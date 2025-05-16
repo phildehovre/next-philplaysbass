@@ -1,0 +1,27 @@
+/* [project]/components/Nav.css [app-client] (css) */
+nav {
+  z-index: 100;
+  justify-content: space-around;
+  align-items: center;
+  width: 100svw;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  display: flex;
+  position: fixed;
+}
+
+nav ul {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2em;
+  width: 80%;
+  display: flex;
+}
+
+nav ul a {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: lighter;
+}
+
+/*# sourceMappingURL=components_Nav_css_f9ee138c._.single.css.map*/

@@ -1,0 +1,150 @@
+.hero_ctn {
+  position: relative;
+  display: flex;
+  width: 100svw;
+  height: 100svh;
+}
+
+.slogan_ctn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.left {
+  font-size: 4em;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-family: 'Anton';
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.left #phil {
+  margin-bottom: -40px;
+  font-size: 3.62em;
+  text-shadow: 2px 2px 2px pink;
+}
+
+.left #plays {
+  font-family: 'NCL Astonic';
+  font-size: 1.5em;
+  color: var(--clr-cta-primary);
+  text-shadow: 5px 5px 5px rgb(0, 44, 40);
+  margin-top: -2.75em;
+  letter-spacing: -5px;
+}
+
+.left #bass {
+  letter-spacing: -5px;
+  text-shadow: 2px 2px 2px pink;
+}
+
+.right {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+  }
+
+    .buttons_ctn {
+        display: flex;
+        gap: 1em;
+    }
+    
+}
+
+.links_ctn {
+    display: none;
+}
+
+
+@media (min-width: 900px) {
+  .slogan_ctn {
+    flex-direction: row;
+  }
+
+  .left {
+    font-size: 5em;
+    justify-content: flex-start;
+    margin-top: 4em;
+  }
+
+  .left #phil {
+    margin-bottom: -50px;
+  }
+
+  .left #plays {
+    font-size: 1.5em;
+    margin-top: -2.75em;
+    letter-spacing: -5px;
+  }
+
+  .left #bass {
+    letter-spacing: -5px;
+  }
+
+  .right {
+    .container {
+        min-width: 350px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1em;
+        max-height: 200px;
+        
+
+        .links_ctn {
+            display: inline-block;
+            text-align: start;
+            width: 100%;
+            min-height: 250px;
+        }
+
+        .links_ctn > ul {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link_item {
+            text-transform: uppercase;
+            font-size: 3.5em;
+            transition: 350ms ease-in-out all;
+            letter-spacing: -2px;
+            text-shadow:  
+                1px 1px 2px pink;
+        }
+
+        .link_item:hover {
+            font-size: 4em;
+            transition: 350ms ease-in-out all;
+            color: var(--clr-cta-primary);
+            text-shadow: 
+                -1px 3px 1px white, 
+                -2px 3px 1px white,
+                -3px 3px 1px white;
+        }
+    }
+  } 
+  
+}

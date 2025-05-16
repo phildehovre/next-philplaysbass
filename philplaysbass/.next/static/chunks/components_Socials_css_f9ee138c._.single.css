@@ -1,0 +1,12 @@
+/* [project]/components/Socials.css [app-client] (css) */
+.socials-list {
+  color: #fff;
+  gap: 1em;
+  display: flex;
+}
+
+.socials-list a {
+  color: var(--clr-cta-primary);
+}
+
+/*# sourceMappingURL=components_Socials_css_f9ee138c._.single.css.map*/

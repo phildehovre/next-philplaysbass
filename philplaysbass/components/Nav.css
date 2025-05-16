@@ -1,0 +1,24 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100svw;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    position: fixed;
+    z-index: 100;
+
+    ul {
+        width: 80%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2em;
+
+        a {
+            color: white;
+            font-weight: lighter ;
+            text-transform: uppercase;
+        }
+    }
+}

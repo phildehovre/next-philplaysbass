@@ -1,0 +1,9 @@
+.socials-list {
+    color: white;
+    display: flex;
+    gap: 1em;
+
+    a {
+        color: var(--clr-cta-primary);
+    }
+}

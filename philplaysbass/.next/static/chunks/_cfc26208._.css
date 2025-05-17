@@ -4407,6 +4407,7 @@ video::-webkit-media-text-track-display {
   justify-content: center;
   width: 100svw;
   height: auto;
+  min-height: 1000px;
   display: flex;
   position: fixed;
   top: 0%;

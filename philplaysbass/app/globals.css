@@ -35,6 +35,25 @@ a {
   text-decoration: none;
 }
 
+button {
+  border: 1px solid var(--clr-cta-primary);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  background-color: var(--clr-cta-primary);
+  color: black;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

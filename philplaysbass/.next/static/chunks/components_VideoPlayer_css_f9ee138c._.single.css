@@ -13,15 +13,13 @@
 
 #player_ctn:after {
   content: "";
-  z-index: 998;
-  opacity: 0;
-  background-color: #00000080;
+  opacity: 1;
+  background-color: #000;
   width: 100%;
   height: 100%;
   animation: 2.5s ease-in 1s forwards fadeIn;
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
 }
 
 .video_ctn {
@@ -30,6 +28,16 @@
   min-width: 1900px;
   min-height: 1000px;
   position: absolute;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .5;
+  }
 }
 
 /*# sourceMappingURL=components_VideoPlayer_css_f9ee138c._.single.css.map*/

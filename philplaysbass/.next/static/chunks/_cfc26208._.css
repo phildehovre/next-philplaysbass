@@ -4416,15 +4416,13 @@ video::-webkit-media-text-track-display {
 
 #player_ctn:after {
   content: "";
-  z-index: 998;
-  opacity: 0;
-  background-color: #00000080;
+  opacity: 1;
+  background-color: #000;
   width: 100%;
   height: 100%;
   animation: 2.5s ease-in 1s forwards fadeIn;
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
 }
 
 .video_ctn {
@@ -4433,6 +4431,16 @@ video::-webkit-media-text-track-display {
   min-width: 1900px;
   min-height: 1000px;
   position: absolute;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .5;
+  }
 }
 
 
@@ -4445,22 +4453,23 @@ video::-webkit-media-text-track-display {
 }
 
 .slogan_ctn {
-  z-index: 9999;
+  z-index: 1;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
   display: flex;
   position: absolute;
-  inset: 0 0 0 0%;
 }
 
 .left {
   text-transform: uppercase;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 80%;
   font-family: Anton;
   font-size: 4em;
   font-weight: bolder;
@@ -4469,22 +4478,23 @@ video::-webkit-media-text-track-display {
 
 .left #phil {
   text-shadow: 2px 2px 2px pink;
-  margin-bottom: -40px;
+  margin-bottom: -25px;
   font-size: 3.62em;
 }
 
 .left #plays {
   color: var(--clr-cta-primary);
   text-shadow: 5px 5px 5px #002c28;
-  letter-spacing: -5px;
-  margin-top: -2.75em;
+  letter-spacing: 5px;
+  margin-top: -4.5em;
   font-family: NCL Astonic;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 .left #bass {
-  letter-spacing: -5px;
   text-shadow: 2px 2px 2px pink;
+  margin-top: -100px;
+  font-size: 3.17em;
 }
 
 .right {
@@ -4499,6 +4509,7 @@ video::-webkit-media-text-track-display {
 
 .right .container {
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 1em;
   display: flex;
@@ -4520,22 +4531,18 @@ video::-webkit-media-text-track-display {
 
   .left {
     justify-content: flex-start;
-    margin-top: 4em;
     font-size: 5em;
-  }
-
-  .left #phil {
-    margin-bottom: -50px;
   }
 
   .left #plays {
     letter-spacing: -5px;
-    margin-top: -2.75em;
+    margin-top: -3.5em;
     font-size: 1.5em;
   }
 
   .left #bass {
     letter-spacing: -5px;
+    margin-top: -.5em;
   }
 
   .right .container {
@@ -4590,15 +4597,25 @@ video::-webkit-media-text-track-display {
 
 /* [project]/components/Nav.css [app-client] (css) */
 nav {
-  z-index: 100;
+  z-index: 999;
   justify-content: space-around;
   align-items: center;
   width: 100svw;
-  height: 60px;
+  height: 80px;
   padding-top: 2em;
   padding-bottom: 2em;
   display: flex;
   position: fixed;
+}
+
+nav button {
+  transition: all .1s ease-in-out;
+}
+
+nav button:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+  transform: scale(1.1);
 }
 
 nav ul {
@@ -4609,10 +4626,25 @@ nav ul {
   display: flex;
 }
 
+nav ul li {
+  padding: 0;
+  margin: 0 !important;
+}
+
 nav ul a {
   color: #fff;
   text-transform: uppercase;
   font-weight: lighter;
+}
+
+nav .languages {
+  align-items: center;
+  display: flex;
+}
+
+nav .languages button {
+  text-transform: uppercase;
+  border: none;
 }
 
 

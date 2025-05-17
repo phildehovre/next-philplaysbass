@@ -1,14 +1,24 @@
 /* [project]/components/Nav.css [app-client] (css) */
 nav {
-  z-index: 100;
+  z-index: 999;
   justify-content: space-around;
   align-items: center;
   width: 100svw;
-  height: 60px;
+  height: 80px;
   padding-top: 2em;
   padding-bottom: 2em;
   display: flex;
   position: fixed;
+}
+
+nav button {
+  transition: all .1s ease-in-out;
+}
+
+nav button:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+  transform: scale(1.1);
 }
 
 nav ul {
@@ -19,10 +29,25 @@ nav ul {
   display: flex;
 }
 
+nav ul li {
+  padding: 0;
+  margin: 0 !important;
+}
+
 nav ul a {
   color: #fff;
   text-transform: uppercase;
   font-weight: lighter;
+}
+
+nav .languages {
+  align-items: center;
+  display: flex;
+}
+
+nav .languages button {
+  text-transform: uppercase;
+  border: none;
 }
 
 /*# sourceMappingURL=components_Nav_css_f9ee138c._.single.css.map*/

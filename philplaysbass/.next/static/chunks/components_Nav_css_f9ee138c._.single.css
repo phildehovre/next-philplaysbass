@@ -5,8 +5,7 @@ nav {
   align-items: center;
   width: 100svw;
   height: 80px;
-  padding-top: 2em;
-  padding-bottom: 2em;
+  padding: 0 2em;
   display: flex;
   position: fixed;
 }
@@ -19,6 +18,12 @@ nav button:hover {
   color: var(--clr-cta-primary);
   background-color: #0000;
   transform: scale(1.1);
+}
+
+nav button.auth_btn {
+  color: var(--clr-cta-primary);
+  padding: .5em;
+  box-shadow: 1px 1px 1px pink;
 }
 
 nav ul {

@@ -1,0 +1,10 @@
+/* [project]/components/LatestStream.css [app-client] (css) */
+.latest-stream_ctn {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  display: flex;
+}
+
+/*# sourceMappingURL=components_LatestStream_css_f9ee138c._.single.css.map*/

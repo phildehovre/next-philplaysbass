@@ -129,6 +129,10 @@ a {
   text-decoration: none;
 }
 
+a:focus, a:focus-visible {
+  outline: 4px auto var(--clr-cta-primary);
+}
+
 button {
   border: 1px solid var(--clr-cta-primary);
   cursor: pointer;
@@ -145,8 +149,8 @@ button:hover {
   color: #000;
 }
 
-button:focus, button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:focus-visible {
+  outline: 4px auto var(--clr-cta-primary);
 }
 
 @media (prefers-color-scheme: dark) {

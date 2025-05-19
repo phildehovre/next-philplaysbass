@@ -16,52 +16,75 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+// Dynamic import of cloudinary to avoid SSR issues
+const loadCloudinary = ()=>{
+    if ("TURBOPACK compile-time truthy", 1) {
+        return __turbopack_context__.r("[project]/node_modules/cloudinary-video-player/lib/cld-video-player.js [app-client] (ecmascript, async loader)")(__turbopack_context__.i);
+    }
+    "TURBOPACK unreachable";
+};
 const VideoPlayer = ()=>{
     _s();
     const [bgLoaded, setBgLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const cloudinaryRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(undefined);
-    const videoRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(undefined);
-    // useEffect(() => {
-    //   const video = videoRef.current as HTMLVideoElement | null;
-    //   if (!video) return;
-    //   const handleLoad = () => setBgLoaded(true);
-    //     video.addEventListener("loadedmetadata", handleLoad);
-    //     return () => {
-    //       video.removeEventListener("loadedmetadata", handleLoad);
-    //   }
-    // }, []);
-    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useEffect({
+    const videoRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "VideoPlayer.useEffect": ()=>{
-            if (cloudinaryRef.current) return;
-            cloudinaryRef.current = window.cloudinary;
-            cloudinaryRef.current.videoPlayer(videoRef.current, {
-                cloud_name: 'dtnif6mzm',
-                public_id: 'Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h',
-                autoplay: true,
-                muted: true,
-                controls: false,
-                loop: true
-            });
+            const video = videoRef.current;
+            if (!video) return;
+            const handleLoad = {
+                "VideoPlayer.useEffect.handleLoad": ()=>setBgLoaded(true)
+            }["VideoPlayer.useEffect.handleLoad"];
+            video.addEventListener("loadedmetadata", handleLoad);
+            return ({
+                "VideoPlayer.useEffect": ()=>video.removeEventListener("loadedmetadata", handleLoad)
+            })["VideoPlayer.useEffect"];
+        }
+    }["VideoPlayer.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "VideoPlayer.useEffect": ()=>{
+            let cloudinary;
+            loadCloudinary().then({
+                "VideoPlayer.useEffect": (module)=>{
+                    if (module) {
+                        cloudinary = module.default;
+                        if (videoRef.current) {
+                            cloudinary.videoPlayer(videoRef.current, {
+                                cloudName: "dtnif6mzm",
+                                publicId: "Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h",
+                                autoplay: true,
+                                muted: true,
+                                controls: false,
+                                loop: true
+                            });
+                        }
+                    }
+                }
+            }["VideoPlayer.useEffect"]);
+            return ({
+                "VideoPlayer.useEffect": ()=>{
+                    if (cloudinary) cloudinary.destroy();
+                }
+            })["VideoPlayer.useEffect"];
         }
     }["VideoPlayer.useEffect"], []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         id: "player_ctn",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
-            className: `video_ctn ${bgLoaded ? 'loaded' : ''}`,
             ref: videoRef,
+            className: `video_ctn ${bgLoaded ? "loaded" : ""}`,
             "data-cld-public-id": "Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h"
         }, void 0, false, {
             fileName: "[project]/components/VideoPlayer.tsx",
-            lineNumber: 41,
-            columnNumber: 9
+            lineNumber: 55,
+            columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/VideoPlayer.tsx",
-        lineNumber: 40,
+        lineNumber: 54,
         columnNumber: 5
     }, this);
 };
-_s(VideoPlayer, "yUgymH7ltMpbFrqh+G51TSdT2NQ=");
+_s(VideoPlayer, "8DXGKhQuWxNAWst6WJZX/vE+M5U=");
 _c = VideoPlayer;
 const __TURBOPACK__default__export__ = VideoPlayer;
 var _c;

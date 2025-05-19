@@ -494,6 +494,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$LanguageContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/LanguageContext.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$languages$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/constants/languages.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/index.es.js [app-client] (ecmascript) <module evaluation>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LoginLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/components/LoginLink.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LogoutLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/components/LogoutLink.es.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -502,7 +505,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-const Nav = ()=>{
+;
+const Nav = ({ isLoggedIn })=>{
     _s();
     const { language, setLanguage } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$LanguageContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLanguage"])();
     const languages = __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$languages$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LANGUAGES"];
@@ -516,20 +520,20 @@ const Nav = ()=>{
                         children: item
                     }, void 0, false, {
                         fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 19,
+                        lineNumber: 28,
                         columnNumber: 6
                     }, this),
                     index < languages.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         children: "|"
                     }, void 0, false, {
                         fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 24,
+                        lineNumber: 29,
                         columnNumber: 39
                     }, this)
                 ]
             }, item, true, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 18,
+                lineNumber: 27,
                 columnNumber: 5
             }, this);
         });
@@ -541,7 +545,7 @@ const Nav = ()=>{
                 children: "Logo"
             }, void 0, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 32,
+                lineNumber: 37,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -551,21 +555,6 @@ const Nav = ()=>{
                             href: "/",
                             title: btns.home.tooltip[language],
                             children: btns.home.labels[language]
-                        }, void 0, false, {
-                            fileName: "[project]/components/Nav.tsx",
-                            lineNumber: 35,
-                            columnNumber: 6
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 34,
-                        columnNumber: 5
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                            href: "/about",
-                            title: btns.about.tooltip[language],
-                            children: btns.about.labels[language]
                         }, void 0, false, {
                             fileName: "[project]/components/Nav.tsx",
                             lineNumber: 40,
@@ -578,9 +567,9 @@ const Nav = ()=>{
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                            href: "/lessons",
-                            title: btns.lessons.tooltip[language],
-                            children: btns.lessons.labels[language]
+                            href: "/about",
+                            title: btns.about.tooltip[language],
+                            children: btns.about.labels[language]
                         }, void 0, false, {
                             fileName: "[project]/components/Nav.tsx",
                             lineNumber: 45,
@@ -590,11 +579,26 @@ const Nav = ()=>{
                         fileName: "[project]/components/Nav.tsx",
                         lineNumber: 44,
                         columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                            href: "/lessons",
+                            title: btns.lessons.tooltip[language],
+                            children: btns.lessons.labels[language]
+                        }, void 0, false, {
+                            fileName: "[project]/components/Nav.tsx",
+                            lineNumber: 50,
+                            columnNumber: 6
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/Nav.tsx",
+                        lineNumber: 49,
+                        columnNumber: 5
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 33,
+                lineNumber: 38,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -602,13 +606,39 @@ const Nav = ()=>{
                 children: renderLanguageButtons()
             }, void 0, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 50,
+                lineNumber: 55,
                 columnNumber: 4
+            }, this),
+            isLoggedIn ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                className: "button",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LogoutLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LogoutLink"], {
+                    children: "Log out"
+                }, void 0, false, {
+                    fileName: "[project]/components/Nav.tsx",
+                    lineNumber: 58,
+                    columnNumber: 6
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/Nav.tsx",
+                lineNumber: 57,
+                columnNumber: 5
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LoginLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoginLink"], {
+                    children: "Sign in"
+                }, void 0, false, {
+                    fileName: "[project]/components/Nav.tsx",
+                    lineNumber: 62,
+                    columnNumber: 6
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/Nav.tsx",
+                lineNumber: 61,
+                columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Nav.tsx",
-        lineNumber: 31,
+        lineNumber: 36,
         columnNumber: 3
     }, this);
 };

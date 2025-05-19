@@ -10,19 +10,23 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$cloudinary$2d$video$2d$player$2f$lib$2f$cld$2d$video$2d$player$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/cloudinary-video-player/lib/cld-video-player.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
 ;
 ;
 ;
-;
+// Dynamic import of cloudinary to avoid SSR issues
+const loadCloudinary = ()=>{
+    if ("TURBOPACK compile-time truthy", 1) {
+        return __turbopack_context__.r("[project]/node_modules/cloudinary-video-player/lib/cld-video-player.js [app-client] (ecmascript, async loader)")(__turbopack_context__.i);
+    }
+    "TURBOPACK unreachable";
+};
 const VideoPlayer = ()=>{
     _s();
     const [bgLoaded, setBgLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const cloudinaryRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(undefined);
-    const videoRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(undefined);
+    const videoRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "VideoPlayer.useEffect": ()=>{
             const video = videoRef.current;
@@ -32,44 +36,55 @@ const VideoPlayer = ()=>{
             }["VideoPlayer.useEffect.handleLoad"];
             video.addEventListener("loadedmetadata", handleLoad);
             return ({
-                "VideoPlayer.useEffect": ()=>{
-                    video.removeEventListener("loadedmetadata", handleLoad);
-                }
+                "VideoPlayer.useEffect": ()=>video.removeEventListener("loadedmetadata", handleLoad)
             })["VideoPlayer.useEffect"];
         }
     }["VideoPlayer.useEffect"], []);
-    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useEffect({
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "VideoPlayer.useEffect": ()=>{
-            if (cloudinaryRef.current) return;
-            cloudinaryRef.current = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$cloudinary$2d$video$2d$player$2f$lib$2f$cld$2d$video$2d$player$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"];
-            cloudinaryRef.current.videoPlayer(videoRef.current, {
-                cloud_name: 'dtnif6mzm',
-                public_id: 'Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h',
-                autoplay: true,
-                muted: true,
-                controls: false,
-                loop: true
-            });
+            let cloudinary;
+            loadCloudinary().then({
+                "VideoPlayer.useEffect": (module)=>{
+                    if (module) {
+                        cloudinary = module.default;
+                        if (videoRef.current) {
+                            cloudinary.videoPlayer(videoRef.current, {
+                                cloudName: "dtnif6mzm",
+                                publicId: "Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h",
+                                autoplay: true,
+                                muted: true,
+                                controls: false,
+                                loop: true
+                            });
+                        }
+                    }
+                }
+            }["VideoPlayer.useEffect"]);
+            return ({
+                "VideoPlayer.useEffect": ()=>{
+                    if (cloudinary) cloudinary.destroy();
+                }
+            })["VideoPlayer.useEffect"];
         }
     }["VideoPlayer.useEffect"], []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         id: "player_ctn",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
-            className: `video_ctn ${bgLoaded ? 'loaded' : ''}`,
             ref: videoRef,
+            className: `video_ctn ${bgLoaded ? "loaded" : ""}`,
             "data-cld-public-id": "Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h"
         }, void 0, false, {
             fileName: "[project]/components/VideoPlayer.tsx",
-            lineNumber: 41,
-            columnNumber: 9
+            lineNumber: 55,
+            columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/VideoPlayer.tsx",
-        lineNumber: 40,
+        lineNumber: 54,
         columnNumber: 5
     }, this);
 };
-_s(VideoPlayer, "PFx+uUU97k2zr7dyVRAumuNSvw0=");
+_s(VideoPlayer, "8DXGKhQuWxNAWst6WJZX/vE+M5U=");
 _c = VideoPlayer;
 const __TURBOPACK__default__export__ = VideoPlayer;
 var _c;
@@ -87,9 +102,7 @@ __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$instagram$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Instagram$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/instagram.js [app-client] (ecmascript) <export default as Instagram>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$twitch$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Twitch$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/twitch.js [app-client] (ecmascript) <export default as Twitch>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$youtube$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Youtube$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/youtube.js [app-client] (ecmascript) <export default as Youtube>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 ;
 ;
 ;
@@ -103,22 +116,26 @@ function Socials() {
                     href: "https://www.youtube.com/watch?v=QlwlT6CPqJ8",
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$youtube$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Youtube$3e$__["Youtube"], {
-                        className: "youtube-icon"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        src: "/icons/youtube.svg",
+                        alt: "instagram icon",
+                        width: 24,
+                        height: 24,
+                        className: "socials_icon"
                     }, void 0, false, {
                         fileName: "[project]/components/Socials.tsx",
                         lineNumber: 15,
-                        columnNumber: 11
+                        columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/Socials.tsx",
                     lineNumber: 9,
-                    columnNumber: 9
+                    columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/Socials.tsx",
                 lineNumber: 8,
-                columnNumber: 7
+                columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -126,22 +143,26 @@ function Socials() {
                     href: "https://www.facebook.com/seanjacksonband",
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$twitch$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Twitch$3e$__["Twitch"], {
-                        className: "facebook-icon"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        src: "/icons/twitch.svg",
+                        alt: "instagram icon",
+                        width: 24,
+                        height: 24,
+                        className: "socials_icon"
                     }, void 0, false, {
                         fileName: "[project]/components/Socials.tsx",
-                        lineNumber: 25,
-                        columnNumber: 11
+                        lineNumber: 31,
+                        columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/Socials.tsx",
-                    lineNumber: 19,
-                    columnNumber: 9
+                    lineNumber: 25,
+                    columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/Socials.tsx",
-                lineNumber: 18,
-                columnNumber: 7
+                lineNumber: 24,
+                columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -149,28 +170,32 @@ function Socials() {
                     href: "https://www.instagram.com/seanjacksonband/",
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$instagram$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Instagram$3e$__["Instagram"], {
-                        className: "instagram-icon"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        src: "/icons/instagram.svg",
+                        alt: "instagram icon",
+                        width: 24,
+                        height: 24,
+                        className: "socials_icon"
                     }, void 0, false, {
                         fileName: "[project]/components/Socials.tsx",
-                        lineNumber: 35,
-                        columnNumber: 11
+                        lineNumber: 47,
+                        columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/Socials.tsx",
-                    lineNumber: 29,
-                    columnNumber: 9
+                    lineNumber: 41,
+                    columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/Socials.tsx",
-                lineNumber: 28,
-                columnNumber: 7
+                lineNumber: 40,
+                columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Socials.tsx",
         lineNumber: 7,
-        columnNumber: 5
+        columnNumber: 3
     }, this);
 }
 _c = Socials;
@@ -478,6 +503,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/constants/textFile.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$LanguageContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/LanguageContext.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$languages$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/constants/languages.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/index.es.js [app-client] (ecmascript) <module evaluation>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LoginLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/components/LoginLink.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LogoutLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/components/LogoutLink.es.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -485,23 +514,37 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-const Nav = ()=>{
+;
+;
+const Nav = ({ isLoggedIn })=>{
     _s();
     const { language, setLanguage } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$LanguageContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLanguage"])();
     const languages = __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$languages$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LANGUAGES"];
     const btns = __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons;
     const renderLanguageButtons = ()=>{
-        return languages.map((i)=>{
-            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                style: {
-                    textTransform: "uppercase"
-                },
-                onClick: ()=>setLanguage(i),
-                children: i
-            }, i, false, {
+        return languages.map((item, index)=>{
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].Fragment, {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>setLanguage(item),
+                        children: item
+                    }, void 0, false, {
+                        fileName: "[project]/components/Nav.tsx",
+                        lineNumber: 28,
+                        columnNumber: 6
+                    }, this),
+                    index < languages.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: "|"
+                    }, void 0, false, {
+                        fileName: "[project]/components/Nav.tsx",
+                        lineNumber: 29,
+                        columnNumber: 39
+                    }, this)
+                ]
+            }, item, true, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 19,
-                columnNumber: 9
+                lineNumber: 27,
+                columnNumber: 5
             }, this);
         });
     };
@@ -512,8 +555,8 @@ const Nav = ()=>{
                 children: "Logo"
             }, void 0, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 30,
-                columnNumber: 13
+                lineNumber: 37,
+                columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                 children: [
@@ -524,13 +567,13 @@ const Nav = ()=>{
                             children: btns.home.labels[language]
                         }, void 0, false, {
                             fileName: "[project]/components/Nav.tsx",
-                            lineNumber: 32,
-                            columnNumber: 21
+                            lineNumber: 40,
+                            columnNumber: 6
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 32,
-                        columnNumber: 17
+                        lineNumber: 39,
+                        columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -539,13 +582,13 @@ const Nav = ()=>{
                             children: btns.about.labels[language]
                         }, void 0, false, {
                             fileName: "[project]/components/Nav.tsx",
-                            lineNumber: 33,
-                            columnNumber: 21
+                            lineNumber: 45,
+                            columnNumber: 6
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 33,
-                        columnNumber: 17
+                        lineNumber: 44,
+                        columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -554,36 +597,63 @@ const Nav = ()=>{
                             children: btns.lessons.labels[language]
                         }, void 0, false, {
                             fileName: "[project]/components/Nav.tsx",
-                            lineNumber: 34,
-                            columnNumber: 21
+                            lineNumber: 50,
+                            columnNumber: 6
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Nav.tsx",
-                        lineNumber: 34,
-                        columnNumber: 17
+                        lineNumber: 49,
+                        columnNumber: 5
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 31,
-                columnNumber: 13
+                lineNumber: 38,
+                columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "languages",
                 children: renderLanguageButtons()
             }, void 0, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 36,
-                columnNumber: 13
+                lineNumber: 55,
+                columnNumber: 4
+            }, this),
+            isLoggedIn ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                className: "auth_btn",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LogoutLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LogoutLink"], {
+                    children: "Log out"
+                }, void 0, false, {
+                    fileName: "[project]/components/Nav.tsx",
+                    lineNumber: 58,
+                    columnNumber: 6
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/Nav.tsx",
+                lineNumber: 57,
+                columnNumber: 5
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                className: "auth_btn",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$components$2f$LoginLink$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoginLink"], {
+                    children: "Sign in"
+                }, void 0, false, {
+                    fileName: "[project]/components/Nav.tsx",
+                    lineNumber: 62,
+                    columnNumber: 6
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/Nav.tsx",
+                lineNumber: 61,
+                columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Nav.tsx",
-        lineNumber: 29,
-        columnNumber: 9
+        lineNumber: 36,
+        columnNumber: 3
     }, this);
 };
-_s(Nav, "tbzPEnnvIwBarH/zx87oUz8iqhc=", false, function() {
+_s(Nav, "UZUYajh7f/ecAaqs8+JAYjvISYI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$LanguageContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLanguage"]
     ];

@@ -1,0 +1,8 @@
+.feature_ctn {
+	height: 50svh;
+	width: 100%;
+	background-color: black;
+	z-index: 999;
+	display: flex;
+	justify-content: center;
+}

@@ -1,6 +1,39 @@
 {
   "version": 3,
-  "middleware": {},
-  "sortedMiddleware": [],
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/_2037329d._.js",
+        "server/edge/chunks/node_modules_@kinde_jwt-validator_dist_368831d4._.js",
+        "server/edge/chunks/node_modules_@kinde-oss_kinde-typescript-sdk_dist_models_85d86fcf._.js",
+        "server/edge/chunks/node_modules_@kinde-oss_kinde-typescript-sdk_dist_apis_5d74e6ad._.js",
+        "server/edge/chunks/node_modules_@kinde-oss_kinde-typescript-sdk_dist_sdk_ffb8fa21._.js",
+        "server/edge/chunks/node_modules_@kinde-oss_kinde-typescript-sdk_dist_bc93d8e0._.js",
+        "server/edge/chunks/node_modules_5a06e2db._.js",
+        "server/edge/chunks/[root-of-the-server]__de110ef0._.js",
+        "server/edge/chunks/edge-wrapper_388cf01f.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "JJJgEH3+2tk0uoa4vSWRnpnEMMLxdrtn8cmGNSg5ZaA=",
+        "__NEXT_PREVIEW_MODE_ID": "f3ecea3886b2ed2657a5d69d966aa99a",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "5bf4ed8ea26c4f4ed7a47fa9478bf09b64fdf3a5ffdcacd72cfd63918ba302d2",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "47f32578699db98456806295e5d05e47da2d4b44928f87aeacead589cb5e5908"
+      }
+    }
+  },
+  "sortedMiddleware": [
+    "/"
+  ],
   "functions": {}
 }

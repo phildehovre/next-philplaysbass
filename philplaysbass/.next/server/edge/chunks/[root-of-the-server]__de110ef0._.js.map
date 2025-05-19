@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import { withAuth } from \"@kinde-oss/kinde-auth-nextjs/middleware\";\nimport { RequestData } from \"next/dist/server/web/types\";\n\n// You can use the withAuth helper as shown below with a middleware callback function\n// which has access to the req.kindeAuth object that exposes the token and user data.\ntype KindeReqType = {\n\tkindeAuth: unknown;\n};\n\nexport default withAuth(\n\tasync function middleware(req: KindeReqType) {\n\t\tconsole.log(\"look at me\", req.kindeAuth);\n\t},\n\t{\n\t\tpublicPaths: [\"/\"], // Add any other public paths as needed\n\t}\n);\n\nexport const config = {\n\tmatcher: [\n\t\t\"/((?!_next|[^?]*\\\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)\",\n\t],\n};\n"],"names":[],"mappings":";;;;AAAA;AAAA;;uCASe,CAAA,GAAA,mNAAA,CAAA,WAAQ,AAAD,EACrB,eAAe,WAAW,GAAiB;IAC1C,QAAQ,GAAG,CAAC,cAAc,IAAI,SAAS;AACxC,GACA;IACC,aAAa;QAAC;KAAI;AACnB;AAGM,MAAM,SAAS;IACrB,SAAS;QACR;KACA;AACF"}}]
+}

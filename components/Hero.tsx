@@ -25,7 +25,9 @@ const Hero: React.FC = () => {
 						<div className="links_ctn">
 							<ul>
 								<li className="link_item">
-									<a href="/">{textObject.nav.buttons.app.labels[language]}</a>
+									<a href="/metronome">
+										{textObject.nav.buttons.app.labels[language]}
+									</a>
 								</li>
 								<li className="link_item">
 									<a href="/lessons">

@@ -36,7 +36,7 @@ const LatestStream = ({ latestStream }: Props) => {
 				title={title}
 				loading="lazy"
 				allowFullScreen
-				src={`http://www.youtube.com/embed/${latestStream.id}`}
+				src={`https://www.youtube.com/embed/${latestStream.id}`}
 				className="latest-stream"
 			/>
 		</div>

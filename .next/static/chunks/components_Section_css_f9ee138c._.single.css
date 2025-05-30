@@ -1,0 +1,11 @@
+/* [project]/components/Section.css [app-client] (css) */
+.section_ctn {
+  z-index: 999;
+  background-color: #000;
+  justify-content: center;
+  width: 100%;
+  min-height: 10svh;
+  display: flex;
+}
+
+/*# sourceMappingURL=components_Section_css_f9ee138c._.single.css.map*/

@@ -1,0 +1,205 @@
+/* [project]/components/Footer.css [app-client] (css) */
+.footer_ctn {
+  color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2em;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  background-color: #000 !important;
+}
+
+.footer_ctn .list_ctn {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.footer_ctn ul {
+  text-align: center;
+  flex-direction: column;
+  gap: 1em;
+  width: 40%;
+  display: flex;
+}
+
+.footer_ctn .logo {
+  aspect-ratio: 1;
+  z-index: 99;
+  background-image: url("/logo_black_circle.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 250%;
+  width: 5em;
+  height: auto;
+}
+
+
+/* [project]/app/lessons/lessons.css [app-client] (css) */
+.session-section {
+  background-color: #000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100svh;
+  display: flex;
+}
+
+.session-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 200px 2em;
+  display: flex;
+}
+
+.session-title {
+  color: var(--clr-cta-primary);
+  font-family: NCL Astonic;
+  font-size: 2em;
+}
+
+.session-cards {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5em;
+  width: 100%;
+  display: flex;
+}
+
+.session-card {
+  border: 1px solid var(--clr-cta-primary);
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 80%;
+  min-height: 300px;
+  padding: 1em;
+  display: flex;
+}
+
+.session-card-title {
+  font-family: Anton;
+  font-size: 2em;
+}
+
+.session-card-description {
+  font-size: 1.25em;
+}
+
+.session-button {
+  border: 1px solid var(--clr-cta-primary);
+  background-color: var(--clr-cta-primary);
+  color: #000;
+  padding: 1em;
+  transition: all .25s ease-in-out;
+}
+
+.session-button:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+}
+
+@media (width >= 768px) {
+  .session-container {
+    padding: 0 2em;
+  }
+
+  .session-cards {
+    flex-direction: row;
+  }
+
+  .session-title {
+    font-size: 4em;
+  }
+}
+
+
+/* [project]/components/Nav.css [app-client] (css) */
+nav {
+  z-index: 999;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100svw;
+  height: 80px;
+  padding: 0 2em;
+  display: flex;
+  position: fixed;
+}
+
+nav button {
+  transition: all .1s ease-in-out;
+}
+
+nav button:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+  transform: scale(1.1);
+}
+
+nav button.auth_btn {
+  color: var(--clr-cta-primary);
+  padding: .5em;
+  box-shadow: 1px 1px 1px pink;
+}
+
+nav .mobile-menu {
+  color: #000;
+}
+
+nav .mobile-menu > a {
+  text-transform: capitalize;
+}
+
+nav .mobile-menu .desktop-menu {
+  display: none;
+}
+
+nav ul {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2em;
+  width: 80%;
+  display: flex;
+}
+
+nav ul li {
+  padding: 0;
+  margin: 0 !important;
+}
+
+nav ul a {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: lighter;
+}
+
+@media (width >= 768px) {
+  nav .desktop-menu {
+    justify-content: space-around;
+    display: flex;
+  }
+
+  nav .mobile-menu {
+    display: none;
+  }
+
+  .languages {
+    align-items: center;
+    display: flex;
+  }
+
+  .languages button {
+    text-transform: uppercase;
+    border: none;
+  }
+}
+
+
+/*# sourceMappingURL=_744eadfa._.css.map*/

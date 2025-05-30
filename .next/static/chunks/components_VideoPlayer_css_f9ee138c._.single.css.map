@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/VideoPlayer.css"],"sourcesContent":["#player_ctn {\n\tposition: fixed;\n\taspect-ratio: 16/9;\n\ttop: 0%;\n\theight: auto;\n\twidth: 100svw;\n\tmin-height: 100%;\n\toverflow: hidden;\n\tdisplay: flex;\n\tjustify-content: center;\n\tz-index: -1;\n}\n\n#player_ctn::after {\n\tcontent: \"\";\n\tbackground-color: rgb(0, 0, 0); /* Adjust opacity here */\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tbottom: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\tanimation: fadeIn ease-in 2500ms forwards;\n\tanimation-delay: 1000ms;\n\tz-index: 1;\n}\n\n.video_ctn {\n\tposition: absolute;\n\twidth: auto; /* Maintain original width */\n\tobject-fit: cover;\n\tmin-width: 1900px;\n\tmin-height: 100%;\n}\n\n@media (min-width: 769px) {\n\t#player_ctn {\n\t\tposition: fixed;\n\t\taspect-ratio: 16/9;\n\t\ttop: 0%;\n\t\theight: auto;\n\t\twidth: 100svw;\n\t\toverflow: hidden;\n\t\tdisplay: flex;\n\t\tjustify-content: center;\n\t}\n}\n\n@keyframes fadeIn {\n\t0% {\n\t\topacity: 0;\n\t}\n\t100% {\n\t\topacity: 0.5;\n\t}\n}\n"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;AAaA;;;;;;;;;;;;AAgBA;;;;;;;;AAQA;EACC;;;;;;;;;;;;AAYD"}}]
+}

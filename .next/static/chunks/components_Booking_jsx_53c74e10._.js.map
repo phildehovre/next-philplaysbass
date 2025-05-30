@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/phil/Dev/philplaysbass/components/Booking.jsx"],"sourcesContent":["\"use client\";\n// Example Calendly embed in a React/Next.js component\nimport { useEffect } from \"react\";\n\nexport default function Booking() {\n\tuseEffect(() => {\n\t\tconst script = document.createElement(\"script\");\n\t\tscript.src = \"https://assets.calendly.com/assets/external/widget.js\";\n\t\tscript.async = true;\n\t\tdocument.body.appendChild(script);\n\t}, []);\n\n\treturn (\n\t\t<div\n\t\t\tclassName=\"calendly-inline-widget\"\n\t\t\tdata-url=\"https://calendly.com/philplaysbass\"\n\t\t\tstyle={{ minWidth: \"320px\", height: \"630px\" }}\n\t\t></div>\n\t);\n}\n"],"names":[],"mappings":";;;;AACA,sDAAsD;AACtD;;;AAFA;;AAIe,SAAS;;IACvB,CAAA,GAAA,6JAAA,CAAA,YAAS,AAAD;6BAAE;YACT,MAAM,SAAS,SAAS,aAAa,CAAC;YACtC,OAAO,GAAG,GAAG;YACb,OAAO,KAAK,GAAG;YACf,SAAS,IAAI,CAAC,WAAW,CAAC;QAC3B;4BAAG,EAAE;IAEL,qBACC,6LAAC;QACA,WAAU;QACV,YAAS;QACT,OAAO;YAAE,UAAU;YAAS,QAAQ;QAAQ;;;;;;AAG/C;GAfwB;KAAA","debugId":null}}]
+}

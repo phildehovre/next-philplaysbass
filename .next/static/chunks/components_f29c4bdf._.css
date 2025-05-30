@@ -1,0 +1,123 @@
+/* [project]/components/Footer.css [app-client] (css) */
+.footer_ctn {
+  color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2em;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  background-color: #000 !important;
+}
+
+.footer_ctn .list_ctn {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.footer_ctn ul {
+  text-align: center;
+  flex-direction: column;
+  gap: 1em;
+  width: 40%;
+  display: flex;
+}
+
+.footer_ctn .logo {
+  aspect-ratio: 1;
+  z-index: 99;
+  background-image: url("/logo_black_circle.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 250%;
+  width: 5em;
+  height: auto;
+}
+
+
+/* [project]/components/Nav.css [app-client] (css) */
+nav {
+  z-index: 999;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100svw;
+  height: 80px;
+  padding: 0 2em;
+  display: flex;
+  position: fixed;
+}
+
+nav button {
+  transition: all .1s ease-in-out;
+}
+
+nav button:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+  transform: scale(1.1);
+}
+
+nav button.auth_btn {
+  color: var(--clr-cta-primary);
+  padding: .5em;
+  box-shadow: 1px 1px 1px pink;
+}
+
+nav .desktop-menu {
+  display: block;
+}
+
+nav .mobile-menu {
+  color: #000;
+}
+
+nav .mobile-menu > a {
+  text-transform: capitalize;
+}
+
+nav ul {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2em;
+  width: 80%;
+  display: flex;
+}
+
+nav ul li {
+  padding: 0;
+  margin: 0 !important;
+}
+
+nav ul a {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: lighter;
+}
+
+@media (width >= 768px) {
+  .mobile-menu {
+    outline: 2px solid red;
+    display: none;
+  }
+
+  .desktop-menu {
+    display: block;
+  }
+
+  .languages {
+    align-items: center;
+    display: flex;
+  }
+
+  .languages button {
+    text-transform: uppercase;
+    border: none;
+  }
+}
+
+
+/*# sourceMappingURL=components_f29c4bdf._.css.map*/

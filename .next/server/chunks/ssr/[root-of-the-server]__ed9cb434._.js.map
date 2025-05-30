@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 67, "column": 0}, "map": {"version":3,"sources":["file:///Users/phil/Dev/philplaysbass/app/api/auth/login/page.tsx"],"sourcesContent":["import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs'\nimport React from 'react'\n\nconst LoginPage = () => {\n  return (\n    <div>LoginPage\n      <LoginLink>Login</LoginLink>\n      <RegisterLink>Sign up</RegisterLink>\n    </div>\n  )\n}\n\nexport default LoginPage"],"names":[],"mappings":";;;;AAAA;AAAA;AAAA;;;AAGA,MAAM,YAAY;IAChB,qBACE,8OAAC;;YAAI;0BACH,8OAAC,kMAAA,CAAA,YAAS;0BAAC;;;;;;0BACX,8OAAC,qMAAA,CAAA,eAAY;0BAAC;;;;;;;;;;;;AAGpB;uCAEe","debugId":null}}]
+}

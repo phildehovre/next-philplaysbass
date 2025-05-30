@@ -1,0 +1,58 @@
+/* [project]/components/VideoPlayer.css [app-client] (css) */
+#player_ctn {
+  aspect-ratio: 16 / 9;
+  z-index: -1;
+  justify-content: center;
+  width: 100svw;
+  height: auto;
+  min-height: 100%;
+  display: flex;
+  position: fixed;
+  top: 0%;
+  overflow: hidden;
+}
+
+#player_ctn:after {
+  content: "";
+  opacity: 1;
+  z-index: 1;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  animation: 2.5s ease-in 1s forwards fadeIn;
+  position: absolute;
+  inset: 0;
+}
+
+.video_ctn {
+  object-fit: cover;
+  width: auto;
+  min-width: 1900px;
+  min-height: 100%;
+  position: absolute;
+}
+
+@media (width >= 769px) {
+  #player_ctn {
+    aspect-ratio: 16 / 9;
+    justify-content: center;
+    width: 100svw;
+    height: auto;
+    display: flex;
+    position: fixed;
+    top: 0%;
+    overflow: hidden;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .5;
+  }
+}
+
+/*# sourceMappingURL=components_VideoPlayer_css_f9ee138c._.single.css.map*/

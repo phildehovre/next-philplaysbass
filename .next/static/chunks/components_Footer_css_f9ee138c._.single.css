@@ -1,0 +1,41 @@
+/* [project]/components/Footer.css [app-client] (css) */
+.footer_ctn {
+  color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2em;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  background-color: #000 !important;
+}
+
+.footer_ctn .list_ctn {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.footer_ctn ul {
+  text-align: center;
+  flex-direction: column;
+  gap: 1em;
+  width: 40%;
+  display: flex;
+}
+
+.footer_ctn .logo {
+  aspect-ratio: 1;
+  z-index: 99;
+  background-image: url("/logo_black_circle.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 250%;
+  width: 5em;
+  height: auto;
+}
+
+/*# sourceMappingURL=components_Footer_css_f9ee138c._.single.css.map*/

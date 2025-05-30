@@ -1,0 +1,36 @@
+/* [project]/components/metronome/SongCard.scss.css [app-client] (css) */
+.songcard {
+  width: content;
+  color: #fff;
+  background-color: #00808052;
+  border-radius: 6px;
+  justify-content: space-between;
+  align-items: center;
+  height: 3em;
+  margin-bottom: .2em;
+  padding: 1em;
+  transition: all .25s ease-in;
+  display: flex;
+}
+
+.songcard:hover {
+  background-color: teal;
+  box-shadow: 5px 5px 20px teal;
+}
+
+.songcard-left {
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 1em;
+  display: flex;
+}
+
+.songcard-left .songcard-title {
+  text-overflow: ellipsis;
+}
+
+.songcard-artist {
+  font-size: .75em;
+}
+
+/*# sourceMappingURL=components_metronome_SongCard_scss_css_f9ee138c._.single.css.map*/

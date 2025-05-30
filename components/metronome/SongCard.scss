@@ -1,0 +1,35 @@
+@import "../../variables.scss";
+
+.songcard {
+	width: content;
+	height: 3em;
+	margin-bottom: 0.2em;
+	padding: 1em;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: $secondary-o2;
+	border-radius: 6px;
+	color: white;
+	transition: ease-in 250ms;
+}
+
+.songcard:hover {
+	background-color: $secondary;
+	box-shadow: $secondary 5px 5px 20px;
+}
+
+.songcard-left {
+	height: 1em;
+	flex-wrap: nowrap;
+	display: flex;
+	align-items: center;
+
+	.songcard-title {
+		text-overflow: ellipsis;
+	}
+}
+
+.songcard-artist {
+	font-size: 0.75em;
+}

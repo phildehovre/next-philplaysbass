@@ -32,6 +32,7 @@ async function fetchLatestStream() {
 }
 
 export default async function Home() {
+	console.log(process.env.SONGBPM_API_KEY);
 	const { isAuthenticated } = getKindeServerSession();
 	const isLoggedIn = await isAuthenticated();
 	const latestStream = await fetchLatestStream();

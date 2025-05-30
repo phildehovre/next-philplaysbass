@@ -318,7 +318,7 @@ const Hero = ()=>{
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                                 className: "link_item",
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/",
+                                                    href: "/metronome",
                                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.app.labels[language]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Hero.tsx",
@@ -337,12 +337,12 @@ const Hero = ()=>{
                                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.lessons.labels[language]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Hero.tsx",
-                                                    lineNumber: 31,
+                                                    lineNumber: 33,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Hero.tsx",
-                                                lineNumber: 30,
+                                                lineNumber: 32,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -357,18 +357,18 @@ const Hero = ()=>{
                                                             children: "(coming soon...)"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/Hero.tsx",
-                                                            lineNumber: 38,
+                                                            lineNumber: 40,
                                                             columnNumber: 11
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/Hero.tsx",
-                                                    lineNumber: 36,
+                                                    lineNumber: 38,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Hero.tsx",
-                                                lineNumber: 35,
+                                                lineNumber: 37,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -378,12 +378,12 @@ const Hero = ()=>{
                                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.about.labels[language]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Hero.tsx",
-                                                    lineNumber: 44,
+                                                    lineNumber: 46,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Hero.tsx",
-                                                lineNumber: 43,
+                                                lineNumber: 45,
                                                 columnNumber: 9
                                             }, this)
                                         ]
@@ -406,7 +406,7 @@ const Hero = ()=>{
                                             children: "Shop"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Hero.tsx",
-                                            lineNumber: 51,
+                                            lineNumber: 53,
                                             columnNumber: 8
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -415,18 +415,18 @@ const Hero = ()=>{
                                             children: "Learn"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Hero.tsx",
-                                            lineNumber: 54,
+                                            lineNumber: 56,
                                             columnNumber: 8
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Hero.tsx",
-                                    lineNumber: 50,
+                                    lineNumber: 52,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Socials$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                     fileName: "[project]/components/Hero.tsx",
-                                    lineNumber: 58,
+                                    lineNumber: 60,
                                     columnNumber: 7
                                 }, this)
                             ]
@@ -537,7 +537,7 @@ const LatestStream = ({ latestStream })=>{
                 title: title,
                 loading: "lazy",
                 allowFullScreen: true,
-                src: `http://www.youtube.com/embed/${latestStream.id}`,
+                src: `https://www.youtube.com/embed/${latestStream.id}`,
                 className: "latest-stream"
             }, void 0, false, {
                 fileName: "[project]/components/LatestStream.tsx",

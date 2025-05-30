@@ -1,0 +1,36 @@
+.footer_ctn {
+	background-color: black !important;
+	color: white;
+	width: 100%;
+	bottom: 0;
+	right: 0;
+	padding: 2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	.list_ctn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+	}
+	ul {
+		width: 40%;
+		text-align: center;
+		gap: 1em;
+		display: flex;
+		flex-direction: column;
+	}
+	.logo {
+		background-image: url("/logo_black_circle.png");
+		width: 5em;
+		height: auto;
+		aspect-ratio: 1/1;
+		background-position: center;
+		background-size: 250%;
+		background-repeat: no-repeat;
+		z-index: 99;
+	}
+}

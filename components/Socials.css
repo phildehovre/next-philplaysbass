@@ -1,0 +1,37 @@
+.socials-list {
+	flex-direction: row;
+	display: flex;
+	width: 100%;
+	gap: 1em;
+	justify-content: flex-start;
+
+	a {
+		color: var(--clr-cta-primary);
+		color: var(--clr-cta-primary);
+		background-color: var(--clr-cta-primary);
+		border-radius: 100%;
+		padding: 1em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: 250ms ease-in-out all;
+	}
+	a:hover {
+		animation: 500ms ease-in-out pulse;
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+		box-shadow: 0px 0px 0px pink;
+	}
+	50% {
+		transform: scale(1.3);
+		box-shadow: 2px 2px 2px pink;
+	}
+	100% {
+		transform: scale(1);
+		box-shadow: 0px 0px 0px pink;
+	}
+}

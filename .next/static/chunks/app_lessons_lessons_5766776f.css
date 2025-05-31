@@ -1,6 +1,19 @@
 /* [project]/app/lessons/lessons.css [app-client] (css) */
 .session-section {
   background-color: #000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100svh;
+  display: flex;
+}
+
+.session-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 200px 2em;
+  display: flex;
 }
 
 .session-title {
@@ -53,6 +66,10 @@
 }
 
 @media (width >= 768px) {
+  .session-container {
+    padding: 0 2em;
+  }
+
   .session-cards {
     flex-direction: row;
   }

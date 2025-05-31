@@ -7,6 +7,7 @@ import Dropdown from "./Dropdown";
 import SongList from "./SongList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -14,13 +15,8 @@ type SoundObject = {
 	sidestick: HTMLAudioElement | undefined;
 };
 
-const Metronome = ({
-	showSongs,
-	setShowSongs,
-}: {
-	showSongs: boolean;
-	setShowSongs: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Metronome = () => {
+	const [showSongs, setShowSongs] = useState(false);
 	const [play, setPlay] = useState(false);
 	const [bpm, setBpm] = useState(120);
 	const [tempoInterval, setTempoInterval] = useState<number>(0);
@@ -36,6 +32,8 @@ const Metronome = ({
 		cowbell: undefined,
 		sidestick: undefined,
 	});
+
+	const queryClient = new QueryClient();
 
 	useEffect(() => {
 		const woodblock = new Audio("sounds/Woodblock.mp3");
@@ -180,12 +178,14 @@ const Metronome = ({
 					</div>
 				</div>
 				<h6 style={{ color: "var(--secondary)" }}>Powered by GetSongBpm.com</h6>
-				<SongList
-					bpm={debouncedBpm}
-					showSongs={showSongs}
-					listSize={listSize}
-					setListSize={setListSize}
-				/>
+				<QueryClientProvider client={queryClient}>
+					<SongList
+						bpm={debouncedBpm}
+						showSongs={showSongs}
+						listSize={listSize}
+						setListSize={setListSize}
+					/>
+				</QueryClientProvider>
 			</div>
 		</div>
 	);

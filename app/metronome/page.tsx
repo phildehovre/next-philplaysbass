@@ -1,19 +1,17 @@
-"use client";
-
 import Metronome from "@/components/metronome/Metronome";
-import React, { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 
-const page = () => {
-	const [showSongs, setShowSongs] = useState(false);
+const page = async () => {
+	const { isAuthenticated } = await getKindeServerSession();
+	const isLoggedIn = await isAuthenticated();
 
-	const queryClient = new QueryClient();
+	if (!isLoggedIn) {
+		redirect("/login");
+	}
 
-	return (
-		<QueryClientProvider client={queryClient}>
-			<Metronome setShowSongs={setShowSongs} showSongs={showSongs} />
-		</QueryClientProvider>
-	);
+	return <Metronome />;
 };
 
 export default page;

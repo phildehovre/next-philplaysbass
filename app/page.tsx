@@ -3,11 +3,8 @@
 
 import styles from "./page.module.css";
 import Hero from "@/components/Hero";
-import Nav from "@/components/Nav";
 import LatestStream from "@/components/LatestStream";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import Section from "@/components/Section";
-import Footer from "@/components/Footer";
 
 // Fetch stream data directly in the server component
 async function fetchLatestStream() {

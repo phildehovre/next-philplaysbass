@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -170,6 +171,7 @@ const Metronome = () => {
 						className="metro-dropdown-header"
 						onClick={() => setDropdownOpen(!dropdownOpen)}
 					>
+						<ChevronDown />
 						{soundEffect}
 						<Dropdown
 							open={dropdownOpen}

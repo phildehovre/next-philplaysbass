@@ -38,10 +38,11 @@
 	object-fit: cover;
 	width: auto;
 	aspect-ratio: 1/1;
+	margin-bottom: 1em;
 }
 
 .metro-display {
-	width: 90%;
+	width: 100%;
 	display: grid;
 	grid-template-columns: 20% 1fr 20%;
 	border-radius: 16px;
@@ -377,14 +378,14 @@ input[type="range"]:focus::-ms-fill-upper {
 .pause {
 	box-sizing: content-box;
 	z-index: 10;
-	border: 0.5em solid $accent;
-	height: 10em;
-	width: 10em;
+	border: 0.125em solid $accent;
+	height: 5em;
+	width: 5em;
 	background-color: transparent;
 	border-radius: 250px;
 	position: relative;
 	color: $accent;
-	margin-bottom: 4em;
+	margin-bottom: 2em;
 }
 
 .pause:after {
@@ -411,12 +412,16 @@ input[type="range"]:focus::-ms-fill-upper {
 /*============================================= Dropdown Styling ======================================= */
 
 .metro-dropdown-header {
-	padding: 1em;
+	padding: 0.75em;
 	background-color: $secondary;
 	border-radius: 26px;
 	width: 100%;
 	transition: ease-in 150ms;
 	cursor: pointer;
+	text-transform: uppercase;
+	text-align: center;
+	font-weight: bolder;
+	display: flex;
 }
 
 .metro-dropdown-header:hover {

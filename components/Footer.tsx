@@ -11,7 +11,11 @@ const Footer = () => {
 
 	return (
 		<footer className="footer_ctn">
-			<div className="logo"></div>
+			<img
+				src="https://res.cloudinary.com/dtnif6mzm/image/upload/v1748784212/philplaysbass/Logo_uyaaoa.png"
+				alt="Phil plays bass logo"
+				className="logo"
+			/>
 			<div className="list_ctn">
 				<ul>
 					<li>

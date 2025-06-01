@@ -6,6 +6,7 @@ import Socials from "./Socials";
 import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import Link from "next/link";
 
 const Hero: React.FC = () => {
 	const { language } = useLanguage();
@@ -25,14 +26,14 @@ const Hero: React.FC = () => {
 						<div className="links_ctn">
 							<ul>
 								<li className="link_item">
-									<a href="/metronome">
+									<Link href="/metronome">
 										{textObject.nav.buttons.app.labels[language]}
-									</a>
+									</Link>
 								</li>
 								<li className="link_item">
-									<a href="/lessons">
+									<Link href="/lessons">
 										{textObject.nav.buttons.lessons.labels[language]}
-									</a>
+									</Link>
 								</li>
 								<li className="link_item disabled pointer-none:">
 									<a href="/" className="md:flex pointer-none:">
@@ -43,16 +44,16 @@ const Hero: React.FC = () => {
 									</a>
 								</li>
 								<li className="link_item">
-									<a href="/">
+									<Link href="/">
 										{textObject.nav.buttons.about.labels[language]}
-									</a>
+									</Link>
 								</li>
 							</ul>
 						</div>
 						<div className="buttons_ctn">
-							<a className="button" href="/lessons/shop">
+							<Link className="button" href="/lessons/shop">
 								Shop
-							</a>
+							</Link>
 							<a className="button" href="/lessons/book">
 								Learn
 							</a>

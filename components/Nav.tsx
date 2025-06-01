@@ -14,6 +14,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LucideMenu } from "lucide-react";
+import Link from "next/link";
 
 type NavProps = {
 	isLoggedIn: boolean | null;
@@ -57,9 +58,9 @@ const Nav: React.FC<NavProps> = ({ isLoggedIn }) => {
 			<ul className="desktop-menu desktop">
 				{navLinks.map((link) => (
 					<li key={link.href}>
-						<a href={link.href} title={link.tooltip}>
+						<Link href={link.href} title={link.tooltip}>
 							{link.label}
-						</a>
+						</Link>
 					</li>
 				))}
 			</ul>

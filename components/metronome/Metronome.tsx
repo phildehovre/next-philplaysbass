@@ -129,7 +129,7 @@ const Metronome = () => {
 		<div className="metronome-ctn">
 			<div className={`metronome ${pulse ? "pulse" : ""}`}>
 				<div className="header">
-					<img src="/logo.png" />
+					<img src="https://res.cloudinary.com/dtnif6mzm/image/upload/v1748784212/philplaysbass/Logo_uyaaoa.png" />
 				</div>
 				<div className="metro-display">
 					<div className="metro-btn decrement" onClick={decrement}>

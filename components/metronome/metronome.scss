@@ -20,27 +20,24 @@
 }
 
 .metronome {
-	height: auto;
 	min-width: 400px;
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 2.5em;
+	padding: 1.5em;
 	background-color: $bg-color;
 	border-radius: 26px;
 	box-shadow: $secondary 15px 15px 100px;
 	transition: 150ms all cubic-bezier(0.49, 0.03, 0.61, 1.93);
-
-	&.pulse {
-		box-shadow: $secondary 15px 15px 300px;
-		transition: 150ms ease-in-out all cubic-bezier(0.49, 0.03, 0.61, 1.93);
-	}
 }
 
-.metronome h1 {
+.metronome .header img {
 	color: $accent;
-	font-size: 3em;
+	height: 100px;
+	object-fit: cover;
+	width: auto;
+	aspect-ratio: 1/1;
 }
 
 .metro-display {
@@ -51,38 +48,8 @@
 	justify-content: center;
 	align-items: center;
 	background-color: $secondary;
-}
+	height: 65px;
 
-.metro-display.bpm {
-	display: flex;
-	border: none;
-	height: 1em;
-	font-size: 1.5em;
-	width: 100%;
-}
-
-.metro-btn.decrement {
-	height: 100%;
-	text-align: center;
-	align-items: center;
-	border-radius: 16px 0 0 16px;
-}
-
-.metro-btn.decrement:hover {
-	background-color: $bg-color;
-	color: $secondary;
-}
-
-.metro-btn.increment {
-	border-radius: 0px 16px 16px 0px;
-}
-
-.metro-btn.increment:hover {
-	background-color: $accent;
-	color: $accent;
-}
-
-.metro-display {
 	> .metro-btn {
 		height: 100%;
 		text-align: center;
@@ -95,12 +62,43 @@
 		color: $accent;
 		transition: 150ms ease-in;
 	}
+
+	> .metro-btn:hover {
+		box-shadow: $secondary 5px 5px 50px;
+		background-color: $accent;
+		color: black;
+	}
+	> .bpm {
+		display: flex;
+		border: none;
+		font-size: 1.5em;
+		width: 100%;
+	}
 }
 
-.metro-display > .metro-btn:hover {
-	box-shadow: $secondary 5px 5px 50px;
+.metro-btn.decrement,
+.metro-btn.increment {
+	margin-top: -5px;
+	transition: 100ms all ease-in-out;
+}
+
+.metro-btn.decrement {
+	border-radius: 16px 0 0 16px;
+}
+
+.metro-btn.increment {
+	border-radius: 0px 16px 16px 0px;
+}
+
+.metro-btn.increment:hover,
+.metro-btn.decrement:hover {
 	background-color: $accent;
-	color: black;
+	color: $bg-color;
+}
+
+.metro-btn.decrement:active,
+.metro-btn.increment:active {
+	margin-top: 0px;
 }
 
 input[type="range"] {
@@ -154,13 +152,17 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 
 input[type="range"]::-webkit-slider-thumb {
-	height: 2em;
-	width: 2em;
+	height: 25px;
+	width: auto;
+	aspect-ratio: 1/1;
 	border-radius: 30px;
-	background: #ffffff;
+	background: $accent;
 	cursor: pointer;
 	-webkit-appearance: none;
-	margin-top: -9px;
+	margin-top: -7px;
+	input[type="range"]::-webkit-slider-thumb:hover {
+		box-shadow: $style-neon-shadow;
+	}
 }
 
 input[type="range"]::-moz-range-track {
@@ -242,7 +244,7 @@ input[type="range"]:focus::-ms-fill-upper {
 .metro-controls {
 	display: flex;
 	flex-direction: column;
-	height: 350px;
+	height: auto;
 	width: 100%;
 	align-items: center;
 	position: relative;
@@ -266,16 +268,14 @@ input[type="range"]:focus::-ms-fill-upper {
 .play {
 	box-sizing: content-box;
 	z-index: 10;
-	border: 0.5em solid $accent;
-	/* height: 55%;
-    width: 55%; */
-	height: 10em;
-	width: 10em;
+	border: 0.125em solid $accent;
+	height: 5em;
+	width: 5em;
 	background-color: $bg-color;
 	border-radius: 250px;
 	position: relative;
 	transition: ease-in 150ms;
-	margin-bottom: 4em;
+	margin-bottom: 2em;
 }
 
 .play:hover {
@@ -307,7 +307,6 @@ input[type="range"]:focus::-ms-fill-upper {
 	background-color: $bg-color;
 	border-radius: 25px;
 	position: absolute;
-	top: 20%;
 	right: 0%;
 	z-index: 9;
 	color: $accent;
@@ -359,7 +358,6 @@ input[type="range"]:focus::-ms-fill-upper {
 	border-radius: 25px;
 	border: 1px solid $secondary;
 	position: absolute;
-	top: 20%;
 	left: 0%;
 	z-index: 9;
 	color: $accent;
@@ -422,7 +420,7 @@ input[type="range"]:focus::-ms-fill-upper {
 }
 
 .metro-dropdown-header:hover {
-	background-color: var(--ternary);
+	background-color: var(--primary);
 }
 
 .metro-dropdown {
@@ -433,7 +431,6 @@ input[type="range"]:focus::-ms-fill-upper {
 }
 
 .metro-dropdown.open {
-	/* top: 1%; */
 	bottom: -97%;
 	right: 1%;
 	height: 100%;
@@ -457,7 +454,7 @@ input[type="range"]:focus::-ms-fill-upper {
 }
 
 .metro-dropdown-item:hover {
-	background-color: var(--ternary);
+	background-color: var(--primary);
 }
 
 /* Define the pulse animation */

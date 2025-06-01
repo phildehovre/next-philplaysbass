@@ -1,18 +1,33 @@
 "use client";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import "./Nav_alt.css";
 import { useActiveSectionContext } from "../context/activeElementContext";
 import { links } from "../types/types";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Link from "next/link";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
+import UserMenu from "./UserMenu";
 
 function Header() {
 	const { activeSection, setActiveSection, setTimeOfLastClick } =
 		useActiveSectionContext();
 
 	const [isShowing, setIsShowing] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+	const { user } = useKindeBrowserClient();
+
+	console.log(user);
+	useEffect(() => {
+		if (user) {
+			setIsLoggedIn(true);
+		}
+		if (!user) {
+			setIsLoggedIn(false);
+		}
+	});
 	useLayoutEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
 
@@ -59,6 +74,20 @@ function Header() {
 				</div>
 				<ul className={`links ${isShowing ? "showing" : ""}`}>
 					{renderLinks()}
+					<li className="login-btn">
+						{isLoggedIn ? (
+							<div className="flex gap-2 items-center">
+								<button className="auth_btn desktop">
+									<LogoutLink>Log out</LogoutLink>
+								</button>
+								<UserMenu user={user} />
+							</div>
+						) : (
+							<button className="auth_btn desktop">
+								<LoginLink>Sign in</LoginLink>
+							</button>
+						)}
+					</li>
 				</ul>
 			</nav>
 		</header>

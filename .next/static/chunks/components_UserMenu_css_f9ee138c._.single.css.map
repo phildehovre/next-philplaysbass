@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/UserMenu.css"],"sourcesContent":[".user-menu {\n\tobject-fit: cover;\n\theight: 2em;\n\twidth: 2em;\n\tborder-radius: 100%;\n}\n"],"names":[],"mappings":"AAAA"}}]
+}

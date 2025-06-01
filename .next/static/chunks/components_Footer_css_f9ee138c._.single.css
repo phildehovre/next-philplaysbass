@@ -29,11 +29,8 @@
 
 .footer_ctn .logo {
   aspect-ratio: 1;
+  object-fit: cover;
   z-index: 99;
-  background-image: url("/logo_black_circle.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 250%;
   width: 5em;
   height: auto;
 }

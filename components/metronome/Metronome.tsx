@@ -8,6 +8,7 @@ import SongList from "./SongList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Link from "next/link";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -127,7 +128,9 @@ const Metronome = () => {
 	return (
 		<div className="metronome-ctn">
 			<div className={`metronome ${pulse ? "pulse" : ""}`}>
-				<h1>Metronome</h1>
+				<div className="header">
+					<img src="/logo.png" />
+				</div>
 				<div className="metro-display">
 					<div className="metro-btn decrement" onClick={decrement}>
 						-
@@ -177,7 +180,10 @@ const Metronome = () => {
 						/>
 					</div>
 				</div>
-				<h6 style={{ color: "var(--secondary)" }}>Powered by GetSongBpm.com</h6>
+				<h6 style={{ color: "var(--secondary)" }}>
+					Powered by{" "}
+					<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>
+				</h6>
 				<QueryClientProvider client={queryClient}>
 					<SongList
 						bpm={debouncedBpm}

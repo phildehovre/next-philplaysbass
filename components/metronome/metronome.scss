@@ -391,11 +391,12 @@ input[type="range"]:focus::-ms-fill-upper {
 .pause:after {
 	content: "";
 	background-image: url("/pause.svg");
-	height: 55%;
-	width: 40%;
+	height: 2.5em;
+	width: 2.5em;
 	position: absolute;
-	top: 23%;
-	left: 30%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	background-size: cover;
 	background-position: center;
 }

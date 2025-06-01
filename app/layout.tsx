@@ -6,6 +6,8 @@ import { AuthProvider } from "@/AuthProvider";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import Nav_alt from "@/components/Nav_alt";
+import ActiveSectionContextProvider from "@/context/activeElementContext";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -35,7 +37,10 @@ export default async function RootLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<AuthProvider>
 					<LanguageProvider>
-						<Nav isLoggedIn={isLoggedIn} />
+						{/* <Nav isLoggedIn={isLoggedIn} /> */}
+						<ActiveSectionContextProvider>
+							<Nav_alt />
+						</ActiveSectionContextProvider>
 						{children}
 						<Footer />
 					</LanguageProvider>

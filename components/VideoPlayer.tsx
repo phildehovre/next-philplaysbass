@@ -53,7 +53,7 @@ const VideoPlayer: React.FC = () => {
 		<div id="player_ctn">
 			<video
 				ref={videoRef}
-				id="my-video-id" // important for cloudinary to target
+				id="my-video-id"
 				className={`video_ctn ${bgLoaded ? "loaded" : ""}`}
 				data-cld-public-id="Portfolio - 2024/promo_intro_clean_web_export_-_720WebShareName_lmzz2h"
 			/>

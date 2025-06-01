@@ -3,7 +3,7 @@ const runtime = require("../../chunks/ssr/[turbopack]_runtime.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_next_dist_0962b827._.js");
 runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__4c58c055._.js");
 runtime.loadChunk("server/chunks/ssr/app_1f3630ef._.js");
-runtime.loadChunk("server/chunks/ssr/node_modules_5e2c4522._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_26ce8c74._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_next_e3715097._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_@kinde-oss_kinde-auth-nextjs_dist_2c6cc3ef._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_@kinde-oss_kinde-typescript-sdk_dist_models_e818fb5d._.js");
@@ -11,7 +11,7 @@ runtime.loadChunk("server/chunks/ssr/node_modules_@kinde-oss_kinde-typescript-sd
 runtime.loadChunk("server/chunks/ssr/node_modules_@kinde-oss_kinde-typescript-sdk_dist_sdk_979a6815._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_@kinde-oss_kinde-typescript-sdk_dist_adb6f31b._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_fa6334f9._.js");
-runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__4eb4fe93._.js");
+runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__090e5f01._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_96715ba7._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_next_dist_client_components_forbidden-error_ea7ea172.js");
 runtime.loadChunk("server/chunks/ssr/_ce586ab0._.js");

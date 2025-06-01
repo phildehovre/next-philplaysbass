@@ -5,12 +5,10 @@ import "./Hero.css";
 import Socials from "./Socials";
 import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Link from "next/link";
 
 const Hero: React.FC = () => {
 	const { language } = useLanguage();
-	const { isAuthenticated } = useKindeBrowserClient();
 
 	return (
 		<div className="hero_ctn">

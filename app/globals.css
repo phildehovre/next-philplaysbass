@@ -4,7 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-	--clr-cta-primary: rgb(0, 255, 251);
+	/* My vars */
+	--clr-cta-primary: #00fffb;
+	--secondary-o2: #00fffb38; /* placeholder */
+	--secondary: #00fffb; /* placeholder */
+	--section-clamp: clamp(320px, 80%, 1200px); /* placeholder */
+
+	/* shadcn vars */
 	--radius: 0.625rem;
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);

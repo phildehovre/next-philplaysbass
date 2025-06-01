@@ -21,3 +21,28 @@ export type Song = {
 		year: string;
 	};
 };
+
+export const links = [
+	{
+		name: "Home",
+		hash: "/",
+	},
+	{
+		name: "App",
+		hash: "/metronome",
+	},
+	{
+		name: "Lessons",
+		hash: "/lessons",
+	},
+	{
+		name: "About",
+		hash: "/about",
+	},
+	// {
+	// 	name: "Contact",
+	// 	hash: "#contact",
+	// },
+] as const;
+
+export type SectionName = (typeof links)[number]["name"];

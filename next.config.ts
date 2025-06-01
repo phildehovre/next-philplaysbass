@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	/* config options here */
 	images: {
 		remotePatterns: [
 			{
@@ -9,6 +8,22 @@ const nextConfig: NextConfig = {
 				hostname: "i.ytimg.com",
 			},
 		],
+	},
+
+	async redirects() {
+		return [
+			{
+				source: "/:path*",
+				has: [
+					{
+						type: "host",
+						value: "next-philplaysbass.vercel.app",
+					},
+				],
+				destination: "https://philplaysbass.com/:path*",
+				permanent: true,
+			},
+		];
 	},
 };
 

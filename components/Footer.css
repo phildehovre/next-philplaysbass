@@ -24,13 +24,10 @@
 		flex-direction: column;
 	}
 	.logo {
-		background-image: url("/logo_black_circle.png");
 		width: 5em;
 		height: auto;
 		aspect-ratio: 1/1;
-		background-position: center;
-		background-size: 250%;
-		background-repeat: no-repeat;
+		object-fit: cover;
 		z-index: 99;
 	}
 }

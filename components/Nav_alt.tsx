@@ -76,12 +76,7 @@ function Header() {
 					{renderLinks()}
 					<li className="login-btn">
 						{isLoggedIn ? (
-							<div className="flex gap-2 items-center">
-								<button className="auth_btn desktop">
-									<LogoutLink>Log out</LogoutLink>
-								</button>
-								<UserMenu user={user} />
-							</div>
+							<UserMenu user={user} />
 						) : (
 							<button className="auth_btn desktop">
 								<LoginLink>Sign in</LoginLink>

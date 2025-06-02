@@ -39,10 +39,11 @@ export const links = [
 		name: "About",
 		hash: "/about",
 	},
-	// {
-	// 	name: "Contact",
-	// 	hash: "#contact",
-	// },
 ] as const;
 
 export type SectionName = (typeof links)[number]["name"];
+
+export type PaymentDetails = {
+	iban: string;
+	account_holder: string;
+};

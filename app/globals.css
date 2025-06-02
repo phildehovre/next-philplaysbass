@@ -9,6 +9,11 @@
 	--secondary-o2: #00fffb38; /* placeholder */
 	--secondary: #00fffb; /* placeholder */
 	--section-clamp: clamp(320px, 80%, 1200px); /* placeholder */
+	--test-border: 1px solid black;
+	--primary: #81a1bc;
+	--secondary: #abc0d2;
+	--ternary: #d5e0e9;
+	--primary-overlay: rgba(129, 161, 188, 0.75);
 
 	/* shadcn vars */
 	--radius: 0.625rem;
@@ -75,8 +80,6 @@ a:focus-visible {
 
 button,
 .button {
-	border: 1px solid var(--clr-cta-primary);
-	padding: 0.6em 1.2em;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
@@ -86,13 +89,11 @@ button,
 }
 button:hover,
 .button:hover {
-	background-color: var(--clr-cta-primary);
 	color: black;
 }
 
 button:focus-visible,
 .button:focus-visible {
-	outline: 4px auto var(--clr-cta-primary);
 }
 
 @media (prefers-color-scheme: dark) {

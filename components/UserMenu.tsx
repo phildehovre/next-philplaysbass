@@ -50,8 +50,9 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
 						src={user.picture}
 						alt="user avatar"
 						className="user-menu"
-						width={2}
-						height={2}
+						width={20}
+						height={20}
+						quality={100}
 					/>
 				</DropdownMenuTrigger>
 				{show && (

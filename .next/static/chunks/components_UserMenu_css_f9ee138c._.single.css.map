@@ -2,5 +2,5 @@
   "version": 3,
   "sources": [],
   "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/UserMenu.css"],"sourcesContent":[".user-menu {\n\tobject-fit: cover;\n\theight: 2em;\n\twidth: 2em;\n\tborder-radius: 100%;\n}\n"],"names":[],"mappings":"AAAA"}}]
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/UserMenu.css"],"sourcesContent":[".user-menu {\n\tobject-fit: cover;\n\theight: 2em;\n\twidth: 2em;\n\tborder-radius: 100%;\n}\n\n.dropdown-menu_content {\n\tbackground-color: rgba(32, 32, 32, 0.732);\n\tdisplay: flex;\n\tflex-direction: column;\n\tgap: 0.5em;\n\tpadding: 0.75em;\n\tz-index: 999;\n\tborder: 1px solid rgb(85, 85, 85);\n\n\t.dropdown-menu_item {\n\t\ttransition: 150ms all ease-in-out;\n\t}\n\t.dropdown-menu_item:hover {\n\t\tfont-weight: bolder;\n\t\tcolor: var(--clr-cta-primary);\n\t\tbackground-color: transparent;\n\t}\n}\n"],"names":[],"mappings":"AAAA;;;;;;;AAOA;;;;;;;;;;AASC;;;;AAGA"}}]
 }

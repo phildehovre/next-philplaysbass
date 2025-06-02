@@ -1,0 +1,77 @@
+.form_ctn {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    > .input-row {
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
+        justify-content: center;
+        width: 100%;
+
+        > .control {
+            display: flex;
+            gap: 1em;
+            width: 100%;
+
+            > label {
+                width: 100%;
+
+                > input {
+                    color: black;
+                    background: transparent;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    padding: .75em;
+                    border-radius: .25em;
+                    margin-top: .25em;
+                    width: 100%;
+
+                    &:hover {
+                        border: 1px solid var(--clr-accent-primary);
+                        outline: none;
+                    }
+                }
+            }
+
+            }
+    .half-size {
+        flex-shrink: 1.5;
+    }
+    }
+
+    .membership_wrapper {
+        padding: 1em;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: .25em .25em .5em .25em rgba(0, 0, 0, 0.1);
+        transition: 150ms all ease-in-out;
+        cursor: pointer;
+
+        &.selected {
+            outline: 5px solid var(--clr-accent-primary);
+            background: var(--clr-accent-primary-o1)
+        }
+
+        > label {
+            display: flex;
+            justify-content: start;
+            gap: .25em;
+
+            > * {
+                margin: 0;
+                align-content: center;
+            }
+        }
+    }
+}
+
+@media (min-width: 500px) {
+    .form_ctn {
+        > .input-row {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+    }
+
+
+}

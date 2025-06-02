@@ -8,7 +8,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { LucideMenu } from "lucide-react";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 
 type UserMenuProps = {
 	user: any;
@@ -22,8 +22,27 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
 		{ label: "Log out", link: "" },
 	];
 
+	const renderUserMenu = () => {
+		return items.map((item) => {
+			if (item.label === "Log out") {
+				return (
+					<DropdownMenuItem key={item.label} className="dropdown-menu_item">
+						<LogoutLink>Logout</LogoutLink>
+					</DropdownMenuItem>
+				);
+			}
+			return (
+				<DropdownMenuItem key={item.link} className="dropdown-menu_item">
+					<a href={item.link} title={item.label}>
+						{item.label}
+					</a>
+				</DropdownMenuItem>
+			);
+		});
+	};
+
 	return (
-		<React.Fragment>
+		<div className="z-100">
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Image
@@ -36,23 +55,12 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
 					/>
 				</DropdownMenuTrigger>
 				{show && (
-					<DropdownMenuContent>
-						{items.map((item) => (
-							<DropdownMenuItem asChild key={item.link}>
-								<a
-									className="gap-1 text-black"
-									style={{ color: "black", gap: "1em" }}
-									href={item.link}
-									title={item.label}
-								>
-									{item.label}
-								</a>
-							</DropdownMenuItem>
-						))}
+					<DropdownMenuContent className="dropdown-menu_content">
+						{renderUserMenu()}
 					</DropdownMenuContent>
 				)}
 			</DropdownMenu>
-		</React.Fragment>
+		</div>
 	);
 };
 

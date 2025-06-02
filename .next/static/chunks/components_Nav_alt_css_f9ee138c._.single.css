@@ -127,7 +127,7 @@ header {
 @media (width >= 768px) {
   .navbar {
     backdrop-filter: blur(5px);
-    z-index: 999;
+    z-index: 100;
     background-color: #0000;
     flex-direction: row;
     justify-content: space-evenly;
@@ -177,7 +177,6 @@ header {
     text-align: center;
     border-radius: 30px;
     width: 100%;
-    padding: .8em 1em;
     font-size: 1.1rem;
     font-weight: 400;
   }
@@ -196,6 +195,10 @@ header {
 
   .nav-active > links > li {
     font-size: 1.2em;
+  }
+
+  .login-btn {
+    padding: 0;
   }
 }
 

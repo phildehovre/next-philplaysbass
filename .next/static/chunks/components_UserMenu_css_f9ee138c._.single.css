@@ -6,4 +6,24 @@
   height: 2em;
 }
 
+.dropdown-menu_content {
+  z-index: 999;
+  background-color: #202020bb;
+  border: 1px solid #555;
+  flex-direction: column;
+  gap: .5em;
+  padding: .75em;
+  display: flex;
+}
+
+.dropdown-menu_content .dropdown-menu_item {
+  transition: all .15s ease-in-out;
+}
+
+.dropdown-menu_content .dropdown-menu_item:hover {
+  color: var(--clr-cta-primary);
+  background-color: #0000;
+  font-weight: bolder;
+}
+
 /*# sourceMappingURL=components_UserMenu_css_f9ee138c._.single.css.map*/

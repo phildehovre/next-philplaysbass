@@ -4,3 +4,22 @@
 	width: 2em;
 	border-radius: 100%;
 }
+
+.dropdown-menu_content {
+	background-color: rgba(32, 32, 32, 0.732);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	padding: 0.75em;
+	z-index: 999;
+	border: 1px solid rgb(85, 85, 85);
+
+	.dropdown-menu_item {
+		transition: 150ms all ease-in-out;
+	}
+	.dropdown-menu_item:hover {
+		font-weight: bolder;
+		color: var(--clr-cta-primary);
+		background-color: transparent;
+	}
+}

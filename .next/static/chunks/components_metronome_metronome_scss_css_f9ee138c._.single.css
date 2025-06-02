@@ -1,13 +1,4 @@
 /* [project]/components/metronome/metronome.scss.css [app-client] (css) */
-*, :before, :after {
-  box-sizing: border-box;
-  --test-border: 1px solid black;
-  --primary: #81a1bc;
-  --secondary: #abc0d2;
-  --ternary: #d5e0e9;
-  --primary-overlay: #81a1bcbf;
-}
-
 .metronome-ctn {
   justify-content: center;
   align-items: center;
@@ -19,7 +10,7 @@
 .metronome {
   z-index: 1;
   background-color: #000;
-  border-radius: 26px;
+  border-radius: 10px;
   flex-direction: column;
   align-items: center;
   min-width: 400px;

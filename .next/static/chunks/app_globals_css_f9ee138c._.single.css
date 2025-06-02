@@ -24,7 +24,11 @@
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-animation-delay: 0s;
+      --tw-animation-direction: normal;
       --tw-animation-duration: initial;
+      --tw-animation-fill-mode: forwards;
+      --tw-animation-iteration-count: 1;
       --tw-enter-opacity: 1;
       --tw-enter-rotate: 0;
       --tw-enter-scale: 1;
@@ -276,6 +280,10 @@
 
   .z-50 {
     z-index: 50;
+  }
+
+  .z-100 {
+    z-index: 100;
   }
 
   .container {
@@ -549,7 +557,7 @@
   }
 
   .data-\[state\=closed\]\:animate-out[data-state="closed"] {
-    animation: exit var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease);
+    animation: exit var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, forwards);
   }
 
   .data-\[state\=closed\]\:fade-out-0[data-state="closed"] {
@@ -561,7 +569,7 @@
   }
 
   .data-\[state\=open\]\:animate-in[data-state="open"] {
-    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease);
+    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, forwards);
   }
 
   .data-\[state\=open\]\:bg-accent[data-state="open"] {
@@ -642,9 +650,33 @@
   }
 }
 
+@property --tw-animation-delay {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0s;
+}
+
+@property --tw-animation-direction {
+  syntax: "*";
+  inherits: false;
+  initial-value: normal;
+}
+
 @property --tw-animation-duration {
   syntax: "*";
   inherits: false
+}
+
+@property --tw-animation-fill-mode {
+  syntax: "*";
+  inherits: false;
+  initial-value: forwards;
+}
+
+@property --tw-animation-iteration-count {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
 }
 
 @property --tw-enter-opacity {
@@ -712,12 +744,15 @@
   --secondary-o2: #00fffb38;
   --secondary: oklch(.97 0 0);
   --section-clamp: clamp(320px, 80%, 1200px);
+  --test-border: 1px solid black;
+  --primary: oklch(.205 0 0);
+  --ternary: #d5e0e9;
+  --primary-overlay: #81a1bcbf;
   --radius: .625rem;
   --card: oklch(1 0 0);
   --card-foreground: oklch(.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(.145 0 0);
-  --primary: oklch(.205 0 0);
   --primary-foreground: oklch(.985 0 0);
   --secondary-foreground: oklch(.205 0 0);
   --muted: oklch(.97 0 0);
@@ -773,10 +808,8 @@ a:focus, a:focus-visible {
 }
 
 button, .button {
-  border: 1px solid var(--clr-cta-primary);
   cursor: pointer;
   background-color: #0000;
-  padding: .6em 1.2em;
   font-family: inherit;
   font-size: 1em;
   font-weight: 500;
@@ -784,12 +817,7 @@ button, .button {
 }
 
 button:hover, .button:hover {
-  background-color: var(--clr-cta-primary);
   color: #000;
-}
-
-button:focus-visible, .button:focus-visible {
-  outline: 4px auto var(--clr-cta-primary);
 }
 
 @media (prefers-color-scheme: dark) {

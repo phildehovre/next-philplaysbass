@@ -1,16 +1,5 @@
 @import "../../variables.scss";
 
-*,
-*:before,
-*:after {
-	box-sizing: border-box;
-	--test-border: 1px solid black;
-	--primary: #81a1bc;
-	--secondary: #abc0d2;
-	--ternary: #d5e0e9;
-	--primary-overlay: rgba(129, 161, 188, 0.75);
-}
-
 .metronome-ctn {
 	display: flex;
 	justify-content: center;
@@ -27,7 +16,7 @@
 	align-items: center;
 	padding: 1.5em;
 	background-color: $bg-color;
-	border-radius: 26px;
+	border-radius: 10px;
 	box-shadow: $secondary 15px 15px 100px;
 	transition: 150ms all cubic-bezier(0.49, 0.03, 0.61, 1.93);
 }

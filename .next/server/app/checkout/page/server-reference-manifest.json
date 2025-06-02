@@ -1,0 +1,16 @@
+{
+  "node": {
+    "7f5092bb1be13a0a57e8ebd5b6854cd05e935b0846": {
+      "workers": {
+        "app/checkout/page": {
+          "moduleId": "[project]/.next-internal/server/app/checkout/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/checkout/page": "action-browser"
+      }
+    }
+  },
+  "edge": {}
+}

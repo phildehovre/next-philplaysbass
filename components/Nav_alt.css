@@ -20,18 +20,22 @@ header {
 
 .navbar .links {
 	margin: 0;
-	padding: 2em 0;
+	padding: 0;
 	width: 100%;
 	height: 100%;
 	display: none;
 	justify-content: space-evenly;
 	align-items: center;
 	list-style: none;
+	margin-top: -35px;
+	font-family: Anton;
+	border-bottom: 4px solid var(--clr-cta-primary);
 }
 
 .navbar .links.showing {
 	display: flex;
 	flex-direction: column;
+	background-color: rgba(0, 0, 0, 0.359);
 }
 
 .navbar .links > li {
@@ -48,6 +52,7 @@ header {
 	text-decoration: none;
 	color: inherit;
 	transition: 150ms ease-in-out all;
+	font-size: 1.8em;
 }
 
 .navbar .links > li > a:hover {
@@ -57,6 +62,7 @@ header {
 .navbar .hamburger {
 	padding: 1em 0;
 	margin-right: 2em;
+	top: 50px;
 	right: 0;
 	height: 1.75em;
 	width: 1.75em;
@@ -67,25 +73,31 @@ header {
 	position: relative;
 }
 
+.navbar .hamburger .hamburger-bar:nth-child(1) {
+	transform: translateY(-9px);
+	width: 100%;
+}
+
 .navbar .hamburger .hamburger-bar:nth-child(1),
 .navbar .hamburger .hamburger-bar:nth-child(2),
 .navbar .hamburger .hamburger-bar:nth-child(3),
 .navbar .hamburger .hamburger-bar:nth-child(4) {
 	transition: 250ms ease-in-out all;
-	width: 30px;
+	width: 100%;
 	border: 1px solid white;
 }
 
 .navbar .hamburger .hamburger-bar:nth-child(2),
 .navbar .hamburger .hamburger-bar:nth-child(3) {
 	position: absolute;
-	margin-top: 48%;
+	margin-top: 50%;
 	content: "";
+	width: 100%;
 }
 
 .navbar .hamburger .hamburger-bar:nth-child(4) {
 	border-bottom: 2px solid white;
-	width: 32px;
+	width: 100%;
 }
 
 .navbar .hamburger.showing .hamburger-bar:nth-child(1),

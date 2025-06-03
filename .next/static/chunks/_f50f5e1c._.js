@@ -193,7 +193,7 @@ const Logo = (props)=>{
             alt: "Phil plays bass logo",
             width: size,
             height: size,
-            src: "/logo.png"
+            src: "https://res.cloudinary.com/dtnif6mzm/image/upload/v1748938746/philplaysbass/logo_unified_thx8q9.png"
         }, void 0, false, {
             fileName: "[project]/components/metronome/Logo.tsx",
             lineNumber: 8,
@@ -240,7 +240,7 @@ const Footer = ()=>{
                 size: 50
             }, void 0, false, {
                 fileName: "[project]/components/Footer.tsx",
-                lineNumber: 16,
+                lineNumber: 15,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -254,12 +254,12 @@ const Footer = ()=>{
                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.home.labels[language]
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 20,
+                                    lineNumber: 19,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 19,
+                                lineNumber: 18,
                                 columnNumber: 6
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -268,12 +268,12 @@ const Footer = ()=>{
                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.about.labels[language]
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 23,
+                                    lineNumber: 22,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 22,
+                                lineNumber: 21,
                                 columnNumber: 6
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -282,18 +282,18 @@ const Footer = ()=>{
                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.privacy.labels[language]
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 28,
+                                    lineNumber: 27,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 27,
+                                lineNumber: 26,
                                 columnNumber: 6
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Footer.tsx",
-                        lineNumber: 18,
+                        lineNumber: 17,
                         columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -304,12 +304,12 @@ const Footer = ()=>{
                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.lessons.labels[language]
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 35,
+                                    lineNumber: 34,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 34,
+                                lineNumber: 33,
                                 columnNumber: 6
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -318,12 +318,12 @@ const Footer = ()=>{
                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.shop.labels[language]
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 40,
+                                    lineNumber: 39,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 39,
+                                lineNumber: 38,
                                 columnNumber: 6
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -332,30 +332,30 @@ const Footer = ()=>{
                                     children: "Watch the stream"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Footer.tsx",
-                                    lineNumber: 45,
+                                    lineNumber: 44,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Footer.tsx",
-                                lineNumber: 44,
+                                lineNumber: 43,
                                 columnNumber: 6
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Footer.tsx",
-                        lineNumber: 33,
+                        lineNumber: 32,
                         columnNumber: 5
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Footer.tsx",
-                lineNumber: 17,
+                lineNumber: 16,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Footer.tsx",
-        lineNumber: 15,
+        lineNumber: 14,
         columnNumber: 3
     }, this);
 };

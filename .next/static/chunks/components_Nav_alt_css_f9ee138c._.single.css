@@ -20,17 +20,20 @@ header {
 }
 
 .navbar .links {
+  border-bottom: 4px solid var(--clr-cta-primary);
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 2em 0;
+  margin: -35px 0 0;
+  padding: 0;
+  font-family: Anton;
   list-style: none;
   display: none;
 }
 
 .navbar .links.showing {
+  background-color: #0000005c;
   flex-direction: column;
   display: flex;
 }
@@ -47,6 +50,7 @@ header {
 
 .navbar .links > li > a {
   color: inherit;
+  font-size: 1.8em;
   text-decoration: none;
   transition: all .15s ease-in-out;
 }
@@ -65,24 +69,31 @@ header {
   padding: 1em 0;
   display: flex;
   position: relative;
+  top: 50px;
   right: 0;
+}
+
+.navbar .hamburger .hamburger-bar:first-child {
+  width: 100%;
+  transform: translateY(-9px);
 }
 
 .navbar .hamburger .hamburger-bar:first-child, .navbar .hamburger .hamburger-bar:nth-child(2), .navbar .hamburger .hamburger-bar:nth-child(3), .navbar .hamburger .hamburger-bar:nth-child(4) {
   border: 1px solid #fff;
-  width: 30px;
+  width: 100%;
   transition: all .25s ease-in-out;
 }
 
 .navbar .hamburger .hamburger-bar:nth-child(2), .navbar .hamburger .hamburger-bar:nth-child(3) {
   content: "";
-  margin-top: 48%;
+  width: 100%;
+  margin-top: 50%;
   position: absolute;
 }
 
 .navbar .hamburger .hamburger-bar:nth-child(4) {
   border-bottom: 2px solid #fff;
-  width: 32px;
+  width: 100%;
 }
 
 .navbar .hamburger.showing .hamburger-bar:first-child, .navbar .hamburger.showing .hamburger-bar:nth-child(4) {

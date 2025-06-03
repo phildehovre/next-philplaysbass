@@ -6,6 +6,7 @@ import Socials from "./Socials";
 import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
 import Link from "next/link";
+import Image from "next/image";
 
 const Hero: React.FC = () => {
 	const { language } = useLanguage();
@@ -15,9 +16,12 @@ const Hero: React.FC = () => {
 			<VideoPlayer />
 			<div className="slogan_ctn">
 				<div className="left top">
-					<h1 id="phil">Phil</h1>
-					<h1 id="bass">BASS</h1>
-					<h1 id="plays">plays</h1>
+					<Image
+						width={450}
+						height={450}
+						src="/logo.png"
+						alt="Phil plays bass logo"
+					/>
 				</div>
 				<div className="right bottom">
 					<div className="container">

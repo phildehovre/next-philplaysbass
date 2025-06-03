@@ -1,59 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import {
 	useStripe,
 	useElements,
 	PaymentElement,
 } from "@stripe/react-stripe-js";
 
-const StripePayment = ({ handleSubmitRegistration }) => {
+// Define props interface
+interface StripePaymentProps {
+	handleSubmitRegistration: () => void;
+}
+
+const StripePayment: React.FC<StripePaymentProps> = ({
+	handleSubmitRegistration,
+}) => {
 	const stripe = useStripe();
 	const elements = useElements();
 
-	const [errorMessage, setErrorMessage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
 
-		if (elements == null) {
-			return;
-		}
+		if (!elements || !stripe) return;
+
 		handleSubmitRegistration();
 
-		// Trigger form validation and wallet collection
 		const { error: submitError } = await elements.submit();
 		if (submitError) {
-			// Show error to your customer
-			setErrorMessage(submitError.message);
+			setErrorMessage(
+				submitError.message || "An error occurred during submission."
+			);
 			return;
 		}
 
-		// Create the PaymentIntent and obtain clientSecret from your server endpoint
 		const res = await fetch(
-			`${import.meta.env.VITE_API_URL}/checkout/create-payment-intent`,
+			`${process.env.VITE_API_URL}/checkout/create-payment-intent`,
 			{
 				method: "POST",
 			}
 		);
+
 		const { client_secret: clientSecret } = await res.json();
 
 		const { error } = await stripe.confirmPayment({
-			//`Elements` instance that was used to create the Payment Element
 			elements,
 			clientSecret,
 			confirmParams: {
-				return_url: `${import.meta.env.VITE_CLIENT_URL}/checkout/success`,
+				return_url: `${process.env.VITE_CLIENT_URL}/checkout/success`,
 			},
 		});
 
 		if (error) {
-			// This point will only be reached if there is an immediate error when
-			// confirming the payment. Show error to your customer (for example, payment
-			// details incomplete)
-			setErrorMessage(error.message);
-		} else {
-			// Your customer will be redirected to your `return_url`. For some payment
-			// methods like iDEAL, your customer will be redirected to an intermediate
-			// site first to authorize the payment, then redirected to the `return_url`.
+			setErrorMessage(error.message || "An error occurred during payment.");
 		}
 	};
 
@@ -63,7 +61,6 @@ const StripePayment = ({ handleSubmitRegistration }) => {
 			<button type="submit" disabled={!stripe || !elements}>
 				Pay
 			</button>
-			{/* Show error message to your customers */}
 			{errorMessage && <div>{errorMessage}</div>}
 		</form>
 	);

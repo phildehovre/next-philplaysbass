@@ -6,7 +6,6 @@ import Socials from "./Socials";
 import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
 import Link from "next/link";
-import Image from "next/image";
 import Logo from "./metronome/Logo";
 
 const Hero: React.FC = () => {

@@ -10,7 +10,6 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import Logo from "./Logo";
 
 type SoundObject = {

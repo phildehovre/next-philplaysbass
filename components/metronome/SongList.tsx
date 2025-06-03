@@ -13,6 +13,7 @@ import {
 	faChevronRight,
 	faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { LoaderCircle } from "lucide-react";
 
 function SongList(props: any) {
 	const { bpm, showSongs } = props;
@@ -95,7 +96,7 @@ function SongList(props: any) {
 						icon={faSpinner}
 						spin
 						className="songList-spinner"
-						size="2x"
+						size="2xl"
 					/>
 				)}
 			</div>

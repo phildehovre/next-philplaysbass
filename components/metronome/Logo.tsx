@@ -9,7 +9,7 @@ const Logo = (props: { size: number }) => {
 				alt="Phil plays bass logo"
 				width={size}
 				height={size}
-				src="/logo.png"
+				src="https://res.cloudinary.com/dtnif6mzm/image/upload/v1748938746/philplaysbass/logo_unified_thx8q9.png"
 			/>
 		</>
 	);

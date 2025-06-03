@@ -35,6 +35,7 @@ header {
 .navbar .links.showing {
   background-color: #0000005c;
   flex-direction: column;
+  margin-top: -80px;
   display: flex;
 }
 
@@ -65,17 +66,12 @@ header {
   align-items: center;
   width: 1.75em;
   height: 1.75em;
+  margin-bottom: 50px;
   margin-right: 2em;
-  padding: 1em 0;
   display: flex;
   position: relative;
   top: 50px;
   right: 0;
-}
-
-.navbar .hamburger .hamburger-bar:first-child {
-  width: 100%;
-  transform: translateY(-9px);
 }
 
 .navbar .hamburger .hamburger-bar:first-child, .navbar .hamburger .hamburger-bar:nth-child(2), .navbar .hamburger .hamburger-bar:nth-child(3), .navbar .hamburger .hamburger-bar:nth-child(4) {
@@ -97,6 +93,7 @@ header {
 }
 
 .navbar .hamburger.showing .hamburger-bar:first-child, .navbar .hamburger.showing .hamburger-bar:nth-child(4) {
+  width: 100%;
   transform: scaleX(0);
 }
 

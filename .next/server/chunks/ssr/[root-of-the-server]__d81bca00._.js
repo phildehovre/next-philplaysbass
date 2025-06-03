@@ -910,12 +910,12 @@ function Header() {
                     children: link.name
                 }, void 0, false, {
                     fileName: "[project]/components/Nav_alt.tsx",
-                    lineNumber: 57,
+                    lineNumber: 56,
                     columnNumber: 6
                 }, this)
             }, link.name, false, {
                 fileName: "[project]/components/Nav_alt.tsx",
-                lineNumber: 48,
+                lineNumber: 47,
                 columnNumber: 5
             }, this);
         });
@@ -928,6 +928,13 @@ function Header() {
                     className: `hamburger ${isShowing ? "showing" : ""}`,
                     onClick: ()=>setIsShowing(!isShowing),
                     children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "hamburger-bar"
+                        }, void 0, false, {
+                            fileName: "[project]/components/Nav_alt.tsx",
+                            lineNumber: 68,
+                            columnNumber: 6
+                        }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "hamburger-bar"
                         }, void 0, false, {
@@ -948,18 +955,11 @@ function Header() {
                             fileName: "[project]/components/Nav_alt.tsx",
                             lineNumber: 71,
                             columnNumber: 6
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            className: "hamburger-bar"
-                        }, void 0, false, {
-                            fileName: "[project]/components/Nav_alt.tsx",
-                            lineNumber: 72,
-                            columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/Nav_alt.tsx",
-                    lineNumber: 65,
+                    lineNumber: 64,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -972,7 +972,7 @@ function Header() {
                                 user: user
                             }, void 0, false, {
                                 fileName: "[project]/components/Nav_alt.tsx",
-                                lineNumber: 78,
+                                lineNumber: 77,
                                 columnNumber: 8
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "auth_btn desktop",
@@ -981,34 +981,34 @@ function Header() {
                                     children: "Sign in"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Nav_alt.tsx",
-                                    lineNumber: 81,
+                                    lineNumber: 80,
                                     columnNumber: 9
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/Nav_alt.tsx",
-                                lineNumber: 80,
+                                lineNumber: 79,
                                 columnNumber: 8
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/Nav_alt.tsx",
-                            lineNumber: 76,
+                            lineNumber: 75,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/Nav_alt.tsx",
-                    lineNumber: 74,
+                    lineNumber: 73,
                     columnNumber: 5
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/Nav_alt.tsx",
-            lineNumber: 64,
+            lineNumber: 63,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/Nav_alt.tsx",
-        lineNumber: 63,
+        lineNumber: 62,
         columnNumber: 3
     }, this);
 }

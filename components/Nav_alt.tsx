@@ -41,7 +41,6 @@ function Header() {
 
 		return () => ctx.revert();
 	});
-
 	const renderLinks = () => {
 		return links.map((link) => {
 			return (

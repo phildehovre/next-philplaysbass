@@ -99,7 +99,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
 			{clientSecret && (
 				<Elements stripe={stripePromise} options={{ clientSecret }}>
-					<StripePayment handleSubmitRegistration={onSubmit} />
+					<StripePayment
+						handleSubmitRegistration={() => onSubmit({} as PaymentDetails)}
+					/>
 				</Elements>
 			)}
 		</div>

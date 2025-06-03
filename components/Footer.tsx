@@ -5,17 +5,15 @@ import React from "react";
 import "./Footer.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { textObject } from "@/constants/textFile";
+import Image from "next/image";
+import Logo from "./metronome/Logo";
 
 const Footer = () => {
 	const { language } = useLanguage();
 
 	return (
 		<footer className="footer_ctn">
-			<img
-				src="https://res.cloudinary.com/dtnif6mzm/image/upload/v1748784212/philplaysbass/Logo_uyaaoa.png"
-				alt="Phil plays bass logo"
-				className="logo"
-			/>
+			<Logo size={50} />
 			<div className="list_ctn">
 				<ul>
 					<li>

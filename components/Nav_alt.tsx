@@ -19,7 +19,6 @@ function Header() {
 
 	const { user } = useKindeBrowserClient();
 
-	console.log(user);
 	useEffect(() => {
 		if (user) {
 			setIsLoggedIn(true);

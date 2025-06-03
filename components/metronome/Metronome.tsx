@@ -10,6 +10,8 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
+import Logo from "./Logo";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -130,7 +132,7 @@ const Metronome = () => {
 		<div className="metronome-ctn">
 			<div className={`metronome ${pulse ? "pulse" : ""}`}>
 				<div className="header">
-					<img src="https://res.cloudinary.com/dtnif6mzm/image/upload/v1748784212/philplaysbass/Logo_uyaaoa.png" />
+					<Logo size={60} />
 				</div>
 				<div className="metro-display">
 					<div className="metro-btn decrement" onClick={decrement}>

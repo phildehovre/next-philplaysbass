@@ -7,6 +7,7 @@ import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
 import Link from "next/link";
 import Image from "next/image";
+import Logo from "./metronome/Logo";
 
 const Hero: React.FC = () => {
 	const { language } = useLanguage();
@@ -16,12 +17,7 @@ const Hero: React.FC = () => {
 			<VideoPlayer />
 			<div className="slogan_ctn">
 				<div className="left top">
-					<Image
-						width={450}
-						height={450}
-						src="/logo.png"
-						alt="Phil plays bass logo"
-					/>
+					<Logo size={450} />
 				</div>
 				<div className="right bottom">
 					<div className="container">

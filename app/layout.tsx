@@ -37,7 +37,6 @@ export default async function RootLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<AuthProvider>
 					<LanguageProvider>
-						{/* <Nav isLoggedIn={isLoggedIn} /> */}
 						<ActiveSectionContextProvider>
 							<Nav_alt />
 						</ActiveSectionContextProvider>

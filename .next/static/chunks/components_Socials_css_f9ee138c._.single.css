@@ -1,7 +1,7 @@
 /* [project]/components/Socials.css [app-client] (css) */
 .socials-list {
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 1em;
   width: 100%;
   display: flex;
@@ -36,6 +36,14 @@
   100% {
     transform: scale(1);
     box-shadow: 0 0 pink;
+  }
+}
+
+@media (width >= 768px) {
+  .socials-list {
+    justify-content: flex-start;
+    margin: auto 0;
+    display: flex;
   }
 }
 

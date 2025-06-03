@@ -10,7 +10,7 @@
 
 .latest-stream_ctn h1 {
   color: var(--clr-cta-primary);
-  font-family: NCL Astonic;
+  font-family: Anton;
   font-size: 3em;
 }
 
@@ -24,25 +24,12 @@
 
 @media (width >= 768px) {
   .latest-stream_ctn {
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    width: 100%;
     height: 50svh;
     padding: 1em;
-    display: flex;
   }
 
   .latest-stream_ctn h1 {
-    color: var(--clr-cta-primary);
-    font-family: NCL Astonic;
     font-size: 3em;
-  }
-
-  .latest-stream_ctn iframe {
-    aspect-ratio: 16 / 9;
-    min-width: 400px;
-    min-height: auto;
   }
 }
 

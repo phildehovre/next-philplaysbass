@@ -1,7 +1,7 @@
 "use client";
 // components/LatestStream.tsx
 import React, { useEffect, useState } from "react";
-import { handleDecode } from "@/utilities/Parsing";
+import { handleDecode } from "@/utils/Parsing";
 import "./LatestStream.css";
 
 type Video = {

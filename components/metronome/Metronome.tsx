@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import Logo from "./Logo";
+import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -183,6 +184,7 @@ const Metronome = () => {
 						/>
 					</div>
 				</div>
+				<LoginWithSpotifyButton />
 				<h6 style={{ color: "var(--secondary)" }}>
 					Powered by{" "}
 					<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>

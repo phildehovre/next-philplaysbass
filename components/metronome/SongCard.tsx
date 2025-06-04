@@ -4,10 +4,14 @@ import "./SongCard.scss";
 import { Song } from "../../types/types";
 
 import { animate, stagger } from "motion";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
+import PlayButton from "./PlayButton";
+import { PlayerContext } from "@/context/playerContext";
 
 function SongCard(props: { song: Song }) {
 	const { song } = props;
+	const [showPlayButton, setShowPlayButton] = useState(false);
+	const { setCurrentTrack } = useContext<any>(PlayerContext);
 
 	useLayoutEffect(() => {
 		animate(
@@ -35,18 +39,32 @@ function SongCard(props: { song: Song }) {
 		return title;
 	};
 
+	const handlePlayButtonClick = () => {
+		setCurrentTrack(song);
+	};
+
 	return (
-		<>
-			<div className="songcard">
-				<div className="songcard-left">
-					<div>
-						<div className="songcard-title">{formatTitle(song.song_title)}</div>
-						<div className="songcard-artist">{song.artist.name}</div>
-					</div>
+		<div
+			className="songcard"
+			onMouseEnter={() => setShowPlayButton(true)}
+			onMouseLeave={() => setShowPlayButton(false)}
+		>
+			<div className="songcard-left">
+				<div>
+					<div className="songcard-title">{formatTitle(song.song_title)}</div>
+					<div className="songcard-artist">{song.artist.name}</div>
 				</div>
-				<div>{renderGenres(song.artist.genres)}</div>
 			</div>
-		</>
+			<div className="songcard-right">
+				<div className="songcard-genres">
+					{renderGenres(song.artist.genres)}
+				</div>
+				<PlayButton
+					isShowing={showPlayButton}
+					handlePlayButtonClick={handlePlayButtonClick}
+				/>
+			</div>
+		</div>
 	);
 }
 

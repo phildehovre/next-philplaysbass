@@ -2,6 +2,7 @@ import Metronome from "@/components/metronome/Metronome";
 import React from "react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
+import { PlayerProvider } from "@/context/playerContext";
 
 const page = async () => {
 	const { isAuthenticated } = await getKindeServerSession();
@@ -11,7 +12,11 @@ const page = async () => {
 		redirect("/login");
 	}
 
-	return <Metronome />;
+	return (
+		<PlayerProvider>
+			<Metronome />
+		</PlayerProvider>
+	);
 };
 
 export default page;

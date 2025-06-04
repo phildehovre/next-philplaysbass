@@ -4,6 +4,7 @@ import useCookies from "@/hooks/useCookies";
 import { getSpotifyTrackIdByArtistAndTitle } from "@/services/Spotify";
 import { SongData } from "@/types/types";
 import { createContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 // context/PlayerContext.tsx
 export const PlayerContext = createContext({
 	/* state & controls */
@@ -14,12 +15,17 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>(
 		undefined
 	);
-	const [spotifyTrack, setSpotifyTrack] = useState<string | null>("");
+	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
 	const { getCookie } = useCookies();
-
 	useEffect(() => {
-		// Load Web Playback SDK and auth user
-		// Set player instance
+		const script = document.createElement("script");
+		script.src = "https://sdk.scdn.co/spotify-player.js";
+		script.async = true;
+		document.body.appendChild(script);
+
+		(window as any).onSpotifyWebPlaybackSDKReady = () => {
+			console.log("Spotify SDK is ready");
+		};
 	}, []);
 
 	useEffect(() => {
@@ -36,13 +42,21 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 			if (currentTrack && tokenObject?.access_token) {
 				(async () => {
 					try {
-						const result = await getSpotifyTrackIdByArtistAndTitle(
+						const result: any = await getSpotifyTrackIdByArtistAndTitle(
 							currentTrack.song_title,
-							currentTrack.artist.name,
 							tokenObject.access_token
 						);
-						setSpotifyTrack(result);
-						console.log("Spotify track ID:", result);
+						const exists = result?.artists.find(
+							(item: any) => item.name === currentTrack.artist.name
+						);
+						if (exists) {
+							setSpotifyTrack(result);
+						} else {
+							toast("Not found", {
+								description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
+								className: "not-found_toast",
+							});
+						}
 					} catch (err) {
 						console.error("Error fetching Spotify track ID:", err);
 					}
@@ -52,8 +66,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 			console.error("Failed to parse token cookie:", err);
 		}
 	}, [currentTrack]);
-
-	console.log(spotifyTrack);
 
 	const play = (trackUri: string) => {
 		// Tell Spotify SDK to play that URI

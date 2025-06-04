@@ -11,6 +11,7 @@
   padding: 1em;
   transition: all .25s ease-in;
   display: flex;
+  position: relative;
 }
 
 .songcard:hover {
@@ -31,6 +32,27 @@
 
 .songcard-artist {
   font-size: .75em;
+}
+
+.songcard-right {
+  justify-content: flex;
+  gap: .5em;
+  display: flex;
+}
+
+.play-button {
+  opacity: 0;
+  cursor: pointer;
+  padding: .25em;
+  transition: all .15s ease-in-out;
+}
+
+.play-button.showing {
+  opacity: 1;
+}
+
+.play-button.showing :hover > * {
+  color: var(--clr-cta-primary);
 }
 
 /*# sourceMappingURL=components_metronome_SongCard_scss_css_f9ee138c._.single.css.map*/

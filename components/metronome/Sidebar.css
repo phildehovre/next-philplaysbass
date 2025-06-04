@@ -1,0 +1,7 @@
+.sidebar_main {
+	border: transparent;
+	border-right: 1px solid rgba(128, 128, 128, 0.403);
+	> * {
+		background-color: rgb(23, 23, 23);
+	}
+}

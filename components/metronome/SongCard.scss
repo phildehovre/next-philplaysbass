@@ -12,6 +12,7 @@
 	border-radius: 6px;
 	color: white;
 	transition: ease-in 250ms;
+	position: relative;
 }
 
 .songcard:hover {
@@ -32,4 +33,27 @@
 
 .songcard-artist {
 	font-size: 0.75em;
+}
+
+.songcard-right {
+	display: flex;
+	justify-content: flex;
+	gap: 0.5em;
+}
+
+.play-button {
+	transition: 150ms all ease-in-out;
+	opacity: 0;
+	cursor: pointer;
+	padding: 0.25em;
+}
+
+.play-button.showing {
+	opacity: 1;
+
+	:hover {
+		> * {
+			color: var(--clr-cta-primary);
+		}
+	}
 }

@@ -439,8 +439,7 @@ const links = [
 var { g: global, __dirname } = __turbopack_context__;
 {
 __turbopack_context__.s({
-    "cn": (()=>cn),
-    "fetchTempoData": (()=>fetchTempoData)
+    "cn": (()=>cn)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/clsx/dist/clsx.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/tailwind-merge/dist/bundle-mjs.mjs [app-ssr] (ecmascript)");
@@ -449,15 +448,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$
 function cn(...inputs) {
     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["twMerge"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(inputs));
 }
-const fetchTempoData = async (bpm)=>{
-    const apiUrl = `https://api.getsong.co/tempo/?api_key=${("TURBOPACK compile-time value", "5342973719315b31c98d26528094f76e")}&bpm=${bpm}`;
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data.tempo;
-};
 }}),
 "[project]/components/ui/dropdown-menu.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
 "use strict";

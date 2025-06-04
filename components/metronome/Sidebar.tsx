@@ -1,3 +1,4 @@
+import "./Sidebar.css";
 import React from "react";
 import {
 	Sidebar,
@@ -11,7 +12,7 @@ import {
 
 const MetroSidebar = () => {
 	return (
-		<Sidebar side="right">
+		<Sidebar className="sidebar_main">
 			<SidebarHeader />
 			<SidebarContent>
 				<SidebarGroup />

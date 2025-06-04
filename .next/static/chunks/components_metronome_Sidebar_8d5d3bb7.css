@@ -1,0 +1,12 @@
+/* [project]/components/metronome/Sidebar.css [app-client] (css) */
+.sidebar_main {
+  border: #0000;
+  border-right: 1px solid #80808067;
+}
+
+.sidebar_main > * {
+  background-color: #171717;
+}
+
+
+/*# sourceMappingURL=components_metronome_Sidebar_8d5d3bb7.css.map*/

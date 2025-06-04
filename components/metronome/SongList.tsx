@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import "./SongList.scss";
 
 import SongCard from "./SongCard";
-import { fetchTempoData } from "../../lib/utils";
+import { fetchTempoData } from "../../services/getSongBpm";
 import { useQuery } from "@tanstack/react-query";
 import { Song } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/metronome/Sidebar.css"],"sourcesContent":[".sidebar_main {\n\tborder: transparent;\n\tborder-right: 1px solid rgba(128, 128, 128, 0.403);\n\t> * {\n\t\tbackground-color: rgb(23, 23, 23);\n\t}\n}\n"],"names":[],"mappings":"AAAA;;;;;AAGC"}}]
+}

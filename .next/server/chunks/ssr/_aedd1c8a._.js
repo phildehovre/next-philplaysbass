@@ -148,8 +148,8 @@ const PlaySong = ()=>{
     console.log("Beep boop");
 };
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
-async function getSpotifyTrackIdByArtistAndTitle(artist, title, accessToken) {
-    const query = `track:${title} artist:${artist}`;
+async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
+    const query = `track:${title}`;
     const url = new URL(`${SPOTIFY_API_BASE}/search`);
     url.searchParams.append("q", query);
     url.searchParams.append("type", "track");
@@ -167,7 +167,7 @@ async function getSpotifyTrackIdByArtistAndTitle(artist, title, accessToken) {
         }
         const data = await res.json();
         const track = data.tracks.items[0];
-        return track?.id || null;
+        return track || null;
     } catch (err) {
         console.error("[Spotify Search Error]", err);
         return null;
@@ -214,7 +214,7 @@ const PlayerProvider = ({ children })=>{
             if (currentTrack && tokenObject?.access_token) {
                 (async ()=>{
                     try {
-                        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, currentTrack.artist.name, tokenObject.access_token);
+                        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, tokenObject.access_token);
                         setSpotifyTrack(result);
                         console.log("Spotify track ID:", result);
                     } catch (err) {
@@ -242,7 +242,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 63,
+        lineNumber: 62,
         columnNumber: 3
     }, this);
 };

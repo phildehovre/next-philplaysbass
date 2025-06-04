@@ -40,6 +40,17 @@ const Metronome = () => {
 	const queryClient = new QueryClient();
 
 	useEffect(() => {
+		const script = document.createElement("script");
+		script.src = "https://sdk.scdn.co/spotify-player.js";
+		script.async = true;
+		document.body.appendChild(script);
+
+		(window as any).onSpotifyWebPlaybackSDKReady = () => {
+			console.log("Spotify SDK is ready");
+		};
+	}, []);
+
+	useEffect(() => {
 		const woodblock = new Audio("sounds/Woodblock.mp3");
 		const cowbell = new Audio("sounds/Cowbell.mp3");
 		const sidestick = new Audio("sounds/Click.wav");

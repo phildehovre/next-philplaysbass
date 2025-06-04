@@ -5,11 +5,10 @@ export const PlaySong = () => {
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
 export async function getSpotifyTrackIdByArtistAndTitle(
-	artist: string,
 	title: string,
 	accessToken: string
 ): Promise<string | null> {
-	const query = `track:${title} artist:${artist}`;
+	const query = `track:${title}`;
 	const url = new URL(`${SPOTIFY_API_BASE}/search`);
 	url.searchParams.append("q", query);
 	url.searchParams.append("type", "track");
@@ -33,7 +32,7 @@ export async function getSpotifyTrackIdByArtistAndTitle(
 		const data = await res.json();
 		const track = data.tracks.items[0];
 
-		return track?.id || null;
+		return track || null;
 	} catch (err) {
 		console.error("[Spotify Search Error]", err);
 		return null;

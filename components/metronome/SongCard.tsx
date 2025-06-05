@@ -11,7 +11,7 @@ import { PlayerContext } from "@/context/playerContext";
 function SongCard(props: { song: Song }) {
 	const { song } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
-	const { setCurrentTrack } = useContext<any>(PlayerContext);
+	const { setCurrentTrack, setIsPlaying } = useContext<any>(PlayerContext);
 
 	useLayoutEffect(() => {
 		animate(
@@ -41,6 +41,7 @@ function SongCard(props: { song: Song }) {
 
 	const handlePlayButtonClick = () => {
 		setCurrentTrack(song);
+		setIsPlaying((prev: boolean) => !prev);
 	};
 
 	return (

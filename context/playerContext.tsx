@@ -5,18 +5,26 @@ import { getSpotifyTrackIdByArtistAndTitle } from "@/services/Spotify";
 import { SongData } from "@/types/types";
 import { createContext, useState, useEffect } from "react";
 import { toast } from "sonner";
+import Spotify from "spotify-api.js";
 export const PlayerContext = createContext({});
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
-	const [player, setPlayer] = useState(null);
+	const [player, setPlayer] = useState<Spotify.Player | null>(null);
 	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>(
 		undefined
 	);
 	const [isPlaying, setIsPlaying] = useState(false);
+	const [isPaused, setIsPaused] = useState(false);
 	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
 	const [deviceId, setDeviceId] = useState("");
 
 	const { setCookie, getCookie } = useCookies();
+
+	useEffect(() => {
+		setIsPlaying(false);
+		setIsPaused(false);
+		setSpotifyTrack("");
+	}, []);
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -34,7 +42,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 			}
 
 			const player = new (window as any).Spotify.Player({
-				name: "My Web Player",
+				name: "PhilPlaysBass app",
 				getOAuthToken: (cb: any) => cb(token),
 				volume: 0.5,
 			});
@@ -43,6 +51,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				console.log("Ready with Device ID", device_id);
 				setDeviceId(device_id);
 				setCookie("device_id", device_id);
+				(async () => {
+					await transferPlayback(device_id, token);
+				})();
 			});
 
 			player.addListener("not_ready", ({ device_id }: any) => {
@@ -97,11 +108,32 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [currentTrack]);
 
+	// ============== //
+	/* Playing logic */
+	// ============== //
 	useEffect(() => {
-		if (isPlaying && spotifyTrack) {
-			play();
+		if (isPaused && spotifyTrack) {
+			player?.pause();
 		}
-	}, [isPlaying, spotifyTrack]);
+		if (isPlaying && spotifyTrack) {
+			(async () => {
+				try {
+					play();
+				} catch (error: any) {
+					if (
+						error?.message?.includes("CloudPlaybackClientError") ||
+						error?.message?.includes("PlayLoad event failed")
+					) {
+						console.warn("Non-fatal telemetry error:", error.message);
+					} else {
+						console.error("Playback error:", error);
+					}
+				}
+			})();
+		}
+	}, [isPlaying, spotifyTrack, isPaused]);
+
+	console.log(isPaused);
 
 	async function play() {
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
@@ -125,9 +157,45 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		);
 	}
 
+	async function getPlayback() {
+		try {
+			const pb = await player
+				?.getCurrentState()
+				.then((state: any) => console.log(state));
+			if (!pb) {
+				throw new Error("No playback state available");
+			}
+			return pb;
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	async function transferPlayback(device_id: string, token: string) {
+		await fetch("https://api.spotify.com/v1/me/player", {
+			method: "PUT",
+			body: JSON.stringify({
+				device_ids: [device_id],
+				// play: true,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`, // use a valid token
+			},
+		});
+	}
+
 	return (
 		<PlayerContext.Provider
-			value={{ player, currentTrack, setIsPlaying, setCurrentTrack }}
+			value={{
+				player,
+				currentTrack,
+				setIsPlaying,
+				setCurrentTrack,
+				isPlaying,
+				isPaused,
+				setIsPaused,
+			}}
 		>
 			{children}
 		</PlayerContext.Provider>

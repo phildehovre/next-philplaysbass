@@ -11,7 +11,8 @@ import { PlayerContext } from "@/context/playerContext";
 function SongCard(props: { song: Song }) {
 	const { song } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
-	const { setCurrentTrack, setIsPlaying } = useContext<any>(PlayerContext);
+	const { isPaused, setIsPaused, isPlaying, setCurrentTrack, setIsPlaying } =
+		useContext<any>(PlayerContext);
 
 	useLayoutEffect(() => {
 		animate(
@@ -41,7 +42,14 @@ function SongCard(props: { song: Song }) {
 
 	const handlePlayButtonClick = () => {
 		setCurrentTrack(song);
-		setIsPlaying((prev: boolean) => !prev);
+		if (isPlaying) {
+			setIsPlaying(false);
+			setIsPaused(true);
+		}
+		if (isPaused || !isPlaying) {
+			setIsPlaying(true);
+			setIsPaused(false);
+		}
 	};
 
 	return (
@@ -61,6 +69,8 @@ function SongCard(props: { song: Song }) {
 					{renderGenres(song.artist.genres)}
 				</div>
 				<PlayButton
+					isPlaying={isPlaying}
+					isPaused={isPaused}
 					isShowing={showPlayButton}
 					handlePlayButtonClick={handlePlayButtonClick}
 				/>

@@ -1,23 +1,36 @@
-import { PauseIcon, PlayCircleIcon, PlayIcon } from "lucide-react";
-import React from "react";
+"use client";
+
+import { PlayerContext } from "@/context/playerContext";
+import { PauseIcon, PlayIcon } from "lucide-react";
+import { useContext } from "react";
+import { SongData } from "@/types/types";
 
 const PlayButton = ({
 	isShowing,
-	handlePlayButtonClick,
-	isPlaying,
-	isPaused,
+	song,
 }: {
 	isShowing: boolean;
-	handlePlayButtonClick: () => void;
-	isPlaying: boolean;
-	isPaused: boolean;
+	song: SongData;
 }) => {
+	const { isPaused, playSong, currentTrack, pause, spotifyTrack } =
+		useContext(PlayerContext);
+
+	const isCurrentSong = currentTrack?.song_title === song.song_title;
+
+	const handleClick = async () => {
+		if (!isCurrentSong) {
+			await playSong(song); // ✅ New logic: set song, wait for fetch, then play
+		} else {
+			isPaused ? await playSong(song) : await pause();
+		}
+	};
+
 	return (
 		<div
 			className={`play-button ${isShowing ? "showing" : ""}`}
-			onClick={handlePlayButtonClick}
+			onClick={handleClick}
 		>
-			{isPlaying ? <PauseIcon /> : <PlayIcon />}
+			{isPaused || !isCurrentSong ? <PlayIcon /> : <PauseIcon />}
 		</div>
 	);
 };

@@ -168,12 +168,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$di
 const PlayerContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({});
 const PlayerProvider = ({ children })=>{
     const [player, setPlayer] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [currentTrack, setCurrentTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])();
-    const [spotifyTrack, setSpotifyTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [isPaused, setIsPaused] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [currentTrack, setCurrentTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(undefined);
+    const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isPaused, setIsPaused] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [spotifyTrack, setSpotifyTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [deviceId, setDeviceId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [active, setActive] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const { setCookie, getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
-    // Load SDK and connect player
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -181,141 +182,108 @@ const PlayerProvider = ({ children })=>{
         document.body.appendChild(script);
         window.onSpotifyWebPlaybackSDKReady = ()=>{
             const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-            if (!token) return;
-            const playerInstance = new window.Spotify.Player({
+            if (!token) {
+                console.warn("No access token found in cookies.");
+                return;
+            }
+            const player = new window.Spotify.Player({
                 name: "PhilPlaysBass app",
                 getOAuthToken: (cb)=>cb(token),
                 volume: 0.5
             });
-            setPlayer(playerInstance);
-            playerInstance.addListener("ready", async ({ device_id })=>{
+            setPlayer(player);
+            player.addListener("ready", async ({ device_id })=>{
+                console.log("Ready with Device ID", device_id);
                 setDeviceId(device_id);
                 setCookie("device_id", device_id);
-                await transferPlayback(device_id, token);
+                const pb = await transferPlayback(device_id, token);
+                console.log("playback transferred to device", pb);
             });
-            playerInstance.addListener("not_ready", ({ device_id })=>{
-                console.log("Device ID offline", device_id);
+            player.addListener("not_ready", ({ device_id })=>{
+                console.log("Device ID has gone offline", device_id);
             });
-            playerInstance.addListener("player_state_changed", (state)=>{
-                if (!state) return;
+            player.addListener("player_state_changed", (state)=>{
+                if (!state) {
+                    return;
+                }
                 setSpotifyTrack(state.track_window.current_track);
                 setIsPaused(state.paused);
+                player.getCurrentState().then((state)=>{
+                    !state ? setActive(false) : setActive(true);
+                });
             });
-            playerInstance.connect();
+            player.connect().then((success)=>{
+                if (success) {
+                    console.log("The web player sucessfully connected to Spotify");
+                }
+            });
         };
         return ()=>{
             delete window.onSpotifyWebPlaybackSDKReady;
         };
     }, []);
-    // Fetch Spotify track for currentTrack
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const tokenData = getCookie("token");
-        if (!tokenData || !currentTrack) return;
-        const token = JSON.parse(tokenData)?.access_token;
-        (async ()=>{
-            try {
-                const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, token);
-                const match = result?.artists?.find((a)=>a.name === currentTrack.artist.name);
-                if (match) {
-                    setSpotifyTrack(result);
-                } else {
-                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"])("Not found", {
-                        description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
-                        className: "not-found_toast"
-                    });
-                }
-            } catch (err) {
-                console.error("Error fetching Spotify track ID:", err);
+        const data = getCookie("token");
+        if (!data) {
+            console.warn("No token cookie found");
+            return;
+        }
+        try {
+            const tokenObject = JSON.parse(data);
+            if (currentTrack && tokenObject?.access_token) {
+                (async ()=>{
+                    try {
+                        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, tokenObject.access_token);
+                        const exists = result?.artists.find((item)=>item.name === currentTrack.artist.name);
+                        if (exists) {
+                            setSpotifyTrack(result);
+                        } else {
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"])("Not found", {
+                                description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
+                                className: "not-found_toast"
+                            });
+                        }
+                    } catch (err) {
+                        console.error("Error fetching Spotify track ID:", err);
+                    }
+                })();
             }
-        })();
+        } catch (err) {
+            console.error("Failed to parse token cookie:", err);
+        }
     }, [
         currentTrack
     ]);
-    const transferPlayback = async (device_id, token)=>{
+    // console.log(currentTrack, spotifyTrack);
+    async function transferPlayback(device_id, token) {
         await fetch("https://api.spotify.com/v1/me/player", {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
             body: JSON.stringify({
                 device_ids: [
                     device_id
-                ],
-                play: false
-            })
-        });
-    };
-    const play = async (uri)=>{
-        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-        const device_id = getCookie("device_id");
-        if (!token || !device_id || !uri) {
-            console.warn("Missing token, device_id or uri");
-            return;
-        }
-        await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                uris: [
-                    uri
                 ]
-            })
-        });
-    };
-    const pause = async ()=>{
-        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-        if (!token) return;
-        try {
-            await fetch("https://api.spotify.com/v1/me/player/pause", {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
-        } catch (err) {
-            console.error("Failed to pause", err);
-        }
-    };
-    const playSong = async (song)=>{
-        setCurrentTrack(song);
-        // Wait until spotifyTrack matches this song
-        const waitForCorrectSpotifyTrack = async ()=>{
-            for(let i = 0; i < 10; i++){
-                await new Promise((res)=>setTimeout(res, 500));
-                if (spotifyTrack?.name === song.song_title && spotifyTrack?.artists?.some((a)=>a.name === song.artist.name)) {
-                    return spotifyTrack.uri;
-                }
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             }
-            return null;
-        };
-        const uri = await waitForCorrectSpotifyTrack();
-        if (uri) {
-            await play(uri);
-        } else {
-            console.warn("Correct Spotify track not found in time.");
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Couldn't load this track from Spotify.");
-        }
-    };
+        });
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
         value: {
             player,
             currentTrack,
+            setIsPlaying,
             setCurrentTrack,
+            isPlaying,
             isPaused,
-            spotifyTrack,
-            play,
-            pause,
-            playSong
+            setIsPaused,
+            spotifyTrack
         },
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 174,
+        lineNumber: 138,
         columnNumber: 3
     }, this);
 };
@@ -330,6 +298,7 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pause.js [app-ssr] (ecmascript) <export default as PauseIcon>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/play.js [app-ssr] (ecmascript) <export default as PlayIcon>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
@@ -338,31 +307,105 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 ;
-const PlayButton = ({ isShowing, song })=>{
-    const { isPaused, playSong, currentTrack, pause, spotifyTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
-    const isCurrentSong = currentTrack?.song_title === song.song_title;
-    const handleClick = async ()=>{
-        if (!isCurrentSong) {
-            await playSong(song); // ✅ New logic: set song, wait for fetch, then play
+;
+const PlayButton = ({ isShowing, player, handlePlayButtonClick })=>{
+    const { getCookie, setCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
+    const { spotifyTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const [playerState, setPlayerState] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!player) return;
+        player.getCurrentState().then((state)=>{
+            console.log(state);
+            setPlayerState(state);
+        });
+    }, []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        player.getCurrentState().then((state)=>{
+            console.log("Player is present: ", playerState);
+        });
+    }, [
+        player
+    ]);
+    async function play() {
+        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+        const device_id = getCookie("device_id");
+        if (!token || !device_id) {
+            console.error("Missing token or deviceId");
+            return;
+        }
+        await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                uris: [
+                    spotifyTrack.uri
+                ]
+            })
+        });
+    }
+    async function pause() {
+        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+        if (!player || !token) {
+            console.error("Missing player instance or token");
+            return;
+        }
+        try {
+            const state = await player.getCurrentState();
+            if (!state) {
+                console.warn("No active playback state. Falling back to Web API pause.");
+                await fetch("https://api.spotify.com/v1/me/player/pause", {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                return;
+            }
+            await player.pause();
+            console.log("Playback paused using SDK.");
+        } catch (err) {
+            console.error("Error pausing via SDK. Falling back to Web API:", err);
+            try {
+                await fetch("https://api.spotify.com/v1/me/player/pause", {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                console.log("Playback paused using Web API fallback.");
+            } catch (apiErr) {
+                console.error("Failed to pause using Web API:", apiErr);
+            }
+        }
+    }
+    const handlePlayPause = ()=>{
+        handlePlayButtonClick();
+        if (playerState?.isPlaying) {
+            pause();
         } else {
-            isPaused ? await playSong(song) : await pause();
+            play();
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `play-button ${isShowing ? "showing" : ""}`,
-        onClick: handleClick,
-        children: isPaused || !isCurrentSong ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__["PlayIcon"], {}, void 0, false, {
+        onClick: handlePlayPause,
+        children: playerState?.isPaused ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
             fileName: "[project]/components/metronome/PlayButton.tsx",
-            lineNumber: 33,
-            columnNumber: 34
-        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
+            lineNumber: 117,
+            columnNumber: 29
+        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__["PlayIcon"], {}, void 0, false, {
             fileName: "[project]/components/metronome/PlayButton.tsx",
-            lineNumber: 33,
-            columnNumber: 49
+            lineNumber: 117,
+            columnNumber: 45
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/PlayButton.tsx",
-        lineNumber: 29,
+        lineNumber: 113,
         columnNumber: 3
     }, this);
 };
@@ -381,7 +424,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$di
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$motionone$2f$dom$2f$dist$2f$utils$2f$stagger$2e$es$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@motionone/dom/dist/utils/stagger.es.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlayButton.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-ssr] (ecmascript)");
 "use client";
+;
 ;
 ;
 ;
@@ -390,6 +435,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$P
 function SongCard(props) {
     const { song } = props;
     const [showPlayButton, setShowPlayButton] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { player, isPaused, setIsPaused, isPlaying, setCurrentTrack, setIsPlaying } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLayoutEffect"])(()=>{
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$animate$2e$es$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animate"])(".songcard", {
             opacity: [
@@ -417,6 +463,9 @@ function SongCard(props) {
         }
         return title;
     };
+    const handlePlayButtonClick = ()=>{
+        setCurrentTrack(song);
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "songcard",
         onMouseEnter: ()=>setShowPlayButton(true),
@@ -431,7 +480,7 @@ function SongCard(props) {
                             children: formatTitle(song.song_title)
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 49,
+                            lineNumber: 61,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -439,18 +488,18 @@ function SongCard(props) {
                             children: song.artist.name
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 50,
+                            lineNumber: 62,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/SongCard.tsx",
-                    lineNumber: 48,
+                    lineNumber: 60,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 47,
+                lineNumber: 59,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -461,27 +510,28 @@ function SongCard(props) {
                         children: renderGenres(song.artist.genres)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 54,
+                        lineNumber: 66,
                         columnNumber: 5
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                    player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         isShowing: showPlayButton,
-                        song: song
+                        handlePlayButtonClick: handlePlayButtonClick,
+                        player: player
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 57,
-                        columnNumber: 5
+                        lineNumber: 70,
+                        columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 53,
+                lineNumber: 65,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/metronome/SongCard.tsx",
-        lineNumber: 42,
+        lineNumber: 54,
         columnNumber: 3
     }, this);
 }

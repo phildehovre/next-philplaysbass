@@ -207,19 +207,19 @@ const PlayerProvider = ({ children })=>{
     const [isPaused, setIsPaused] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [spotifyTrack, setSpotifyTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [deviceId, setDeviceId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [active, setActive] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const { setCookie, getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        setIsPlaying(false);
-        setIsPaused(false);
-        setSpotifyTrack("");
-    }, []);
+    // useEffect(() => {
+    // 	setIsPlaying(false);
+    // 	setIsPaused(false);
+    // 	setSpotifyTrack("");
+    // }, []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
         script.async = true;
         document.body.appendChild(script);
         window.onSpotifyWebPlaybackSDKReady = ()=>{
-            console.log("Spotify SDK is ready");
             const token = JSON.parse(getCookie("token") || "{}")?.access_token;
             if (!token) {
                 console.warn("No access token found in cookies.");
@@ -230,19 +230,33 @@ const PlayerProvider = ({ children })=>{
                 getOAuthToken: (cb)=>cb(token),
                 volume: 0.5
             });
-            player.addListener("ready", ({ device_id })=>{
+            setPlayer(player);
+            player.addListener("ready", async ({ device_id })=>{
                 console.log("Ready with Device ID", device_id);
                 setDeviceId(device_id);
                 setCookie("device_id", device_id);
-                (async ()=>{
-                    await transferPlayback(device_id, token);
-                })();
+                const pb = await transferPlayback(device_id, token);
+                console.log("playback transferred to device", pb);
             });
             player.addListener("not_ready", ({ device_id })=>{
                 console.log("Device ID has gone offline", device_id);
             });
-            player.connect();
-            setPlayer(player);
+            player.addListener("player_state_changed", (state)=>{
+                if (!state) {
+                    return;
+                }
+                setSpotifyTrack(state.track_window.current_track);
+                setIsPaused(state.paused);
+                player.getCurrentState().then((state)=>{
+                    console.log(state);
+                    !state ? setActive(false) : setActive(true);
+                });
+            });
+            player.connect().then((success)=>{
+                if (success) {
+                    console.log("The web player sucessfully connected to Spotify");
+                }
+            });
         };
         return ()=>{
             delete window.onSpotifyWebPlaybackSDKReady;
@@ -282,29 +296,28 @@ const PlayerProvider = ({ children })=>{
     ]);
     // ============== //
     /* Playing logic */ // ============== //
+    const hasPlayed = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (isPaused && spotifyTrack) {
             player?.pause();
+            hasPlayed.current = false;
         }
-        if (isPlaying && spotifyTrack) {
+        if (isPlaying && spotifyTrack && !hasPlayed.current) {
+            hasPlayed.current = true;
             (async ()=>{
                 try {
-                    play();
+                    await play();
                 } catch (error) {
-                    if (error?.message?.includes("CloudPlaybackClientError") || error?.message?.includes("PlayLoad event failed")) {
-                        console.warn("Non-fatal telemetry error:", error.message);
-                    } else {
-                        console.error("Playback error:", error);
-                    }
+                    console.error("Playback error:", error);
                 }
             })();
         }
     }, [
         isPlaying,
         spotifyTrack,
-        isPaused
+        isPaused,
+        player
     ]);
-    console.log(isPaused);
     async function play() {
         const token = JSON.parse(getCookie("token") || "{}")?.access_token;
         const device_id = getCookie("device_id");
@@ -327,7 +340,7 @@ const PlayerProvider = ({ children })=>{
     }
     async function getPlayback() {
         try {
-            const pb = await player?.getCurrentState().then((state)=>console.log(state));
+            const pb = await player?.getCurrentPlayback().then((state)=>console.log(state));
             if (!pb) {
                 throw new Error("No playback state available");
             }
@@ -363,7 +376,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 189,
+        lineNumber: 204,
         columnNumber: 3
     }, this);
 };

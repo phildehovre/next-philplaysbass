@@ -3,7 +3,7 @@
 import useCookies from "@/hooks/useCookies";
 import { getSpotifyTrackIdByArtistAndTitle } from "@/services/Spotify";
 import { SongData } from "@/types/types";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import Spotify from "spotify-api.js";
 export const PlayerContext = createContext({});
@@ -17,14 +17,15 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isPaused, setIsPaused] = useState(false);
 	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
 	const [deviceId, setDeviceId] = useState("");
+	const [active, setActive] = useState(false);
 
 	const { setCookie, getCookie } = useCookies();
 
-	useEffect(() => {
-		setIsPlaying(false);
-		setIsPaused(false);
-		setSpotifyTrack("");
-	}, []);
+	// useEffect(() => {
+	// 	setIsPlaying(false);
+	// 	setIsPaused(false);
+	// 	setSpotifyTrack("");
+	// }, []);
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -33,8 +34,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		document.body.appendChild(script);
 
 		(window as any).onSpotifyWebPlaybackSDKReady = () => {
-			console.log("Spotify SDK is ready");
-
 			const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 			if (!token) {
 				console.warn("No access token found in cookies.");
@@ -47,21 +46,41 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				volume: 0.5,
 			});
 
-			player.addListener("ready", ({ device_id }: any) => {
+			setPlayer(player);
+
+			player.addListener("ready", async ({ device_id }: any) => {
 				console.log("Ready with Device ID", device_id);
+
 				setDeviceId(device_id);
 				setCookie("device_id", device_id);
-				(async () => {
-					await transferPlayback(device_id, token);
-				})();
+
+				const pb = await transferPlayback(device_id, token);
+				console.log("playback transferred to device", pb);
 			});
 
 			player.addListener("not_ready", ({ device_id }: any) => {
 				console.log("Device ID has gone offline", device_id);
 			});
 
-			player.connect();
-			setPlayer(player);
+			player.addListener("player_state_changed", (state: any) => {
+				if (!state) {
+					return;
+				}
+
+				setSpotifyTrack(state.track_window.current_track);
+				setIsPaused(state.paused);
+
+				player.getCurrentState().then((state: any) => {
+					console.log(state);
+					!state ? setActive(false) : setActive(true);
+				});
+			});
+
+			player.connect().then((success: boolean) => {
+				if (success) {
+					console.log("The web player sucessfully connected to Spotify");
+				}
+			});
 		};
 
 		return () => {
@@ -111,29 +130,25 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	// ============== //
 	/* Playing logic */
 	// ============== //
+	const hasPlayed = useRef(false);
+
 	useEffect(() => {
 		if (isPaused && spotifyTrack) {
 			player?.pause();
+			hasPlayed.current = false;
 		}
-		if (isPlaying && spotifyTrack) {
+
+		if (isPlaying && spotifyTrack && !hasPlayed.current) {
+			hasPlayed.current = true;
 			(async () => {
 				try {
-					play();
-				} catch (error: any) {
-					if (
-						error?.message?.includes("CloudPlaybackClientError") ||
-						error?.message?.includes("PlayLoad event failed")
-					) {
-						console.warn("Non-fatal telemetry error:", error.message);
-					} else {
-						console.error("Playback error:", error);
-					}
+					await play();
+				} catch (error) {
+					console.error("Playback error:", error);
 				}
 			})();
 		}
-	}, [isPlaying, spotifyTrack, isPaused]);
-
-	console.log(isPaused);
+	}, [isPlaying, spotifyTrack, isPaused, player]);
 
 	async function play() {
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
@@ -160,7 +175,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	async function getPlayback() {
 		try {
 			const pb = await player
-				?.getCurrentState()
+				?.getCurrentPlayback()
 				.then((state: any) => console.log(state));
 			if (!pb) {
 				throw new Error("No playback state available");

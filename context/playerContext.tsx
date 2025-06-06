@@ -3,30 +3,21 @@
 import useCookies from "@/hooks/useCookies";
 import { getSpotifyTrackIdByArtistAndTitle } from "@/services/Spotify";
 import { SongData } from "@/types/types";
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import Spotify from "spotify-api.js";
-export const PlayerContext = createContext({});
+
+export const PlayerContext = createContext<any>({});
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [player, setPlayer] = useState<Spotify.Player | null>(null);
-	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>(
-		undefined
-	);
-	const [isPlaying, setIsPlaying] = useState(false);
-	const [isPaused, setIsPaused] = useState(false);
-	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
+	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>();
+	const [spotifyTrack, setSpotifyTrack] = useState<any>(null);
+	const [isPaused, setIsPaused] = useState(true);
 	const [deviceId, setDeviceId] = useState("");
-	const [active, setActive] = useState(false);
 
 	const { setCookie, getCookie } = useCookies();
 
-	// useEffect(() => {
-	// 	setIsPlaying(false);
-	// 	setIsPaused(false);
-	// 	setSpotifyTrack("");
-	// }, []);
-
+	// Load SDK and connect player
 	useEffect(() => {
 		const script = document.createElement("script");
 		script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -35,52 +26,33 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 
 		(window as any).onSpotifyWebPlaybackSDKReady = () => {
 			const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-			if (!token) {
-				console.warn("No access token found in cookies.");
-				return;
-			}
+			if (!token) return;
 
-			const player = new (window as any).Spotify.Player({
+			const playerInstance = new (window as any).Spotify.Player({
 				name: "PhilPlaysBass app",
 				getOAuthToken: (cb: any) => cb(token),
 				volume: 0.5,
 			});
 
-			setPlayer(player);
+			setPlayer(playerInstance);
 
-			player.addListener("ready", async ({ device_id }: any) => {
-				console.log("Ready with Device ID", device_id);
-
+			playerInstance.addListener("ready", async ({ device_id }: any) => {
 				setDeviceId(device_id);
 				setCookie("device_id", device_id);
-
-				const pb = await transferPlayback(device_id, token);
-				console.log("playback transferred to device", pb);
+				await transferPlayback(device_id, token);
 			});
 
-			player.addListener("not_ready", ({ device_id }: any) => {
-				console.log("Device ID has gone offline", device_id);
+			playerInstance.addListener("not_ready", ({ device_id }: any) => {
+				console.log("Device ID offline", device_id);
 			});
 
-			player.addListener("player_state_changed", (state: any) => {
-				if (!state) {
-					return;
-				}
-
+			playerInstance.addListener("player_state_changed", (state: any) => {
+				if (!state) return;
 				setSpotifyTrack(state.track_window.current_track);
 				setIsPaused(state.paused);
-
-				player.getCurrentState().then((state: any) => {
-					console.log(state);
-					!state ? setActive(false) : setActive(true);
-				});
 			});
 
-			player.connect().then((success: boolean) => {
-				if (success) {
-					console.log("The web player sucessfully connected to Spotify");
-				}
-			});
+			playerInstance.connect();
 		};
 
 		return () => {
@@ -88,74 +60,55 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 	}, []);
 
+	// Fetch Spotify track for currentTrack
 	useEffect(() => {
-		const data = getCookie("token");
+		const tokenData = getCookie("token");
+		if (!tokenData || !currentTrack) return;
 
-		if (!data) {
-			console.warn("No token cookie found");
-			return;
-		}
+		const token = JSON.parse(tokenData)?.access_token;
 
-		try {
-			const tokenObject = JSON.parse(data);
+		(async () => {
+			try {
+				const result: any = await getSpotifyTrackIdByArtistAndTitle(
+					currentTrack.song_title,
+					token
+				);
 
-			if (currentTrack && tokenObject?.access_token) {
-				(async () => {
-					try {
-						const result: any = await getSpotifyTrackIdByArtistAndTitle(
-							currentTrack.song_title,
-							tokenObject.access_token
-						);
-						const exists = result?.artists.find(
-							(item: any) => item.name === currentTrack.artist.name
-						);
-						if (exists) {
-							setSpotifyTrack(result);
-						} else {
-							toast("Not found", {
-								description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
-								className: "not-found_toast",
-							});
-						}
-					} catch (err) {
-						console.error("Error fetching Spotify track ID:", err);
-					}
-				})();
+				const match = result?.artists?.find(
+					(a: any) => a.name === currentTrack.artist.name
+				);
+
+				if (match) {
+					setSpotifyTrack(result);
+				} else {
+					toast("Not found", {
+						description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
+						className: "not-found_toast",
+					});
+				}
+			} catch (err) {
+				console.error("Error fetching Spotify track ID:", err);
 			}
-		} catch (err) {
-			console.error("Failed to parse token cookie:", err);
-		}
+		})();
 	}, [currentTrack]);
 
-	// ============== //
-	/* Playing logic */
-	// ============== //
-	const hasPlayed = useRef(false);
+	const transferPlayback = async (device_id: string, token: string) => {
+		await fetch("https://api.spotify.com/v1/me/player", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ device_ids: [device_id], play: false }),
+		});
+	};
 
-	useEffect(() => {
-		if (isPaused && spotifyTrack) {
-			player?.pause();
-			hasPlayed.current = false;
-		}
-
-		if (isPlaying && spotifyTrack && !hasPlayed.current) {
-			hasPlayed.current = true;
-			(async () => {
-				try {
-					await play();
-				} catch (error) {
-					console.error("Playback error:", error);
-				}
-			})();
-		}
-	}, [isPlaying, spotifyTrack, isPaused, player]);
-
-	async function play() {
+	const play = async (uri?: string) => {
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const device_id = getCookie("device_id");
 
-		if (!token || !device_id) {
-			console.error("Missing token or deviceId");
+		if (!token || !device_id || !uri) {
+			console.warn("Missing token, device_id or uri");
 			return;
 		}
 
@@ -167,49 +120,67 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 					Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ uris: [spotifyTrack.uri] }),
+				body: JSON.stringify({ uris: [uri] }),
 			}
 		);
-	}
+	};
 
-	async function getPlayback() {
+	const pause = async () => {
+		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+		if (!token) return;
+
 		try {
-			const pb = await player
-				?.getCurrentPlayback()
-				.then((state: any) => console.log(state));
-			if (!pb) {
-				throw new Error("No playback state available");
-			}
-			return pb;
-		} catch (error) {
-			console.error(error);
+			await fetch("https://api.spotify.com/v1/me/player/pause", {
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
+		} catch (err) {
+			console.error("Failed to pause", err);
 		}
-	}
+	};
 
-	async function transferPlayback(device_id: string, token: string) {
-		await fetch("https://api.spotify.com/v1/me/player", {
-			method: "PUT",
-			body: JSON.stringify({
-				device_ids: [device_id],
-				// play: true,
-			}),
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`, // use a valid token
-			},
-		});
-	}
+	const playSong = async (song: SongData) => {
+		setCurrentTrack(song);
+
+		// Wait until spotifyTrack matches this song
+		const waitForCorrectSpotifyTrack = async () => {
+			for (let i = 0; i < 10; i++) {
+				await new Promise((res) => setTimeout(res, 500));
+
+				if (
+					spotifyTrack?.name === song.song_title &&
+					spotifyTrack?.artists?.some((a: any) => a.name === song.artist.name)
+				) {
+					return spotifyTrack.uri;
+				}
+			}
+			return null;
+		};
+
+		const uri = await waitForCorrectSpotifyTrack();
+
+		if (uri) {
+			await play(uri);
+		} else {
+			console.warn("Correct Spotify track not found in time.");
+			toast.error("Couldn't load this track from Spotify.");
+		}
+	};
 
 	return (
 		<PlayerContext.Provider
 			value={{
 				player,
 				currentTrack,
-				setIsPlaying,
 				setCurrentTrack,
-				isPlaying,
 				isPaused,
-				setIsPaused,
+				spotifyTrack,
+				play,
+				pause,
+				playSong,
 			}}
 		>
 			{children}

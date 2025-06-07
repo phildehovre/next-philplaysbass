@@ -3,20 +3,14 @@ import React, { useState, useContext, useEffect } from "react";
 import { PlayerContext } from "@/context/playerContext";
 import "./SpotifyPlayer.css";
 import { Slider } from "../ui/slider";
-import PlayButton from "./PlayButton";
-import { Glegoo } from "next/font/google";
 import { toast } from "sonner";
 
 const SpotifyPlayer = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [position, setPosition] = useState<number>(0);
-	const {
-		isNextSongLoading,
-		player,
-		spotifyTrack,
-		currentTrack,
-		resumePosition,
-	} = useContext<any>(PlayerContext);
+	const [position, setPosition] = useState<number[]>();
+	const [sliderValue, setSliderValue] = useState<number | undefined>();
+	const { isNextSongLoading, player, spotifyTrack, currentTrack, play } =
+		useContext<any>(PlayerContext);
 
 	useEffect(() => {
 		if (currentTrack) {
@@ -27,16 +21,34 @@ const SpotifyPlayer = () => {
 	}, [currentTrack]);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			player?.getCurrentState().then((state: any) => {
-				if (state && state.duration > 0) {
-					const percent = (state.position / state.duration) * 100;
-					setPosition(percent);
-				}
-			});
-		}, 250);
+		if (!player) return;
 
-		return () => clearInterval(interval); // clean up
+		let interval: NodeJS.Timeout;
+
+		const pollPosition = async () => {
+			const state = await player.getCurrentState();
+			if (!state || state.paused || !state.duration) {
+				return; // Don't poll if not playing
+			}
+
+			interval = setInterval(async () => {
+				const currentState = await player.getCurrentState();
+				if (!currentState || currentState.paused) {
+					clearInterval(interval); // stop polling if paused
+					return;
+				}
+
+				const { position, duration } = currentState;
+				const percent = (position / duration) * 100;
+
+				setSliderValue(percent);
+				setPosition(position);
+			}, 500);
+		};
+
+		pollPosition();
+
+		return () => clearInterval(interval);
 	}, [player]);
 
 	useEffect(() => {
@@ -44,7 +56,7 @@ const SpotifyPlayer = () => {
 			if (!player || isNextSongLoading) return;
 			player.getCurrentState().then((state: any) => {
 				if (
-					currentTrack.artist.name !==
+					currentTrack?.artist.name !==
 					state.track_window.current_track.artists[0].name
 				) {
 					toast(
@@ -61,7 +73,18 @@ const SpotifyPlayer = () => {
 				<h1>{spotifyTrack?.name}</h1>
 				<p>{spotifyTrack?.artists[0].name}</p>
 				<p></p>
-				<Slider value={[position]} max={100} step={1} />
+				<Slider
+					value={[sliderValue]}
+					max={100}
+					step={1}
+					onValueChange={(value) => setSliderValue(value[0])}
+					onValueCommit={(value) => {
+						// Seek on release
+						const newPosition = (value[0] / 100) * duration;
+						player.seek(newPosition);
+						setPosition(newPosition);
+					}}
+				/>
 			</div>
 		</div>
 	);

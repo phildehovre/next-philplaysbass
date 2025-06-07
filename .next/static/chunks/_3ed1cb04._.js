@@ -389,7 +389,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 179,
+        lineNumber: 178,
         columnNumber: 3
     }, this);
 };
@@ -1377,8 +1377,9 @@ var _s = __turbopack_context__.k.signature();
 const SpotifyPlayer = ()=>{
     _s();
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [position, setPosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
-    const { isNextSongLoading, player, spotifyTrack, currentTrack, resumePosition } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const [position, setPosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const [sliderValue, setSliderValue] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const { isNextSongLoading, player, spotifyTrack, currentTrack, play } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SpotifyPlayer.useEffect": ()=>{
             if (currentTrack) {
@@ -1392,21 +1393,33 @@ const SpotifyPlayer = ()=>{
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SpotifyPlayer.useEffect": ()=>{
-            const interval = setInterval({
-                "SpotifyPlayer.useEffect.interval": ()=>{
-                    player?.getCurrentState().then({
-                        "SpotifyPlayer.useEffect.interval": (state)=>{
-                            if (state && state.duration > 0) {
-                                const percent = state.position / state.duration * 100;
-                                setPosition(percent);
+            if (!player) return;
+            let interval;
+            const pollPosition = {
+                "SpotifyPlayer.useEffect.pollPosition": async ()=>{
+                    const state = await player.getCurrentState();
+                    if (!state || state.paused || !state.duration) {
+                        return; // Don't poll if not playing
+                    }
+                    interval = setInterval({
+                        "SpotifyPlayer.useEffect.pollPosition": async ()=>{
+                            const currentState = await player.getCurrentState();
+                            if (!currentState || currentState.paused) {
+                                clearInterval(interval); // stop polling if paused
+                                return;
                             }
+                            const { position, duration: duration1 } = currentState;
+                            const percent = position / duration1 * 100;
+                            setSliderValue(percent);
+                            setPosition(position);
                         }
-                    }["SpotifyPlayer.useEffect.interval"]);
+                    }["SpotifyPlayer.useEffect.pollPosition"], 500);
                 }
-            }["SpotifyPlayer.useEffect.interval"], 250);
+            }["SpotifyPlayer.useEffect.pollPosition"];
+            pollPosition();
             return ({
                 "SpotifyPlayer.useEffect": ()=>clearInterval(interval)
-            })["SpotifyPlayer.useEffect"]; // clean up
+            })["SpotifyPlayer.useEffect"];
         }
     }["SpotifyPlayer.useEffect"], [
         player
@@ -1418,7 +1431,7 @@ const SpotifyPlayer = ()=>{
                     if (!player || isNextSongLoading) return;
                     player.getCurrentState().then({
                         "SpotifyPlayer.useEffect": (state)=>{
-                            if (currentTrack.artist.name !== state.track_window.current_track.artists[0].name) {
+                            if (currentTrack?.artist.name !== state.track_window.current_track.artists[0].name) {
                                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])(`Mismatch: Showing: ${currentTrack.artist.name}, Playing: ${state.track_window.current_track.artists[0].name}`);
                             }
                         }
@@ -1440,45 +1453,52 @@ const SpotifyPlayer = ()=>{
                     children: spotifyTrack?.name
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-                    lineNumber: 61,
+                    lineNumber: 73,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                     children: spotifyTrack?.artists[0].name
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-                    lineNumber: 62,
+                    lineNumber: 74,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {}, void 0, false, {
                     fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-                    lineNumber: 63,
+                    lineNumber: 75,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$slider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Slider"], {
                     value: [
-                        position
+                        sliderValue
                     ],
                     max: 100,
-                    step: 1
+                    step: 1,
+                    onValueChange: (value)=>setSliderValue(value[0]),
+                    onValueCommit: (value)=>{
+                        // Seek on release
+                        const newPosition = value[0] / 100 * duration;
+                        player.seek(newPosition);
+                        setPosition(newPosition);
+                    }
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-                    lineNumber: 64,
+                    lineNumber: 76,
                     columnNumber: 5
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-            lineNumber: 60,
+            lineNumber: 72,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
-        lineNumber: 59,
+        lineNumber: 71,
         columnNumber: 3
     }, this);
 };
-_s(SpotifyPlayer, "uLfc88g315Xqt7hpJ0xCpch9Ilg=");
+_s(SpotifyPlayer, "Z0eMTrqu+DblM/+OUkT3mT6cRac=");
 _c = SpotifyPlayer;
 const __TURBOPACK__default__export__ = SpotifyPlayer;
 var _c;

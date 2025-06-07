@@ -68,7 +68,7 @@ export type SongData = {
 	};
 };
 
-odeclare global {
+declare global {
 	interface Window {
 		onSpotifyWebPlaybackSDKReady: () => void;
 		Spotify: {
@@ -85,11 +85,11 @@ export interface SpotifyPlayer {
 	connect(): Promise<boolean>;
 	disconnect(): void;
 	addListener(
-		event: 'ready' | 'not_ready',
+		event: "ready" | "not_ready",
 		callback: (data: { device_id: string }) => void
 	): boolean;
 	addListener(
-		event: 'player_state_changed',
+		event: "player_state_changed",
 		callback: (state: Spotify.PlaybackState | null) => void
 	): boolean;
 	addListener(event: string, callback: (...args: any[]) => void): boolean;

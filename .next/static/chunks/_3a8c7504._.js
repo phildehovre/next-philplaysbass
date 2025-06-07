@@ -128,13 +128,33 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 {
 __turbopack_context__.s({
     "PlaySong": (()=>PlaySong),
-    "getSpotifyTrackIdByArtistAndTitle": (()=>getSpotifyTrackIdByArtistAndTitle)
+    "getSpotifyTrackIdByArtistAndTitle": (()=>getSpotifyTrackIdByArtistAndTitle),
+    "loadSpotifySDK": (()=>loadSpotifySDK)
 });
 const PlaySong = ()=>{
     console.log("Beep boop");
 };
 _c = PlaySong;
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
+let spotifySDKPromise = null;
+function loadSpotifySDK() {
+    if (spotifySDKPromise) return spotifySDKPromise;
+    spotifySDKPromise = new Promise((resolve, reject)=>{
+        if (window.Spotify) {
+            resolve();
+            return;
+        }
+        const script = document.createElement("script");
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+        script.onload = ()=>{
+            window.onSpotifyWebPlaybackSDKReady = ()=>resolve();
+        };
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
+    return spotifySDKPromise;
+}
 async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
     const query = `track:${title}`;
     const url = new URL(`${SPOTIFY_API_BASE}/search`);
@@ -205,18 +225,15 @@ const PlayerProvider = ({ children })=>{
     // =====================
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "PlayerProvider.useEffect": ()=>{
-            const script = document.createElement("script");
-            script.src = "https://sdk.scdn.co/spotify-player.js";
-            script.async = true;
-            document.body.appendChild(script);
-            window.onSpotifyWebPlaybackSDKReady = ({
+            let player;
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["loadSpotifySDK"])().then({
                 "PlayerProvider.useEffect": ()=>{
                     const token = JSON.parse(getCookie("token") || "{}")?.access_token;
                     if (!token) {
                         console.warn("No access token found in cookies.");
                         return;
                     }
-                    const player = new window.Spotify.Player({
+                    player = new window.Spotify.Player({
                         name: "PhilPlaysBass app",
                         getOAuthToken: {
                             "PlayerProvider.useEffect": (cb)=>cb(token)
@@ -226,23 +243,21 @@ const PlayerProvider = ({ children })=>{
                     setPlayer(player);
                     player.addListener("ready", {
                         "PlayerProvider.useEffect": async ({ device_id })=>{
-                            console.log("Ready with Device ID", device_id);
+                            console.log("✅ Ready with Device ID", device_id);
                             setDeviceId(device_id);
                             setCookie("device_id", device_id);
                             const pb = await transferPlayback(device_id, token);
-                            console.log("playback transferred to device", pb);
+                            console.log("🔁 Playback transferred", pb);
                         }
                     }["PlayerProvider.useEffect"]);
                     player.addListener("not_ready", {
                         "PlayerProvider.useEffect": ({ device_id })=>{
-                            console.log("Device ID has gone offline", device_id);
+                            console.log("❌ Device offline", device_id);
                         }
                     }["PlayerProvider.useEffect"]);
                     player.addListener("player_state_changed", {
                         "PlayerProvider.useEffect": (state)=>{
-                            if (!state) {
-                                return;
-                            }
+                            if (!state) return;
                             setResumePosition(state.position);
                             setIsPaused(state.paused);
                             setIsNextSongLoading(state.loading);
@@ -251,15 +266,21 @@ const PlayerProvider = ({ children })=>{
                     player.connect().then({
                         "PlayerProvider.useEffect": (success)=>{
                             if (success) {
-                                console.log("The web player sucessfully connected to Spotify");
+                                console.log("✅ Web player connected");
                             }
                         }
                     }["PlayerProvider.useEffect"]);
                 }
-            })["PlayerProvider.useEffect"];
+            }["PlayerProvider.useEffect"]).catch({
+                "PlayerProvider.useEffect": (error)=>{
+                    console.error("❌ Failed to load Spotify SDK", error);
+                }
+            }["PlayerProvider.useEffect"]);
             return ({
                 "PlayerProvider.useEffect": ()=>{
-                    delete window.onSpotifyWebPlaybackSDKReady;
+                    if (player) {
+                        player.disconnect();
+                    }
                 }
             })["PlayerProvider.useEffect"];
         }
@@ -312,6 +333,7 @@ const PlayerProvider = ({ children })=>{
     }["PlayerProvider.useEffect"], [
         spotifyTrack
     ]);
+    console.log(isNextSongLoading);
     // ================================================
     // Necessary to ensure the app can control playback
     // ================================================
@@ -330,7 +352,6 @@ const PlayerProvider = ({ children })=>{
         });
     }
     async function play(position) {
-        console.log("Is it a play request?");
         const token = JSON.parse(getCookie("token") || "{}")?.access_token;
         const device_id = getCookie("device_id");
         if (!token || !device_id) {
@@ -368,7 +389,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 175,
+        lineNumber: 178,
         columnNumber: 3
     }, this);
 };
@@ -511,7 +532,6 @@ function SongCard(props) {
             });
         }
     }["SongCard.useLayoutEffect"], []);
-    console.log(player);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SongCard.useEffect": ()=>{
             if (currentTrack && currentTrack.song_title == song.song_title) {
@@ -557,7 +577,7 @@ function SongCard(props) {
                             children: formatTitle(song.song_title)
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 62,
+                            lineNumber: 61,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -565,18 +585,18 @@ function SongCard(props) {
                             children: song.artist.name
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 63,
+                            lineNumber: 62,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/SongCard.tsx",
-                    lineNumber: 61,
+                    lineNumber: 60,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 60,
+                lineNumber: 59,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -587,7 +607,7 @@ function SongCard(props) {
                         children: renderGenres(song.artist.genres)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 67,
+                        lineNumber: 66,
                         columnNumber: 5
                     }, this),
                     player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -596,19 +616,19 @@ function SongCard(props) {
                         song: song
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 71,
+                        lineNumber: 70,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 66,
+                lineNumber: 65,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/metronome/SongCard.tsx",
-        lineNumber: 51,
+        lineNumber: 50,
         columnNumber: 3
     }, this);
 }

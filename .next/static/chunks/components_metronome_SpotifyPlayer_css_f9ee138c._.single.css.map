@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/metronome/SpotifyPlayer.css"],"sourcesContent":[".player_ctn {\n\tposition: fixed;\n\tbottom: 0;\n\twidth: 100%;\n\tz-index: 999;\n\tbackground-color: black;\n\tborder-top: 1px solid rgb(46, 46, 46);\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tflex-direction: column;\n\tpadding: 1em 0;\n\n\t> * {\n\t\twidth: 90%;\n\t}\n}\n"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;AAaC"}}]
+}

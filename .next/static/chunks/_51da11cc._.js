@@ -283,12 +283,9 @@ const PlayerProvider = ({ children })=>{
                             if (!state) {
                                 return;
                             }
-                            player.getCurrentState().then({
-                                "PlayerProvider.useEffect": (state)=>{
-                                    setIsPaused(state.paused);
-                                    setIsNextSongLoading(state.loading);
-                                }
-                            }["PlayerProvider.useEffect"]);
+                            setResumePosition(state.position);
+                            setIsPaused(state.paused);
+                            setIsNextSongLoading(state.loading);
                         }
                     }["PlayerProvider.useEffect"]);
                     player.connect().then({
@@ -350,6 +347,7 @@ const PlayerProvider = ({ children })=>{
         "PlayerProvider.useEffect": ()=>{
             if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$helpers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["areTitlesSimilar"])(currentTrack?.song_title, spotifyTrack?.name) && !isNextSongLoading && isPlaying) {
                 play();
+                console.log("This one?");
             }
         }
     }["PlayerProvider.useEffect"], [
@@ -361,6 +359,7 @@ const PlayerProvider = ({ children })=>{
         "PlayerProvider.useEffect": ()=>{
             if (isNextSongLoading) {
                 play();
+                console.log("Or this one?");
             }
         }
     }["PlayerProvider.useEffect"], [
@@ -384,7 +383,6 @@ const PlayerProvider = ({ children })=>{
         });
     }
     async function play(position) {
-        console.log(position);
         const token = JSON.parse(getCookie("token") || "{}")?.access_token;
         const device_id = getCookie("device_id");
         if (!token || !device_id) {
@@ -422,7 +420,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 187,
+        lineNumber: 186,
         columnNumber: 3
     }, this);
 };
@@ -551,7 +549,7 @@ function SongCard(props) {
     _s();
     const { song } = props;
     const [showPlayButton, setShowPlayButton] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const { player } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const { player, currentTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLayoutEffect"])({
         "SongCard.useLayoutEffect": ()=>{
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$animate$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["animate"])(".songcard", {
@@ -565,6 +563,17 @@ function SongCard(props) {
             });
         }
     }["SongCard.useLayoutEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SongCard.useEffect": ()=>{
+            if (currentTrack && currentTrack.song_title == song.song_title) {
+                setShowPlayButton(true);
+            } else {
+                setShowPlayButton(false);
+            }
+        }
+    }["SongCard.useEffect"], [
+        currentTrack
+    ]);
     const renderGenres = (genres)=>{
         if (genres) {
             const newArr = [];
@@ -584,7 +593,11 @@ function SongCard(props) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "songcard",
         onMouseEnter: ()=>setShowPlayButton(true),
-        onMouseLeave: ()=>setShowPlayButton(false),
+        onMouseLeave: ()=>{
+            if (currentTrack && currentTrack.song_title !== song.song_title) {
+                setShowPlayButton(false);
+            }
+        },
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "songcard-left",
@@ -595,7 +608,7 @@ function SongCard(props) {
                             children: formatTitle(song.song_title)
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 50,
+                            lineNumber: 62,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -603,18 +616,18 @@ function SongCard(props) {
                             children: song.artist.name
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 51,
+                            lineNumber: 63,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/SongCard.tsx",
-                    lineNumber: 49,
+                    lineNumber: 61,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 48,
+                lineNumber: 60,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -625,7 +638,7 @@ function SongCard(props) {
                         children: renderGenres(song.artist.genres)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 55,
+                        lineNumber: 67,
                         columnNumber: 5
                     }, this),
                     player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -634,23 +647,23 @@ function SongCard(props) {
                         song: song
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 59,
+                        lineNumber: 71,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 54,
+                lineNumber: 66,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/metronome/SongCard.tsx",
-        lineNumber: 43,
+        lineNumber: 51,
         columnNumber: 3
     }, this);
 }
-_s(SongCard, "Kc4hibmbl0OmwIZ3HtRX0rmpfsA=");
+_s(SongCard, "dfX9Uw1ys7+uFLsWH6/F+biQ59c=");
 _c = SongCard;
 const __TURBOPACK__default__export__ = SongCard;
 var _c;
@@ -961,19 +974,6 @@ const Metronome = ()=>{
     const queryClient = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$queryClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QueryClient"]();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Metronome.useEffect": ()=>{
-            const script = document.createElement("script");
-            script.src = "https://sdk.scdn.co/spotify-player.js";
-            script.async = true;
-            document.body.appendChild(script);
-            window.onSpotifyWebPlaybackSDKReady = ({
-                "Metronome.useEffect": ()=>{
-                    console.log("Spotify SDK is ready");
-                }
-            })["Metronome.useEffect"];
-        }
-    }["Metronome.useEffect"], []);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "Metronome.useEffect": ()=>{
             const woodblock = new Audio("sounds/Woodblock.mp3");
             const cowbell = new Audio("sounds/Cowbell.mp3");
             const sidestick = new Audio("sounds/Click.wav");
@@ -1098,12 +1098,12 @@ const Metronome = ()=>{
                         size: 60
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/Metronome.tsx",
-                        lineNumber: 146,
+                        lineNumber: 136,
                         columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 145,
+                    lineNumber: 135,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1115,7 +1115,7 @@ const Metronome = ()=>{
                             children: "-"
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 149,
+                            lineNumber: 139,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1123,7 +1123,7 @@ const Metronome = ()=>{
                             children: bpm
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 152,
+                            lineNumber: 142,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1132,13 +1132,13 @@ const Metronome = ()=>{
                             children: "+"
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 153,
+                            lineNumber: 143,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 148,
+                    lineNumber: 138,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1149,7 +1149,7 @@ const Metronome = ()=>{
                     onChange: (e)=>setBpm(Number(e.target.value))
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 157,
+                    lineNumber: 147,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1164,7 +1164,7 @@ const Metronome = ()=>{
                             }
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 165,
+                            lineNumber: 155,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1175,12 +1175,12 @@ const Metronome = ()=>{
                                 size: "2x"
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/Metronome.tsx",
-                                lineNumber: 175,
+                                lineNumber: 165,
                                 columnNumber: 7
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 171,
+                            lineNumber: 161,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1192,17 +1192,17 @@ const Metronome = ()=>{
                                     className: "inner"
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/Metronome.tsx",
-                                    lineNumber: 180,
+                                    lineNumber: 170,
                                     columnNumber: 8
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/Metronome.tsx",
-                                lineNumber: 179,
+                                lineNumber: 169,
                                 columnNumber: 7
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 178,
+                            lineNumber: 168,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1211,7 +1211,7 @@ const Metronome = ()=>{
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {}, void 0, false, {
                                     fileName: "[project]/components/metronome/Metronome.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 177,
                                     columnNumber: 7
                                 }, this),
                                 soundEffect,
@@ -1223,24 +1223,24 @@ const Metronome = ()=>{
                                     setDropdownOpen: setDropdownOpen
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/Metronome.tsx",
-                                    lineNumber: 189,
+                                    lineNumber: 179,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 183,
+                            lineNumber: 173,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 164,
+                    lineNumber: 154,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$LoginWithSpotifyButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoginWithSpotifyButton"], {}, void 0, false, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 198,
+                    lineNumber: 188,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
@@ -1255,13 +1255,13 @@ const Metronome = ()=>{
                             children: "getsongbpm.com"
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 201,
+                            lineNumber: 191,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 199,
+                    lineNumber: 189,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$QueryClientProvider$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QueryClientProvider"], {
@@ -1273,27 +1273,27 @@ const Metronome = ()=>{
                         setListSize: setListSize
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/Metronome.tsx",
-                        lineNumber: 204,
+                        lineNumber: 194,
                         columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 203,
+                    lineNumber: 193,
                     columnNumber: 5
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/metronome/Metronome.tsx",
-            lineNumber: 144,
+            lineNumber: 134,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/Metronome.tsx",
-        lineNumber: 143,
+        lineNumber: 133,
         columnNumber: 3
     }, this);
 };
-_s(Metronome, "5eNnpb7QIi14i+JVAEqA9Xbwx0M=");
+_s(Metronome, "EHAhK6KstJewBjaZMN/2fiBtc1U=");
 _c = Metronome;
 const __TURBOPACK__default__export__ = Metronome;
 var _c;

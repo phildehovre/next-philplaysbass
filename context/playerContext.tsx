@@ -67,11 +67,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				if (!state) {
 					return;
 				}
-
-				player.getCurrentState().then((state: any) => {
-					setIsPaused(state.paused);
-					setIsNextSongLoading(state.loading);
-				});
+				setResumePosition(state.position);
+				setIsPaused(state.paused);
+				setIsNextSongLoading(state.loading);
 			});
 
 			player.connect().then((success: boolean) => {
@@ -126,16 +124,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [currentTrack]);
 
 	useEffect(() => {
-		if (
-			areTitlesSimilar(currentTrack?.song_title, spotifyTrack?.name) &&
-			!isNextSongLoading &&
-			isPlaying
-		) {
-			play();
-		}
-	}, [spotifyTrack, currentTrack, isNextSongLoading]);
-
-	useEffect(() => {
 		if (isNextSongLoading) {
 			play();
 		}
@@ -158,7 +146,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	async function play(position?: number) {
-		console.log(position);
+		console.log("Is it a play request?");
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const device_id = getCookie("device_id");
 

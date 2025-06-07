@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -38,17 +39,6 @@ const Metronome = () => {
 	});
 
 	const queryClient = new QueryClient();
-
-	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://sdk.scdn.co/spotify-player.js";
-		script.async = true;
-		document.body.appendChild(script);
-
-		(window as any).onSpotifyWebPlaybackSDKReady = () => {
-			console.log("Spotify SDK is ready");
-		};
-	}, []);
 
 	useEffect(() => {
 		const woodblock = new Audio("sounds/Woodblock.mp3");

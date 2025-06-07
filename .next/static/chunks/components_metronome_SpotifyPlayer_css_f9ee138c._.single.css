@@ -1,0 +1,20 @@
+/* [project]/components/metronome/SpotifyPlayer.css [app-client] (css) */
+.player_ctn {
+  z-index: 999;
+  background-color: #000;
+  border-top: 1px solid #2e2e2e;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1em 0;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+}
+
+.player_ctn > * {
+  width: 90%;
+}
+
+/*# sourceMappingURL=components_metronome_SpotifyPlayer_css_f9ee138c._.single.css.map*/

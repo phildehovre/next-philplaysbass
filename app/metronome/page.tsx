@@ -3,6 +3,7 @@ import React from "react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { PlayerProvider } from "@/context/playerContext";
+import SpotifyPlayer from "@/components/metronome/SpotifyPlayer";
 
 const page = async () => {
 	const { isAuthenticated } = await getKindeServerSession();
@@ -15,6 +16,7 @@ const page = async () => {
 	return (
 		<PlayerProvider>
 			<Metronome />
+			<SpotifyPlayer />
 		</PlayerProvider>
 	);
 };

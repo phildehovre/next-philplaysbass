@@ -4,14 +4,14 @@ import "./SongCard.scss";
 import { Song, SongData } from "../../types/types";
 
 import { animate, stagger } from "motion";
-import { useContext, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
 
 function SongCard(props: { song: SongData }) {
 	const { song } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
-	const { player } = useContext<any>(PlayerContext);
+	const { player, currentTrack } = useContext<any>(PlayerContext);
 
 	useLayoutEffect(() => {
 		animate(
@@ -20,6 +20,14 @@ function SongCard(props: { song: SongData }) {
 			{ duration: 0.5, delay: stagger(0.05) }
 		);
 	}, []);
+
+	useEffect(() => {
+		if (currentTrack && currentTrack.song_title == song.song_title) {
+			setShowPlayButton(true);
+		} else {
+			setShowPlayButton(false);
+		}
+	}, [currentTrack]);
 
 	const renderGenres = (genres: string[]) => {
 		if (genres) {
@@ -43,7 +51,11 @@ function SongCard(props: { song: SongData }) {
 		<div
 			className="songcard"
 			onMouseEnter={() => setShowPlayButton(true)}
-			onMouseLeave={() => setShowPlayButton(false)}
+			onMouseLeave={() => {
+				if (currentTrack && currentTrack.song_title !== song.song_title) {
+					setShowPlayButton(false);
+				}
+			}}
 		>
 			<div className="songcard-left">
 				<div>

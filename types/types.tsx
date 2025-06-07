@@ -67,3 +67,36 @@ export type SongData = {
 		year: string; // or number if you'd rather coerce it
 	};
 };
+
+odeclare global {
+	interface Window {
+		onSpotifyWebPlaybackSDKReady: () => void;
+		Spotify: {
+			Player: new (options: {
+				name: string;
+				getOAuthToken: (cb: (token: string) => void) => void;
+				volume?: number;
+			}) => SpotifyPlayer;
+		};
+	}
+}
+
+export interface SpotifyPlayer {
+	connect(): Promise<boolean>;
+	disconnect(): void;
+	addListener(
+		event: 'ready' | 'not_ready',
+		callback: (data: { device_id: string }) => void
+	): boolean;
+	addListener(
+		event: 'player_state_changed',
+		callback: (state: Spotify.PlaybackState | null) => void
+	): boolean;
+	addListener(event: string, callback: (...args: any[]) => void): boolean;
+	removeListener(event: string): boolean;
+	getCurrentState(): Promise<Spotify.PlaybackState | null>;
+	pause(): Promise<void>;
+	resume(): Promise<void>;
+	previousTrack(): Promise<void>;
+	nextTrack(): Promise<void>;
+}

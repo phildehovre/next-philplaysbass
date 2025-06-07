@@ -1,7 +1,10 @@
 "use client";
 
 import useCookies from "@/hooks/useCookies";
-import { getSpotifyTrackIdByArtistAndTitle } from "@/services/Spotify";
+import {
+	getSpotifyTrackIdByArtistAndTitle,
+	loadSpotifySDK,
+} from "@/services/Spotify";
 import { SongData } from "@/types/types";
 import { createContext, useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -29,58 +32,58 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	// =====================
 
 	useEffect(() => {
-		const script = document.createElement("script");
-		script.src = "https://sdk.scdn.co/spotify-player.js";
-		script.async = true;
-		document.body.appendChild(script);
+		let player: Spotify.Player;
 
-		(window as any).onSpotifyWebPlaybackSDKReady = () => {
-			const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-			if (!token) {
-				console.warn("No access token found in cookies.");
-				return;
-			}
-
-			const player = new (window as any).Spotify.Player({
-				name: "PhilPlaysBass app",
-				getOAuthToken: (cb: any) => cb(token),
-				volume: 0.5,
-			});
-
-			setPlayer(player);
-
-			player.addListener("ready", async ({ device_id }: any) => {
-				console.log("Ready with Device ID", device_id);
-
-				setDeviceId(device_id);
-				setCookie("device_id", device_id);
-
-				const pb = await transferPlayback(device_id, token);
-				console.log("playback transferred to device", pb);
-			});
-
-			player.addListener("not_ready", ({ device_id }: any) => {
-				console.log("Device ID has gone offline", device_id);
-			});
-
-			player.addListener("player_state_changed", (state: any) => {
-				if (!state) {
+		loadSpotifySDK()
+			.then(() => {
+				const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+				if (!token) {
+					console.warn("No access token found in cookies.");
 					return;
 				}
-				setResumePosition(state.position);
-				setIsPaused(state.paused);
-				setIsNextSongLoading(state.loading);
-			});
 
-			player.connect().then((success: boolean) => {
-				if (success) {
-					console.log("The web player sucessfully connected to Spotify");
-				}
+				player = new (window as any).Spotify.Player({
+					name: "PhilPlaysBass app",
+					getOAuthToken: (cb: (token: string) => void) => cb(token),
+					volume: 0.5,
+				});
+
+				setPlayer(player);
+
+				player.addListener("ready", async ({ device_id }: any) => {
+					console.log("✅ Ready with Device ID", device_id);
+					setDeviceId(device_id);
+					setCookie("device_id", device_id);
+
+					const pb = await transferPlayback(device_id, token);
+					console.log("🔁 Playback transferred", pb);
+				});
+
+				player.addListener("not_ready", ({ device_id }: any) => {
+					console.log("❌ Device offline", device_id);
+				});
+
+				player.addListener("player_state_changed", (state: any) => {
+					if (!state) return;
+					setResumePosition(state.position);
+					setIsPaused(state.paused);
+					setIsNextSongLoading(state.loading);
+				});
+
+				player.connect().then((success: boolean) => {
+					if (success) {
+						console.log("✅ Web player connected");
+					}
+				});
+			})
+			.catch((error) => {
+				console.error("❌ Failed to load Spotify SDK", error);
 			});
-		};
 
 		return () => {
-			delete (window as any).onSpotifyWebPlaybackSDKReady;
+			if (player) {
+				player.disconnect();
+			}
 		};
 	}, []);
 
@@ -129,6 +132,8 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [spotifyTrack]);
 
+	console.log(isNextSongLoading);
+
 	// ================================================
 	// Necessary to ensure the app can control playback
 	// ================================================
@@ -146,7 +151,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	async function play(position?: number) {
-		console.log("Is it a play request?");
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const device_id = getCookie("device_id");
 

@@ -20,7 +20,6 @@ function SongCard(props: { song: SongData }) {
 			{ duration: 0.5, delay: stagger(0.05) }
 		);
 	}, []);
-
 	useEffect(() => {
 		if (currentTrack && currentTrack.song_title == song.song_title) {
 			setShowPlayButton(true);

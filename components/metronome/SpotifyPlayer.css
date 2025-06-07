@@ -1,0 +1,17 @@
+.player_ctn {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	z-index: 999;
+	background-color: black;
+	border-top: 1px solid rgb(46, 46, 46);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 1em 0;
+
+	> * {
+		width: 90%;
+	}
+}

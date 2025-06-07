@@ -5,7 +5,7 @@ import {
 	getSpotifyTrackIdByArtistAndTitle,
 	loadSpotifySDK,
 } from "@/services/Spotify";
-import { SongData } from "@/types/types";
+import { SongData, SpotifyPlayer } from "@/types/types";
 import { createContext, useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import Spotify from "spotify-api.js";
@@ -13,7 +13,7 @@ import { areTitlesSimilar } from "@/utils/helpers";
 export const PlayerContext = createContext({});
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
-	const [player, setPlayer] = useState<Spotify.Player | null>(null);
+	const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
 	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>(
 		undefined
 	);
@@ -32,7 +32,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	// =====================
 
 	useEffect(() => {
-		let player: Spotify.Player;
+		let player: SpotifyPlayer;
 
 		loadSpotifySDK()
 			.then(() => {
@@ -41,12 +41,11 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 					console.warn("No access token found in cookies.");
 					return;
 				}
-
 				player = new (window as any).Spotify.Player({
 					name: "PhilPlaysBass app",
 					getOAuthToken: (cb: (token: string) => void) => cb(token),
 					volume: 0.5,
-				});
+				}) as any;
 
 				setPlayer(player);
 

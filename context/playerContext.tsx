@@ -16,7 +16,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isPaused, setIsPaused] = useState(false);
-	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
+	const [spotifyTrack, setSpotifyTrack] = useState<Spotify.Track>();
 	const [deviceId, setDeviceId] = useState("");
 	const [active, setActive] = useState(false);
 	const [isNextSongLoading, setIsNextSongLoading] = useState(false);
@@ -126,7 +126,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		if (
-			areTitlesSimilar(currentTrack?.song_title, spotifyTrack.song_title) &&
+			areTitlesSimilar(currentTrack?.song_title, spotifyTrack?.name) &&
 			!isNextSongLoading &&
 			isPlaying
 		) {
@@ -156,7 +156,8 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		});
 	}
 
-	async function play() {
+	async function play(position?: number) {
+		const pos = Number(position);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const device_id = getCookie("device_id");
 
@@ -173,7 +174,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 					Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ uris: [spotifyTrack?.uri] }),
+				body: JSON.stringify({
+					uris: [spotifyTrack?.uri],
+					position: pos || 0,
+				}),
 			}
 		).then(() => setIsNextSongLoading(false));
 	}
@@ -233,6 +237,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				isPaused,
 				setIsPaused,
 				play,
+				spotifyTrack,
 			}}
 		>
 			{children}

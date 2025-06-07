@@ -175,6 +175,7 @@ const PlayerProvider = ({ children })=>{
     const [deviceId, setDeviceId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [active, setActive] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isNextSongLoading, setIsNextSongLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [resumePosition, setResumePosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])();
     const { setCookie, getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
     // =====================
     // Initialize player SKD
@@ -225,7 +226,6 @@ const PlayerProvider = ({ children })=>{
             delete window.onSpotifyWebPlaybackSDKReady;
         };
     }, []);
-    console.log(isNextSongLoading, spotifyTrack);
     // =================
     // Fetch next song
     // =================
@@ -261,23 +261,12 @@ const PlayerProvider = ({ children })=>{
     }, [
         currentTrack
     ]);
-    console.log("currentTrack?.song_title:", currentTrack?.song_title);
-    console.log("spotifyTrack.song_title:", spotifyTrack.name);
-    console.log("Song titles match:", currentTrack?.song_title === spotifyTrack.name);
-    console.log("isNextSongLoading:", isNextSongLoading);
-    console.log("!isNextSongLoading:", !isNextSongLoading);
-    console.log("isPlaying:", isPlaying);
-    if (currentTrack?.song_title === spotifyTrack.song_title && !isNextSongLoading && isPlaying) {
-        console.log("All conditions met: playing the correct track and ready.");
-    }
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (currentTrack?.song_title === spotifyTrack.song_title && !isNextSongLoading && isPlaying) {
-            play();
+        if (isNextSongLoading) {
+            play(resumePosition);
         }
     }, [
-        spotifyTrack,
-        currentTrack,
-        isNextSongLoading
+        spotifyTrack
     ]);
     // ================================================
     // Necessary to ensure the app can control playback
@@ -296,11 +285,11 @@ const PlayerProvider = ({ children })=>{
             }
         });
     }
-    async function play() {
+    async function play(position) {
         const token = JSON.parse(getCookie("token") || "{}")?.access_token;
         const device_id = getCookie("device_id");
-        if (!token || !device_id) {
-            console.error("Missing token or deviceId");
+        if (!token || !device_id || !spotifyTrack?.uri) {
+            console.error("Missing token, deviceId, or track URI");
             return;
         }
         await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
@@ -311,47 +300,11 @@ const PlayerProvider = ({ children })=>{
             },
             body: JSON.stringify({
                 uris: [
-                    spotifyTrack?.uri
-                ]
+                    spotifyTrack.uri
+                ],
+                position_ms: position || 0
             })
         }).then(()=>setIsNextSongLoading(false));
-    }
-    async function pause() {
-        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-        if (!player || !token) {
-            console.error("Missing player instance or token");
-            return;
-        }
-        try {
-            player.pause();
-            if (!player) {
-                console.warn("No active playback state. Falling back to Web API pause.");
-                await fetch("https://api.spotify.com/v1/me/player/pause", {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-                return;
-            }
-            await player.pause();
-            console.log("Playback paused using SDK.");
-        } catch (err) {
-            console.error("Error pausing via SDK. Falling back to Web API:", err);
-            try {
-                await fetch("https://api.spotify.com/v1/me/player/pause", {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-                console.log("Playback paused using Web API fallback.");
-            } catch (apiErr) {
-                console.error("Failed to pause using Web API:", apiErr);
-            }
-        }
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
         value: {
@@ -362,12 +315,13 @@ const PlayerProvider = ({ children })=>{
             isPlaying,
             isPaused,
             setIsPaused,
-            play
+            play,
+            setResumePosition
         },
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 240,
+        lineNumber: 176,
         columnNumber: 3
     }, this);
 };
@@ -391,31 +345,41 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 const PlayButton = ({ isShowing, player, song })=>{
-    const { setIsPlaying, isPaused, setIsNextSongLoading, setCurrentTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const { currentTrack, setIsPlaying, isPaused, setResumePosition, setCurrentTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         player.getCurrentState().then((state)=>{});
     }, [
         player
     ]);
     const handlePlayPause = ()=>{
-        setCurrentTrack(song);
-        setIsPlaying(true);
+        console.log(song);
+        console.log(currentTrack);
+        player.getCurrentState().then((state)=>{
+            if (state?.paused) {
+                setCurrentTrack(song);
+                setIsPlaying(true);
+            } else {
+                setResumePosition();
+                player.pause();
+            }
+            console.log(state);
+        });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `play-button ${isShowing ? "showing" : ""}`,
         onClick: handlePlayPause,
-        children: isPaused ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
+        children: !isPaused ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
             fileName: "[project]/components/metronome/PlayButton.tsx",
-            lineNumber: 33,
-            columnNumber: 16
+            lineNumber: 47,
+            columnNumber: 17
         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__["PlayIcon"], {}, void 0, false, {
             fileName: "[project]/components/metronome/PlayButton.tsx",
-            lineNumber: 33,
-            columnNumber: 32
+            lineNumber: 47,
+            columnNumber: 33
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/PlayButton.tsx",
-        lineNumber: 29,
+        lineNumber: 43,
         columnNumber: 3
     }, this);
 };

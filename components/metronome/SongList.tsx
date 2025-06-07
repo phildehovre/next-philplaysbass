@@ -6,7 +6,7 @@ import "./SongList.scss";
 import SongCard from "./SongCard";
 import { fetchTempoData } from "../../services/getSongBpm";
 import { useQuery } from "@tanstack/react-query";
-import { Song } from "../../types/types";
+import { Song, SongData } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronLeft,
@@ -27,8 +27,6 @@ function SongList(props: any) {
 		queryFn: () => fetchTempoData(bpm),
 		enabled: !!showSongs,
 	});
-
-	//   console.log("data", data, showSongs, songs);
 
 	useEffect(() => {
 		setSongs(data?.slice(listStart, listEnd));
@@ -60,7 +58,7 @@ function SongList(props: any) {
 	};
 
 	const renderSongList = () => {
-		return songs?.map((song: Song) => {
+		return songs?.map((song: SongData) => {
 			return <SongCard song={song} key={song.song_id} />;
 		});
 	};

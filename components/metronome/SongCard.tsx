@@ -1,24 +1,17 @@
 "use client";
 
 import "./SongCard.scss";
-import { Song } from "../../types/types";
+import { Song, SongData } from "../../types/types";
 
 import { animate, stagger } from "motion";
 import { useContext, useLayoutEffect, useState } from "react";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
 
-function SongCard(props: { song: Song }) {
+function SongCard(props: { song: SongData }) {
 	const { song } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
-	const {
-		player,
-		isPaused,
-		setIsPaused,
-		isPlaying,
-		setCurrentTrack,
-		setIsPlaying,
-	} = useContext<any>(PlayerContext);
+	const { player } = useContext<any>(PlayerContext);
 
 	useLayoutEffect(() => {
 		animate(

@@ -4,6 +4,31 @@ export const PlaySong = () => {
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
+let spotifySDKPromise: Promise<void> | null = null;
+
+export function loadSpotifySDK(): Promise<void> {
+	if (spotifySDKPromise) return spotifySDKPromise;
+
+	spotifySDKPromise = new Promise((resolve, reject) => {
+		if ((window as any).Spotify) {
+			resolve();
+			return;
+		}
+
+		const script = document.createElement("script");
+		script.src = "https://sdk.scdn.co/spotify-player.js";
+		script.async = true;
+		script.onload = () => {
+			(window as any).onSpotifyWebPlaybackSDKReady = () => resolve();
+		};
+		script.onerror = reject;
+
+		document.body.appendChild(script);
+	});
+
+	return spotifySDKPromise;
+}
+
 export async function getSpotifyTrackIdByArtistAndTitle(
 	title: string,
 	accessToken: string

@@ -20,6 +20,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [deviceId, setDeviceId] = useState("");
 	const [active, setActive] = useState(false);
 	const [isNextSongLoading, setIsNextSongLoading] = useState(false);
+	const [resumePosition, setResumePosition] = useState<number>(0);
 
 	const { setCookie, getCookie } = useCookies();
 
@@ -157,7 +158,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	async function play(position?: number) {
-		const pos = Number(position);
+		console.log(position);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const device_id = getCookie("device_id");
 
@@ -176,54 +177,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				},
 				body: JSON.stringify({
 					uris: [spotifyTrack?.uri],
-					position: pos || 0,
+					position_ms: position || 0,
 				}),
 			}
 		).then(() => setIsNextSongLoading(false));
-	}
-
-	async function pause() {
-		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-
-		if (!player || !token) {
-			console.error("Missing player instance or token");
-			return;
-		}
-
-		try {
-			player.pause();
-			if (!player) {
-				console.warn(
-					"No active playback state. Falling back to Web API pause."
-				);
-				await fetch("https://api.spotify.com/v1/me/player/pause", {
-					method: "PUT",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				});
-				return;
-			}
-
-			await player.pause();
-			console.log("Playback paused using SDK.");
-		} catch (err) {
-			console.error("Error pausing via SDK. Falling back to Web API:", err);
-
-			try {
-				await fetch("https://api.spotify.com/v1/me/player/pause", {
-					method: "PUT",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				});
-				console.log("Playback paused using Web API fallback.");
-			} catch (apiErr) {
-				console.error("Failed to pause using Web API:", apiErr);
-			}
-		}
 	}
 
 	return (
@@ -238,6 +195,8 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				setIsPaused,
 				play,
 				spotifyTrack,
+				setResumePosition,
+				resumePosition,
 			}}
 		>
 			{children}

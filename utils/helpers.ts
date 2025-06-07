@@ -21,10 +21,10 @@ function normalizeTitle(title: string) {
 
 export function areTitlesSimilar(title1?: string, title2?: string) {
 	if (title1 == undefined || title2 == undefined) {
-		console.error("Some titles are missing, 1, 2: ", title1, title2);
+		console.log("Some titles are missing, 1, 2: ", title1, title2);
 	}
 	if (title1 && title2) {
 		return normalizeTitle(title1) === normalizeTitle(title2);
 	}
-	console.error("Some titles are missing, 1, 2: ", title1, title2);
+	console.log("Some titles are missing, 1, 2: ", title1, title2);
 }

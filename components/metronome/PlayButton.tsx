@@ -1,8 +1,9 @@
 "use client";
+
 import { PlayerContext } from "@/context/playerContext";
 import { SongData } from "@/types/types";
-import { PauseIcon, PlayCircleIcon, PlayIcon } from "lucide-react";
-import React, { useContext, useEffect, useState } from "react";
+import { PauseIcon, PlayIcon } from "lucide-react";
+import React, { useContext } from "react";
 
 const PlayButton = ({
 	isShowing,
@@ -14,52 +15,56 @@ const PlayButton = ({
 	player: Spotify.Player;
 }) => {
 	const {
+		setResumePosition,
+		resumePosition,
 		currentTrack,
 		setIsPlaying,
 		isPaused,
-		setIsNextSongLoading,
 		setCurrentTrack,
-		spotifyTrack,
 		play,
 	} = useContext<any>(PlayerContext);
 
-	useEffect(() => {
-		player.getCurrentState().then((state) => {});
-	}, [player]);
+	const handlePlayClick = async () => {
+		const state = await player.getCurrentState();
+		const isDifferentTrack = currentTrack?.song_title !== song.song_title;
 
-	const handlePlayPause = () => {
-		player.getCurrentState().then((state) => {
-			if (
-				!state?.paused &&
-				currentTrack &&
-				currentTrack.song_title !== song.song_title
-			) {
-				setCurrentTrack(song);
-				setIsPlaying(true);
-			}
-			if (state?.paused) {
-				if (currentTrack && currentTrack.song_title === song.song_title) {
-					play(state?.position);
-					return;
-				}
-				setCurrentTrack(song);
-				setIsPlaying(true);
-			} else {
-				player.pause();
-				setIsPlaying(false);
-			}
-		});
+		if (!isDifferentTrack && state?.paused) {
+			play(resumePosition);
+		}
+
+		if (isDifferentTrack) {
+			setCurrentTrack(song);
+			setIsPlaying(true);
+			setResumePosition(0);
+			return;
+		}
+
+		if (state?.paused) {
+			play(resumePosition);
+			setIsPlaying(true);
+		}
 	};
 
+	const handlePauseClick = async () => {
+		const state = await player.getCurrentState();
+		await player.pause();
+		setIsPlaying(false);
+		setResumePosition(state?.position);
+	};
+
+	const isCurrentSong = currentTrack?.song_title === song.song_title;
+	const showPause = isCurrentSong && !isPaused;
+
 	return (
-		<div
-			className={`play-button ${isShowing ? "showing" : ""}`}
-			onClick={handlePlayPause}
-		>
-			{!isPaused && currentTrack.song_title == song.song_title ? (
-				<PauseIcon />
+		<div className={`play-button ${isShowing ? "showing" : ""}`}>
+			{showPause ? (
+				<button onClick={handlePauseClick}>
+					<PauseIcon />
+				</button>
 			) : (
-				<PlayIcon />
+				<button onClick={handlePlayClick}>
+					<PlayIcon />
+				</button>
 			)}
 		</div>
 	);

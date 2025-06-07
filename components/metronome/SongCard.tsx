@@ -46,10 +46,6 @@ function SongCard(props: { song: Song }) {
 		return title;
 	};
 
-	const handlePlayButtonClick = () => {
-		setCurrentTrack(song);
-	};
-
 	return (
 		<div
 			className="songcard"
@@ -67,11 +63,7 @@ function SongCard(props: { song: Song }) {
 					{renderGenres(song.artist.genres)}
 				</div>
 				{player && (
-					<PlayButton
-						isShowing={showPlayButton}
-						handlePlayButtonClick={handlePlayButtonClick}
-						player={player}
-					/>
+					<PlayButton isShowing={showPlayButton} player={player} song={song} />
 				)}
 			</div>
 		</div>

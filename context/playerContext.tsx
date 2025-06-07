@@ -6,6 +6,7 @@ import { SongData } from "@/types/types";
 import { createContext, useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import Spotify from "spotify-api.js";
+import { areTitlesSimilar } from "@/utils/helpers";
 export const PlayerContext = createContext({});
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
@@ -18,8 +19,13 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [spotifyTrack, setSpotifyTrack] = useState<any>("");
 	const [deviceId, setDeviceId] = useState("");
 	const [active, setActive] = useState(false);
+	const [isNextSongLoading, setIsNextSongLoading] = useState(false);
 
 	const { setCookie, getCookie } = useCookies();
+
+	// =====================
+	// Initialize player SKD
+	// =====================
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -61,11 +67,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 					return;
 				}
 
-				setSpotifyTrack(state.track_window.current_track);
-				setIsPaused(state.paused);
-
 				player.getCurrentState().then((state: any) => {
-					!state ? setActive(false) : setActive(true);
+					setIsPaused(state.paused);
+					setIsNextSongLoading(state.loading);
 				});
 			});
 
@@ -81,8 +85,12 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 	}, []);
 
+	// =================
+	// Fetch next song
+	// =================
 	useEffect(() => {
 		const data = getCookie("token");
+		setIsNextSongLoading(true);
 
 		if (!data) {
 			console.warn("No token cookie found");
@@ -91,7 +99,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 
 		try {
 			const tokenObject = JSON.parse(data);
-
 			if (currentTrack && tokenObject?.access_token) {
 				(async () => {
 					try {
@@ -99,10 +106,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 							currentTrack.song_title,
 							tokenObject.access_token
 						);
-						const exists = result?.artists.find(
-							(item: any) => item.name === currentTrack.artist.name
-						);
-						if (exists) {
+						if (result) {
 							setSpotifyTrack(result);
 						} else {
 							toast("Not found", {
@@ -120,7 +124,25 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [currentTrack]);
 
-	// console.log(currentTrack, spotifyTrack);
+	useEffect(() => {
+		if (
+			areTitlesSimilar(currentTrack?.song_title, spotifyTrack.song_title) &&
+			!isNextSongLoading &&
+			isPlaying
+		) {
+			play();
+		}
+	}, [spotifyTrack, currentTrack, isNextSongLoading]);
+
+	useEffect(() => {
+		if (isNextSongLoading) {
+			play();
+		}
+	}, [spotifyTrack]);
+
+	// ================================================
+	// Necessary to ensure the app can control playback
+	// ================================================
 	async function transferPlayback(device_id: string, token: string) {
 		await fetch("https://api.spotify.com/v1/me/player", {
 			method: "PUT",
@@ -134,6 +156,72 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		});
 	}
 
+	async function play() {
+		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+		const device_id = getCookie("device_id");
+
+		if (!token || !device_id) {
+			console.error("Missing token or deviceId");
+			return;
+		}
+
+		await fetch(
+			`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+			{
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ uris: [spotifyTrack?.uri] }),
+			}
+		).then(() => setIsNextSongLoading(false));
+	}
+
+	async function pause() {
+		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+
+		if (!player || !token) {
+			console.error("Missing player instance or token");
+			return;
+		}
+
+		try {
+			player.pause();
+			if (!player) {
+				console.warn(
+					"No active playback state. Falling back to Web API pause."
+				);
+				await fetch("https://api.spotify.com/v1/me/player/pause", {
+					method: "PUT",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				});
+				return;
+			}
+
+			await player.pause();
+			console.log("Playback paused using SDK.");
+		} catch (err) {
+			console.error("Error pausing via SDK. Falling back to Web API:", err);
+
+			try {
+				await fetch("https://api.spotify.com/v1/me/player/pause", {
+					method: "PUT",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				});
+				console.log("Playback paused using Web API fallback.");
+			} catch (apiErr) {
+				console.error("Failed to pause using Web API:", apiErr);
+			}
+		}
+	}
+
 	return (
 		<PlayerContext.Provider
 			value={{
@@ -144,7 +232,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				isPlaying,
 				isPaused,
 				setIsPaused,
-				spotifyTrack,
+				play,
 			}}
 		>
 			{children}

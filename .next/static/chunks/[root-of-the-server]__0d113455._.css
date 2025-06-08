@@ -156,6 +156,7 @@
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --color-green-500: oklch(72.3% .219 149.579);
+    --color-gray-400: oklch(70.7% .022 261.325);
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
@@ -554,6 +555,10 @@
     margin-block: auto;
   }
 
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
@@ -824,6 +829,10 @@
 
   .items-center {
     align-items: center;
+  }
+
+  .justify-between {
+    justify-content: space-between;
   }
 
   .justify-center {
@@ -1132,6 +1141,10 @@
 
   .text-foreground {
     color: var(--foreground);
+  }
+
+  .text-gray-400 {
+    color: var(--color-gray-400);
   }
 
   .text-muted-foreground {

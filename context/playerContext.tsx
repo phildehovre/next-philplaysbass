@@ -131,8 +131,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [spotifyTrack]);
 
-	console.log(isNextSongLoading);
-
 	// ================================================
 	// Necessary to ensure the app can control playback
 	// ================================================

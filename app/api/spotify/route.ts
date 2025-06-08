@@ -1,11 +1,16 @@
-// pages/api/spotify/token.ts
-import type { NextApiRequest, NextApiResponse } from "next";
-
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-	const { code } = req.body;
+// app/api/spotify/route.ts
+export async function POST(req: Request) {
+	const body = await req.json();
+	const { code } = body;
 
 	if (!code) {
-		return res.status(400).json({ error: "Authorization code is missing" });
+		return new Response(
+			JSON.stringify({ error: "Authorization code is missing" }),
+			{
+				status: 400,
+				headers: { "Content-Type": "application/json" },
+			}
+		);
 	}
 
 	const params = new URLSearchParams({
@@ -28,15 +33,21 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
 		const data = await response.json();
 
 		if (!response.ok) {
-			return res
-				.status(response.status)
-				.json({ error: data.error_description });
+			return new Response(JSON.stringify({ error: data.error_description }), {
+				status: response.status,
+				headers: { "Content-Type": "application/json" },
+			});
 		}
 
-		// Optional: store refresh_token in a cookie or DB
-		return res.status(200).json(data); // access_token, refresh_token, expires_in
+		return new Response(JSON.stringify(data), {
+			status: 200,
+			headers: { "Content-Type": "application/json" },
+		});
 	} catch (err) {
 		console.error("[Spotify Token Error]", err);
-		return res.status(500).json({ error: "Internal Server Error" });
+		return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+			status: 500,
+			headers: { "Content-Type": "application/json" },
+		});
 	}
-};
+}

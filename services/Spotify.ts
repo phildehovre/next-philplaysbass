@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 export const PlaySong = () => {
 	console.log("Beep boop");
 };
@@ -59,7 +61,8 @@ export async function getSpotifyTrackIdByArtistAndTitle(
 
 		return track || null;
 	} catch (err) {
-		console.error("[Spotify Search Error]", err);
+		toast("The Spotify access has reset, please log in again", {});
+		console.log("[Spotify Search Error]", err);
 		return null;
 	}
 }

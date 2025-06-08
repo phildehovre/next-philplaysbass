@@ -1,20 +1,74 @@
 /* [project]/components/metronome/SpotifyPlayer.css [app-client] (css) */
 .player_ctn {
+  transition: transform .25s ease-in-out;
+  display: none;
+  transform: translateY(100%);
+}
+
+.player_ctn.open {
   z-index: 999;
+  opacity: .8;
   background-color: #000;
   border-top: 1px solid #2e2e2e;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 1em 0;
+  transition: transform .25s ease-in-out;
   display: flex;
   position: fixed;
   bottom: 0;
+  transform: translateY(0%);
 }
 
-.player_ctn > * {
+.player_ctn.open > * {
+  opacity: 1;
   width: 90%;
+}
+
+.player_ctn.open > .header {
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+}
+
+.player_ctn.open > .header > p {
+  font-size: .75em;
+}
+
+.player_ctn.open > .header > button {
+  border-radius: 100%;
+  outline: 1px solid #fff;
+  justify-content: center;
+  align-items: center;
+  padding: .5em;
+  display: flex;
+}
+
+.player_ctn.open > .header > button:hover {
+  outline: 2px solid #fff;
+}
+
+.player_ctn.open > .header > button:active {
+  outline: 3px solid #fff;
+}
+
+.player_ctn.open .close_btn {
+  cursor: pointer;
+  background-color: #212121;
+  border-top: 1px solid #494949;
+  border-bottom: 1px solid #535353;
+  width: 100%;
+  height: 1em;
+  margin-bottom: .5em;
+}
+
+.player_ctn.open .close_btn:hover {
+  background-color: #2d2d2d;
+}
+
+.player_ctn.open .close_btn:active {
+  background-color: #343434;
 }
 
 /*# sourceMappingURL=components_metronome_SpotifyPlayer_css_f9ee138c._.single.css.map*/

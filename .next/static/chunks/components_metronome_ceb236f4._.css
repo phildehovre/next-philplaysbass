@@ -428,6 +428,20 @@ input[type="range"]:focus::-ms-fill-upper {
   background-color: var(--primary);
 }
 
+.spotify-login_btn {
+  color: #000;
+  background-color: #1ed760;
+  border-radius: 16px;
+  margin: .5em 0;
+  padding: .5em 1em;
+  font-size: .75em;
+}
+
+.spotify-login_btn > img {
+  object-fit: cover;
+  width: 7.5em;
+}
+
 @keyframes pulse {
   0% {
     box-shadow: 15px 15px 100px teal;

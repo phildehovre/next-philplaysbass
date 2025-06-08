@@ -451,6 +451,19 @@ input[type="range"]:focus::-ms-fill-upper {
 .metro-dropdown-item:hover {
 	background-color: var(--primary);
 }
+.spotify-login_btn {
+	background-color: #1ed760;
+	color: black;
+	border-radius: 16px;
+	padding: 0.5em 1em;
+	font-size: 0.75em;
+	margin: 0.5em 0;
+
+	> img {
+		object-fit: cover;
+		width: 7.5em;
+	}
+}
 
 /* Define the pulse animation */
 @keyframes pulse {

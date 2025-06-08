@@ -5,52 +5,66 @@ import "./SpotifyPlayer.css";
 import { Slider } from "../ui/slider";
 import { toast } from "sonner";
 import { formatTime } from "@/utils/helpers";
+import {
+	ChevronDown,
+	ChevronsDown,
+	ChevronUp,
+	PauseIcon,
+	PlayIcon,
+} from "lucide-react";
 
 const SpotifyPlayer = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [position, setPosition] = useState<number[] | number>();
+	const [position, setPosition] = useState<number>(0);
 	const [sliderValue, setSliderValue] = useState<number>(0);
 	const [duration, setDuration] = useState<number>(0);
+	const [isPlaying, setIsPlaying] = useState(false);
 
-	const { isNextSongLoading, player, spotifyTrack, currentTrack, play } =
+	const { isNextSongLoading, player, spotifyTrack, currentTrack } =
 		useContext<any>(PlayerContext);
 
-	const isSeekingRef = useRef(false);
-	const previousSliderValueRef = useRef<number>(0);
+	useEffect(() => {
+		if (isPlaying) {
+			setIsOpen(true);
+		}
+	}, [isPlaying]);
 
+	const isSeekingRef = useRef(false);
+	const previousSliderValueRef = useRef<number>(sliderValue);
+
+	// Open player when currentTrack changes
 	useEffect(() => {
 		if (currentTrack) {
 			setIsOpen(true);
-		} else {
-			return;
 		}
 	}, [currentTrack]);
 
+	// Reset position and slider on new track
 	useEffect(() => {
 		if (!currentTrack) return;
-
 		setPosition(0);
 		setSliderValue(0);
-		setDuration(0); // Optional: Reset duration if it's track-specific
+		setDuration(0);
 	}, [currentTrack]);
 
-	// Sets slider value immediately when the player becomes ready.
+	// Initialize slider when player is ready
 	useEffect(() => {
 		if (!player) return;
 
 		const updateInitialSlider = async () => {
 			const state = await player.getCurrentState();
 			if (state && !state.paused && state.duration) {
-				const { position, duration } = state;
-				setSliderValue((position / duration) * 100);
-				setPosition(position);
-				setDuration(duration);
+				setPosition(state.position);
+				setDuration(state.duration);
+				setSliderValue((state.position / state.duration) * 100);
+				setIsPlaying(!state.paused);
 			}
 		};
 
 		updateInitialSlider();
 	}, [player]);
 
+	// Poll player position every 500ms (but pause updates if seeking)
 	useEffect(() => {
 		if (!player) return;
 
@@ -61,14 +75,12 @@ const SpotifyPlayer = () => {
 				const state = await player.getCurrentState();
 				if (!state || !state.duration) return;
 
-				const { position, duration, paused } = state;
-
-				setDuration(duration);
+				setDuration(state.duration);
+				setIsPlaying(!state.paused);
 
 				if (!isSeekingRef.current) {
-					setPosition(position);
-					const percent = (position / duration) * 100;
-					setSliderValue(percent);
+					setPosition(state.position);
+					setSliderValue((state.position / state.duration) * 100);
 				}
 			}, 500);
 		};
@@ -78,8 +90,7 @@ const SpotifyPlayer = () => {
 		return () => clearInterval(interval);
 	}, [player]);
 
-	// Mismatch Logic
-	// TODO: better Fuzzy match algo
+	// Mismatch detection (toast notification)
 	useEffect(() => {
 		setTimeout(() => {
 			if (!player || isNextSongLoading) return;
@@ -96,43 +107,67 @@ const SpotifyPlayer = () => {
 		}, 2000);
 	}, [player, isNextSongLoading, spotifyTrack]);
 
+	// Play/pause toggle handler
+	const togglePlayPause = async () => {
+		if (!player) return;
+
+		const state = await player.getCurrentState();
+		if (!state) return;
+
+		if (state.paused) {
+			await player.resume();
+			setIsPlaying(true);
+		} else {
+			await player.pause();
+			setIsPlaying(false);
+		}
+	};
+
 	return (
 		<div className={`player_ctn ${isOpen ? "open" : ""}`}>
+			<ChevronsDown className="close_btn" onClick={() => setIsOpen(false)} />
 			<div className="header">
+				<button
+					onClick={togglePlayPause}
+					className="player-toggle_btn"
+					aria-label={isPlaying ? "Pause" : "Play"}
+				>
+					{isPlaying ? <PlayIcon /> : <PauseIcon />}
+				</button>
 				<h1>{spotifyTrack?.name}</h1>
 				<p>{spotifyTrack?.artists[0].name}</p>
-				<Slider
-					value={[sliderValue]}
-					max={100}
-					step={0.1}
-					onValueChange={(value) => {
-						setSliderValue(value[0]);
-						isSeekingRef.current = true;
+			</div>
+			<Slider
+				value={[sliderValue]}
+				max={100}
+				step={0.1}
+				onValueChange={(value) => {
+					setSliderValue(value[0]);
+					isSeekingRef.current = true;
 
-						if (duration && value[0] !== previousSliderValueRef.current) {
-							const previewPosition = (value[0] / 100) * duration;
-							setPosition(previewPosition);
-							previousSliderValueRef.current = value[0];
-						}
-					}}
-					onValueCommit={(value) => {
-						if (!player) return;
-						player.getCurrentState().then((state: Spotify.PlaybackState) => {
-							if (!state) return;
-							const duration = state.duration;
-							const newPosition = (value[0] / 100) * duration;
-							player.seek(newPosition);
-							setPosition(newPosition);
-							setSliderValue(value[0]);
-							isSeekingRef.current = false;
-							previousSliderValueRef.current = value[0]; // Reset ref
-						});
-					}}
-				/>
-				<div className="flex justify-between text-xs text-gray-400 mt-1">
-					<span>{formatTime(position || 0)}</span>
-					<span>{formatTime(duration || 0)}</span>
-				</div>
+					if (duration && value[0] !== previousSliderValueRef.current) {
+						const previewPosition = (value[0] / 100) * duration;
+						setPosition(previewPosition);
+						previousSliderValueRef.current = value[0];
+					}
+				}}
+				onValueCommit={(value) => {
+					if (!player) return;
+					player.getCurrentState().then((state: Spotify.PlaybackState) => {
+						if (!state) return;
+						const duration = state.duration;
+						const newPosition = (value[0] / 100) * duration;
+						player.seek(newPosition);
+						setPosition(newPosition);
+						setSliderValue(value[0]);
+						isSeekingRef.current = false;
+						previousSliderValueRef.current = value[0];
+					});
+				}}
+			/>
+			<div className="flex justify-between text-xs text-gray-400 mt-1">
+				<span>{formatTime(position || 0)}</span>
+				<span>{formatTime(duration || 0)}</span>
 			</div>
 		</div>
 	);

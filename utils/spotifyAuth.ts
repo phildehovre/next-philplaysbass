@@ -1,5 +1,3 @@
-// utils/spotifyAuth.ts
-
 export function getSpotifyLoginUrl() {
 	const params = new URLSearchParams({
 		client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!,

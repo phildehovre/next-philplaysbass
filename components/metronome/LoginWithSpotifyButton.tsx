@@ -8,11 +8,9 @@ export function LoginWithSpotifyButton() {
 	};
 
 	return (
-		<button
-			onClick={handleLogin}
-			className="px-4 py-2 bg-green-500 text-white rounded"
-		>
-			Log in with Spotify
+		<button onClick={handleLogin} className="spotify-login_btn">
+			Log in with
+			<img src="/icons/spotify.png" alt="spotify logo" />
 		</button>
 	);
 }

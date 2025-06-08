@@ -4,7 +4,7 @@
   "static/chunks/components_metronome_d7149bf2._.css",
   "static/chunks/node_modules_@tanstack_query-core_build_modern_2df6024e._.js",
   "static/chunks/node_modules_@fortawesome_free-solid-svg-icons_index_mjs_6d4e8d45._.js",
-  "static/chunks/node_modules_c2a4f1b3._.js",
+  "static/chunks/node_modules_f03aaf95._.js",
   "static/chunks/_1877bc20._.js"
 ],
     source: "dynamic"

@@ -1,10 +1,7 @@
 // pages/api/spotify/token.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
-) {
+export async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { code } = req.body;
 
 	if (!code) {

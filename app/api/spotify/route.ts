@@ -1,7 +1,7 @@
 // pages/api/spotify/token.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
+export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
 	const { code } = req.body;
 
 	if (!code) {
@@ -39,4 +39,4 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
 		console.error("[Spotify Token Error]", err);
 		return res.status(500).json({ error: "Internal Server Error" });
 	}
-}
+};

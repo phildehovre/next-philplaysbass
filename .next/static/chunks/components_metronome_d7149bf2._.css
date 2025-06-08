@@ -560,6 +560,7 @@ input[type="range"]:focus::-ms-fill-upper {
 
 /* [project]/components/metronome/SpotifyPlayer.css [app-client] (css) */
 .player_ctn {
+  height: 15em;
   transition: transform .25s ease-in-out;
   display: none;
   transform: translateY(100%);
@@ -571,8 +572,9 @@ input[type="range"]:focus::-ms-fill-upper {
   background-color: #000;
   border-top: 1px solid #2e2e2e;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  gap: 1em;
   width: 100%;
   transition: transform .25s ease-in-out;
   display: flex;
@@ -619,7 +621,7 @@ input[type="range"]:focus::-ms-fill-upper {
   border-top: 1px solid #494949;
   border-bottom: 1px solid #535353;
   width: 100%;
-  height: 1em;
+  height: 2em;
   margin-bottom: .5em;
 }
 
@@ -629,6 +631,16 @@ input[type="range"]:focus::-ms-fill-upper {
 
 .player_ctn.open .close_btn:active {
   background-color: #343434;
+}
+
+@media (width >= 768px) {
+  .player_ctn.open {
+    height: 10em;
+  }
+
+  .player_ctn.open .close_btn {
+    min-height: 15px;
+  }
 }
 
 

@@ -132,7 +132,7 @@ const SpotifyPlayer = () => {
 					className="player-toggle_btn"
 					aria-label={isPlaying ? "Pause" : "Play"}
 				>
-					{isPlaying ? <PlayIcon /> : <PauseIcon />}
+					{!isPlaying ? <PlayIcon /> : <PauseIcon />}
 				</button>
 				<h1>{spotifyTrack?.name}</h1>
 				<p>{spotifyTrack?.artists[0].name}</p>

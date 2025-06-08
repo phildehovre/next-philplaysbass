@@ -2,6 +2,7 @@
 	transform: translateY(100%);
 	display: none;
 	transition: 250ms transform ease-in-out;
+	height: 15em;
 }
 
 .player_ctn.open {
@@ -12,7 +13,8 @@
 	background-color: black;
 	border-top: 1px solid rgb(46, 46, 46);
 	display: flex;
-	justify-content: center;
+	gap: 1em;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
 	transform: translateY(0%);
@@ -55,13 +57,23 @@
 		border-bottom: 1px solid rgb(83, 83, 83);
 		margin-bottom: 0.5em;
 		cursor: pointer;
-		height: 1em;
+		height: 2em;
 
 		&:hover {
 			background-color: rgb(45, 45, 45);
 		}
 		&:active {
 			background-color: rgb(52, 52, 52);
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.player_ctn.open {
+		height: 10em;
+
+		.close_btn {
+			min-height: 15px;
 		}
 	}
 }

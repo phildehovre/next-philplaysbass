@@ -129,7 +129,8 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 __turbopack_context__.s({
     "PlaySong": (()=>PlaySong),
     "getSpotifyTrackIdByArtistAndTitle": (()=>getSpotifyTrackIdByArtistAndTitle),
-    "loadSpotifySDK": (()=>loadSpotifySDK)
+    "loadSpotifySDK": (()=>loadSpotifySDK),
+    "searchSpotifyArtistByName": (()=>searchSpotifyArtistByName)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
 ;
@@ -180,6 +181,32 @@ async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
     } catch (err) {
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
         console.log("[Spotify Search Error]", err);
+        return null;
+    }
+}
+async function searchSpotifyArtistByName(name, accessToken) {
+    const query = `artist:${name}`;
+    const url = new URL(`${SPOTIFY_API_BASE}/search`);
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "artist");
+    url.searchParams.append("limit", "1");
+    try {
+        const res = await fetch(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`Spotify search error: ${res.status} ${res.statusText} - ${errorData.error?.message}`);
+        }
+        const data = await res.json();
+        const artist = data.artists.items[0];
+        return artist || null;
+    } catch (err) {
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
+        console.log("[Spotify Artist Search Error]", err);
         return null;
     }
 }
@@ -307,6 +334,13 @@ const PlayerProvider = ({ children })=>{
                             try {
                                 const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, tokenObject.access_token);
                                 if (result) {
+                                    var artist = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["searchSpotifyArtistByName"])(currentTrack.artist.name, tokenObject.access_token);
+                                }
+                                if (result && artist) {
+                                    // Get more results from getSPottrack
+                                    // Try to find correct artist
+                                    // if artist, filter songs to find artist
+                                    console.log(result, artist);
                                     setSpotifyTrack(result);
                                 } else {
                                     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("Not found", {
@@ -391,7 +425,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 176,
+        lineNumber: 187,
         columnNumber: 3
     }, this);
 };

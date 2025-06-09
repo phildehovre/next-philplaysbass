@@ -186,6 +186,12 @@ const Metronome = () => {
 					</div>
 				</div>
 				<LoginWithSpotifyButton />
+				<div className="spotify-login_btn">
+					<img
+						src="https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png"
+						alt="Login with Spotify"
+					/>
+				</div>
 				<h6 style={{ color: "var(--secondary)" }}>
 					Powered by{" "}
 					<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>

@@ -17,6 +17,7 @@ export function LoginWithSpotifyButton() {
 				alt="spotify logo"
 				width={50}
 				height={50}
+				quality={100}
 			/>
 		</button>
 	);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useCookies from "@/hooks/useCookies";
-import { LoaderPinwheelIcon } from "lucide-react";
+import Spinner from "@/components/Spinner";
 
 export default function CallbackPage() {
 	const router = useRouter();
@@ -43,7 +43,7 @@ export default function CallbackPage() {
 	return (
 		<div className="flex flex-col h-full w-full justify-center items-center">
 			<h1 className="absolute top-[50%] right-[50%] mx-auto my-auto h-5 w-10">
-				<LoaderPinwheelIcon className="spin" />
+				<Spinner />
 				Connecting with Spotify...
 			</h1>
 		</div>

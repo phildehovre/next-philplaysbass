@@ -1,4 +1,3 @@
-// pages/callback.tsx or app/callback/page.tsx (Next 13+)
 "use client";
 
 import { useEffect, useState } from "react";

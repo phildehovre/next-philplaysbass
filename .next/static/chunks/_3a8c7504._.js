@@ -158,8 +158,8 @@ function loadSpotifySDK() {
     });
     return spotifySDKPromise;
 }
-async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
-    const query = `track:${title}`;
+async function getSpotifyTrackIdByArtistAndTitle(title, artistName, accessToken) {
+    const query = `track:${title} artist:${artistName}`;
     const url = new URL(`${SPOTIFY_API_BASE}/search`);
     url.searchParams.append("q", query);
     url.searchParams.append("type", "track");
@@ -176,7 +176,7 @@ async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
             throw new Error(`Spotify search error: ${res.status} ${res.statusText} - ${errorData.error?.message}`);
         }
         const data = await res.json();
-        const track = data.tracks.items[0];
+        const track = data.tracks.items;
         return track || null;
     } catch (err) {
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
@@ -332,16 +332,9 @@ const PlayerProvider = ({ children })=>{
                     ({
                         "PlayerProvider.useEffect": async ()=>{
                             try {
-                                const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, tokenObject.access_token);
+                                const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyTrackIdByArtistAndTitle"])(currentTrack.song_title, currentTrack.artist.name, tokenObject.access_token);
                                 if (result) {
-                                    var artist = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["searchSpotifyArtistByName"])(currentTrack.artist.name, tokenObject.access_token);
-                                }
-                                if (result && artist) {
-                                    // Get more results from getSPottrack
-                                    // Try to find correct artist
-                                    // if artist, filter songs to find artist
-                                    console.log(result, artist);
-                                    setSpotifyTrack(result);
+                                    setSpotifyTrack(result[0]);
                                 } else {
                                     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("Not found", {
                                         description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
@@ -425,7 +418,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 187,
+        lineNumber: 178,
         columnNumber: 3
     }, this);
 };

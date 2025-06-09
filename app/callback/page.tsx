@@ -4,7 +4,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useCookies from "@/hooks/useCookies";
-import { Suspense } from "react";
 import { LoaderPinwheelIcon } from "lucide-react";
 
 export default function CallbackPage() {
@@ -43,13 +42,11 @@ export default function CallbackPage() {
 	}, [params]);
 
 	return (
-		<Suspense>
-			<div className="flex flex-col h-full w-full justify-center items-center">
-				<h1 className="absolute top-[50%] right-[50%] mx-auto my-auto h-5 w-10">
-					<LoaderPinwheelIcon className="spin" />
-					Connecting with Spotify...
-				</h1>
-			</div>
-		</Suspense>
+		<div className="flex flex-col h-full w-full justify-center items-center">
+			<h1 className="absolute top-[50%] right-[50%] mx-auto my-auto h-5 w-10">
+				<LoaderPinwheelIcon className="spin" />
+				Connecting with Spotify...
+			</h1>
+		</div>
 	);
 }

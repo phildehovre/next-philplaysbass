@@ -1,14 +1,16 @@
 import Metronome from "@/components/metronome/Metronome";
 import MetroSidebar from "@/components/metronome/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import React from "react";
+import React, { Suspense } from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div>
 			<SidebarProvider>
-				<MetroSidebar />
-				{children}
+				<Suspense>
+					<MetroSidebar />
+					{children}
+				</Suspense>
 			</SidebarProvider>
 			<Metronome />
 		</div>

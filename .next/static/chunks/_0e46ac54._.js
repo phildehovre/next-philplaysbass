@@ -157,7 +157,7 @@ function Separator({ className, orientation = "horizontal", decorative = true, .
     }, void 0, false, {
         fileName: "[project]/components/ui/separator.tsx",
         lineNumber: 15,
-        columnNumber: 5
+        columnNumber: 3
     }, this);
 }
 _c = Separator;

@@ -110,16 +110,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 							tokenObject.access_token
 						);
 						if (result) {
-							var artist: any = await searchSpotifyArtistByName(
-								currentTrack.artist.name,
-								tokenObject.access_token
-							);
-						}
-						if (result && artist) {
-							// Get more results from getSPottrack
-							// Try to find correct artist
-							// if artist, filter songs to find artist
-							console.log(result, artist);
 							setSpotifyTrack(result[0]);
 						} else {
 							toast("Not found", {

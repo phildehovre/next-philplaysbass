@@ -131,6 +131,8 @@ __turbopack_context__.s({
     "getSpotifyTrackIdByArtistAndTitle": (()=>getSpotifyTrackIdByArtistAndTitle),
     "loadSpotifySDK": (()=>loadSpotifySDK)
 });
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
+;
 const PlaySong = ()=>{
     console.log("Beep boop");
 };
@@ -176,7 +178,8 @@ async function getSpotifyTrackIdByArtistAndTitle(title, accessToken) {
         const track = data.tracks.items[0];
         return track || null;
     } catch (err) {
-        console.error("[Spotify Search Error]", err);
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
+        console.log("[Spotify Search Error]", err);
         return null;
     }
 }
@@ -862,7 +865,10 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$spotifyAuth$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/spotifyAuth.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 "use client";
+;
+;
 ;
 ;
 function LoginWithSpotifyButton() {
@@ -874,18 +880,21 @@ function LoginWithSpotifyButton() {
         className: "spotify-login_btn",
         children: [
             "Log in with",
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 src: "/icons/spotify.png",
-                alt: "spotify logo"
+                alt: "spotify logo",
+                width: 50,
+                height: 50,
+                quality: 100
             }, void 0, false, {
                 fileName: "[project]/components/metronome/LoginWithSpotifyButton.tsx",
-                lineNumber: 13,
+                lineNumber: 15,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/metronome/LoginWithSpotifyButton.tsx",
-        lineNumber: 11,
+        lineNumber: 13,
         columnNumber: 3
     }, this);
 }
@@ -1232,13 +1241,13 @@ const Metronome = ()=>{
                             children: "getsongbpm.com"
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/Metronome.tsx",
-                            lineNumber: 191,
+                            lineNumber: 192,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 189,
+                    lineNumber: 190,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$QueryClientProvider$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QueryClientProvider"], {
@@ -1250,12 +1259,12 @@ const Metronome = ()=>{
                         setListSize: setListSize
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/Metronome.tsx",
-                        lineNumber: 194,
+                        lineNumber: 195,
                         columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/Metronome.tsx",
-                    lineNumber: 193,
+                    lineNumber: 194,
                     columnNumber: 5
                 }, this)
             ]
@@ -1436,7 +1445,7 @@ function Separator({ className, orientation = "horizontal", decorative = true, .
     }, void 0, false, {
         fileName: "[project]/components/ui/separator.tsx",
         lineNumber: 15,
-        columnNumber: 5
+        columnNumber: 3
     }, this);
 }
 _c = Separator;

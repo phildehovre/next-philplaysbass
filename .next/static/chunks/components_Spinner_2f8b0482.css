@@ -1,0 +1,17 @@
+/* [project]/components/Spinner.css [app-client] (css) */
+.spinner {
+  animation: 1s infinite spin;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*# sourceMappingURL=components_Spinner_2f8b0482.css.map*/

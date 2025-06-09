@@ -4,6 +4,7 @@ import useCookies from "@/hooks/useCookies";
 import {
 	getSpotifyTrackIdByArtistAndTitle,
 	loadSpotifySDK,
+	searchSpotifyArtistByName,
 } from "@/services/Spotify";
 import { SongData, SpotifyPlayer } from "@/types/types";
 import { createContext, useState, useEffect, useRef } from "react";
@@ -105,10 +106,21 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 					try {
 						const result: any = await getSpotifyTrackIdByArtistAndTitle(
 							currentTrack.song_title,
+							currentTrack.artist.name,
 							tokenObject.access_token
 						);
 						if (result) {
-							setSpotifyTrack(result);
+							var artist: any = await searchSpotifyArtistByName(
+								currentTrack.artist.name,
+								tokenObject.access_token
+							);
+						}
+						if (result && artist) {
+							// Get more results from getSPottrack
+							// Try to find correct artist
+							// if artist, filter songs to find artist
+							console.log(result, artist);
+							setSpotifyTrack(result[0]);
 						} else {
 							toast("Not found", {
 								description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,

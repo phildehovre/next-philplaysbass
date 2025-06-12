@@ -15,7 +15,7 @@ runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__d9b43565._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_96715ba7._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_next_dist_client_components_forbidden-error_ea7ea172.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_next_dist_client_components_unauthorized-error_c8949b27.js");
-runtime.loadChunk("server/chunks/ssr/_c55cfb93._.js");
+runtime.loadChunk("server/chunks/ssr/_7593087d._.js");
 runtime.loadChunk("server/chunks/ssr/_5d15d73c._.js");
 runtime.loadChunk("server/chunks/ssr/app_74731a7f._.js");
 runtime.getOrInstantiateRuntimeModule("[project]/.next-internal/server/app/callback/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)", CHUNK_PUBLIC_PATH);

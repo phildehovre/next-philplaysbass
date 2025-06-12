@@ -1,0 +1,36 @@
+/* [project]/components/metronome/SongDropdown.css [app-client] (css) */
+.song-dropdown_ctn {
+  opacity: 1;
+  background-color: #fff;
+  border: 1px solid #3c3c3c;
+  border-radius: 3px;
+  flex-direction: column;
+  gap: .25em;
+  padding: .5em;
+  display: flex;
+  position: absolute;
+  background-color: #222 !important;
+}
+
+.song-dropdown_item {
+  border-radius: 0;
+  width: 100%;
+  height: 100%;
+  padding: .1em;
+}
+
+.song-dropdown_item:hover, .song-dropdown_item:active, .song-dropdown_item:focus-visible, .song-dropdown_item:focus-within {
+  background-color: #7171717f;
+}
+
+.song-dropdown_item[data-state="open"] {
+  opacity: .7;
+  background-color: #424242;
+}
+
+.song-dropdown_trigger:focus {
+  outline: none;
+  opacity: 1 !important;
+}
+
+/*# sourceMappingURL=components_metronome_SongDropdown_css_f9ee138c._.single.css.map*/

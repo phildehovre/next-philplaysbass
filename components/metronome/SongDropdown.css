@@ -1,0 +1,37 @@
+.song-dropdown_ctn {
+	position: absolute;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+	padding: 0.5em;
+	border: 1px solid rgb(60, 60, 60);
+	border-radius: 3px;
+	opacity: 1;
+	background-color: rgb(34, 34, 34) !important;
+}
+.song-dropdown_item {
+	width: 100%;
+	height: 100%;
+	padding: 0.1em;
+	border-radius: 0;
+	&:hover {
+		background-color: rgba(113, 113, 113, 0.498);
+	}
+	&:active {
+		background-color: rgba(113, 113, 113, 0.498);
+	}
+	&:focus-visible,
+	&:focus-within {
+		background-color: rgba(113, 113, 113, 0.498);
+	}
+	&[data-state="open"] {
+		background-color: rgb(66, 66, 66);
+		opacity: 0.7;
+	}
+}
+
+.song-dropdown_trigger:focus {
+	opacity: 1 !important;
+	outline: none;
+}

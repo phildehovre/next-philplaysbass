@@ -16,7 +16,7 @@ import {
 import { LoaderCircle } from "lucide-react";
 
 function SongList(props: any) {
-	const { bpm, showSongs } = props;
+	const { bpm, showSongs, playlists } = props;
 	const [songs, setSongs] = useState([]);
 	const [listStart, setListStart] = useState(0);
 	const [listEnd, setListEnd] = useState(12);
@@ -59,7 +59,7 @@ function SongList(props: any) {
 
 	const renderSongList = () => {
 		return songs?.map((song: SongData) => {
-			return <SongCard song={song} key={song.song_id} />;
+			return <SongCard song={song} key={song.song_id} playlists={playlists} />;
 		});
 	};
 

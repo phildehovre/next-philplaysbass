@@ -55,4 +55,18 @@
   color: var(--clr-cta-primary);
 }
 
+.song-dropdown_btn {
+  opacity: .1;
+  background-color: #000;
+  border-radius: 100%;
+  width: 2em;
+  height: 2em;
+  padding: .25em;
+}
+
+.song-dropdown_btn:hover {
+  opacity: .5;
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=components_metronome_SongCard_scss_css_f9ee138c._.single.css.map*/

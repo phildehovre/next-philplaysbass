@@ -9,6 +9,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Nav_alt from "@/components/Nav_alt";
 import ActiveSectionContextProvider from "@/context/activeElementContext";
 import { Toaster } from "@/components/ui/sonner";
+import { UserProvider } from "@/context/userContext";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -38,12 +39,14 @@ export default async function RootLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<AuthProvider>
 					<LanguageProvider>
-						<ActiveSectionContextProvider>
-							<Nav_alt />
-						</ActiveSectionContextProvider>
-						{children}
-						<Footer />
-						<Toaster theme="dark" />
+						<UserProvider>
+							<ActiveSectionContextProvider>
+								<Nav_alt />
+							</ActiveSectionContextProvider>
+							{children}
+							<Footer />
+							<Toaster theme="dark" />
+						</UserProvider>
 					</LanguageProvider>
 				</AuthProvider>
 				<script src="https://sdk.scdn.co/spotify-player.js"></script>

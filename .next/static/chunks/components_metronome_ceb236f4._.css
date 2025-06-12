@@ -557,6 +557,20 @@ input[type="range"]:focus::-ms-fill-upper {
   color: var(--clr-cta-primary);
 }
 
+.song-dropdown_btn {
+  opacity: .1;
+  background-color: #000;
+  border-radius: 100%;
+  width: 2em;
+  height: 2em;
+  padding: .25em;
+}
+
+.song-dropdown_btn:hover {
+  opacity: .5;
+  cursor: pointer;
+}
+
 
 /* [project]/components/metronome/Sidebar.css [app-client] (css) */
 .sidebar_main {

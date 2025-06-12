@@ -7,12 +7,8 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div>
 			<SidebarProvider>
-				<Suspense>
-					<MetroSidebar />
-					{children}
-				</Suspense>
+				<Suspense>{children}</Suspense>
 			</SidebarProvider>
-			<Metronome />
 		</div>
 	);
 };

@@ -12,7 +12,6 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
-import SpotifyPlayer from "./SpotifyPlayer";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -20,7 +19,7 @@ type SoundObject = {
 	sidestick: HTMLAudioElement | undefined;
 };
 
-const Metronome = () => {
+const Metronome = ({ playlists }: { playlists: any }) => {
 	const [showSongs, setShowSongs] = useState(false);
 	const [play, setPlay] = useState(false);
 	const [bpm, setBpm] = useState(120);
@@ -37,8 +36,6 @@ const Metronome = () => {
 		cowbell: undefined,
 		sidestick: undefined,
 	});
-
-	const queryClient = new QueryClient();
 
 	useEffect(() => {
 		const woodblock = new Audio("sounds/Woodblock.mp3");
@@ -129,78 +126,80 @@ const Metronome = () => {
 		setBpm(Number(bpm) - 1);
 	};
 
+	const queryClient = new QueryClient();
 	return (
-		<div className="metronome-ctn">
-			<div className={`metronome ${pulse ? "pulse" : ""}`}>
-				<div className="header">
-					<Logo size={60} />
-				</div>
-				<div className="metro-display">
-					<div className="metro-btn decrement" onClick={decrement}>
-						-
+		<QueryClientProvider client={queryClient}>
+			<div className="metronome-ctn">
+				<div className={`metronome ${pulse ? "pulse" : ""}`}>
+					<div className="header">
+						<Logo size={60} />
 					</div>
-					<div className="metro-display bpm">{bpm}</div>
-					<div className="metro-btn increment" onClick={increment}>
-						+
-					</div>
-				</div>
-				<input
-					type="range"
-					min="40"
-					max="220"
-					value={bpm}
-					onChange={(e) => setBpm(Number(e.target.value))}
-				/>
-				<div className="metro-controls">
-					<div
-						onClick={startClick}
-						className={`metro-btn ${play ? `pause` : `play`} noSelect`}
-						id="metro-there"
-						style={{ animationDuration: `${tempoInterval}ms` }}
-					></div>
-					<div
-						className="metro-btn-generate"
-						onClick={() => handleDisplaySongsList()}
-					>
-						<FontAwesomeIcon icon={faBars} size="2x" />
-					</div>
-
-					<div onClick={tapTempo} className="metro-btn-tap">
-						<div className="outer">
-							<div className="inner"></div>
+					<div className="metro-display">
+						<div className="metro-btn decrement" onClick={decrement}>
+							-
+						</div>
+						<div className="metro-display bpm">{bpm}</div>
+						<div className="metro-btn increment" onClick={increment}>
+							+
 						</div>
 					</div>
-					<div
-						className="metro-dropdown-header"
-						onClick={() => setDropdownOpen(!dropdownOpen)}
-					>
-						<ChevronDown />
-						{soundEffect}
-						<Dropdown
-							open={dropdownOpen}
-							soundEffect={soundEffect}
-							setSoundEffect={setSoundEffect}
-							dropdownOpen={dropdownOpen}
-							setDropdownOpen={setDropdownOpen}
-						/>
-					</div>
-				</div>
-				<LoginWithSpotifyButton />
+					<input
+						type="range"
+						min="40"
+						max="220"
+						value={bpm}
+						onChange={(e) => setBpm(Number(e.target.value))}
+					/>
+					<div className="metro-controls">
+						<div
+							onClick={startClick}
+							className={`metro-btn ${play ? `pause` : `play`} noSelect`}
+							id="metro-there"
+							style={{ animationDuration: `${tempoInterval}ms` }}
+						></div>
+						<div
+							className="metro-btn-generate"
+							onClick={() => handleDisplaySongsList()}
+						>
+							<FontAwesomeIcon icon={faBars} size="2x" />
+						</div>
 
-				<h6 style={{ color: "var(--secondary)" }}>
-					Powered by{" "}
-					<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>
-				</h6>
-				<QueryClientProvider client={queryClient}>
+						<div onClick={tapTempo} className="metro-btn-tap">
+							<div className="outer">
+								<div className="inner"></div>
+							</div>
+						</div>
+						<div
+							className="metro-dropdown-header"
+							onClick={() => setDropdownOpen(!dropdownOpen)}
+						>
+							<ChevronDown />
+							{soundEffect}
+							<Dropdown
+								open={dropdownOpen}
+								soundEffect={soundEffect}
+								setSoundEffect={setSoundEffect}
+								dropdownOpen={dropdownOpen}
+								setDropdownOpen={setDropdownOpen}
+							/>
+						</div>
+					</div>
+					<LoginWithSpotifyButton />
+
+					<h6 style={{ color: "var(--secondary)" }}>
+						Powered by{" "}
+						<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>
+					</h6>
 					<SongList
 						bpm={debouncedBpm}
 						showSongs={showSongs}
 						listSize={listSize}
 						setListSize={setListSize}
+						playlists={playlists}
 					/>
-				</QueryClientProvider>
+				</div>
 			</div>
-		</div>
+		</QueryClientProvider>
 	);
 };
 

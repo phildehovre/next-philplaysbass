@@ -7,11 +7,16 @@ import { animate, stagger } from "motion";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
+import { EllipsisVertical } from "lucide-react";
+import Dropdown from "./Dropdown";
+import SongDropdown from "./SongDropdown";
+import PlaylistModal from "./PlaylistModal";
 
-function SongCard(props: { song: SongData }) {
-	const { song } = props;
+function SongCard(props: { song: SongData; playlists: any }) {
+	const { song, playlists } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const { player, currentTrack } = useContext<any>(PlayerContext);
+	const [showSongPortal, setShowSongPortal] = useState(false);
 
 	useLayoutEffect(() => {
 		animate(
@@ -47,30 +52,46 @@ function SongCard(props: { song: SongData }) {
 	};
 
 	return (
-		<div
-			className="songcard"
-			onMouseEnter={() => setShowPlayButton(true)}
-			onMouseLeave={() => {
-				if (currentTrack && currentTrack.song_title !== song.song_title) {
-					setShowPlayButton(false);
-				}
-			}}
-		>
-			<div className="songcard-left">
-				<div>
-					<div className="songcard-title">{formatTitle(song.song_title)}</div>
-					<div className="songcard-artist">{song.artist.name}</div>
+		<>
+			{showSongPortal && (
+				<PlaylistModal setShow={setShowSongPortal} song={song} />
+			)}
+			<div
+				className="songcard"
+				onMouseEnter={() => setShowPlayButton(true)}
+				onMouseLeave={() => {
+					if (currentTrack && currentTrack.song_title !== song.song_title) {
+						setShowPlayButton(false);
+					}
+				}}
+			>
+				<div className="songcard-left">
+					<div>
+						<div className="songcard-title">{formatTitle(song.song_title)}</div>
+						<div className="songcard-artist">{song.artist.name}</div>
+					</div>
+				</div>
+				<div className="songcard-right">
+					<div className="songcard-genres">
+						{renderGenres(song.artist.genres)}
+					</div>
+					{player && (
+						<PlayButton
+							isShowing={showPlayButton}
+							player={player}
+							song={song}
+						/>
+					)}
+					<div className="song-dropdown_btn">
+						<SongDropdown
+							playlists={playlists}
+							setShowSongPortal={setShowSongPortal}
+							song={song}
+						/>
+					</div>
 				</div>
 			</div>
-			<div className="songcard-right">
-				<div className="songcard-genres">
-					{renderGenres(song.artist.genres)}
-				</div>
-				{player && (
-					<PlayButton isShowing={showPlayButton} player={player} song={song} />
-				)}
-			</div>
-		</div>
+		</>
 	);
 }
 

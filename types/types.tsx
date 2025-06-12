@@ -22,6 +22,8 @@ export type Song = {
 	};
 };
 
+export type Playlist = Song[];
+
 export const links = [
 	{
 		name: "Home",

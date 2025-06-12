@@ -9,8 +9,9 @@ import {
 	SidebarGroupLabel,
 	SidebarHeader,
 } from "@/components/ui/sidebar";
+import { Playlist, Song } from "@/types/types";
 
-const MetroSidebar = () => {
+const MetroSidebar = ({ playlists }: { playlists: Song[][] }) => {
 	return (
 		<Sidebar className="sidebar_main">
 			<SidebarHeader />

@@ -34,8 +34,11 @@ model Playlist {
 model Song {
   id        Int           @id @default(autoincrement())
   title     String
+  externalId String  @unique // song_id from external source
+  uri String
+  tempo Int
   artist    String
-  duration  Int           // duration in seconds
+  duration  Int?           // duration in seconds
   playlists PlaylistSong[] // Many-to-many via join table
 }
 

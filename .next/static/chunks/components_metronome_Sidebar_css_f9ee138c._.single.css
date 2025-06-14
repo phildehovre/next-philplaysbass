@@ -1,11 +1,13 @@
 /* [project]/components/metronome/Sidebar.css [app-client] (css) */
 .sidebar_main {
+  background-color: #171717;
   border: #0000;
-  border-right: 1px solid #80808067;
+  border-left: 1px solid #80808067;
+  padding: 100px 1em 1em;
 }
 
 .sidebar_main > * {
-  background-color: #171717;
+  background-color: #0000;
 }
 
 /*# sourceMappingURL=components_metronome_Sidebar_css_f9ee138c._.single.css.map*/

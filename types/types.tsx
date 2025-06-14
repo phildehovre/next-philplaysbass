@@ -22,7 +22,23 @@ export type Song = {
 	};
 };
 
-export type Playlist = Song[];
+export type Playlist = {
+	songs: Song[];
+	createdAt: Date;
+	id: number;
+	name: string;
+	userId: number;
+};
+
+export type SongData = {
+	id: number;
+	title: string;
+	artist: string;
+	duration: number | null;
+	tempo: number;
+	externalId: number;
+	uri: string;
+};
 
 export const links = [
 	{
@@ -48,26 +64,6 @@ export type SectionName = (typeof links)[number]["name"];
 export type PaymentDetails = {
 	iban: string;
 	account_holder: string;
-};
-
-export type SongData = {
-	song_id: string;
-	song_title: string;
-	song_uri: string;
-	tempo: string; // or number, depending on how you want to use it
-	artist: {
-		id: string;
-		name: string;
-		uri: string;
-		genres: string[];
-		from: string | null;
-		mbid: string;
-	};
-	album: {
-		title: string;
-		uri: string;
-		year: string; // or number if you'd rather coerce it
-	};
 };
 
 declare global {

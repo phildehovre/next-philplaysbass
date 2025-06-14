@@ -1,0 +1,68 @@
+.modal_overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.587);
+	height: 100svh;
+	width: 100%;
+	z-index: 1000;
+}
+
+.modal_error {
+	color: rgb(232, 116, 98);
+}
+.modal_ctn {
+	background-color: rgb(31, 31, 31);
+	color: white;
+	width: 400px;
+	margin: auto auto;
+	position: absolute;
+	z-index: 1000 !important;
+	top: 50%;
+	right: 50%;
+	transform: translate(50%, -50%);
+	padding: 1em;
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+
+	> form {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+
+		> input[type="text"] {
+			background-color: black;
+			padding: 0.5em;
+			border-radius: 6px;
+		}
+		> label {
+			font-size: 2em;
+			font-weight: bolder;
+		}
+
+		> input[type="submit"] {
+			width: 50%;
+			margin: 0 auto;
+			padding: 0.5em;
+			border-radius: 6px;
+			outline: none;
+			color: black;
+			background-color: var(--clr-cta-primary);
+			cursor: pointer;
+			transition: 150ms ease-in-out all;
+			&:hover {
+				outline: 1px solid var(--clr-cta-primary);
+				background-color: transparent;
+				color: var(--clr-cta-primary);
+			}
+			&:active {
+				color: black;
+				background-color: var(--clr-cta-primary);
+			}
+		}
+	}
+}

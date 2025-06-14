@@ -8,8 +8,6 @@ import { getUserPlaylists } from "@/services/playlistService";
 import { ensureUserInDb } from "@/services/userService";
 import MetroSidebar from "@/components/metronome/Sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Playlist, Song } from "@/types/types";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const page = async () => {
 	const { isAuthenticated, getUser } = await getKindeServerSession();

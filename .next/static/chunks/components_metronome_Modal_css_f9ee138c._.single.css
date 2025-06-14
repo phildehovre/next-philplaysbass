@@ -1,0 +1,21 @@
+/* [project]/components/metronome/Modal.css [app-client] (css) */
+.modal_overlay {
+  z-index: 1000;
+  background: #0009;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: fixed;
+  inset: 0;
+}
+
+.modal_container {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  box-shadow: 0 4px 14px #00000040;
+}
+
+/*# sourceMappingURL=components_metronome_Modal_css_f9ee138c._.single.css.map*/

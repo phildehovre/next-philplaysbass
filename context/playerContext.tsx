@@ -6,18 +6,15 @@ import {
 	loadSpotifySDK,
 	searchSpotifyArtistByName,
 } from "@/services/Spotify";
-import { SongData, SpotifyPlayer } from "@/types/types";
+import { Song, SongData, SpotifyPlayer } from "@/types/types";
 import { createContext, useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import Spotify from "spotify-api.js";
-import { areTitlesSimilar } from "@/utils/helpers";
 export const PlayerContext = createContext({});
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
-	const [currentTrack, setCurrentTrack] = useState<SongData | undefined>(
-		undefined
-	);
+	const [currentTrack, setCurrentTrack] = useState<Song | undefined>(undefined);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isPaused, setIsPaused] = useState(false);
 	const [spotifyTrack, setSpotifyTrack] = useState<Spotify.Track>();

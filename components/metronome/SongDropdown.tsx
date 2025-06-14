@@ -15,7 +15,7 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { SongData } from "@/types/types";
+import { Song, SongData } from "@/types/types";
 
 const SongDropdown = ({
 	playlists,
@@ -24,7 +24,7 @@ const SongDropdown = ({
 }: {
 	playlists: any;
 	setShowSongPortal: (p: boolean) => void;
-	song: SongData;
+	song: Song;
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
 

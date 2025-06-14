@@ -2,15 +2,32 @@
 
 import useCookies from "@/hooks/useCookies";
 import {
-	getSpotifyTrackIdByArtistAndTitle,
+	getSpotifyTrackByArtistAndTitle,
 	loadSpotifySDK,
-	searchSpotifyArtistByName,
 } from "@/services/Spotify";
-import { Song, SongData, SpotifyPlayer } from "@/types/types";
-import { createContext, useState, useEffect, useRef } from "react";
+import { Song, SpotifyPlayer } from "@/types/types";
+import { createContext, useState, useEffect, useRef, useContext } from "react";
 import { toast } from "sonner";
-import Spotify from "spotify-api.js";
-export const PlayerContext = createContext({});
+import Spotify, { Track } from "spotify-api.js";
+
+type PlayerContextType = {
+	player: SpotifyPlayer | null;
+	currentTrack: Song | undefined;
+	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+	setCurrentTrack: React.Dispatch<React.SetStateAction<Song | undefined>>;
+	isPlaying: boolean;
+	isPaused: boolean;
+	setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
+	play: (position?: number) => Promise<void>;
+	spotifyTrack: Spotify.Track | undefined;
+	setResumePosition: React.Dispatch<React.SetStateAction<number>>;
+	resumePosition: number;
+	findCacheCorrespondance: (song: Song) => Track | null;
+};
+
+export const PlayerContext = createContext<PlayerContextType | undefined>(
+	undefined
+);
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
@@ -19,9 +36,9 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isPaused, setIsPaused] = useState(false);
 	const [spotifyTrack, setSpotifyTrack] = useState<Spotify.Track>();
 	const [deviceId, setDeviceId] = useState("");
-	const [active, setActive] = useState(false);
 	const [isNextSongLoading, setIsNextSongLoading] = useState(false);
 	const [resumePosition, setResumePosition] = useState<number>(0);
+	const [spotifyCache, setSpotifyCache] = useState<Track[]>([]);
 
 	const { setCookie, getCookie } = useCookies();
 
@@ -101,13 +118,14 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 			if (currentTrack && tokenObject?.access_token) {
 				(async () => {
 					try {
-						const result: any = await getSpotifyTrackIdByArtistAndTitle(
+						const result: any = await getSpotifyTrackByArtistAndTitle(
 							currentTrack.song_title,
 							currentTrack.artist.name,
 							tokenObject.access_token
 						);
 						if (result) {
 							setSpotifyTrack(result[0]);
+							setSpotifyCache((prev) => [...prev, result[0]]);
 						} else {
 							toast("Not found", {
 								description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
@@ -171,6 +189,15 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		).then(() => setIsNextSongLoading(false));
 	}
 
+	const findCacheCorrespondance = (song: Song) => {
+		const track = spotifyCache.find(
+			(track: Track) =>
+				track.artists[0].name === song.artist.name &&
+				track.name === song.song_title
+		);
+		return track || null;
+	};
+
 	return (
 		<PlayerContext.Provider
 			value={{
@@ -185,9 +212,18 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				spotifyTrack,
 				setResumePosition,
 				resumePosition,
+				findCacheCorrespondance,
 			}}
 		>
 			{children}
 		</PlayerContext.Provider>
 	);
+};
+
+export const usePlayer = () => {
+	const context = useContext(PlayerContext);
+	if (!context) {
+		throw new Error("usePlayer must be used within a PlayerProvider");
+	}
+	return context;
 };

@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { Track } from "spotify-api.js";
 
 export const PlaySong = () => {
 	console.log("Beep boop");
@@ -31,11 +32,11 @@ export function loadSpotifySDK(): Promise<void> {
 	return spotifySDKPromise;
 }
 
-export async function getSpotifyTrackIdByArtistAndTitle(
+export async function getSpotifyTrackByArtistAndTitle(
 	title: string,
 	artistName: string,
 	accessToken: string
-): Promise<string | null> {
+): Promise<Track | null> {
 	const query = `track:${title} artist:${artistName}`;
 	const url = new URL(`${SPOTIFY_API_BASE}/search`);
 	url.searchParams.append("q", query);

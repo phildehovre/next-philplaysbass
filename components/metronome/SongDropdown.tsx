@@ -3,9 +3,7 @@ import "./SongDropdown.css";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuPortal,
 	DropdownMenuSeparator,
 	DropdownMenuShortcut,
@@ -16,6 +14,8 @@ import {
 } from "../ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { Song, SongData } from "@/types/types";
+import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
+import useCookies from "@/hooks/useCookies";
 
 const SongDropdown = ({
 	playlists,
@@ -28,10 +28,26 @@ const SongDropdown = ({
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
 
+	const { getCookie } = useCookies();
+	const handleAddToPlaylist = async (song: Song) => {
+		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+		const spotifyUri = await getSpotifyTrackByArtistAndTitle(
+			song.song_title,
+			song.artist.name,
+			token
+		);
+		console.log(spotifyUri);
+	};
+
 	const renderPlaylists = () => {
 		return playlists.map((item: any, index: number) => {
 			return (
-				<DropdownMenuItem key={item.name + index}>{item.name}</DropdownMenuItem>
+				<DropdownMenuItem
+					key={item.name + index}
+					onClick={() => handleAddToPlaylist(song)}
+				>
+					{item.name}
+				</DropdownMenuItem>
 			);
 		});
 	};

@@ -1,7 +1,7 @@
 "use client";
 
 import "./SongCard.scss";
-import { Playlist, Song, SongData } from "../../types/types";
+import { Playlist, Song } from "../../types/types";
 
 import { animate, stagger } from "motion";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";

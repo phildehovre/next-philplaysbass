@@ -1,3 +1,5 @@
+import { Track } from "spotify-api.js";
+
 export type LanguagesType = "en" | "fr" | "nl";
 
 export type Song = {
@@ -31,14 +33,16 @@ export type Playlist = {
 };
 
 export type SongData = {
-	id: number;
+	id: number | string;
 	title: string;
 	artist: string;
-	duration: number | null;
+	duration: number;
 	tempo: number;
 	externalId: number;
 	uri: string;
 };
+type SimplifiedTrack = Omit<Track, "makeCodeImage">;
+export type SongObject = SimplifiedTrack & SongData;
 
 export const links = [
 	{

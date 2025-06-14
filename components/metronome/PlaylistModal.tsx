@@ -3,9 +3,12 @@ import React, { useContext, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import "./PlaylistModal.css";
 import { useUser } from "@/context/userContext";
-import { Song, SongData } from "@/types/types";
+import { Song, SongData, SongObject } from "@/types/types";
 import { useCreatePlaylist } from "@/hooks/usePlaylist";
-import { PlayerContext } from "@/context/playerContext";
+import { PlayerContext, usePlayer } from "@/context/playerContext";
+import { Track } from "spotify-api.js";
+import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
+import useCookies from "@/hooks/useCookies";
 
 type Props = {
 	setShow: (p: boolean) => void;
@@ -27,6 +30,8 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	const modalRef = useRef<HTMLDivElement>(null);
 
 	const { user, loading } = useUser();
+	const { findCacheCorrespondance } = usePlayer();
+	const { getCookie } = useCookies();
 
 	// Close on click outside
 	useEffect(() => {
@@ -38,7 +43,6 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 				setShow(false);
 			}
 		};
-		console.log(song);
 
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => {
@@ -48,17 +52,31 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 
 	const { mutate: createPlaylist, isPending, error } = useCreatePlaylist();
 
-	const onSubmit = (data: FormValues) => {
+	const onSubmit = async (data: FormValues) => {
 		if (!user) return;
+
+		var track: Track | null;
+
+		track = findCacheCorrespondance(song);
+		if (!track) {
+			const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+			track = await getSpotifyTrackByArtistAndTitle(
+				song.song_title,
+				song.artist.name,
+				token
+			);
+		}
 		try {
-			const mappedSong = {
-				id: Number(song.song_id),
+			if (!track) return;
+			const mappedSong: SongObject = {
+				id: song.song_id,
 				title: song.song_title,
 				externalId: Number(song.song_id),
 				uri: song.song_uri,
 				tempo: Number(song.tempo),
 				artist: song.artist.name,
-				duration: null,
+				duration: track.duration,
+				...track,
 			};
 			createPlaylist(
 				{

@@ -409,9 +409,9 @@ const PlayerProvider = ({ children })=>{
         }).then(()=>setIsNextSongLoading(false));
     }
     const findCacheCorrespondance = (song)=>{
-        return spotifyCache.find((track)=>track.artists[0].name === song.artist.name && track.name === song.song_title);
+        const track = spotifyCache.find((track)=>track.artists[0].name === song.artist.name && track.name === song.song_title);
+        return track || null;
     };
-    console.log(spotifyCache);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
         value: {
             player,
@@ -814,13 +814,10 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
         try {
             if (!track) return;
             const mappedSong = {
-                id: song.song_id,
                 title: song.song_title,
                 externalId: Number(song.song_id),
-                uri: song.song_uri,
                 tempo: Number(song.tempo),
                 artist: song.artist.name,
-                duration: track.duration,
                 ...track
             };
             createPlaylist({
@@ -858,7 +855,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Playlist Name:"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 111,
+                        lineNumber: 108,
                         columnNumber: 6
                     }, this),
                     errors.playlistName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -866,7 +863,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Please enter a playlist name."
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 113,
+                        lineNumber: 110,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -878,7 +875,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         })
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 115,
+                        lineNumber: 112,
                         columnNumber: 6
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -886,23 +883,23 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         value: "Create Playlist"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 121,
+                        lineNumber: 118,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                lineNumber: 110,
+                lineNumber: 107,
                 columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/metronome/PlaylistModal.tsx",
-            lineNumber: 109,
+            lineNumber: 106,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-        lineNumber: 108,
+        lineNumber: 105,
         columnNumber: 3
     }, this);
 };

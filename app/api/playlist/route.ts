@@ -21,7 +21,13 @@ export async function POST(req: NextRequest) {
 		let songIdToConnect: number | undefined = undefined;
 
 		if (firstSong) {
-			const { song_id, song_title, song_uri, tempo, artist } = firstSong;
+			const {
+				id: song_id,
+				title: song_title,
+				uri: song_uri,
+				tempo,
+				artist,
+			} = firstSong;
 
 			if (!song_id || !song_title) {
 				return NextResponse.json(
@@ -46,6 +52,7 @@ export async function POST(req: NextRequest) {
 						uri: song_uri,
 						tempo: parseInt(tempo),
 						artist: artist?.name ?? "Unknown Artist",
+						...firstSong,
 					},
 				});
 			}

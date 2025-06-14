@@ -112,7 +112,7 @@ async function POST(req) {
         }
         let songIdToConnect = undefined;
         if (firstSong) {
-            const { song_id, song_title, song_uri, tempo, artist } = firstSong;
+            const { id: song_id, title: song_title, uri: song_uri, tempo, artist } = firstSong;
             if (!song_id || !song_title) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                     error: "Song data incomplete: need at least song_id and song_title"
@@ -134,7 +134,8 @@ async function POST(req) {
                         title: song_title,
                         uri: song_uri,
                         tempo: parseInt(tempo),
-                        artist: artist?.name ?? "Unknown Artist"
+                        artist: artist?.name ?? "Unknown Artist",
+                        ...firstSong
                     }
                 });
             }

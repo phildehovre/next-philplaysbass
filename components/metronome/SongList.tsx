@@ -58,7 +58,7 @@ function SongList(props: any) {
 	};
 
 	const renderSongList = () => {
-		return songs?.map((song: SongData) => {
+		return songs?.map((song: Song) => {
 			return <SongCard song={song} key={song.song_id} playlists={playlists} />;
 		});
 	};

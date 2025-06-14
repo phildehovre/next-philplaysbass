@@ -1,18 +1,16 @@
 "use client";
 
 import "./SongCard.scss";
-import { Song, SongData } from "../../types/types";
+import { Playlist, Song, SongData } from "../../types/types";
 
 import { animate, stagger } from "motion";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
-import { EllipsisVertical } from "lucide-react";
-import Dropdown from "./Dropdown";
 import SongDropdown from "./SongDropdown";
 import PlaylistModal from "./PlaylistModal";
 
-function SongCard(props: { song: SongData; playlists: any }) {
+function SongCard(props: { song: Song; playlists: Playlist[] }) {
 	const { song, playlists } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const { player, currentTrack } = useContext<any>(PlayerContext);
@@ -54,7 +52,11 @@ function SongCard(props: { song: SongData; playlists: any }) {
 	return (
 		<>
 			{showSongPortal && (
-				<PlaylistModal setShow={setShowSongPortal} song={song} />
+				<PlaylistModal
+					setShow={setShowSongPortal}
+					song={song}
+					onClose={() => setShowSongPortal}
+				/>
 			)}
 			<div
 				className="songcard"

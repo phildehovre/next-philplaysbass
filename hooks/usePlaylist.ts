@@ -21,7 +21,7 @@ const createPlaylistForUser = async ({
 }: {
 	kindeId: string;
 	name: string;
-	firstSong?: SongData;
+	firstSong: SongData;
 }) => {
 	console.log(firstSong);
 	const res = await fetch("/api/playlist", {

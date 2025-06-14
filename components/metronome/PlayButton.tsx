@@ -1,7 +1,7 @@
 "use client";
 
 import { PlayerContext } from "@/context/playerContext";
-import { SongData } from "@/types/types";
+import { Song, SongData } from "@/types/types";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import React, { useContext } from "react";
 
@@ -10,7 +10,7 @@ const PlayButton = ({
 	player,
 	song,
 }: {
-	song: SongData;
+	song: Song;
 	isShowing: boolean;
 	player: Spotify.Player;
 }) => {

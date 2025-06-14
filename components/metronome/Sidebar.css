@@ -1,7 +1,10 @@
 .sidebar_main {
 	border: transparent;
-	border-right: 1px solid rgba(128, 128, 128, 0.403);
+	border-left: 1px solid rgba(128, 128, 128, 0.403);
+	padding: 1em;
+	padding-top: 100px;
+	background-color: rgb(23, 23, 23);
 	> * {
-		background-color: rgb(23, 23, 23);
+		background-color: transparent;
 	}
 }

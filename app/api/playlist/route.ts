@@ -21,18 +21,17 @@ export async function POST(req: NextRequest) {
 		let songIdToConnect: number | undefined = undefined;
 
 		if (firstSong) {
-			const {
-				id: song_id,
-				title: song_title,
-				uri: song_uri,
-				tempo,
-				artist,
-			} = firstSong;
+			const { externalId, title, tempo, artist } = firstSong;
+			console.log("From server: ", firstSong[0].title);
 
-			if (!song_id || !song_title) {
+			if (!externalId || !title) {
 				return NextResponse.json(
 					{
-						error: "Song data incomplete: need at least song_id and song_title",
+						error: "Song data incomplete: need at least song id and song title",
+						externalId,
+						title,
+						tempo,
+						artist,
 					},
 					{ status: 400 }
 				);
@@ -40,19 +39,18 @@ export async function POST(req: NextRequest) {
 
 			// Check if song already exists
 			let song = await prisma.song.findUnique({
-				where: { externalId: song_id },
+				where: { externalId: externalId },
 			});
 
 			if (!song) {
 				// Create song
 				song = await prisma.song.create({
 					data: {
-						externalId: song_id,
-						title: song_title,
-						uri: song_uri,
+						externalId,
+						title,
 						tempo: parseInt(tempo),
 						artist: artist?.name ?? "Unknown Artist",
-						...firstSong,
+						...firstSong[0],
 					},
 				});
 			}
@@ -81,7 +79,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json(playlist, { status: 201 });
 	} catch (error) {
-		console.error("Error creating playlist:", error);
+		console.log("Error creating playlist:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
 			{ status: 500 }

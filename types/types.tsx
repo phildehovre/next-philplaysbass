@@ -25,7 +25,7 @@ export type Song = {
 };
 
 export type Playlist = {
-	songs: Song[];
+	songs: SongObject[];
 	createdAt: Date;
 	id: number;
 	name: string;
@@ -38,7 +38,7 @@ export type SongData = {
 	artist: string;
 	duration: number;
 	tempo: number;
-	externalId: number;
+	externalId: string;
 	uri: string;
 };
 type SimplifiedTrack = Omit<Track, "makeCodeImage">;

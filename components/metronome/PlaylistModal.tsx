@@ -70,7 +70,7 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 			if (!track) return;
 			const mappedSong: SongObject = {
 				title: song.song_title,
-				externalId: Number(song.song_id),
+				externalId: song.song_id,
 				tempo: Number(song.tempo),
 				artist: song.artist.name,
 				...track,

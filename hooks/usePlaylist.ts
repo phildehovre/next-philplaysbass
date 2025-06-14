@@ -1,11 +1,11 @@
-import { SongData } from "@/types/types";
+import { SongData, SongObject } from "@/types/types";
 import { Song } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 
 type CreatePlaylistArgs = {
 	kindeId: string;
 	name: string;
-	firstSong: SongData;
+	firstSong: SongObject;
 };
 
 export function useCreatePlaylist() {
@@ -21,9 +21,8 @@ const createPlaylistForUser = async ({
 }: {
 	kindeId: string;
 	name: string;
-	firstSong: SongData;
+	firstSong: SongObject;
 }) => {
-	console.log(firstSong);
 	const res = await fetch("/api/playlist", {
 		method: "POST",
 		headers: {

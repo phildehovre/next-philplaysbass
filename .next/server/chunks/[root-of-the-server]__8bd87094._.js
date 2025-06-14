@@ -112,10 +112,15 @@ async function POST(req) {
         }
         let songIdToConnect = undefined;
         if (firstSong) {
-            const { id: song_id, title: song_title, uri: song_uri, tempo, artist } = firstSong;
-            if (!song_id || !song_title) {
+            const { externalId, title, tempo, artist } = firstSong;
+            console.log("From server: ", firstSong[0].title);
+            if (!externalId || !title) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    error: "Song data incomplete: need at least song_id and song_title"
+                    error: "Song data incomplete: need at least song id and song title",
+                    externalId,
+                    title,
+                    tempo,
+                    artist
                 }, {
                     status: 400
                 });
@@ -123,19 +128,18 @@ async function POST(req) {
             // Check if song already exists
             let song = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].song.findUnique({
                 where: {
-                    externalId: song_id
+                    externalId: externalId
                 }
             });
             if (!song) {
                 // Create song
                 song = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].song.create({
                     data: {
-                        externalId: song_id,
-                        title: song_title,
-                        uri: song_uri,
+                        externalId,
+                        title,
                         tempo: parseInt(tempo),
                         artist: artist?.name ?? "Unknown Artist",
-                        ...firstSong
+                        ...firstSong[0]
                     }
                 });
             }
@@ -171,7 +175,7 @@ async function POST(req) {
             status: 201
         });
     } catch (error) {
-        console.error("Error creating playlist:", error);
+        console.log("Error creating playlist:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: "Internal server error"
         }, {

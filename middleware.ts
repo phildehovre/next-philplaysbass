@@ -9,10 +9,10 @@ type KindeReqType = {
 
 export default withAuth(
 	async function middleware(req: KindeReqType) {
-		console.log("look at me", req.kindeAuth);
+		// console.log("look at me", req.kindeAuth);
 	},
 	{
-		publicPaths: ["/"], // Add any other public paths as needed
+		publicPaths: ["/", "/lessons", "/about"], // Add any other public paths as needed
 	}
 );
 

@@ -1,5 +1,4 @@
-import { SongData, SongObject } from "@/types/types";
-import { Song } from "@prisma/client";
+import { SongObject } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
 
 type CreatePlaylistArgs = {
@@ -37,3 +36,51 @@ const createPlaylistForUser = async ({
 
 	return res.json();
 };
+
+type SongPayload = {
+	id?: number;
+	externalId?: string;
+	title?: string;
+	artist?: string;
+	uri?: string;
+	tempo?: number;
+	spotify_uri?: string;
+	// add other song fields if needed
+};
+
+const addSongToPlaylist = async ({
+	playlistId,
+	song,
+}: {
+	playlistId: number;
+	song: SongPayload;
+}) => {
+	const res = await fetch(`/api/playlist/${playlistId}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(song),
+	});
+
+	console.log("FROM HOOK, playlistId:", playlistId, "song:", song);
+
+	if (!res.ok) {
+		const errorData = await res.json();
+		throw new Error(errorData.error || "Failed to add song to playlist");
+	}
+
+	return res.json();
+};
+
+export function useAddSongToPlaylist() {
+	return useMutation({
+		mutationFn: ({
+			playlistId,
+			song,
+		}: {
+			playlistId: number;
+			song: SongPayload;
+		}) => addSongToPlaylist({ playlistId, song }),
+	});
+}

@@ -29,10 +29,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$o
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$authMiddleware$2f$authMiddleware$2e$es$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/authMiddleware/authMiddleware.es.js [middleware-edge] (ecmascript)");
 ;
 const __TURBOPACK__default__export__ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$kinde$2d$oss$2f$kinde$2d$auth$2d$nextjs$2f$dist$2f$authMiddleware$2f$authMiddleware$2e$es$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["withAuth"])(async function middleware(req) {
-    console.log("look at me", req.kindeAuth);
+// console.log("look at me", req.kindeAuth);
 }, {
     publicPaths: [
-        "/"
+        "/",
+        "/lessons",
+        "/about"
     ]
 });
 const config = {

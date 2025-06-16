@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./SongDropdown.css";
+import { v4 as uuidv4 } from "uuid";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,9 +14,10 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { Song, SongData } from "@/types/types";
+import { Playlist, Song, SongData } from "@/types/types";
 import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
+import { useAddSongToPlaylist, useCreatePlaylist } from "@/hooks/usePlaylist";
 
 const SongDropdown = ({
 	playlists,
@@ -27,16 +29,42 @@ const SongDropdown = ({
 	song: Song;
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
+	const [isAdding, setIsAdding] = useState(false);
 
 	const { getCookie } = useCookies();
-	const handleAddToPlaylist = async (song: Song) => {
+	const addSongMutation = useAddSongToPlaylist();
+
+	const handleAddToPlaylist = async (playlist: Playlist, song: Song) => {
+		setIsAdding(true);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const spotifyUri = await getSpotifyTrackByArtistAndTitle(
 			song.song_title,
 			song.artist.name,
 			token
 		);
-		console.log(spotifyUri);
+
+		try {
+			if (!spotifyUri) {
+				throw new Error("There was an error getting through to Spotify!");
+			}
+			await addSongMutation.mutateAsync({
+				playlistId: playlist.id,
+				song: {
+					externalId: song.song_id,
+					title: song.song_title,
+					artist: song.artist.name,
+					uri: song.song_uri,
+					tempo: parseInt(song.tempo),
+					// spotify_uri: spotifyUri.,
+				},
+			});
+
+			console.log("✅ Song added to playlist!");
+		} catch (err) {
+			console.error("❌ Error adding song to playlist:", err);
+		} finally {
+			setIsAdding(false);
+		}
 	};
 
 	const renderPlaylists = () => {
@@ -44,7 +72,7 @@ const SongDropdown = ({
 			return (
 				<DropdownMenuItem
 					key={item.name + index}
-					onClick={() => handleAddToPlaylist(song)}
+					onClick={() => handleAddToPlaylist(item, song)}
 				>
 					{item.name}
 				</DropdownMenuItem>

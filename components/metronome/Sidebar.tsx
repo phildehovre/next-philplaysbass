@@ -11,10 +11,16 @@ import { Playlist, Song, SongData } from "@/types/types";
 import Spinner from "../Spinner";
 import Modal from "../Modal";
 import "../Modal.css";
-import SongCard from "./SongCard";
 import PlaylistItem from "./PlaylistItem";
+import { PlaylistSong } from "@/lib/generated/prisma";
 
-const MetroSidebar = ({ playlists }: { playlists: Playlist[] }) => {
+type PlaylistWithSongs = Playlist & {
+	songs: (PlaylistSong & {
+		song: Song;
+	})[];
+};
+
+const MetroSidebar = ({ playlists }: { playlists: PlaylistWithSongs[] }) => {
 	const [componentPlaylists, setComponentPlaylists] = useState<Playlist[]>([]);
 	const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(
 		null
@@ -48,8 +54,8 @@ const MetroSidebar = ({ playlists }: { playlists: Playlist[] }) => {
 
 	const renderPlaylistSongs = (pl: Playlist) => {
 		if (!pl) return;
-		return pl.songs.map((item: any) => {
-			const song: SongData = item.song;
+		return pl.songs?.map((item: any) => {
+			const song = item.song;
 
 			return <PlaylistItem key={song.id} song={song} />;
 		});

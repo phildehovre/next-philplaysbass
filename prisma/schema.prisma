@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
+  id        String           @id @default(uuid()) @unique
   email     String     @unique
   name      String
   playlists Playlist[] 
@@ -17,16 +17,16 @@ model User {
 }
 
 model Playlist {
-  id        Int           @id @default(autoincrement())
+  id        String           @id @default(uuid()) @unique
   name      String
   createdAt DateTime      @default(now())
   user      User          @relation(fields: [userId], references: [id])
-  userId    Int
+  userId   String 
   songs     PlaylistSong[] 
 }
 
 model Song {
-  id        Int           @id @default(autoincrement())
+  id String @default(uuid()) @unique
   title     String
   externalId String  @unique 
   uri String
@@ -38,10 +38,10 @@ model Song {
 
 model PlaylistSong {
   playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  playlistId Int
+  playlistId String 
 
   song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
-  songId     Int
+  songId    String @default(uuid()) 
 
   addedAt    DateTime @default(now())
 

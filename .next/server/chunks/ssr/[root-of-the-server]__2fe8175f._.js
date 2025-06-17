@@ -376,9 +376,9 @@ const page = async ()=>{
     }
     let playlists = [];
     if (user) {
-        const { id } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$userService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureUserInDb"])();
-        if (id) {
-            playlists = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$playlistService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getUserPlaylists"])(id);
+        var dbUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$userService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureUserInDb"])();
+        if (dbUser.id) {
+            playlists = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$playlistService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getUserPlaylists"])(dbUser.id);
             console.log("user playlists: ", playlists);
         }
     }

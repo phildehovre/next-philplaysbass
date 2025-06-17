@@ -9,6 +9,7 @@ import { PlayerContext, usePlayer } from "@/context/playerContext";
 import { Track } from "spotify-api.js";
 import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
+import { createPlaylist } from "@/actions/playlistActions";
 
 type Props = {
 	setShow: (p: boolean) => void;
@@ -29,7 +30,6 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	} = useForm<FormValues>();
 	const modalRef = useRef<HTMLDivElement>(null);
 
-	const { user, loading } = useUser();
 	const { findCacheCorrespondance } = usePlayer();
 	const { getCookie } = useCookies();
 
@@ -50,55 +50,12 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		};
 	}, [setShow]);
 
-	const { mutate: createPlaylist, isPending, error } = useCreatePlaylist();
-
 	const onSubmit = async (data: FormValues) => {
-		if (!user) return;
-
-		var track: Track | null;
-
-		track = findCacheCorrespondance(song);
-		if (!track) {
-			const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-			track = await getSpotifyTrackByArtistAndTitle(
-				song.song_title,
-				song.artist.name,
-				token
-			);
-		}
-		try {
-			if (!track) return;
-			const mappedSong: SongObject = {
-				title: song.song_title,
-				externalId: song.song_id,
-				tempo: Number(song.tempo),
-				artist: song.artist.name,
-				...track,
-			};
-			createPlaylist(
-				{
-					kindeId: user.id,
-					name: data.playlistName,
-					firstSong: mappedSong,
-				},
-				{
-					onSuccess: (playlist) => {
-						console.log("Created:", playlist);
-						reset();
-						setShow(false);
-					},
-					onError: (err: any) => {
-						throw new Error("Something went wrong: ", err.message);
-					},
-				}
-			);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			if (!isPending) {
-				onClose();
-			}
-		}
+		await createPlaylist(data.playlistName)
+			.catch((err) => {
+				throw new Error(err);
+			})
+			.then(onClose);
 	};
 
 	return (

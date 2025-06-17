@@ -24,7 +24,7 @@ export async function createPlaylistForUser({
 			songs: firstSongId
 				? {
 						create: {
-							song: { connect: { id: Number(firstSongId) } }, // <-- this is required
+							song: { connect: { id: firstSongId } }, // <-- this is required
 						},
 				  }
 				: undefined,
@@ -43,8 +43,8 @@ export async function addSongsToPlaylist({
 	playlistId,
 	songIds,
 }: {
-	playlistId: number;
-	songIds: number[];
+	playlistId: string;
+	songIds: string[];
 	kindeId: string;
 }) {
 	const operations = songIds.map((songId) =>
@@ -63,7 +63,7 @@ export async function addSongsToPlaylist({
 	return await prisma.$transaction(operations);
 }
 
-export async function getUserPlaylists(userId: number) {
+export async function getUserPlaylists(userId: string) {
 	try {
 		const playlists = await prisma.playlist.findMany({
 			where: {

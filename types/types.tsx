@@ -25,11 +25,11 @@ export type Song = {
 };
 
 export type Playlist = {
-	songs: SongObject[];
 	createdAt: Date;
-	id: number;
+	id: string;
 	name: string;
-	userId: number;
+	userId: string;
+	songs: Song[];
 };
 
 export type SongData = {

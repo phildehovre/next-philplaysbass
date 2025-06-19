@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../lib/generated/prisma"
+  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -26,15 +26,17 @@ model Playlist {
 }
 
 model Song {
-  id String @default(uuid()) @unique
-  title     String
-  externalId String  @unique 
-  uri String
-  tempo Int
-  artist    String
-  duration  Int?           
-  playlists PlaylistSong[] 
+  id         String   @id @default(uuid()) @unique
+  spotifyUri String @unique
+  getSongBpmUri String @unique
+  title      String
+  uri        String
+  tempo      Int
+  artist     String
+  duration   Int?
+  playlists  PlaylistSong[]
 }
+
 
 model PlaylistSong {
   playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)

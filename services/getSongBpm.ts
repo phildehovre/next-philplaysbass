@@ -7,6 +7,7 @@ export const fetchTempoData = async (bpm: number) => {
 	}
 
 	const data = await response.json();
+	console.log(data);
 
 	return data.tempo;
 };

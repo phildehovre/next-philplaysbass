@@ -1,23 +1,24 @@
+"use client";
 import React, { useState } from "react";
 import "./SongDropdown.css";
-import { v4 as uuidv4 } from "uuid";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuPortal,
 	DropdownMenuSeparator,
-	DropdownMenuShortcut,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { Playlist, Song, SongData } from "@/types/types";
+import { GSBSong, Playlist } from "@/types/types";
 import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
-import { useAddSongToPlaylist, useCreatePlaylist } from "@/hooks/usePlaylist";
+import { addSongToPlaylist } from "@/actions/playlistActions";
+import { usePlaylists } from "@/context/playlistContext";
+import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
 
 const SongDropdown = ({
 	playlists,
@@ -26,38 +27,44 @@ const SongDropdown = ({
 }: {
 	playlists: any;
 	setShowSongPortal: (p: boolean) => void;
-	song: Song;
+	song: GSBSong;
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
 
 	const { getCookie } = useCookies();
-	const addSongMutation = useAddSongToPlaylist();
+	const { addSongToPlaylist: ctxAddSongToPlaylist } = usePlaylists();
 
-	const handleAddToPlaylist = async (playlist: Playlist, song: Song) => {
+	const handleAddToPlaylist = async (playlist: Playlist, song: GSBSong) => {
 		setIsAdding(true);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-		const spotifyUri = await getSpotifyTrackByArtistAndTitle(
+		const spotifyTrack = await getSpotifyTrackByArtistAndTitle(
 			song.song_title,
 			song.artist.name,
 			token
 		);
 
 		try {
-			if (!spotifyUri) {
+			if (!spotifyTrack) {
 				throw new Error("There was an error getting through to Spotify!");
 			}
-			await addSongMutation.mutateAsync({
-				playlistId: playlist.id,
-				song: {
-					externalId: song.song_id,
-					title: song.song_title,
-					artist: song.artist.name,
-					uri: song.song_uri,
-					tempo: parseInt(song.tempo),
-					// spotify_uri: spotifyUri.,
-				},
-			});
+
+			console.log(song);
+
+			const mapped = mapGSBSongToSongInput(
+				song,
+				spotifyTrack.uri,
+				spotifyTrack.duration
+			);
+			// Directyl add song for optimistic update
+			ctxAddSongToPlaylist(playlist.id, mapped);
+
+			// Create song in db in the background
+			const result = await addSongToPlaylist(playlist.id, mapped);
+			if (!result) {
+				console.log("Failed to add song to db");
+				return;
+			}
 
 			console.log("✅ Song added to playlist!");
 		} catch (err) {

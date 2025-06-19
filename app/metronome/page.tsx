@@ -8,6 +8,7 @@ import { ensureUserInDb } from "@/services/userService";
 import MetroSidebar from "@/components/metronome/Sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getUserPlaylists } from "@/actions/playlistActions";
+import { PlaylistProvider } from "@/context/playlistContext";
 
 const page = async () => {
 	const { isAuthenticated } = await getKindeServerSession();
@@ -21,10 +22,12 @@ const page = async () => {
 
 	return (
 		<PlayerProvider>
-			<Metronome playlists={playlists} />
-			<SpotifyPlayer />
-			<MetroSidebar playlists={playlists} />
-			<SidebarTrigger />
+			<PlaylistProvider>
+				<Metronome playlists={playlists} />
+				<SpotifyPlayer />
+				<MetroSidebar playlists={playlists} />
+				<SidebarTrigger />
+			</PlaylistProvider>
 		</PlayerProvider>
 	);
 };

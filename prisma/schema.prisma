@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
+  engineType = "binary"
 }
 
 datasource db {
@@ -28,7 +29,7 @@ model Playlist {
 model Song {
   id         String   @id @default(uuid()) @unique
   spotifyUri String @unique
-  getSongBpmUri String @unique
+  getSongBpmId String @unique 
   title      String
   uri        String
   tempo      Int

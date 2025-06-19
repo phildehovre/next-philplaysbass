@@ -2,8 +2,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Playlist, Prisma, Song } from "@prisma/client";
-import { GSBSong } from "@/types/types";
+import { Prisma, Playlist, Song } from "@/lib/generated/prisma";
 
 type PlaylistWithSongs = Playlist & { songs: Prisma.SongCreateInput[] };
 
@@ -42,6 +41,8 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 		const fresh = await res.json();
 		setPlaylists(fresh);
 	};
+
+	console.log(playlists);
 
 	return (
 		<PlaylistContext.Provider

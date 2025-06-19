@@ -135,7 +135,7 @@
       --tw-animation-delay: 0s;
       --tw-animation-direction: normal;
       --tw-animation-duration: initial;
-      --tw-animation-fill-mode: forwards;
+      --tw-animation-fill-mode: none;
       --tw-animation-iteration-count: 1;
       --tw-enter-opacity: 1;
       --tw-enter-rotate: 0;
@@ -590,10 +590,6 @@
     display: inline-flex;
   }
 
-  .table {
-    display: table;
-  }
-
   .aspect-square {
     aspect-ratio: 1;
   }
@@ -803,7 +799,7 @@
   }
 
   .animate-in {
-    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, forwards);
+    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
   }
 
   .animate-pulse {
@@ -1904,7 +1900,7 @@
   }
 
   .data-\[state\=closed\]\:animate-out[data-state="closed"] {
-    animation: exit var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, forwards);
+    animation: exit var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
   }
 
   .data-\[state\=closed\]\:duration-300[data-state="closed"] {
@@ -1937,7 +1933,7 @@
   }
 
   .data-\[state\=open\]\:animate-in[data-state="open"] {
-    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, forwards);
+    animation: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
   }
 
   .data-\[state\=open\]\:bg-accent[data-state="open"] {
@@ -2393,7 +2389,7 @@
 @property --tw-animation-fill-mode {
   syntax: "*";
   inherits: false;
-  initial-value: forwards;
+  initial-value: none;
 }
 
 @property --tw-animation-iteration-count {

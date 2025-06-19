@@ -1,30 +1,25 @@
 {
   "node": {
-    "7f5092bb1be13a0a57e8ebd5b6854cd05e935b0846": {
+    "7fc1cfb5cbe2a66e6927b26013a037a808825a75ff": {
       "workers": {
         "app/_not-found/page": {
-          "moduleId": "[project]/.next-internal/server/app/_not-found/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        },
-        "app/callback/page": {
-          "moduleId": "[project]/.next-internal/server/app/callback/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/_not-found/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         },
         "app/metronome/page": {
-          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
       "layer": {
         "app/_not-found/page": "action-browser",
-        "app/callback/page": "action-browser",
         "app/metronome/page": "action-browser"
       }
     },
     "002bb781435bc586f057bc5a84ffdacf3f40569e16": {
       "workers": {
         "app/metronome/page": {
-          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
@@ -35,7 +30,7 @@
     "403407216b161d7ad6ed13c128ee4f3e57320de29f": {
       "workers": {
         "app/metronome/page": {
-          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
@@ -46,7 +41,7 @@
     "6067325ccab1647e985221060a630322ea73039eb1": {
       "workers": {
         "app/metronome/page": {
-          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
@@ -57,7 +52,7 @@
     "60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2": {
       "workers": {
         "app/metronome/page": {
-          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/metronome/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@kinde-oss/kinde-auth-nextjs/dist/src/session/refreshTokensServerAction.es.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/actions/playlistActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },

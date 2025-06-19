@@ -19,6 +19,7 @@ import useCookies from "@/hooks/useCookies";
 import { addSongToPlaylist } from "@/actions/playlistActions";
 import { usePlaylists } from "@/context/playlistContext";
 import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
+import { Track } from "spotify-api.js";
 
 const SongDropdown = ({
 	playlists,
@@ -39,11 +40,14 @@ const SongDropdown = ({
 	const handleAddToPlaylist = async (playlist: Playlist, song: GSBSong) => {
 		setIsAdding(true);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-		const spotifyTrack = await getSpotifyTrackByArtistAndTitle(
+		const res: any = await getSpotifyTrackByArtistAndTitle(
 			song.song_title,
 			song.artist.name,
 			token
 		);
+
+		if (!res) return;
+		var spotifyTrack = res[0];
 
 		try {
 			if (!spotifyTrack) {
@@ -55,7 +59,6 @@ const SongDropdown = ({
 				spotifyTrack.uri,
 				spotifyTrack.duration
 			);
-			// Directyl add song for optimistic update
 			ctxAddSongToPlaylist(playlist.id, mapped);
 			console.log("Song added to pl ctx: ", ctxPlaylists);
 
@@ -68,6 +71,7 @@ const SongDropdown = ({
 			}
 
 			console.log("✅ Song added to playlist!");
+			// Directyl add song for optimistic update
 		} catch (err) {
 			console.error("❌ Error adding song to playlist:", err);
 		} finally {

@@ -99,7 +99,7 @@ export async function findOrCreateSong(
 	try {
 		// Check if song already exists (by unique externalId)
 		const existing = await prisma.song.findUnique({
-			where: { getSongBpmUri: data.getSongBpmId },
+			where: { getSongBpmId: data.getSongBpmId },
 		});
 
 		if (existing) {

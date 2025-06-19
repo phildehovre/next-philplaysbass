@@ -7,12 +7,13 @@ import {
 	SidebarFooter,
 	SidebarHeader,
 } from "@/components/ui/sidebar";
-import { Playlist, Song, SongData } from "@/types/types";
+import { Playlist } from "@/types/types";
 import Spinner from "../Spinner";
 import Modal from "../Modal";
 import "../Modal.css";
 import PlaylistItem from "./PlaylistItem";
 import { PlaylistSong } from "@/lib/generated/prisma";
+import { Song } from "@/lib/generated/prisma";
 
 type PlaylistWithSongs = Playlist & {
 	songs: (PlaylistSong & {

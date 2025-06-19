@@ -1,5 +1,5 @@
 import { GSBSong } from "@/types/types";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/lib/generated/prisma";
 
 export function mapGSBSongToSongInput(
 	song: GSBSong,
@@ -7,7 +7,7 @@ export function mapGSBSongToSongInput(
 	duration: number
 ): Prisma.SongCreateInput {
 	return {
-		getSongBpmUri: song.song_id,
+		getSongBpmId: song.song_id,
 		spotifyUri,
 		title: song.song_title,
 		uri: song.song_uri,

@@ -33,7 +33,8 @@ const SongDropdown = ({
 	const [isAdding, setIsAdding] = useState(false);
 
 	const { getCookie } = useCookies();
-	const { addSongToPlaylist: ctxAddSongToPlaylist } = usePlaylists();
+	const { addSongToPlaylist: ctxAddSongToPlaylist, playlists: ctxPlaylists } =
+		usePlaylists();
 
 	const handleAddToPlaylist = async (playlist: Playlist, song: GSBSong) => {
 		setIsAdding(true);
@@ -49,8 +50,6 @@ const SongDropdown = ({
 				throw new Error("There was an error getting through to Spotify!");
 			}
 
-			console.log(song);
-
 			const mapped = mapGSBSongToSongInput(
 				song,
 				spotifyTrack.uri,
@@ -58,9 +57,11 @@ const SongDropdown = ({
 			);
 			// Directyl add song for optimistic update
 			ctxAddSongToPlaylist(playlist.id, mapped);
+			console.log("Song added to pl ctx: ", ctxPlaylists);
 
 			// Create song in db in the background
 			const result = await addSongToPlaylist(playlist.id, mapped);
+			console.log("Song added to DB: ", result);
 			if (!result) {
 				console.log("Failed to add song to db");
 				return;

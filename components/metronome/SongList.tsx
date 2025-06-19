@@ -6,14 +6,13 @@ import "./SongList.scss";
 import SongCard from "./SongCard";
 import { fetchTempoData } from "../../services/getSongBpm";
 import { useQuery } from "@tanstack/react-query";
-import { Song, SongData } from "../../types/types";
+import { GSBSong } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronLeft,
 	faChevronRight,
 	faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
-import { LoaderCircle } from "lucide-react";
 
 function SongList(props: any) {
 	const { bpm, showSongs, playlists } = props;
@@ -58,7 +57,7 @@ function SongList(props: any) {
 	};
 
 	const renderSongList = () => {
-		return songs?.map((song: Song) => {
+		return songs?.map((song: GSBSong) => {
 			return <SongCard song={song} key={song.song_id} playlists={playlists} />;
 		});
 	};

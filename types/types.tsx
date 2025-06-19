@@ -1,8 +1,9 @@
 import { Track } from "spotify-api.js";
+import { Song } from "@/lib/generated/prisma";
 
 export type LanguagesType = "en" | "fr" | "nl";
 
-export type Song = {
+export type GSBSong = {
 	song_id: string;
 	song_title: string;
 	song_uri: string;
@@ -11,15 +12,13 @@ export type Song = {
 		id: string;
 		name: string;
 		uri: string;
-		img: string;
 		genres: string[];
-		from: string;
+		from: string | null;
 		mbid: string;
 	};
 	album: {
 		title: string;
 		uri: string;
-		img: string;
 		year: string;
 	};
 };
@@ -42,7 +41,7 @@ export type SongData = {
 	uri: string;
 };
 type SimplifiedTrack = Omit<Track, "makeCodeImage">;
-export type SongObject = SimplifiedTrack & SongData;
+export type SongObject = SimplifiedTrack & Song;
 
 export const links = [
 	{

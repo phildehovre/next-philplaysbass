@@ -290,7 +290,7 @@ const PlayerProvider = ({ children })=>{
             if (currentTrack && tokenObject?.access_token) {
                 (async ()=>{
                     try {
-                        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(currentTrack.song_title, currentTrack.artist.name, tokenObject.access_token);
+                        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(currentTrack.title, currentTrack.artist, tokenObject.access_token);
                         if (result) {
                             setSpotifyTrack(result[0]);
                             setSpotifyCache((prev)=>[
@@ -299,7 +299,7 @@ const PlayerProvider = ({ children })=>{
                                 ]);
                         } else {
                             (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"])("Not found", {
-                                description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
+                                description: `Spotify did not find '${currentTrack.title}' by '${currentTrack.artist}'`,
                                 className: "not-found_toast"
                             });
                         }
@@ -360,7 +360,7 @@ const PlayerProvider = ({ children })=>{
         }).then(()=>setIsNextSongLoading(false));
     }
     const findCacheCorrespondance = (song)=>{
-        const track = spotifyCache.find((track)=>track.artists[0].name === song.artist.name && track.name === song.song_title);
+        const track = spotifyCache.find((track)=>track.artists[0].name === song.artist && track.name === song.title);
         return track || null;
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
@@ -381,7 +381,7 @@ const PlayerProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playerContext.tsx",
-        lineNumber: 202,
+        lineNumber: 206,
         columnNumber: 3
     }, this);
 };
@@ -415,7 +415,7 @@ const PlayButton = ({ isShowing, player, song })=>{
     const { setResumePosition, resumePosition, currentTrack, setIsPlaying, isPaused, setCurrentTrack, play } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlayerContext"]);
     const handlePlayClick = async ()=>{
         const state = await player.getCurrentState();
-        const isDifferentTrack = currentTrack?.song_title !== song.song_title;
+        const isDifferentTrack = currentTrack?.title !== song.title;
         if (!isDifferentTrack && state?.paused) {
             play(resumePosition);
         }
@@ -436,7 +436,7 @@ const PlayButton = ({ isShowing, player, song })=>{
         setIsPlaying(false);
         setResumePosition(state?.position);
     };
-    const isCurrentSong = currentTrack?.song_title === song.song_title;
+    const isCurrentSong = currentTrack?.title === song.title;
     const showPause = isCurrentSong && !isPaused;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `play-button ${isShowing ? "showing" : ""}`,
@@ -564,7 +564,8 @@ const usePlaylists = ()=>{
 var { g: global, __dirname } = __turbopack_context__;
 {
 __turbopack_context__.s({
-    "mapGSBSongToSongInput": (()=>mapGSBSongToSongInput)
+    "mapGSBSongToSongInput": (()=>mapGSBSongToSongInput),
+    "mapSpotifyFieldsToSongInput": (()=>mapSpotifyFieldsToSongInput)
 });
 function mapGSBSongToSongInput(song, spotifyUri, duration) {
     return {
@@ -574,6 +575,13 @@ function mapGSBSongToSongInput(song, spotifyUri, duration) {
         uri: song.song_uri,
         tempo: parseInt(song.tempo),
         artist: song.artist.name,
+        duration: duration
+    };
+}
+function mapSpotifyFieldsToSongInput(song, spotifyUri, duration) {
+    return {
+        ...song,
+        spotifyUri,
         duration: duration
     };
 }
@@ -614,15 +622,15 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
     const handleAddToPlaylist = async (playlist, song)=>{
         setIsAdding(true);
         const token = JSON.parse(getCookie("token") || "{}")?.access_token;
-        const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(song.song_title, song.artist.name, token);
+        const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(song.title, song.artist, token);
         if (!res) return;
         var spotifyTrack = res[0];
         try {
             if (!spotifyTrack) {
                 throw new Error("There was an error getting through to Spotify!");
             }
-            const mapped = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapGSBSongToSongInput"])(song, spotifyTrack.uri, spotifyTrack.duration_ms);
-            ctxAddSongToPlaylist(playlist.id, mapped);
+            const mapped = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapSpotifyFieldsToSongInput"])(song, spotifyTrack.uri, spotifyTrack.duration_ms);
+            ctxAddSongToPlaylist(playlist.id, song);
             const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$43f5cc__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["addSongToPlaylist"])(playlist.id, mapped);
             if (!result) {
                 console.log("Failed to add song to db");
@@ -642,7 +650,7 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                 children: item.name
             }, item.name + index, false, {
                 fileName: "[project]/components/metronome/SongDropdown.tsx",
-                lineNumber: 81,
+                lineNumber: 88,
                 columnNumber: 5
             }, this);
         });
@@ -656,12 +664,12 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                         onClick: ()=>setShowSongDropdown(!showSongDropdown)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongDropdown.tsx",
-                        lineNumber: 94,
+                        lineNumber: 101,
                         columnNumber: 6
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/metronome/SongDropdown.tsx",
-                    lineNumber: 93,
+                    lineNumber: 100,
                     columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -672,7 +680,7 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                             children: "Nothing yet"
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongDropdown.tsx",
-                            lineNumber: 99,
+                            lineNumber: 106,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSub"], {
@@ -682,7 +690,7 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                                     children: "Add to playlist"
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                    lineNumber: 103,
+                                    lineNumber: 110,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuPortal"], {
@@ -695,13 +703,13 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                                                 children: "New..."
                                             }, void 0, false, {
                                                 fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                                lineNumber: 108,
+                                                lineNumber: 115,
                                                 columnNumber: 9
                                             }, this),
                                             playlists?.length > 0 && renderPlaylists(),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                                 fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                                lineNumber: 115,
+                                                lineNumber: 122,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -709,24 +717,24 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                                                 children: "More..."
                                             }, void 0, false, {
                                                 fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                                lineNumber: 116,
+                                                lineNumber: 123,
                                                 columnNumber: 9
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                        lineNumber: 107,
+                                        lineNumber: 114,
                                         columnNumber: 8
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongDropdown.tsx",
-                                    lineNumber: 106,
+                                    lineNumber: 113,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/metronome/SongDropdown.tsx",
-                            lineNumber: 102,
+                            lineNumber: 109,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -734,19 +742,19 @@ const SongDropdown = ({ playlists, setShowSongPortal, song })=>{
                             children: "More..."
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/SongDropdown.tsx",
-                            lineNumber: 122,
+                            lineNumber: 129,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/SongDropdown.tsx",
-                    lineNumber: 98,
+                    lineNumber: 105,
                     columnNumber: 5
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/metronome/SongDropdown.tsx",
-            lineNumber: 92,
+            lineNumber: 99,
             columnNumber: 4
         }, this)
     }, void 0, false);
@@ -822,7 +830,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Playlist Name:"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 59,
+                        lineNumber: 60,
                         columnNumber: 6
                     }, this),
                     errors.playlistName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -830,7 +838,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Please enter a playlist name."
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 61,
+                        lineNumber: 62,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -842,7 +850,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         })
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 63,
+                        lineNumber: 64,
                         columnNumber: 6
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -850,23 +858,23 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         value: "Create Playlist"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 69,
+                        lineNumber: 70,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                lineNumber: 58,
+                lineNumber: 59,
                 columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/metronome/PlaylistModal.tsx",
-            lineNumber: 57,
+            lineNumber: 58,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-        lineNumber: 56,
+        lineNumber: 57,
         columnNumber: 3
     }, this);
 };
@@ -914,7 +922,7 @@ function SongCard(props) {
         });
     }, []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (currentTrack && currentTrack.song_title == song.song_title) {
+        if (currentTrack && currentTrack.song_title == song.title) {
             setShowPlayButton(true);
         } else {
             setShowPlayButton(false);
@@ -946,14 +954,14 @@ function SongCard(props) {
                 onClose: ()=>setShowSongPortal(false)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 55,
+                lineNumber: 59,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "songcard",
                 onMouseEnter: ()=>setShowPlayButton(true),
                 onMouseLeave: ()=>{
-                    if (currentTrack && currentTrack.song_title !== song.song_title) {
+                    if (currentTrack && currentTrack.song_title !== song.title) {
                         setShowPlayButton(false);
                     }
                 },
@@ -964,29 +972,29 @@ function SongCard(props) {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "songcard-title",
-                                    children: formatTitle(song.song_title)
+                                    children: formatTitle(song.title)
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 72,
+                                    lineNumber: 76,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "songcard-artist",
-                                    children: song.artist.name
+                                    children: song.artist
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 73,
+                                    lineNumber: 77,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 71,
+                            lineNumber: 75,
                             columnNumber: 6
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 70,
+                        lineNumber: 74,
                         columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -994,10 +1002,10 @@ function SongCard(props) {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "songcard-genres",
-                                children: renderGenres(song.artist.genres)
+                                children: renderGenres(song.genres)
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 77,
+                                lineNumber: 81,
                                 columnNumber: 6
                             }, this),
                             player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1006,7 +1014,7 @@ function SongCard(props) {
                                 song: song
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 81,
+                                lineNumber: 83,
                                 columnNumber: 7
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1017,24 +1025,24 @@ function SongCard(props) {
                                     song: song
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 90,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 87,
+                                lineNumber: 89,
                                 columnNumber: 6
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 76,
+                        lineNumber: 80,
                         columnNumber: 5
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 61,
+                lineNumber: 65,
                 columnNumber: 4
             }, this)
         ]
@@ -1050,6 +1058,8 @@ var { g: global, __dirname } = __turbopack_context__;
 __turbopack_context__.s({
     "fetchTempoData": (()=>fetchTempoData)
 });
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-ssr] (ecmascript)");
+;
 const fetchTempoData = async (bpm)=>{
     const apiUrl = `https://api.getsong.co/tempo/?api_key=${("TURBOPACK compile-time value", "5342973719315b31c98d26528094f76e")}&bpm=${bpm}`;
     const response = await fetch(apiUrl);
@@ -1057,7 +1067,10 @@ const fetchTempoData = async (bpm)=>{
         throw new Error("Network response was not ok");
     }
     const data = await response.json();
-    return data.tempo;
+    const result = data.tempo.map((item)=>{
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapGSBSongToSongInput"])(item, "", 0);
+    });
+    return result;
 };
 }}),
 "[project]/components/metronome/SongList.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
@@ -1154,14 +1167,15 @@ function SongList(props) {
         }
     };
     const renderSongList = ()=>{
-        return songs?.map((song)=>{
+        if (!songs) return;
+        return songs.map((song)=>{
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                 song: song,
                 playlists: playlists
-            }, song.song_id, false, {
+            }, song.getSongBpmId, false, {
                 fileName: "[project]/components/metronome/SongList.tsx",
-                lineNumber: 61,
-                columnNumber: 11
+                lineNumber: 63,
+                columnNumber: 5
             }, this);
         });
     };
@@ -1194,12 +1208,12 @@ function SongList(props) {
                 size: "2xl"
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongList.tsx",
-                lineNumber: 92,
+                lineNumber: 95,
                 columnNumber: 6
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/metronome/SongList.tsx",
-            lineNumber: 88,
+            lineNumber: 91,
             columnNumber: 4
         }, this)
     }, void 0, false);

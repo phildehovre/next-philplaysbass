@@ -6,17 +6,17 @@ import "./SongList.scss";
 import SongCard from "./SongCard";
 import { fetchTempoData } from "../../services/getSongBpm";
 import { useQuery } from "@tanstack/react-query";
-import { GSBSong } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faChevronLeft,
 	faChevronRight,
 	faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { Prisma } from "@/lib/generated/prisma";
 
 function SongList(props: any) {
 	const { bpm, showSongs, playlists } = props;
-	const [songs, setSongs] = useState([]);
+	const [songs, setSongs] = useState<Prisma.SongCreateInput[]>([]);
 	const [listStart, setListStart] = useState(0);
 	const [listEnd, setListEnd] = useState(12);
 	const [pageCounter, setPageCounter] = useState(1);
@@ -57,8 +57,11 @@ function SongList(props: any) {
 	};
 
 	const renderSongList = () => {
-		return songs?.map((song: GSBSong) => {
-			return <SongCard song={song} key={song.song_id} playlists={playlists} />;
+		if (!songs) return;
+		return songs.map((song) => {
+			return (
+				<SongCard song={song} key={song.getSongBpmId} playlists={playlists} />
+			);
 		});
 	};
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { PlayerContext } from "@/context/playerContext";
-import { Song, SongData } from "@/types/types";
+import { Prisma } from "@/lib/generated/prisma";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import React, { useContext } from "react";
 
@@ -10,7 +10,7 @@ const PlayButton = ({
 	player,
 	song,
 }: {
-	song: Song;
+	song: Prisma.SongCreateInput;
 	isShowing: boolean;
 	player: Spotify.Player;
 }) => {
@@ -26,7 +26,7 @@ const PlayButton = ({
 
 	const handlePlayClick = async () => {
 		const state = await player.getCurrentState();
-		const isDifferentTrack = currentTrack?.song_title !== song.song_title;
+		const isDifferentTrack = currentTrack?.title !== song.title;
 
 		if (!isDifferentTrack && state?.paused) {
 			play(resumePosition);
@@ -52,7 +52,7 @@ const PlayButton = ({
 		setResumePosition(state?.position);
 	};
 
-	const isCurrentSong = currentTrack?.song_title === song.song_title;
+	const isCurrentSong = currentTrack?.title === song.title;
 	const showPause = isCurrentSong && !isPaused;
 
 	return (

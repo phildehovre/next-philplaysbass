@@ -18,8 +18,12 @@ import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import { addSongToPlaylist } from "@/actions/playlistActions";
 import { usePlaylists } from "@/context/playlistContext";
-import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
+import {
+	mapGSBSongToSongInput,
+	mapSpotifyFieldsToSongInput,
+} from "@/lib/utils/songUtils";
 import { Track } from "spotify-api.js";
+import { Prisma } from "@/lib/generated/prisma";
 
 const SongDropdown = ({
 	playlists,
@@ -28,7 +32,7 @@ const SongDropdown = ({
 }: {
 	playlists: any;
 	setShowSongPortal: (p: boolean) => void;
-	song: GSBSong;
+	song: Prisma.SongCreateInput;
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
@@ -37,12 +41,15 @@ const SongDropdown = ({
 	const { addSongToPlaylist: ctxAddSongToPlaylist, playlists: ctxPlaylists } =
 		usePlaylists();
 
-	const handleAddToPlaylist = async (playlist: Playlist, song: GSBSong) => {
+	const handleAddToPlaylist = async (
+		playlist: Playlist,
+		song: Prisma.SongCreateInput
+	) => {
 		setIsAdding(true);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const res: any = await getSpotifyTrackByArtistAndTitle(
-			song.song_title,
-			song.artist.name,
+			song.title,
+			song.artist,
 			token
 		);
 
@@ -54,12 +61,12 @@ const SongDropdown = ({
 				throw new Error("There was an error getting through to Spotify!");
 			}
 
-			const mapped = mapGSBSongToSongInput(
+			const mapped = mapSpotifyFieldsToSongInput(
 				song,
 				spotifyTrack.uri,
 				spotifyTrack.duration_ms
 			);
-			ctxAddSongToPlaylist(playlist.id, mapped);
+			ctxAddSongToPlaylist(playlist.id, song);
 
 			const result = await addSongToPlaylist(playlist.id, mapped);
 			if (!result) {

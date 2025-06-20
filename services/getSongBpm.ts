@@ -1,3 +1,6 @@
+import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
+import { GSBSong } from "@/types/types";
+
 export const fetchTempoData = async (bpm: number) => {
 	const apiUrl = `https://api.getsong.co/tempo/?api_key=${process.env.NEXT_PUBLIC_SONGBPM_API_KEY}&bpm=${bpm}`;
 
@@ -8,5 +11,8 @@ export const fetchTempoData = async (bpm: number) => {
 
 	const data = await response.json();
 
-	return data.tempo;
+	const result = data.tempo.map((item: GSBSong) => {
+		return mapGSBSongToSongInput(item, "", 0);
+	});
+	return result;
 };

@@ -4,10 +4,11 @@ import { useForm } from "react-hook-form";
 import "./PlaylistModal.css";
 import { GSBSong } from "@/types/types";
 import { createPlaylist } from "@/actions/playlistActions";
+import { Prisma } from "@/lib/generated/prisma";
 
 type Props = {
 	setShow: (p: boolean) => void;
-	song: GSBSong;
+	song: Prisma.SongCreateInput;
 	onClose: () => void;
 };
 

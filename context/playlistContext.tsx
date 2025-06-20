@@ -1,8 +1,8 @@
-// context/playlistContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Prisma, Playlist, Song } from "@/lib/generated/prisma";
+import { Prisma, Playlist } from "@/lib/generated/prisma";
+import { getUserPlaylistsWithSongs } from "@/actions/playlistActions";
 
 type PlaylistWithSongs = Playlist & { songs: Prisma.SongCreateInput[] };
 
@@ -37,12 +37,9 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const refreshPlaylists = async () => {
-		const res = await fetch("/api/playlists"); // set up a route that returns fresh playlists
-		const fresh = await res.json();
+		const fresh: any = await getUserPlaylistsWithSongs();
 		setPlaylists(fresh);
 	};
-
-	console.log(playlists);
 
 	return (
 		<PlaylistContext.Provider

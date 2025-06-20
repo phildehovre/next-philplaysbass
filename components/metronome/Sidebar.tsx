@@ -14,23 +14,18 @@ import "../Modal.css";
 import PlaylistItem from "./PlaylistItem";
 import { PlaylistSong } from "@/lib/generated/prisma";
 import { Song } from "@/lib/generated/prisma";
+import { usePlaylists } from "@/context/playlistContext";
 
 type PlaylistWithSongs = Playlist & {
-	songs: (PlaylistSong & {
-		song: Song;
-	})[];
+	songs: (PlaylistSong & { song: Song })[];
 };
 
-const MetroSidebar = ({ playlists }: { playlists: PlaylistWithSongs[] }) => {
-	const [componentPlaylists, setComponentPlaylists] = useState<Playlist[]>([]);
-	const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(
-		null
-	);
+const MetroSidebar = () => {
+	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
+	const { playlists: ctxPlaylists, refreshPlaylists } = usePlaylists();
 
 	useEffect(() => {
-		if (playlists && playlists.length != 0) {
-			setComponentPlaylists(playlists);
-		}
+		refreshPlaylists(); // fetch on mount
 	}, []);
 
 	useEffect(() => {
@@ -40,7 +35,7 @@ const MetroSidebar = ({ playlists }: { playlists: PlaylistWithSongs[] }) => {
 	}, [selectedPlaylist]);
 
 	const renderPlaylists = () => {
-		return componentPlaylists.map((pl) => {
+		return ctxPlaylists.map((pl) => {
 			return (
 				<div
 					key={pl.id}
@@ -53,12 +48,11 @@ const MetroSidebar = ({ playlists }: { playlists: PlaylistWithSongs[] }) => {
 		});
 	};
 
-	const renderPlaylistSongs = (pl: Playlist) => {
-		if (!pl) return;
-		return pl.songs?.map((item: any) => {
-			const song = item.song;
+	const renderPlaylistSongs = (pl: PlaylistWithSongs) => {
+		if (!pl?.songs) return null;
 
-			return <PlaylistItem key={song.id} song={song} />;
+		return pl.songs.map((song) => {
+			return <PlaylistItem key={`${pl.id}-${song.getSongBpmId}`} song={song} />;
 		});
 	};
 
@@ -67,9 +61,9 @@ const MetroSidebar = ({ playlists }: { playlists: PlaylistWithSongs[] }) => {
 			<SidebarHeader title="Playlists" />
 			<SidebarContent>
 				<h1>Playlists</h1>
-				{componentPlaylists ? renderPlaylists() : <Spinner />}
+				{ctxPlaylists ? renderPlaylists() : <Spinner />}
 				{selectedPlaylist && (
-					<Modal onClose={() => setSelectedPlaylist(null)}>
+					<Modal onClose={() => setSelectedPlaylist(undefined)}>
 						<h1>{selectedPlaylist.name}</h1>
 						{renderPlaylistSongs(selectedPlaylist)}
 					</Modal>

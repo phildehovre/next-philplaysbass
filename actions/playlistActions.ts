@@ -116,3 +116,36 @@ export async function findOrCreateSong(
 		throw new Error(`Error finding or creating song: ${err.message}`);
 	}
 }
+
+export async function getUserPlaylistsWithSongs() {
+	const dbUser = await ensureUserInDb();
+	const playlists = await prisma.playlist.findMany({
+		where: { userId: dbUser.id },
+		include: {
+			songs: {
+				include: {
+					song: true,
+				},
+			},
+		},
+		orderBy: {
+			createdAt: "desc",
+		},
+	});
+	return playlists.map((playlist) => ({
+		id: playlist.id,
+		name: playlist.name,
+		createdAt: playlist.createdAt,
+		songs: playlist.songs.map((playlistSong) => ({
+			id: playlistSong.song.id,
+			title: playlistSong.song.title,
+			artist: playlistSong.song.artist,
+			tempo: playlistSong.song.tempo,
+			duration: playlistSong.song.duration,
+			spotifyUri: playlistSong.song.spotifyUri,
+			getSongBpmId: playlistSong.song.getSongBpmId,
+			uri: playlistSong.song.uri,
+			addedAt: playlistSong.addedAt,
+		})),
+	}));
+}

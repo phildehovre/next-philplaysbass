@@ -1,7 +1,7 @@
 "use client";
 
 import "./SongCard.scss";
-import { GSBSong, Playlist } from "../../types/types";
+import { Playlist } from "../../types/types";
 
 import { animate, stagger } from "motion";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
@@ -9,8 +9,12 @@ import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
 import SongDropdown from "./SongDropdown";
 import PlaylistModal from "./PlaylistModal";
+import { Prisma } from "@/lib/generated/prisma";
 
-function SongCard(props: { song: GSBSong; playlists: Playlist[] }) {
+function SongCard(props: {
+	song: Prisma.SongCreateInput;
+	playlists: Playlist[];
+}) {
 	const { song, playlists } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const { player, currentTrack } = useContext<any>(PlayerContext);
@@ -24,7 +28,7 @@ function SongCard(props: { song: GSBSong; playlists: Playlist[] }) {
 		);
 	}, []);
 	useEffect(() => {
-		if (currentTrack && currentTrack.song_title == song.song_title) {
+		if (currentTrack && currentTrack.song_title == song.title) {
 			setShowPlayButton(true);
 		} else {
 			setShowPlayButton(false);
@@ -62,21 +66,19 @@ function SongCard(props: { song: GSBSong; playlists: Playlist[] }) {
 				className="songcard"
 				onMouseEnter={() => setShowPlayButton(true)}
 				onMouseLeave={() => {
-					if (currentTrack && currentTrack.song_title !== song.song_title) {
+					if (currentTrack && currentTrack.song_title !== song.title) {
 						setShowPlayButton(false);
 					}
 				}}
 			>
 				<div className="songcard-left">
 					<div>
-						<div className="songcard-title">{formatTitle(song.song_title)}</div>
-						<div className="songcard-artist">{song.artist.name}</div>
+						<div className="songcard-title">{formatTitle(song.title)}</div>
+						<div className="songcard-artist">{song.artist}</div>
 					</div>
 				</div>
 				<div className="songcard-right">
-					<div className="songcard-genres">
-						{renderGenres(song.artist.genres)}
-					</div>
+					<div className="songcard-genres">{renderGenres(song.genres)}</div>
 					{player && (
 						<PlayButton
 							isShowing={showPlayButton}

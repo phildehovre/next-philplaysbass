@@ -16,3 +16,15 @@ export function mapGSBSongToSongInput(
 		duration: duration,
 	};
 }
+
+export function mapSpotifyFieldsToSongInput(
+	song: Prisma.SongCreateInput,
+	spotifyUri: string,
+	duration: number
+): Prisma.SongCreateInput {
+	return {
+		...song,
+		spotifyUri,
+		duration: duration,
+	};
+}

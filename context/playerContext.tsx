@@ -1,20 +1,23 @@
 "use client";
 
 import useCookies from "@/hooks/useCookies";
+import { Prisma } from "@/lib/generated/prisma";
 import {
 	getSpotifyTrackByArtistAndTitle,
 	loadSpotifySDK,
 } from "@/services/Spotify";
-import { Song, SpotifyPlayer } from "@/types/types";
-import { createContext, useState, useEffect, useRef, useContext } from "react";
+import { SpotifyPlayer } from "@/types/types";
+import { createContext, useState, useEffect, useContext } from "react";
 import { toast } from "sonner";
 import Spotify, { Track } from "spotify-api.js";
 
 type PlayerContextType = {
 	player: SpotifyPlayer | null;
-	currentTrack: Song | undefined;
+	currentTrack: Prisma.SongCreateInput | undefined;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-	setCurrentTrack: React.Dispatch<React.SetStateAction<Song | undefined>>;
+	setCurrentTrack: React.Dispatch<
+		React.SetStateAction<Prisma.SongCreateInput | undefined>
+	>;
 	isPlaying: boolean;
 	isPaused: boolean;
 	setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +25,7 @@ type PlayerContextType = {
 	spotifyTrack: Spotify.Track | undefined;
 	setResumePosition: React.Dispatch<React.SetStateAction<number>>;
 	resumePosition: number;
-	findCacheCorrespondance: (song: Song) => Track | null;
+	findCacheCorrespondance: (song: Prisma.SongCreateInput) => Track | null;
 };
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(
@@ -31,7 +34,9 @@ export const PlayerContext = createContext<PlayerContextType | undefined>(
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 	const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
-	const [currentTrack, setCurrentTrack] = useState<Song | undefined>(undefined);
+	const [currentTrack, setCurrentTrack] = useState<
+		Prisma.SongCreateInput | undefined
+	>(undefined);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isPaused, setIsPaused] = useState(false);
 	const [spotifyTrack, setSpotifyTrack] = useState<Spotify.Track>();
@@ -119,8 +124,8 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 				(async () => {
 					try {
 						const result: any = await getSpotifyTrackByArtistAndTitle(
-							currentTrack.song_title,
-							currentTrack.artist.name,
+							currentTrack.title,
+							currentTrack.artist,
 							tokenObject.access_token
 						);
 						if (result) {
@@ -128,7 +133,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 							setSpotifyCache((prev) => [...prev, result[0]]);
 						} else {
 							toast("Not found", {
-								description: `Spotify did not find '${currentTrack.song_title}' by '${currentTrack.artist.name}'`,
+								description: `Spotify did not find '${currentTrack.title}' by '${currentTrack.artist}'`,
 								className: "not-found_toast",
 							});
 						}
@@ -189,11 +194,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		).then(() => setIsNextSongLoading(false));
 	}
 
-	const findCacheCorrespondance = (song: Song) => {
+	const findCacheCorrespondance = (song: Prisma.SongCreateInput) => {
 		const track = spotifyCache.find(
 			(track: Track) =>
-				track.artists[0].name === song.artist.name &&
-				track.name === song.song_title
+				track.artists[0].name === song.artist && track.name === song.title
 		);
 		return track || null;
 	};

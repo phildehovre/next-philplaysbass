@@ -4,7 +4,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { PlayerProvider } from "@/context/playerContext";
 import SpotifyPlayer from "@/components/metronome/SpotifyPlayer";
-import { ensureUserInDb } from "@/services/userService";
 import MetroSidebar from "@/components/metronome/Sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getUserPlaylists } from "@/actions/playlistActions";

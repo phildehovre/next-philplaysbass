@@ -594,11 +594,10 @@ const PlaylistProvider = ({ children })=>{
                 } : p));
     };
     const refreshPlaylists = async ()=>{
-        const res = await fetch("/api/playlists"); // set up a route that returns fresh playlists
+        const res = await fetch("/api/playlists");
         const fresh = await res.json();
         setPlaylists(fresh);
     };
-    console.log(playlists);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PlaylistContext.Provider, {
         value: {
             playlists,
@@ -610,7 +609,7 @@ const PlaylistProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playlistContext.tsx",
-        lineNumber: 48,
+        lineNumber: 46,
         columnNumber: 3
     }, this);
 };
@@ -2328,11 +2327,46 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 ;
 const PlaylistItem = ({ song })=>{
-    console.log(song);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {}, void 0, false, {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "playlist-item_ctn flex justify-between w-full p-2",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "playlist-item_left",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-l",
+                        children: song.title
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                        lineNumber: 8,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-sm",
+                        children: song.artist
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                        lineNumber: 9,
+                        columnNumber: 5
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 7,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                children: song.duration || "0:00"
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 11,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
         fileName: "[project]/components/metronome/PlaylistItem.tsx",
         lineNumber: 6,
-        columnNumber: 9
+        columnNumber: 3
     }, this);
 };
 _c = PlaylistItem;

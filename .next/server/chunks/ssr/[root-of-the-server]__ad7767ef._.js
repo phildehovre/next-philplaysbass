@@ -21390,11 +21390,12 @@ async function ensureUserInDb() {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","6067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
+/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","6067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
     "addSongToPlaylist": (()=>addSongToPlaylist),
     "createPlaylist": (()=>createPlaylist),
     "findOrCreateSong": (()=>findOrCreateSong),
-    "getUserPlaylists": (()=>getUserPlaylists)
+    "getUserPlaylists": (()=>getUserPlaylists),
+    "getUserPlaylistsWithSongs": (()=>getUserPlaylistsWithSongs)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/server-reference.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$app$2d$render$2f$encryption$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/app-render/encryption.js [app-rsc] (ecmascript)");
@@ -21498,17 +21499,53 @@ async function findOrCreateSong(data) {
         throw new Error(`Error finding or creating song: ${err.message}`);
     }
 }
+async function getUserPlaylistsWithSongs() {
+    const dbUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$userService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureUserInDb"])();
+    const playlists = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].playlist.findMany({
+        where: {
+            userId: dbUser.id
+        },
+        include: {
+            songs: {
+                include: {
+                    song: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+    return playlists.map((playlist)=>({
+            id: playlist.id,
+            name: playlist.name,
+            createdAt: playlist.createdAt,
+            songs: playlist.songs.map((playlistSong)=>({
+                    id: playlistSong.song.id,
+                    title: playlistSong.song.title,
+                    artist: playlistSong.song.artist,
+                    tempo: playlistSong.song.tempo,
+                    duration: playlistSong.song.duration,
+                    spotifyUri: playlistSong.song.spotifyUri,
+                    getSongBpmId: playlistSong.song.getSongBpmId,
+                    uri: playlistSong.song.uri,
+                    addedAt: playlistSong.addedAt
+                }))
+        }));
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     getUserPlaylists,
     createPlaylist,
     addSongToPlaylist,
-    findOrCreateSong
+    findOrCreateSong,
+    getUserPlaylistsWithSongs
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylists, "002bb781435bc586f057bc5a84ffdacf3f40569e16", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(createPlaylist, "6067325ccab1647e985221060a630322ea73039eb1", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(addSongToPlaylist, "60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(findOrCreateSong, "403407216b161d7ad6ed13c128ee4f3e57320de29f", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylistsWithSongs, "00f8ea3445fe23581376afca79ebbe842b4935ac5b", null);
 }}),
 "[project]/app/favicon.ico.mjs { IMAGE => \"[project]/app/favicon.ico (static in ecmascript)\" } [app-rsc] (structured image object, ecmascript, Next.js server component)": ((__turbopack_context__) => {
 

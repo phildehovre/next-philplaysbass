@@ -9,6 +9,7 @@ import MetroSidebar from "@/components/metronome/Sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getUserPlaylists } from "@/actions/playlistActions";
 import { PlaylistProvider } from "@/context/playlistContext";
+import { SidebarProvider } from "@/context/sidebarContext";
 
 const page = async () => {
 	const { isAuthenticated } = await getKindeServerSession();
@@ -25,7 +26,9 @@ const page = async () => {
 			<PlaylistProvider>
 				<Metronome playlists={playlists} />
 				<SpotifyPlayer />
-				<MetroSidebar playlists={playlists} />
+				<SidebarProvider>
+					<MetroSidebar />
+				</SidebarProvider>
 				<SidebarTrigger />
 			</PlaylistProvider>
 		</PlayerProvider>

@@ -42,7 +42,7 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	}, [setShow]);
 
 	const onSubmit = async (data: FormValues) => {
-		await createPlaylist(data.playlistName, song?.song_id)
+		await createPlaylist(data.playlistName, song)
 			.catch((err) => {
 				throw new Error(err);
 			})

@@ -516,6 +516,11 @@ input[type="range"]:focus::-ms-fill-upper {
   position: relative;
 }
 
+.songcard.active {
+  background-color: #0077803a;
+  box-shadow: 2px 2px 10px teal;
+}
+
 .songcard:hover {
   background-color: teal;
   box-shadow: 5px 5px 20px teal;

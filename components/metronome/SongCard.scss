@@ -15,6 +15,11 @@
 	position: relative;
 }
 
+.songcard.active {
+	background-color: rgba(0, 119, 128, 0.229);
+	box-shadow: $secondary 2px 2px 10px;
+}
+
 .songcard:hover {
 	background-color: $secondary;
 	box-shadow: $secondary 5px 5px 20px;

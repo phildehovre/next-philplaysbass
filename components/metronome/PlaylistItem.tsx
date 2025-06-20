@@ -1,7 +1,7 @@
-import { Song } from "@/lib/generated/prisma";
+import { Prisma } from "@/lib/generated/prisma";
 import React from "react";
 
-const PlaylistItem = ({ song }: { song: Song }) => {
+const PlaylistItem = ({ song }: { song: Prisma.SongCreateInput }) => {
 	return (
 		<div className="playlist-item_ctn flex justify-between w-full p-2">
 			<div className="playlist-item_left">

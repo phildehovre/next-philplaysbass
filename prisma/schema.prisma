@@ -35,6 +35,7 @@ model Song {
   tempo      Int
   artist     String
   duration   Int?
+  genres String[]
   playlists  PlaylistSong[]
 }
 

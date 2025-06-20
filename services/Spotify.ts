@@ -1,3 +1,5 @@
+import { Prisma } from "@/lib/generated/prisma";
+import { mapSpotifyFieldsToSongInput } from "@/lib/utils/songUtils";
 import { toast } from "sonner";
 import { Track } from "spotify-api.js";
 
@@ -68,6 +70,25 @@ export async function getSpotifyTrackByArtistAndTitle(
 		return null;
 	}
 }
+
+export const getTrackAndMapToSongInput = async (
+	song: Prisma.SongCreateInput,
+	token: string
+) => {
+	if (token) {
+		const res: any & { uri: string; duration_ms: number } =
+			await getSpotifyTrackByArtistAndTitle(song.title, song.artist, token);
+		if (!res) {
+			throw new Error("no track was found");
+		}
+		var songWithSpotifyFields = mapSpotifyFieldsToSongInput(
+			song,
+			res[0].uri,
+			res[0].duration_ms
+		);
+		return songWithSpotifyFields;
+	}
+};
 
 export async function searchSpotifyArtistByName(
 	name: string,

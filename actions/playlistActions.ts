@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
 import { Prisma, Song } from "@/lib/generated/prisma";
 import { revalidatePath } from "next/cache";
+import { GSBSong } from "@/types/types";
+import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
 
 export async function getUserPlaylists() {
 	const dbUser = await ensureUserInDb();
@@ -28,7 +30,10 @@ export async function getUserPlaylists() {
 	}
 }
 
-export async function createPlaylist(name: string, songId?: string) {
+export async function createPlaylist(
+	name: string,
+	song: Prisma.SongCreateInput
+) {
 	const dbUser = await ensureUserInDb();
 
 	try {
@@ -39,14 +44,17 @@ export async function createPlaylist(name: string, songId?: string) {
 			},
 		});
 
-		if (songId) {
-			await prisma.playlistSong.create({
-				data: {
-					playlistId: playlist.id,
-					songId: songId,
-				},
-			});
+		const dbSong = await findOrCreateSong(song);
+		if (!dbSong) {
+			throw new Error("Failed to find or create song");
 		}
+
+		await prisma.playlistSong.create({
+			data: {
+				playlistId: playlist.id,
+				songId: dbSong.id,
+			},
+		});
 
 		revalidatePath("/metronome");
 

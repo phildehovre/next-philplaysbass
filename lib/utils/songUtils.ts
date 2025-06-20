@@ -14,6 +14,7 @@ export function mapGSBSongToSongInput(
 		tempo: parseInt(song.tempo),
 		artist: song.artist.name,
 		duration: duration,
+		genres: song.artist.genres,
 	};
 }
 
@@ -22,9 +23,10 @@ export function mapSpotifyFieldsToSongInput(
 	spotifyUri: string,
 	duration: number
 ): Prisma.SongCreateInput {
-	return {
+	const result = {
 		...song,
-		spotifyUri,
+		spotifyUri: spotifyUri,
 		duration: duration,
 	};
+	return result;
 }

@@ -17,8 +17,13 @@ function SongCard(props: {
 }) {
 	const { song, playlists } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
-	const { player, currentTrack } = useContext<any>(PlayerContext);
 	const [showSongPortal, setShowSongPortal] = useState(false);
+	const [isPlaying, setIsPlaying] = useState(false);
+	const { player, currentTrack } = useContext<any>(PlayerContext);
+
+	useEffect(() => {
+		setIsPlaying(song.title === currentTrack?.title);
+	}, [currentTrack]);
 
 	useLayoutEffect(() => {
 		animate(
@@ -63,7 +68,7 @@ function SongCard(props: {
 				/>
 			)}
 			<div
-				className="songcard"
+				className={`songcard ${isPlaying ? "active" : ""}`}
 				onMouseEnter={() => setShowPlayButton(true)}
 				onMouseLeave={() => {
 					if (currentTrack && currentTrack.song_title !== song.title) {
@@ -78,7 +83,9 @@ function SongCard(props: {
 					</div>
 				</div>
 				<div className="songcard-right">
-					<div className="songcard-genres">{renderGenres(song.genres)}</div>
+					<div className="songcard-genres">
+						{renderGenres(song.genres as string[])}
+					</div>
 					{player && (
 						<PlayButton
 							isShowing={showPlayButton}

@@ -119,6 +119,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 
 		try {
+			const data = getCookie("token");
+			if (!data) {
+				throw new Error("no token found in cookies");
+			}
 			const tokenObject = JSON.parse(data);
 			if (currentTrack && tokenObject?.access_token) {
 				(async () => {

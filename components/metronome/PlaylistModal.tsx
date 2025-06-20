@@ -1,10 +1,12 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import "./PlaylistModal.css";
-import { GSBSong } from "@/types/types";
 import { createPlaylist } from "@/actions/playlistActions";
 import { Prisma } from "@/lib/generated/prisma";
+import { usePlaylists } from "@/context/playlistContext";
+import { getTrackAndMapToSongInput } from "@/services/Spotify";
+import useCookies from "@/hooks/useCookies";
 
 type Props = {
 	setShow: (p: boolean) => void;
@@ -17,6 +19,7 @@ type FormValues = {
 };
 
 const PlaylistModal = ({ setShow, song, onClose }: Props) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const {
 		register,
 		handleSubmit,
@@ -24,6 +27,9 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		formState: { errors },
 	} = useForm<FormValues>();
 	const modalRef = useRef<HTMLDivElement>(null);
+
+	const { addPlaylist } = usePlaylists();
+	const { getCookie } = useCookies();
 
 	// Close on click outside
 	useEffect(() => {
@@ -43,7 +49,17 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	}, [setShow]);
 
 	const onSubmit = async (data: FormValues) => {
-		await createPlaylist(data.playlistName, song)
+		setIsLoading(true);
+		const playlistWithSong = { ...data, songs: [song] };
+		addPlaylist(playlistWithSong);
+		const tokenCookie = getCookie("token");
+		if (!tokenCookie) {
+			throw new Error("No Spotify access token found");
+		}
+		const { access_token } = JSON.parse(tokenCookie);
+		const mapped = await getTrackAndMapToSongInput(song, access_token);
+		console.log("mapped: ", mapped);
+		await createPlaylist(data.playlistName, mapped)
 			.catch((err) => {
 				throw new Error(err);
 			})

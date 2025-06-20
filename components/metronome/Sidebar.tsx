@@ -28,7 +28,7 @@ const MetroSidebar = () => {
 	}, [selectedPlaylist]);
 
 	const renderPlaylists = () => {
-		return ctxPlaylists.map((pl) => {
+		return ctxPlaylists.map((pl, index) => {
 			return (
 				<div
 					key={pl.id}

@@ -1,7 +1,7 @@
 "use client";
 
 import "./SongCard.scss";
-import { Playlist, Song } from "../../types/types";
+import { GSBSong, Playlist } from "../../types/types";
 
 import { animate, stagger } from "motion";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { PlayerContext } from "@/context/playerContext";
 import SongDropdown from "./SongDropdown";
 import PlaylistModal from "./PlaylistModal";
 
-function SongCard(props: { song: Song; playlists: Playlist[] }) {
+function SongCard(props: { song: GSBSong; playlists: Playlist[] }) {
 	const { song, playlists } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const { player, currentTrack } = useContext<any>(PlayerContext);
@@ -55,7 +55,7 @@ function SongCard(props: { song: Song; playlists: Playlist[] }) {
 				<PlaylistModal
 					setShow={setShowSongPortal}
 					song={song}
-					onClose={() => setShowSongPortal}
+					onClose={() => setShowSongPortal(false)}
 				/>
 			)}
 			<div

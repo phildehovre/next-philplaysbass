@@ -47,7 +47,7 @@ const SongDropdown = ({
 		);
 
 		if (!res) return;
-		var spotifyTrack = res[0];
+		var spotifyTrack: Track & { duration_ms: number } = res[0];
 
 		try {
 			if (!spotifyTrack) {
@@ -57,21 +57,17 @@ const SongDropdown = ({
 			const mapped = mapGSBSongToSongInput(
 				song,
 				spotifyTrack.uri,
-				spotifyTrack.duration
+				spotifyTrack.duration_ms
 			);
 			ctxAddSongToPlaylist(playlist.id, mapped);
-			console.log("Song added to pl ctx: ", ctxPlaylists);
 
-			// Create song in db in the background
 			const result = await addSongToPlaylist(playlist.id, mapped);
-			console.log("Song added to DB: ", result);
 			if (!result) {
 				console.log("Failed to add song to db");
 				return;
 			}
 
 			console.log("✅ Song added to playlist!");
-			// Directyl add song for optimistic update
 		} catch (err) {
 			console.error("❌ Error adding song to playlist:", err);
 		} finally {

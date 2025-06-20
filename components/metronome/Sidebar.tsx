@@ -7,25 +7,18 @@ import {
 	SidebarFooter,
 	SidebarHeader,
 } from "@/components/ui/sidebar";
-import { Playlist } from "@/types/types";
 import Spinner from "../Spinner";
 import Modal from "../Modal";
 import "../Modal.css";
 import PlaylistItem from "./PlaylistItem";
-import { PlaylistSong } from "@/lib/generated/prisma";
-import { Song } from "@/lib/generated/prisma";
-import { usePlaylists } from "@/context/playlistContext";
-
-type PlaylistWithSongs = Playlist & {
-	songs: (PlaylistSong & { song: Song })[];
-};
+import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
 	const { playlists: ctxPlaylists, refreshPlaylists } = usePlaylists();
 
 	useEffect(() => {
-		refreshPlaylists(); // fetch on mount
+		refreshPlaylists();
 	}, []);
 
 	useEffect(() => {

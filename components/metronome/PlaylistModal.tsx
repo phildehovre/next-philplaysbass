@@ -1,19 +1,13 @@
 "use client";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import "./PlaylistModal.css";
-import { useUser } from "@/context/userContext";
-import { Song, SongData, SongObject } from "@/types/types";
-import { useCreatePlaylist } from "@/hooks/usePlaylist";
-import { PlayerContext, usePlayer } from "@/context/playerContext";
-import { Track } from "spotify-api.js";
-import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
-import useCookies from "@/hooks/useCookies";
+import { GSBSong } from "@/types/types";
 import { createPlaylist } from "@/actions/playlistActions";
 
 type Props = {
 	setShow: (p: boolean) => void;
-	song: Song;
+	song: GSBSong;
 	onClose: () => void;
 };
 
@@ -29,9 +23,6 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		formState: { errors },
 	} = useForm<FormValues>();
 	const modalRef = useRef<HTMLDivElement>(null);
-
-	const { findCacheCorrespondance } = usePlayer();
-	const { getCookie } = useCookies();
 
 	// Close on click outside
 	useEffect(() => {
@@ -51,11 +42,14 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	}, [setShow]);
 
 	const onSubmit = async (data: FormValues) => {
-		await createPlaylist(data.playlistName)
+		await createPlaylist(data.playlistName, song?.song_id)
 			.catch((err) => {
 				throw new Error(err);
 			})
-			.then(onClose);
+			.then(() => {
+				reset();
+				onClose();
+			});
 	};
 
 	return (

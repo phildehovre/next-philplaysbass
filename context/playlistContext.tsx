@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Prisma, Playlist } from "@/lib/generated/prisma";
 import { getUserPlaylistsWithSongs } from "@/actions/playlistActions";
 
-type PlaylistWithSongs = Playlist & { songs: Prisma.SongCreateInput[] };
+export type PlaylistWithSongs = Playlist & { songs: Prisma.SongCreateInput[] };
 
 type PlaylistContextType = {
 	playlists: PlaylistWithSongs[];

@@ -46,7 +46,7 @@
   font-weight: bolder;
 }
 
-.playlist-modal_ctn > form > input[type="submit"] {
+.submit_btn {
   color: #000;
   background-color: var(--clr-cta-primary);
   cursor: pointer;
@@ -58,13 +58,17 @@
   transition: all .15s ease-in-out;
 }
 
-.playlist-modal_ctn > form > input[type="submit"]:hover {
+.submit_btn > * {
+  margin: auto;
+}
+
+.submit_btn:hover {
   outline: 1px solid var(--clr-cta-primary);
   color: var(--clr-cta-primary);
   background-color: #0000;
 }
 
-.playlist-modal_ctn > form > input[type="submit"]:active {
+.submit_btn:active {
   color: #000;
   background-color: var(--clr-cta-primary);
 }

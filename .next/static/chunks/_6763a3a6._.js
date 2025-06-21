@@ -931,7 +931,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const { register, handleSubmit, reset, formState: { errors } } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])();
     const modalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
-    const { addPlaylist } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
+    const { addPlaylist, refreshPlaylists } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
     const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
     // Close on click outside
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -968,12 +968,13 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
         }
         const { access_token } = JSON.parse(tokenCookie);
         const mapped = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getTrackAndMapToSongInput"])(song, access_token);
-        console.log("mapped: ", mapped);
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$16e92b__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["createPlaylist"])(data.playlistName, mapped).catch((err)=>{
             throw new Error(err);
         }).then(()=>{
             reset();
             onClose();
+        }).finally(()=>{
+            setIsLoading(false);
         });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -989,7 +990,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Playlist Name:"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 76,
+                        lineNumber: 79,
                         columnNumber: 6
                     }, this),
                     errors.playlistName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -997,7 +998,7 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         children: "Please enter a playlist name."
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 78,
+                        lineNumber: 81,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1006,10 +1007,11 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         placeholder: "Enter your name here...",
                         ...register("playlistName", {
                             required: true
-                        })
+                        }),
+                        autoFocus: true
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 80,
+                        lineNumber: 83,
                         columnNumber: 6
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1017,27 +1019,27 @@ const PlaylistModal = ({ setShow, song, onClose })=>{
                         value: "Create Playlist"
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                        lineNumber: 86,
+                        lineNumber: 90,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/PlaylistModal.tsx",
-                lineNumber: 75,
+                lineNumber: 78,
                 columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/metronome/PlaylistModal.tsx",
-            lineNumber: 74,
+            lineNumber: 77,
             columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/metronome/PlaylistModal.tsx",
-        lineNumber: 73,
+        lineNumber: 76,
         columnNumber: 3
     }, this);
 };
-_s(PlaylistModal, "zu04TQEPYThghypPYUCuz+L+OHU=", false, function() {
+_s(PlaylistModal, "k2ND+1r5wIu72idhnDzoXpT2iRI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"],
         __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"],

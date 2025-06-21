@@ -21390,7 +21390,7 @@ async function ensureUserInDb() {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","6067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
+/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","4067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
     "addSongToPlaylist": (()=>addSongToPlaylist),
     "createPlaylist": (()=>createPlaylist),
     "findOrCreateSong": (()=>findOrCreateSong),
@@ -21428,8 +21428,12 @@ async function getUserPlaylists() {
         throw new Error(err.message);
     }
 }
-async function createPlaylist(name, song) {
+async function createPlaylist(formData) {
     const dbUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$userService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureUserInDb"])();
+    const name = formData.get("playlistName")?.toString();
+    const rawSongData = formData.get("songData");
+    if (!name || !rawSongData) return;
+    const song = JSON.parse(rawSongData.toString());
     try {
         const playlist = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].playlist.create({
             data: {
@@ -21544,7 +21548,7 @@ async function getUserPlaylistsWithSongs() {
     getUserPlaylistsWithSongs
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylists, "002bb781435bc586f057bc5a84ffdacf3f40569e16", null);
-(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(createPlaylist, "6067325ccab1647e985221060a630322ea73039eb1", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(createPlaylist, "4067325ccab1647e985221060a630322ea73039eb1", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(addSongToPlaylist, "60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(findOrCreateSong, "403407216b161d7ad6ed13c128ee4f3e57320de29f", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylistsWithSongs, "00f8ea3445fe23581376afca79ebbe842b4935ac5b", null);

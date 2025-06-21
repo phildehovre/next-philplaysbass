@@ -8,7 +8,7 @@ import { usePlaylists } from "@/context/playlistContext";
 import { getTrackAndMapToSongInput } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import Spinner from "../Spinner";
-import { useRouter } from "next/navigation";
+import { consolidateSongDataWithSpotify } from "@/lib/utils/songUtils";
 
 type Props = {
 	setShow: (p: boolean) => void;
@@ -35,6 +35,7 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 
 	const { addPlaylist, refreshPlaylists } = usePlaylists();
 	const { getCookie } = useCookies();
+	const tokenCookie = getCookie("token");
 
 	// Close on click outside
 	useEffect(() => {
@@ -62,39 +63,26 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		}
 	}, [mappedSongData]);
 
+	// Fetch spotify URI and duration_ms
 	useEffect(() => {
 		(async () => {
-			const mapped = await consolidateSongDataWithSpotify();
+			const mapped = await consolidateSongDataWithSpotify(song, tokenCookie);
 			setMappedSongData(mapped);
 		})();
 	}, []);
-
-	console.log(mappedSongData);
-	const consolidateSongDataWithSpotify = async () => {
-		const tokenCookie = getCookie("token");
-		if (!tokenCookie) {
-			throw new Error("No Spotify access token found");
-		}
-		const { access_token } = JSON.parse(tokenCookie);
-		const mapped = await getTrackAndMapToSongInput(song, access_token);
-
-		if (!mapped) return;
-		return mapped;
-	};
 
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const onSubmit = async (data: FormValues) => {
 		setIsLoading(true);
 		try {
-			// Create a FormData object to pass to the server action
 			const formData = new FormData();
 			formData.append("playlistName", data.playlistName);
 			formData.append("songData", JSON.stringify(song));
 
-			await createPlaylist(formData); // call server action
+			await createPlaylist(formData);
 
-			await refreshPlaylists(); // manually re-fetch playlists
+			await refreshPlaylists();
 
 			reset();
 			onClose();
@@ -122,7 +110,11 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 						autoFocus
 					/>
 
-					<input type="hidden" name="songData" value={JSON.stringify(song)} />
+					<input
+						type="hidden"
+						name="songData"
+						value={JSON.stringify(mappedSongData)}
+					/>
 					<button
 						className={`submit_btn ${isLoading ? "loading" : ""}`}
 						type="submit"

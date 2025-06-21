@@ -4,8 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
 import { Prisma, Song } from "@/lib/generated/prisma";
 import { revalidatePath } from "next/cache";
-import { GSBSong } from "@/types/types";
-import { mapGSBSongToSongInput } from "@/lib/utils/songUtils";
 
 export async function getUserPlaylists() {
 	const dbUser = await ensureUserInDb();

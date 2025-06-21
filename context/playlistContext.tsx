@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Prisma, Playlist } from "@/lib/generated/prisma";
 import { getUserPlaylistsWithSongs } from "@/actions/playlistActions";
+import useCookies from "@/hooks/useCookies";
+import { consolidateSongDataWithSpotify } from "@/lib/utils/songUtils";
 
 export type PlaylistWithSongs = Playlist & { songs: Prisma.SongCreateInput[] };
 
@@ -18,6 +20,9 @@ const PlaylistContext = createContext<PlaylistContextType | undefined>(
 	undefined
 );
 
+const { getCookie } = useCookies();
+const token = getCookie("token");
+
 export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 	const [playlists, setPlaylists] = useState<PlaylistWithSongs[]>([]);
 
@@ -25,13 +30,17 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 		setPlaylists((prev) => [...prev, playlist]);
 	};
 
-	const addSongToPlaylist = (
+	const addSongToPlaylist = async (
 		playlistId: string,
 		song: Prisma.SongCreateInput
 	) => {
+		const mapped = await consolidateSongDataWithSpotify(song, token);
+		if (!mapped) {
+			throw new Error("could not fetch spotify track data for consolidation");
+		}
 		setPlaylists((prev) =>
 			prev.map((p) =>
-				p.id === playlistId ? { ...p, songs: [...p.songs, song] } : p
+				p.id === playlistId ? { ...p, songs: [...p.songs, mapped] } : p
 			)
 		);
 	};

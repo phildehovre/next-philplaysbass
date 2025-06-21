@@ -1,3 +1,4 @@
+"use client";
 const useCookies = () => {
 	const getCookie = (name: string) => {
 		const cookieString = document.cookie

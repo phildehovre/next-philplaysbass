@@ -73,4 +73,8 @@
   background-color: var(--clr-cta-primary);
 }
 
+.submit_btn.loading {
+  background: #0000002f;
+}
+
 /*# sourceMappingURL=components_metronome_PlaylistModal_css_f9ee138c._.single.css.map*/

@@ -688,6 +688,10 @@ input[type="range"]:focus::-ms-fill-upper {
   background-color: var(--clr-cta-primary);
 }
 
+.submit_btn.loading {
+  background: #0000002f;
+}
+
 
 /* [project]/components/Spinner.css [app-client] (css) */
 .spinner {

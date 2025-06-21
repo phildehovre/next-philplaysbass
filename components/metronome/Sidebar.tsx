@@ -12,14 +12,27 @@ import Modal from "../Modal";
 import "../Modal.css";
 import PlaylistItem from "./PlaylistItem";
 import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
+import { exportPlaylistToSpotify } from "@/services/Spotify";
+import useCookies from "@/hooks/useCookies";
+import { ReceiptRussianRuble } from "lucide-react";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
 	const { playlists: ctxPlaylists, refreshPlaylists } = usePlaylists();
+	const [playlistUris, setPlaylistUris] = useState<string[]>([]);
+	const [token, setToken] = useState<string>("");
+
+	const { getCookie } = useCookies();
 
 	useEffect(() => {
 		refreshPlaylists();
+		const res = getCookie("token");
+		if (!res) return;
+
+		const { access_token } = JSON.parse(res);
+		setToken(access_token);
 	}, []);
+	console.log(token);
 
 	useEffect(() => {
 		if (selectedPlaylist) {
@@ -27,11 +40,19 @@ const MetroSidebar = () => {
 		}
 	}, [selectedPlaylist]);
 
+	useEffect(() => {
+		let array: string[] = [];
+		if (selectedPlaylist) {
+			selectedPlaylist.songs.forEach((item) => array.push(item.spotifyUri));
+		}
+		setPlaylistUris(array);
+	}, [selectedPlaylist]);
+
 	const renderPlaylists = () => {
 		return ctxPlaylists.map((pl, index) => {
 			return (
 				<div
-					key={pl.id}
+					key={`${pl.id}-${pl.createdAt}-${index}`}
 					className="playlist-card"
 					onClick={() => setSelectedPlaylist(pl)}
 				>
@@ -53,11 +74,25 @@ const MetroSidebar = () => {
 		<Sidebar side="right" className="sidebar_main">
 			<SidebarHeader title="Playlists" />
 			<SidebarContent>
-				<h1>Playlists</h1>
+				<h1 className="text-3xl">Playlists</h1>
 				{ctxPlaylists ? renderPlaylists() : <Spinner />}
 				{selectedPlaylist && (
 					<Modal onClose={() => setSelectedPlaylist(undefined)}>
-						<h1>{selectedPlaylist.name}</h1>
+						<div className="modal_header flex">
+							<h1 className="text-3xl">{selectedPlaylist.name}</h1>
+							<button
+								className="submit_btn"
+								onClick={() =>
+									exportPlaylistToSpotify(
+										selectedPlaylist.name,
+										playlistUris,
+										token
+									)
+								}
+							>
+								Export
+							</button>
+						</div>
 						{renderPlaylistSongs(selectedPlaylist)}
 					</Modal>
 				)}

@@ -125,3 +125,53 @@ export async function searchSpotifyArtistByName(
 		return null;
 	}
 }
+
+export async function exportPlaylistToSpotify(
+	playlistName: string,
+	songUris: string[],
+	accessToken: string
+) {
+	// 1. Get current user's Spotify ID
+	const userRes = await fetch("https://api.spotify.com/v1/me", {
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+	if (!userRes.ok) throw new Error("Failed to fetch user profile");
+	const userData = await userRes.json();
+
+	// 2. Create a playlist
+	const createRes = await fetch(
+		`https://api.spotify.com/v1/users/${userData.id}/playlists`,
+		{
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				name: playlistName,
+				public: false,
+				description: "Exported from Metronome",
+			}),
+		}
+	);
+	if (!createRes.ok) throw new Error("Failed to create playlist");
+	const playlistData = await createRes.json();
+
+	// 3. Add tracks
+	const addRes = await fetch(
+		`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`,
+		{
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ uris: songUris }),
+		}
+	);
+	if (!addRes.ok) throw new Error("Failed to add tracks to playlist");
+
+	return playlistData;
+}

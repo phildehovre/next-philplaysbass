@@ -8,6 +8,7 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
+"use client";
 const useCookies = ()=>{
     const getCookie = (name)=>{
         const cookieString = document.cookie.split("; ").find((row)=>row.startsWith(`${name}=`));

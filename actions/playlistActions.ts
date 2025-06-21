@@ -30,11 +30,13 @@ export async function getUserPlaylists() {
 	}
 }
 
-export async function createPlaylist(
-	name: string,
-	song: Prisma.SongCreateInput
-) {
+export async function createPlaylist(formData: FormData) {
 	const dbUser = await ensureUserInDb();
+	const name = formData.get("playlistName")?.toString();
+	const rawSongData = formData.get("songData");
+	if (!name || !rawSongData) return;
+
+	const song = JSON.parse(rawSongData.toString());
 
 	try {
 		const playlist = await prisma.playlist.create({

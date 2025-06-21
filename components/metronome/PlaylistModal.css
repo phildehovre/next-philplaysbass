@@ -43,26 +43,28 @@
 			font-size: 2em;
 			font-weight: bolder;
 		}
-
-		> input[type="submit"] {
-			width: 50%;
-			margin: 0 auto;
-			padding: 0.5em;
-			border-radius: 6px;
-			outline: none;
-			color: black;
-			background-color: var(--clr-cta-primary);
-			cursor: pointer;
-			transition: 150ms ease-in-out all;
-			&:hover {
-				outline: 1px solid var(--clr-cta-primary);
-				background-color: transparent;
-				color: var(--clr-cta-primary);
-			}
-			&:active {
-				color: black;
-				background-color: var(--clr-cta-primary);
-			}
-		}
+	}
+}
+.submit_btn {
+	width: 50%;
+	margin: 0 auto;
+	padding: 0.5em;
+	border-radius: 6px;
+	outline: none;
+	color: black;
+	background-color: var(--clr-cta-primary);
+	cursor: pointer;
+	transition: 150ms ease-in-out all;
+	> * {
+		margin: auto auto;
+	}
+	&:hover {
+		outline: 1px solid var(--clr-cta-primary);
+		background-color: transparent;
+		color: var(--clr-cta-primary);
+	}
+	&:active {
+		color: black;
+		background-color: var(--clr-cta-primary);
 	}
 }

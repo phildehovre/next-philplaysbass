@@ -60,7 +60,12 @@ function SongList(props: any) {
 		if (!songs) return;
 		return songs.map((song) => {
 			return (
-				<SongCard song={song} key={song.getSongBpmId} playlists={playlists} />
+				<SongCard
+					song={song}
+					key={song.getSongBpmId}
+					playlists={playlists}
+					isPlaylist={false}
+				/>
 			);
 		});
 	};

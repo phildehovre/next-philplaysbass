@@ -262,42 +262,67 @@ async function searchSpotifyArtistByName(name, accessToken) {
     }
 }
 async function exportPlaylistToSpotify(playlistName, songUris, accessToken) {
-    // 1. Get current user's Spotify ID
-    const userRes = await fetch("https://api.spotify.com/v1/me", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`
+    const baseUrl = "https://api.spotify.com/v1";
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+    };
+    // Helper to fetch JSON or throw
+    const fetchOrThrow = async (url, options)=>{
+        const res = await fetch(url, options);
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Spotify API error: ${res.status} ${errText}`);
         }
+        return res.json();
+    };
+    // 1. Get current user's Spotify ID
+    const { id: userId } = await fetchOrThrow(`${baseUrl}/me`, {
+        headers
     });
-    if (!userRes.ok) throw new Error("Failed to fetch user profile");
-    const userData = await userRes.json();
-    // 2. Create a playlist
-    const createRes = await fetch(`https://api.spotify.com/v1/users/${userData.id}/playlists`, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: playlistName,
-            public: false,
-            description: "Exported from Metronome"
-        })
+    // 2. Check for existing playlist with the same name
+    const userPlaylists = await fetchOrThrow(`${baseUrl}/users/${userId}/playlists?limit=50`, {
+        headers
     });
-    if (!createRes.ok) throw new Error("Failed to create playlist");
-    const playlistData = await createRes.json();
-    // 3. Add tracks
-    const addRes = await fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            uris: songUris
-        })
+    let existingPlaylist = userPlaylists.items.find((p)=>p.name.toLowerCase() === playlistName.toLowerCase());
+    let playlistId;
+    if (existingPlaylist) {
+        playlistId = existingPlaylist.id;
+        // Clear existing tracks
+        await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({
+                uris: []
+            })
+        });
+    } else {
+        // 3. Create a new playlist
+        const playlist = await fetchOrThrow(`${baseUrl}/users/${userId}/playlists`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                name: playlistName,
+                public: false,
+                description: "Exported from Metronome"
+            })
+        });
+        playlistId = playlist.id;
+    }
+    // 4. Add tracks
+    if (songUris.length > 0) {
+        await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                uris: songUris
+            })
+        });
+    }
+    // 5. Return playlist info
+    return await fetchOrThrow(`${baseUrl}/playlists/${playlistId}`, {
+        headers
     });
-    if (!addRes.ok) throw new Error("Failed to add tracks to playlist");
-    return playlistData;
 }
 }}),
 "[project]/context/playerContext.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
@@ -627,10 +652,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e
 ;
 ;
 const PlaylistContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])(undefined);
-const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
-const token = getCookie("token");
 const PlaylistProvider = ({ children })=>{
     const [playlists, setPlaylists] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [token, setToken] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const token = getCookie("token");
+        setToken(token);
+    }, []);
     const addPlaylist = (playlist)=>{
         setPlaylists((prev)=>[
                 ...prev,
@@ -665,7 +694,7 @@ const PlaylistProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/context/playlistContext.tsx",
-        lineNumber: 54,
+        lineNumber: 65,
         columnNumber: 3
     }, this);
 };

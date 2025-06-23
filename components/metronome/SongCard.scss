@@ -33,17 +33,21 @@
 
 	.songcard-title {
 		text-overflow: ellipsis;
+		font-size: 0.9em;
 	}
 }
 
 .songcard-artist {
 	font-size: 0.75em;
+	opacity: 0.8;
 }
 
 .songcard-right {
 	display: flex;
 	justify-content: flex;
 	gap: 0.5em;
+	font-size: 0.75em;
+	opacity: 0.8;
 }
 
 .play-button {

@@ -535,15 +535,19 @@ input[type="range"]:focus::-ms-fill-upper {
 
 .songcard-left .songcard-title {
   text-overflow: ellipsis;
+  font-size: .9em;
 }
 
 .songcard-artist {
+  opacity: .8;
   font-size: .75em;
 }
 
 .songcard-right {
   justify-content: flex;
+  opacity: .8;
   gap: .5em;
+  font-size: .75em;
   display: flex;
 }
 

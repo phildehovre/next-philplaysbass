@@ -51,7 +51,7 @@ const MetroSidebar = () => {
 			return (
 				<div
 					key={`${pl.id}-${pl.createdAt}-${index}`}
-					className="playlist-card"
+					className="playlist-card hover:opacity-45 cursor-pointer"
 					onClick={() => setSelectedPlaylist(pl)}
 				>
 					<p className="playlist-card_title">{pl.name}</p>
@@ -98,7 +98,9 @@ const MetroSidebar = () => {
 								Export
 							</button>
 						</div>
-						{renderPlaylistSongs(selectedPlaylist)}
+						<div className="playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70hh0px] ">
+							{renderPlaylistSongs(selectedPlaylist)}
+						</div>
 					</Modal>
 				)}
 			</SidebarContent>

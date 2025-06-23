@@ -1341,7 +1341,7 @@ function SongCard(props) {
                 onClose: ()=>setShowSongPortal(false)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 65,
+                lineNumber: 64,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1362,7 +1362,7 @@ function SongCard(props) {
                                     children: formatTitle(song.title)
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 82,
+                                    lineNumber: 81,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1370,18 +1370,18 @@ function SongCard(props) {
                                     children: song.artist
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 83,
+                                    lineNumber: 82,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/metronome/SongCard.tsx",
-                            lineNumber: 81,
+                            lineNumber: 80,
                             columnNumber: 6
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 80,
+                        lineNumber: 79,
                         columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1392,7 +1392,7 @@ function SongCard(props) {
                                 children: renderGenres(song.genres)
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 87,
+                                lineNumber: 86,
                                 columnNumber: 6
                             }, this),
                             player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1401,7 +1401,7 @@ function SongCard(props) {
                                 song: song
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 91,
+                                lineNumber: 90,
                                 columnNumber: 7
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1413,24 +1413,24 @@ function SongCard(props) {
                                     isPlaylist: isPlaylist
                                 }, void 0, false, {
                                     fileName: "[project]/components/metronome/SongCard.tsx",
-                                    lineNumber: 98,
+                                    lineNumber: 97,
                                     columnNumber: 7
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/metronome/SongCard.tsx",
-                                lineNumber: 97,
+                                lineNumber: 96,
                                 columnNumber: 6
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/metronome/SongCard.tsx",
-                        lineNumber: 86,
+                        lineNumber: 85,
                         columnNumber: 5
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/SongCard.tsx",
-                lineNumber: 71,
+                lineNumber: 70,
                 columnNumber: 4
             }, this)
         ]
@@ -2636,7 +2636,7 @@ const MetroSidebar = ()=>{
     const renderPlaylists = ()=>{
         return ctxPlaylists.map((pl, index)=>{
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "playlist-card",
+                className: "playlist-card hover:opacity-45 cursor-pointer",
                 onClick: ()=>setSelectedPlaylist(pl),
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                     className: "playlist-card_title",
@@ -2722,7 +2722,14 @@ const MetroSidebar = ()=>{
                                 lineNumber: 86,
                                 columnNumber: 7
                             }, this),
-                            renderPlaylistSongs(selectedPlaylist)
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70hh0px] ",
+                                children: renderPlaylistSongs(selectedPlaylist)
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/Sidebar.tsx",
+                                lineNumber: 101,
+                                columnNumber: 7
+                            }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/metronome/Sidebar.tsx",
@@ -2737,7 +2744,7 @@ const MetroSidebar = ()=>{
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarFooter"], {}, void 0, false, {
                 fileName: "[project]/components/metronome/Sidebar.tsx",
-                lineNumber: 105,
+                lineNumber: 107,
                 columnNumber: 4
             }, this)
         ]

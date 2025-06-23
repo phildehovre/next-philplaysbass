@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect,
+} from "react";
 import { Prisma, Playlist } from "@/lib/generated/prisma";
 import { getUserPlaylistsWithSongs } from "@/actions/playlistActions";
 import useCookies from "@/hooks/useCookies";
@@ -20,11 +26,16 @@ const PlaylistContext = createContext<PlaylistContextType | undefined>(
 	undefined
 );
 
-const { getCookie } = useCookies();
-const token = getCookie("token");
-
 export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 	const [playlists, setPlaylists] = useState<PlaylistWithSongs[]>([]);
+	const [token, setToken] = useState<string | null>(null);
+
+	const { getCookie } = useCookies();
+
+	useEffect(() => {
+		const token = getCookie("token");
+		setToken(token);
+	}, []);
 
 	const addPlaylist = (playlist: PlaylistWithSongs) => {
 		setPlaylists((prev) => [...prev, playlist]);

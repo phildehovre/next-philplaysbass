@@ -10,11 +10,10 @@ import {
 import Spinner from "../Spinner";
 import Modal from "../Modal";
 import "../Modal.css";
-import PlaylistItem from "./PlaylistItem";
 import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
 import { exportPlaylistToSpotify } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
-import { ReceiptRussianRuble } from "lucide-react";
+import SongCard from "./SongCard";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
@@ -32,7 +31,6 @@ const MetroSidebar = () => {
 		const { access_token } = JSON.parse(res);
 		setToken(access_token);
 	}, []);
-	console.log(token);
 
 	useEffect(() => {
 		if (selectedPlaylist) {
@@ -66,7 +64,14 @@ const MetroSidebar = () => {
 		if (!pl?.songs) return null;
 
 		return pl.songs.map((song) => {
-			return <PlaylistItem key={`${pl.id}-${song.getSongBpmId}`} song={song} />;
+			return (
+				<SongCard
+					key={`${pl.id}-${song.getSongBpmId}`}
+					song={song}
+					playlists={pl.songs}
+					isPlaylist={true}
+				/>
+			);
 		});
 	};
 

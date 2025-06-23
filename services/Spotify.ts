@@ -126,52 +126,128 @@ export async function searchSpotifyArtistByName(
 	}
 }
 
+// export async function exportPlaylistToSpotify(
+// 	playlistName: string,
+// 	songUris: string[],
+// 	accessToken: string
+// ) {
+// 	// 1. Get current user's Spotify ID
+// 	const userRes = await fetch("https://api.spotify.com/v1/me", {
+// 		headers: {
+// 			Authorization: `Bearer ${accessToken}`,
+// 		},
+// 	});
+// 	if (!userRes.ok) throw new Error("Failed to fetch user profile");
+// 	const userData = await userRes.json();
+
+// 	// 2. Create a playlist
+// 	const createRes = await fetch(
+// 		`https://api.spotify.com/v1/users/${userData.id}/playlists`,
+// 		{
+// 			method: "POST",
+// 			headers: {
+// 				Authorization: `Bearer ${accessToken}`,
+// 				"Content-Type": "application/json",
+// 			},
+// 			body: JSON.stringify({
+// 				name: playlistName,
+// 				public: false,
+// 				description: "Exported from Metronome",
+// 			}),
+// 		}
+// 	);
+// 	if (!createRes.ok) throw new Error("Failed to create playlist");
+// 	const playlistData = await createRes.json();
+
+// 	// 3. Add tracks
+// 	const addRes = await fetch(
+// 		`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`,
+// 		{
+// 			method: "POST",
+// 			headers: {
+// 				Authorization: `Bearer ${accessToken}`,
+// 				"Content-Type": "application/json",
+// 			},
+// 			body: JSON.stringify({ uris: songUris }),
+// 		}
+// 	);
+// 	if (!addRes.ok) throw new Error("Failed to add tracks to playlist");
+
+// 	return playlistData;
+// }
+
 export async function exportPlaylistToSpotify(
 	playlistName: string,
 	songUris: string[],
 	accessToken: string
 ) {
+	const baseUrl = "https://api.spotify.com/v1";
+
+	const headers = {
+		Authorization: `Bearer ${accessToken}`,
+		"Content-Type": "application/json",
+	};
+
+	// Helper to fetch JSON or throw
+	const fetchOrThrow = async (url: string, options?: RequestInit) => {
+		const res = await fetch(url, options);
+		if (!res.ok) {
+			const errText = await res.text();
+			throw new Error(`Spotify API error: ${res.status} ${errText}`);
+		}
+		return res.json();
+	};
+
 	// 1. Get current user's Spotify ID
-	const userRes = await fetch("https://api.spotify.com/v1/me", {
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
-	if (!userRes.ok) throw new Error("Failed to fetch user profile");
-	const userData = await userRes.json();
+	const { id: userId } = await fetchOrThrow(`${baseUrl}/me`, { headers });
 
-	// 2. Create a playlist
-	const createRes = await fetch(
-		`https://api.spotify.com/v1/users/${userData.id}/playlists`,
-		{
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				name: playlistName,
-				public: false,
-				description: "Exported from Metronome",
-			}),
-		}
+	// 2. Check for existing playlist with the same name
+	const userPlaylists: any = await fetchOrThrow(
+		`${baseUrl}/users/${userId}/playlists?limit=50`,
+		{ headers }
 	);
-	if (!createRes.ok) throw new Error("Failed to create playlist");
-	const playlistData = await createRes.json();
 
-	// 3. Add tracks
-	const addRes = await fetch(
-		`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`,
-		{
+	let existingPlaylist = userPlaylists.items.find(
+		(p: any) => p.name.toLowerCase() === playlistName.toLowerCase()
+	);
+
+	let playlistId: string;
+
+	if (existingPlaylist) {
+		playlistId = existingPlaylist.id;
+
+		// Clear existing tracks
+		await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
+			method: "PUT",
+			headers,
+			body: JSON.stringify({ uris: [] }),
+		});
+	} else {
+		// 3. Create a new playlist
+		const playlist = await fetchOrThrow(
+			`${baseUrl}/users/${userId}/playlists`,
+			{
+				method: "POST",
+				headers,
+				body: JSON.stringify({
+					name: playlistName,
+					public: false,
+					description: "Exported from Metronome",
+				}),
+			}
+		);
+		playlistId = playlist.id;
+	}
+
+	// 4. Add tracks
+	if (songUris.length > 0) {
+		await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
 			method: "POST",
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				"Content-Type": "application/json",
-			},
+			headers,
 			body: JSON.stringify({ uris: songUris }),
-		}
-	);
-	if (!addRes.ok) throw new Error("Failed to add tracks to playlist");
+		});
+	}
 
-	return playlistData;
+	// 5. Return playlist info
+	return await fetchOrThrow(`${baseUrl}/playlists/${playlistId}`, { headers });
 }

@@ -13,9 +13,10 @@ import { Prisma } from "@/lib/generated/prisma";
 
 function SongCard(props: {
 	song: Prisma.SongCreateInput;
-	playlists: Playlist[];
+	playlists: Prisma.SongCreateInput[];
+	isPlaylist?: boolean;
 }) {
-	const { song, playlists } = props;
+	const { song, playlists, isPlaylist } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const [showSongPortal, setShowSongPortal] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -98,6 +99,7 @@ function SongCard(props: {
 							playlists={playlists}
 							setShowSongPortal={setShowSongPortal}
 							song={song}
+							isPlaylist={isPlaylist}
 						/>
 					</div>
 				</div>

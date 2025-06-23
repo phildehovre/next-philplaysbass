@@ -30,6 +30,7 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		handleSubmit,
 		reset,
 		formState: { errors },
+		setFocus,
 	} = useForm<FormValues>();
 	const modalRef = useRef<HTMLDivElement>(null);
 
@@ -63,12 +64,23 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		}
 	}, [mappedSongData]);
 
+	useEffect(() => {
+		setFocus("playlistName");
+	}, [setFocus, mappedSongData]);
+
 	// Fetch spotify URI and duration_ms
 	useEffect(() => {
-		(async () => {
-			const mapped = await consolidateSongDataWithSpotify(song, tokenCookie);
-			setMappedSongData(mapped);
-		})();
+		setIsLoading(true);
+		try {
+			(async () => {
+				const mapped = await consolidateSongDataWithSpotify(song, tokenCookie);
+				setMappedSongData(mapped);
+			})();
+		} catch {
+			throw new Error("spotify data mapping failed");
+		} finally {
+			setIsLoading(false);
+		}
 	}, []);
 
 	const formRef = useRef<HTMLFormElement>(null);
@@ -96,33 +108,36 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 	return (
 		<div className="modal_overlay">
 			<div className="modal_ctn" ref={modalRef}>
-				<form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-					<label htmlFor="name">Playlist Name:</label>
-					{errors.playlistName && (
-						<p className="modal_error">Please enter a playlist name.</p>
-					)}
-					<input
-						type="text"
-						id="playlist-name"
-						placeholder="Enter your name here..."
-						{...register("playlistName", { required: true })}
-						name="playlistName"
-						autoFocus
-					/>
+				{isLoading ? (
+					<Spinner />
+				) : (
+					<form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+						<label htmlFor="name">Playlist Name:</label>
+						{errors.playlistName && (
+							<p className="modal_error">Please enter a playlist name.</p>
+						)}
+						<input
+							type="text"
+							id="playlist-name"
+							placeholder="Enter your name here..."
+							{...register("playlistName", { required: true })}
+							name="playlistName"
+						/>
 
-					<input
-						type="hidden"
-						name="songData"
-						value={JSON.stringify(mappedSongData)}
-					/>
-					<button
-						className={`submit_btn ${isLoading ? "loading" : ""}`}
-						type="submit"
-						disabled={isLoading}
-					>
-						{isLoading ? <Spinner /> : "Create playlist"}
-					</button>
-				</form>
+						<input
+							type="hidden"
+							name="songData"
+							value={JSON.stringify(mappedSongData)}
+						/>
+						<button
+							className={`submit_btn ${isLoading ? "loading" : ""}`}
+							type="submit"
+							disabled={isLoading}
+						>
+							{isLoading && mappedSongData ? <Spinner /> : "Create playlist"}
+						</button>
+					</form>
+				)}
 			</div>
 		</div>
 	);

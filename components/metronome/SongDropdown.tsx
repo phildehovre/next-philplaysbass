@@ -13,15 +13,12 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { GSBSong, Playlist } from "@/types/types";
+import { Playlist } from "@/types/types";
 import { getSpotifyTrackByArtistAndTitle } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import { addSongToPlaylist } from "@/actions/playlistActions";
 import { usePlaylists } from "@/context/playlistContext";
-import {
-	mapGSBSongToSongInput,
-	mapSpotifyFieldsToSongInput,
-} from "@/lib/utils/songUtils";
+import { mapSpotifyFieldsToSongInput } from "@/lib/utils/songUtils";
 import { Track } from "spotify-api.js";
 import { Prisma } from "@/lib/generated/prisma";
 
@@ -29,23 +26,24 @@ const SongDropdown = ({
 	playlists,
 	setShowSongPortal,
 	song,
+	isPlaylist,
 }: {
 	playlists: any;
 	setShowSongPortal: (p: boolean) => void;
 	song: Prisma.SongCreateInput;
+	isPlaylist?: boolean;
 }) => {
 	const [showSongDropdown, setShowSongDropdown] = useState(false);
-	const [isAdding, setIsAdding] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { getCookie } = useCookies();
-	const { addSongToPlaylist: ctxAddSongToPlaylist, playlists: ctxPlaylists } =
-		usePlaylists();
+	const { addSongToPlaylist: ctxAddSongToPlaylist } = usePlaylists();
 
 	const handleAddToPlaylist = async (
 		playlist: Playlist,
 		song: Prisma.SongCreateInput
 	) => {
-		setIsAdding(true);
+		setIsLoading(true);
 		const token = JSON.parse(getCookie("token") || "{}")?.access_token;
 		const res: any = await getSpotifyTrackByArtistAndTitle(
 			song.title,
@@ -78,18 +76,23 @@ const SongDropdown = ({
 		} catch (err) {
 			console.error("❌ Error adding song to playlist:", err);
 		} finally {
-			setIsAdding(false);
+			setIsLoading(false);
 		}
 	};
 
+	const handleRemoveFromPlaylist = async (e: Event) => {
+		e.preventDefault();
+		console.log("Clicked remove frmo playlsist");
+	};
+
 	const renderPlaylists = () => {
-		return playlists.map((item: any, index: number) => {
+		return playlists.map((pl: any, index: number) => {
 			return (
 				<DropdownMenuItem
-					key={item.name + index}
-					onClick={() => handleAddToPlaylist(item, song)}
+					key={`${pl.id}-${index}`}
+					onClick={() => handleAddToPlaylist(pl, song)}
 				>
-					{item.name}
+					{pl.name}
 				</DropdownMenuItem>
 			);
 		});
@@ -103,9 +106,14 @@ const SongDropdown = ({
 					/>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="song-dropdown_ctn">
-					<DropdownMenuItem className="song-dropdown_item">
-						Nothing yet
-					</DropdownMenuItem>
+					{isPlaylist && (
+						<DropdownMenuItem
+							className="song-dropdown_item"
+							onClick={(e) => console.log(e)}
+						>
+							Remove from playlist
+						</DropdownMenuItem>
+					)}
 					<DropdownMenuSub>
 						<DropdownMenuSubTrigger className="song-dropdown_item">
 							Add to playlist
@@ -120,7 +128,10 @@ const SongDropdown = ({
 								</DropdownMenuItem>
 								{playlists?.length > 0 && renderPlaylists()}
 								<DropdownMenuSeparator />
-								<DropdownMenuItem className="song-dropdown_item">
+								<DropdownMenuItem
+									className="song-dropdown_item"
+									onClick={() => console.log("Another item")}
+								>
 									More...
 								</DropdownMenuItem>
 							</DropdownMenuSubContent>

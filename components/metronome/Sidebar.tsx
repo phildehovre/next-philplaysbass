@@ -1,6 +1,6 @@
 "use client";
 import "./Sidebar.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -14,6 +14,7 @@ import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
 import { exportPlaylistToSpotify } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import SongCard from "./SongCard";
+import PlaylistItem from "./PlaylistItem";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
@@ -21,6 +22,7 @@ const MetroSidebar = () => {
 	const [playlistUris, setPlaylistUris] = useState<string[]>([]);
 	const [token, setToken] = useState<string>("");
 
+	const dropdownRefs = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
 	const { getCookie } = useCookies();
 
 	useEffect(() => {
@@ -63,15 +65,8 @@ const MetroSidebar = () => {
 	const renderPlaylistSongs = (pl: PlaylistWithSongs) => {
 		if (!pl?.songs) return null;
 
-		return pl.songs.map((song) => {
-			return (
-				<SongCard
-					key={`${pl.id}-${song.getSongBpmId}`}
-					song={song}
-					playlists={pl.songs}
-					isPlaylist={true}
-				/>
-			);
+		return pl.songs.map((song, index) => {
+			return <PlaylistItem key={`${pl.id}-${song.getSongBpmId}`} song={song} />;
 		});
 	};
 
@@ -82,7 +77,10 @@ const MetroSidebar = () => {
 				<h1 className="text-3xl">Playlists</h1>
 				{ctxPlaylists ? renderPlaylists() : <Spinner />}
 				{selectedPlaylist && (
-					<Modal onClose={() => setSelectedPlaylist(undefined)}>
+					<Modal
+						onClose={() => setSelectedPlaylist(undefined)}
+						excludeRefs={dropdownRefs.current}
+					>
 						<div className="modal_header flex">
 							<h1 className="text-3xl">{selectedPlaylist.name}</h1>
 							<button
@@ -98,7 +96,7 @@ const MetroSidebar = () => {
 								Export
 							</button>
 						</div>
-						<div className="playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70hh0px] ">
+						<div className="playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70svh] ">
 							{renderPlaylistSongs(selectedPlaylist)}
 						</div>
 					</Modal>

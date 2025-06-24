@@ -8,7 +8,10 @@ import React, {
 	useEffect,
 } from "react";
 import { Prisma, Playlist } from "@/lib/generated/prisma";
-import { getUserPlaylistsWithSongs } from "@/actions/playlistActions";
+import {
+	getUserPlaylistsWithSongs,
+	removeSongFromPlaylist,
+} from "@/actions/playlistActions";
 import useCookies from "@/hooks/useCookies";
 import { consolidateSongDataWithSpotify } from "@/lib/utils/songUtils";
 
@@ -20,6 +23,10 @@ type PlaylistContextType = {
 	addPlaylist: (p: PlaylistWithSongs) => void;
 	addSongToPlaylist: (playlistId: string, song: Prisma.SongCreateInput) => void;
 	refreshPlaylists: () => Promise<void>;
+	removeFromPlaylist: (
+		id: string,
+		song: Prisma.SongCreateInput
+	) => Promise<void>;
 };
 
 const PlaylistContext = createContext<PlaylistContextType | undefined>(
@@ -56,6 +63,18 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 		);
 	};
 
+	const removeFromPlaylist = async (
+		playlistId: string,
+		song: Prisma.SongCreateInput
+	) => {
+		try {
+			const result = await removeSongFromPlaylist(playlistId, song);
+			console.log("result: ", result);
+		} catch {
+			throw new Error("song could not be removed from playlist");
+		}
+	};
+
 	const refreshPlaylists = async () => {
 		const fresh: any = await getUserPlaylistsWithSongs();
 		setPlaylists(fresh);
@@ -69,6 +88,7 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 				addPlaylist,
 				addSongToPlaylist,
 				refreshPlaylists,
+				removeFromPlaylist,
 			}}
 		>
 			{children}

@@ -157,3 +157,41 @@ export async function getUserPlaylistsWithSongs() {
 		})),
 	}));
 }
+export async function removeSongFromPlaylist(
+	playlistId: string,
+	song: Prisma.SongCreateInput
+) {
+	const dbUser = await ensureUserInDb();
+
+	try {
+		// Verify playlist belongs to user
+		const playlist = await prisma.playlist.findFirst({
+			where: {
+				id: playlistId,
+				userId: dbUser.id,
+			},
+		});
+
+		if (!playlist) {
+			throw new Error("Playlist not found or access denied");
+		}
+
+		// Get existing or matching song
+		const dbSong = await findOrCreateSong(song);
+
+		// Remove join entry
+		await prisma.playlistSong.deleteMany({
+			where: {
+				playlistId,
+				songId: dbSong.id,
+			},
+		});
+
+		revalidatePath("/metronome");
+
+		return { success: true };
+	} catch (err: any) {
+		console.error("Error removing song from playlist:", err);
+		throw new Error(err.message || "Failed to remove song from playlist");
+	}
+}

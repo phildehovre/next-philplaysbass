@@ -2595,8 +2595,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlayButton.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LucideMinusCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-minus.js [app-client] (ecmascript) <export default as LucideMinusCircle>");
 ;
 var _s = __turbopack_context__.k.signature();
+;
 ;
 ;
 ;
@@ -2605,10 +2607,18 @@ var _s = __turbopack_context__.k.signature();
 const PlaylistItem = ({ song })=>{
     _s();
     if (!song || !song.duration) return;
+    const [isShowing, setIsShowing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
     const duration = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDuration"])(song.duration);
+    const handleRemoveFromPlaylist = async ()=>{
+        try {
+            const result = await removeSongFromPlaylist();
+        } catch  {}
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "songcard",
+        onMouseEnter: ()=>setIsShowing(true),
+        onMouseLeave: ()=>setIsShowing(false),
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "songcard-left",
@@ -2620,7 +2630,7 @@ const PlaylistItem = ({ song })=>{
                             children: song.title
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                            lineNumber: 19,
+                            lineNumber: 30,
                             columnNumber: 6
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2628,22 +2638,22 @@ const PlaylistItem = ({ song })=>{
                             children: song.artist
                         }, void 0, false, {
                             fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                            lineNumber: 20,
+                            lineNumber: 31,
                             columnNumber: 6
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                    lineNumber: 18,
+                    lineNumber: 29,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                lineNumber: 17,
+                lineNumber: 28,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "songcard-right",
+                className: "songcard-right flex items-center",
                 children: [
                     duration.minutes,
                     ":",
@@ -2651,26 +2661,36 @@ const PlaylistItem = ({ song })=>{
                     context && context.player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                         song: song,
                         player: context.player,
-                        isShowing: true
+                        isShowing: isShowing
                     }, void 0, false, {
                         fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                        lineNumber: 26,
+                        lineNumber: 37,
+                        columnNumber: 6
+                    }, this),
+                    isShowing && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LucideMinusCircle$3e$__["LucideMinusCircle"], {
+                        color: "red",
+                        onClick: ()=>{
+                            handleRemoveFromPlaylist();
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                        lineNumber: 44,
                         columnNumber: 6
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/metronome/PlaylistItem.tsx",
-                lineNumber: 23,
+                lineNumber: 34,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/metronome/PlaylistItem.tsx",
-        lineNumber: 16,
+        lineNumber: 23,
         columnNumber: 3
     }, this);
 };
-_s(PlaylistItem, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+_s(PlaylistItem, "RvmbPk6YlT6aRI5ZFYHPt6wdLUU=");
 _c = PlaylistItem;
 const __TURBOPACK__default__export__ = PlaylistItem;
 var _c;

@@ -532,6 +532,10 @@
     }
   }
 
+  .m-auto {
+    margin: auto;
+  }
+
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
@@ -678,32 +682,8 @@
     max-height: var(--radix-dropdown-menu-content-available-height);
   }
 
-  .max-h-\[60svh\] {
-    max-height: 60svh;
-  }
-
-  .max-h-\[70hh0px\] {
-    max-height: 70hh0px;
-  }
-
   .max-h-\[70svh\] {
     max-height: 70svh;
-  }
-
-  .max-h-\[80\%\] {
-    max-height: 80%;
-  }
-
-  .max-h-\[80svh\] {
-    max-height: 80svh;
-  }
-
-  .max-h-\[100\%\] {
-    max-height: 100%;
-  }
-
-  .max-h-\[700px\] {
-    max-height: 700px;
   }
 
   .min-h-0 {

@@ -9,6 +9,7 @@
 	border-radius: 3px;
 	opacity: 1;
 	background-color: rgb(34, 34, 34) !important;
+	z-index: 999;
 }
 .song-dropdown_item {
 	width: 100%;

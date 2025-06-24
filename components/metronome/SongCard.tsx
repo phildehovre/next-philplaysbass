@@ -3,18 +3,26 @@
 import "./SongCard.scss";
 
 import { animate, stagger } from "motion";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import {
+	forwardRef,
+	useContext,
+	useEffect,
+	useLayoutEffect,
+	useState,
+} from "react";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
 import SongDropdown from "./SongDropdown";
 import PlaylistModal from "./PlaylistModal";
 import { Prisma } from "@/lib/generated/prisma";
 
-function SongCard(props: {
+type SongCardProps = {
 	song: Prisma.SongCreateInput;
 	playlists: Prisma.SongCreateInput[];
 	isPlaylist?: boolean;
-}) {
+};
+
+const SongCard = forwardRef<HTMLDivElement, SongCardProps>((props, ref) => {
 	const { song, playlists, isPlaylist } = props;
 	const [showPlayButton, setShowPlayButton] = useState(false);
 	const [showSongPortal, setShowSongPortal] = useState(false);
@@ -99,12 +107,13 @@ function SongCard(props: {
 							setShowSongPortal={setShowSongPortal}
 							song={song}
 							isPlaylist={isPlaylist}
+							ref={ref}
 						/>
 					</div>
 				</div>
 			</div>
 		</>
 	);
-}
+});
 
 export default SongCard;

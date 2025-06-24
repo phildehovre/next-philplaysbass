@@ -584,6 +584,7 @@ input[type="range"]:focus::-ms-fill-upper {
 /* [project]/components/metronome/SongDropdown.css [app-client] (css) */
 .song-dropdown_ctn {
   opacity: 1;
+  z-index: 999;
   background-color: #fff;
   border: 1px solid #3c3c3c;
   border-radius: 3px;

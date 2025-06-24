@@ -44,6 +44,12 @@ const MetroSidebar = () => {
 	}, [selectedPlaylist]);
 
 	useEffect(() => {
+		setSelectedPlaylist((prev) =>
+			ctxPlaylists.find((pl) => pl.id === prev?.id)
+		);
+	}, [ctxPlaylists]);
+
+	useEffect(() => {
 		let array: string[] = [];
 		if (selectedPlaylist) {
 			selectedPlaylist.songs.forEach((item) => array.push(item.spotifyUri));
@@ -52,6 +58,7 @@ const MetroSidebar = () => {
 	}, [selectedPlaylist]);
 
 	const renderPlaylists = () => {
+		console.log(selectedPlaylist);
 		return ctxPlaylists.map((pl, index) => {
 			return (
 				<div

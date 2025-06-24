@@ -5,7 +5,8 @@ import "./SongCard.scss";
 import PlayButton from "./PlayButton";
 import { PlayerContext } from "@/context/playerContext";
 import { LucideMinusCircle } from "lucide-react";
-import { PlaylistWithSongs } from "@/context/playlistContext";
+import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
+import Spinner from "../Spinner";
 
 const PlaylistItem = ({
 	song,
@@ -23,10 +24,26 @@ const PlaylistItem = ({
 
 	const [isShowing, setIsShowing] = useState(false);
 	const context: any = useContext(PlayerContext);
+	const { isLoading } = usePlaylists();
 
 	const duration = formatDuration(song.duration);
 
-	console.log(playlist);
+	const renderActionButton = () => {
+		if (!isShowing) return;
+		if (isLoading) {
+			return <Spinner />;
+		}
+		if (isShowing && !isLoading) {
+			return (
+				<LucideMinusCircle
+					color={"red"}
+					onClick={() => {
+						handleRemoveFromPlaylist(playlist.id, song);
+					}}
+				/>
+			);
+		}
+	};
 	return (
 		<div
 			className="songcard"
@@ -48,14 +65,7 @@ const PlaylistItem = ({
 						isShowing={isShowing}
 					/>
 				)}
-				{isShowing && (
-					<LucideMinusCircle
-						color={"red"}
-						onClick={() => {
-							handleRemoveFromPlaylist(playlist.id, song);
-						}}
-					/>
-				)}
+				{renderActionButton()}
 			</div>
 		</div>
 	);

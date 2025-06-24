@@ -27,6 +27,7 @@ type PlaylistContextType = {
 		id: string,
 		song: Prisma.SongCreateInput
 	) => Promise<void>;
+	isLoading: boolean;
 };
 
 const PlaylistContext = createContext<PlaylistContextType | undefined>(
@@ -36,6 +37,7 @@ const PlaylistContext = createContext<PlaylistContextType | undefined>(
 export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 	const [playlists, setPlaylists] = useState<PlaylistWithSongs[]>([]);
 	const [token, setToken] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { getCookie } = useCookies();
 
@@ -67,14 +69,27 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 		playlistId: string,
 		song: Prisma.SongCreateInput
 	) => {
+		setIsLoading(true);
 		try {
 			const result = await removeSongFromPlaylist(playlistId, song);
 			console.log("result: ", result);
-		} catch {
+			if (result.success) {
+				setPlaylists((prev) =>
+					prev.map((p) =>
+						p.id === playlistId
+							? { ...p, songs: p.songs.filter((s) => s.id !== song.id) }
+							: p
+					)
+				);
+			}
+		} catch (err) {
+			console.error(err);
 			throw new Error("song could not be removed from playlist");
+		} finally {
+			setIsLoading(false);
+			await refreshPlaylists();
 		}
 	};
-
 	const refreshPlaylists = async () => {
 		const fresh: any = await getUserPlaylistsWithSongs();
 		setPlaylists(fresh);
@@ -89,6 +104,7 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 				addSongToPlaylist,
 				refreshPlaylists,
 				removeFromPlaylist,
+				isLoading,
 			}}
 		>
 			{children}

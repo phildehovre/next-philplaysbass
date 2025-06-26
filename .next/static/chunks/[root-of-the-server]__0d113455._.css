@@ -532,10 +532,6 @@
     }
   }
 
-  .m-auto {
-    margin: auto;
-  }
-
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
@@ -712,6 +708,10 @@
 
   .w-10 {
     width: calc(var(--spacing) * 10);
+  }
+
+  .w-50 {
+    width: calc(var(--spacing) * 50);
   }
 
   .w-\[100px\] {

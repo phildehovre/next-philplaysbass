@@ -14,11 +14,13 @@ import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
 import { exportPlaylistToSpotify } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import PlaylistItem from "./PlaylistItem";
+import { Trash, Trash2 } from "lucide-react";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
 	const [playlistUris, setPlaylistUris] = useState<string[]>([]);
 	const [token, setToken] = useState<string>("");
+	const [confirmDelete, setConfirmDelete] = useState(false);
 
 	const {
 		playlists: ctxPlaylists,
@@ -58,7 +60,6 @@ const MetroSidebar = () => {
 	}, [selectedPlaylist]);
 
 	const renderPlaylists = () => {
-		console.log(selectedPlaylist);
 		return ctxPlaylists.map((pl, index) => {
 			return (
 				<div
@@ -98,20 +99,37 @@ const MetroSidebar = () => {
 						onClose={() => setSelectedPlaylist(undefined)}
 						excludeRefs={dropdownRefs.current}
 					>
-						<div className="modal_header flex">
-							<h1 className="text-3xl">{selectedPlaylist.name}</h1>
-							<button
-								className="submit_btn"
-								onClick={() =>
-									exportPlaylistToSpotify(
-										selectedPlaylist.name,
-										playlistUris,
-										token
-									)
-								}
-							>
-								Export
-							</button>
+						<div className="modal_header flex gap-1">
+							<h1 className="text-3xl w-50">{selectedPlaylist.name}</h1>
+							<div className="btn_ctn flex gap-2 w-50">
+								{!confirmDelete ? (
+									<>
+										<button
+											className="submit_btn"
+											onClick={() =>
+												exportPlaylistToSpotify(
+													selectedPlaylist.name,
+													playlistUris,
+													token
+												)
+											}
+										>
+											Export
+										</button>
+										<button
+											onClick={() => setConfirmDelete(true)}
+											className="submit_btn"
+										>
+											<Trash2 color="black" />
+										</button>
+									</>
+								) : (
+									<>
+										<button onClick={() => console.log("hello")}>yes</button>
+										<button onClick={() => setConfirmDelete(false)}>no</button>
+									</>
+								)}
+							</div>
 						</div>
 						<div className="playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70svh] ">
 							{renderPlaylistSongs(selectedPlaylist)}

@@ -20,7 +20,7 @@ type SongListContextType = {
 	songs: Song[];
 	setSongs: (songs: Song[]) => void;
 	setIsLoading: (s: boolean) => void;
-	setFilters: (filter: string) => void;
+	setFilters: (filter: string[]) => void;
 	setSearchTerm: (term: string) => void;
 	searchTerm: string;
 	filters: string[];
@@ -32,7 +32,7 @@ const SongListContext = createContext<SongListContextType | undefined>(
 );
 
 export const SongListProvider = ({ children }: { children: ReactNode }) => {
-	const [songs, setSongs] = useState([]);
+	const [songs, setSongs] = useState<Song[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filters, setFilters] = useState<string[]>([]);
 	const [searchTerm, setSearchTerm] = useState<string>("");

@@ -21,6 +21,7 @@ import { usePlaylists } from "@/context/playlistContext";
 import { mapSpotifyFieldsToSongInput } from "@/lib/utils/songUtils";
 import { Track } from "spotify-api.js";
 import { Prisma } from "@/lib/generated/prisma";
+import Spinner from "../Spinner";
 
 type SongDropdownProps = {
 	playlists: any;
@@ -36,7 +37,8 @@ const SongDropdown = forwardRef<HTMLDivElement, SongDropdownProps>(
 		const [isLoading, setIsLoading] = useState(false);
 
 		const { getCookie } = useCookies();
-		const { addSongToPlaylist: ctxAddSongToPlaylist } = usePlaylists();
+		const { addSongToPlaylist: ctxAddSongToPlaylist, playlists: ctxPlaylists } =
+			usePlaylists();
 
 		const handleAddToPlaylist = async (
 			playlist: Playlist,
@@ -84,7 +86,7 @@ const SongDropdown = forwardRef<HTMLDivElement, SongDropdownProps>(
 		};
 
 		const renderPlaylists = () => {
-			return playlists.map((pl: any, index: number) => {
+			return ctxPlaylists.map((pl: any, index: number) => {
 				return (
 					<DropdownMenuItem
 						key={`${pl.id}-${index}`}
@@ -98,7 +100,7 @@ const SongDropdown = forwardRef<HTMLDivElement, SongDropdownProps>(
 		return (
 			<>
 				<DropdownMenu>
-					<DropdownMenuTrigger className="song-dropdown_trigger">
+					<DropdownMenuTrigger className="song-dropdown_trigger flex items-center justify-center">
 						<EllipsisVertical
 							onClick={() => setShowSongDropdown(!showSongDropdown)}
 						/>
@@ -124,7 +126,7 @@ const SongDropdown = forwardRef<HTMLDivElement, SongDropdownProps>(
 									>
 										New...
 									</DropdownMenuItem>
-									{playlists?.length > 0 && renderPlaylists()}
+									{playlists.length ? renderPlaylists() : <Spinner />}
 									<DropdownMenuSeparator />
 									<DropdownMenuItem
 										className="song-dropdown_item"

@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { Prisma, Playlist } from "@/lib/generated/prisma";
 import {
+	deletePlaylist,
 	getUserPlaylistsWithSongs,
 	removeSongFromPlaylist,
 } from "@/actions/playlistActions";
@@ -27,6 +28,7 @@ type PlaylistContextType = {
 		id: string,
 		song: Prisma.SongCreateInput
 	) => Promise<void>;
+	removePlaylist: (id: string) => Promise<void>;
 	isLoading: boolean;
 };
 
@@ -65,6 +67,25 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 		);
 	};
 
+	const removePlaylist = async (playlistId: string) => {
+		setIsLoading(true);
+		try {
+			const result = await deletePlaylist(playlistId);
+			if (result.success) {
+				setPlaylists((prev) => {
+					return prev.filter((p) => {
+						p.id !== playlistId;
+					});
+				});
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsLoading(false);
+			await refreshPlaylists();
+		}
+	};
+
 	const removeFromPlaylist = async (
 		playlistId: string,
 		song: Prisma.SongCreateInput
@@ -84,7 +105,6 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 			}
 		} catch (err) {
 			console.error(err);
-			throw new Error("song could not be removed from playlist");
 		} finally {
 			setIsLoading(false);
 			await refreshPlaylists();
@@ -104,6 +124,7 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 				addSongToPlaylist,
 				refreshPlaylists,
 				removeFromPlaylist,
+				removePlaylist,
 				isLoading,
 			}}
 		>

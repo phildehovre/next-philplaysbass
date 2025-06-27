@@ -14,7 +14,7 @@ import { PlaylistWithSongs, usePlaylists } from "@/context/playlistContext";
 import { exportPlaylistToSpotify } from "@/services/Spotify";
 import useCookies from "@/hooks/useCookies";
 import PlaylistItem from "./PlaylistItem";
-import { Trash, Trash2 } from "lucide-react";
+import { Trash, Trash2, X } from "lucide-react";
 
 const MetroSidebar = () => {
 	const [selectedPlaylist, setSelectedPlaylist] = useState<PlaylistWithSongs>();
@@ -26,6 +26,8 @@ const MetroSidebar = () => {
 		playlists: ctxPlaylists,
 		refreshPlaylists,
 		removeFromPlaylist,
+		removePlaylist,
+		isLoading,
 	} = usePlaylists();
 	const dropdownRefs = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
 	const { getCookie } = useCookies();
@@ -58,6 +60,15 @@ const MetroSidebar = () => {
 		}
 		setPlaylistUris(array);
 	}, [selectedPlaylist]);
+
+	const handleConfirmDelete = async () => {
+		try {
+			if (!selectedPlaylist) return;
+			removePlaylist(selectedPlaylist.id).then(() => setConfirmDelete(false));
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const renderPlaylists = () => {
 		return ctxPlaylists.map((pl, index) => {
@@ -93,7 +104,7 @@ const MetroSidebar = () => {
 			<SidebarHeader title="Playlists" />
 			<SidebarContent>
 				<h1 className="text-3xl">Playlists</h1>
-				{ctxPlaylists ? renderPlaylists() : <Spinner />}
+				{ctxPlaylists.length ? renderPlaylists() : <Spinner />}
 				{selectedPlaylist && (
 					<Modal
 						onClose={() => setSelectedPlaylist(undefined)}
@@ -118,15 +129,25 @@ const MetroSidebar = () => {
 										</button>
 										<button
 											onClick={() => setConfirmDelete(true)}
-											className="submit_btn"
+											className="submit_btn "
 										>
 											<Trash2 color="black" />
 										</button>
 									</>
 								) : (
 									<>
-										<button onClick={() => console.log("hello")}>yes</button>
-										<button onClick={() => setConfirmDelete(false)}>no</button>
+										<button
+											className="w-50 h-full bg-red-800 text-center"
+											onClick={() => handleConfirmDelete()}
+										>
+											{isLoading ? <Spinner /> : "Delete"}
+										</button>
+										<button
+											className="w-50 text-center rounded-2xl"
+											onClick={() => setConfirmDelete(false)}
+										>
+											<X />
+										</button>
 									</>
 								)}
 							</div>

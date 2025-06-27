@@ -90,7 +90,7 @@ const SongCard = forwardRef<HTMLDivElement, SongCardProps>((props, ref) => {
 						<div className="songcard-artist">{song.artist}</div>
 					</div>
 				</div>
-				<div className="songcard-right">
+				<div className="songcard-right flex items-center">
 					<div className="songcard-genres">
 						{renderGenres(song.genres as string[])}
 					</div>
@@ -101,7 +101,7 @@ const SongCard = forwardRef<HTMLDivElement, SongCardProps>((props, ref) => {
 							song={song}
 						/>
 					)}
-					<div className="song-dropdown_btn">
+					<div className="song-dropdown_btn flex items-center justify-center">
 						<SongDropdown
 							playlists={playlists}
 							setShowSongPortal={setShowSongPortal}

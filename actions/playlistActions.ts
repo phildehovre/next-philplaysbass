@@ -195,3 +195,39 @@ export async function removeSongFromPlaylist(
 		throw new Error(err.message || "Failed to remove song from playlist");
 	}
 }
+
+export async function deletePlaylist(playlistId: string) {
+	const dbUser = await ensureUserInDb();
+
+	try {
+		// Verify the playlist belongs to the current user
+		const playlist = await prisma.playlist.findFirst({
+			where: {
+				id: playlistId,
+				userId: dbUser.id,
+			},
+		});
+
+		if (!playlist) {
+			throw new Error("Playlist not found or access denied");
+		}
+
+		// Remove all songs from the playlist (from join table)
+		await prisma.playlistSong.deleteMany({
+			where: { playlistId },
+		});
+
+		// Delete the playlist itself
+		await prisma.playlist.delete({
+			where: { id: playlistId },
+		});
+
+		// Revalidate relevant path if needed
+		revalidatePath("/metronome");
+
+		return { success: true };
+	} catch (err: any) {
+		console.error("Error deleting playlist:", err);
+		throw new Error(err.message || "Failed to delete playlist");
+	}
+}

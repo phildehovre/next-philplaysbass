@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
+import { SongListProvider } from "@/context/songListContext";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -190,13 +191,15 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 						Powered by{" "}
 						<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>
 					</h6>
-					<SongList
-						bpm={debouncedBpm}
-						showSongs={showSongs}
-						listSize={listSize}
-						setListSize={setListSize}
-						playlists={playlists}
-					/>
+					<SongListProvider>
+						<SongList
+							bpm={debouncedBpm}
+							showSongs={showSongs}
+							listSize={listSize}
+							setListSize={setListSize}
+							playlists={playlists}
+						/>
+					</SongListProvider>
 				</div>
 			</div>
 		</QueryClientProvider>

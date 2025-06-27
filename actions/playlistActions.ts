@@ -37,18 +37,17 @@ export async function createPlaylist(formData: FormData) {
 	const song = JSON.parse(rawSongData.toString());
 
 	try {
+		const dbSong = await findOrCreateSong(song);
+		if (!dbSong) {
+			throw new Error("Failed to find or create song");
+		}
+
 		const playlist = await prisma.playlist.create({
 			data: {
 				name,
 				userId: dbUser.id,
 			},
 		});
-
-		const dbSong = await findOrCreateSong(song);
-		if (!dbSong) {
-			throw new Error("Failed to find or create song");
-		}
-
 		await prisma.playlistSong.create({
 			data: {
 				playlistId: playlist.id,

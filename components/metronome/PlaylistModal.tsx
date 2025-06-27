@@ -90,7 +90,7 @@ const PlaylistModal = ({ setShow, song, onClose }: Props) => {
 		try {
 			const formData = new FormData();
 			formData.append("playlistName", data.playlistName);
-			formData.append("songData", JSON.stringify(song));
+			formData.append("songData", JSON.stringify(mappedSongData));
 
 			await createPlaylist(formData);
 

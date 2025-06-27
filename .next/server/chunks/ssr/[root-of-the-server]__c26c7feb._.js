@@ -21390,9 +21390,10 @@ async function ensureUserInDb() {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","4067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","60c4bb7de432aa11fc2840d3294c3df801a6003eb4":"removeSongFromPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
+/* __next_internal_action_entry_do_not_use__ [{"002bb781435bc586f057bc5a84ffdacf3f40569e16":"getUserPlaylists","00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs","403407216b161d7ad6ed13c128ee4f3e57320de29f":"findOrCreateSong","4067325ccab1647e985221060a630322ea73039eb1":"createPlaylist","406e27c1b2b07493df083338ccf835fa87c35bf350":"deletePlaylist","60c4bb7de432aa11fc2840d3294c3df801a6003eb4":"removeSongFromPlaylist","60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"",""] */ __turbopack_context__.s({
     "addSongToPlaylist": (()=>addSongToPlaylist),
     "createPlaylist": (()=>createPlaylist),
+    "deletePlaylist": (()=>deletePlaylist),
     "findOrCreateSong": (()=>findOrCreateSong),
     "getUserPlaylists": (()=>getUserPlaylists),
     "getUserPlaylistsWithSongs": (()=>getUserPlaylistsWithSongs),
@@ -21571,6 +21572,41 @@ async function removeSongFromPlaylist(playlistId, song) {
         throw new Error(err.message || "Failed to remove song from playlist");
     }
 }
+async function deletePlaylist(playlistId) {
+    const dbUser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$userService$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureUserInDb"])();
+    try {
+        // Verify the playlist belongs to the current user
+        const playlist = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].playlist.findFirst({
+            where: {
+                id: playlistId,
+                userId: dbUser.id
+            }
+        });
+        if (!playlist) {
+            throw new Error("Playlist not found or access denied");
+        }
+        // Remove all songs from the playlist (from join table)
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].playlistSong.deleteMany({
+            where: {
+                playlistId
+            }
+        });
+        // Delete the playlist itself
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].playlist.delete({
+            where: {
+                id: playlistId
+            }
+        });
+        // Revalidate relevant path if needed
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$cache$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["revalidatePath"])("/metronome");
+        return {
+            success: true
+        };
+    } catch (err) {
+        console.error("Error deleting playlist:", err);
+        throw new Error(err.message || "Failed to delete playlist");
+    }
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     getUserPlaylists,
@@ -21578,7 +21614,8 @@ async function removeSongFromPlaylist(playlistId, song) {
     addSongToPlaylist,
     findOrCreateSong,
     getUserPlaylistsWithSongs,
-    removeSongFromPlaylist
+    removeSongFromPlaylist,
+    deletePlaylist
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylists, "002bb781435bc586f057bc5a84ffdacf3f40569e16", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(createPlaylist, "4067325ccab1647e985221060a630322ea73039eb1", null);
@@ -21586,6 +21623,7 @@ async function removeSongFromPlaylist(playlistId, song) {
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(findOrCreateSong, "403407216b161d7ad6ed13c128ee4f3e57320de29f", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getUserPlaylistsWithSongs, "00f8ea3445fe23581376afca79ebbe842b4935ac5b", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(removeSongFromPlaylist, "60c4bb7de432aa11fc2840d3294c3df801a6003eb4", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(deletePlaylist, "406e27c1b2b07493df083338ccf835fa87c35bf350", null);
 }}),
 "[project]/app/favicon.ico.mjs { IMAGE => \"[project]/app/favicon.ico (static in ecmascript)\" } [app-rsc] (structured image object, ecmascript, Next.js server component)": ((__turbopack_context__) => {
 

@@ -13,6 +13,7 @@ import {
 	faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { Prisma } from "@/lib/generated/prisma";
+import { useSongList } from "@/context/songListContext";
 
 function SongList(props: any) {
 	const { bpm, showSongs, playlists } = props;
@@ -26,6 +27,8 @@ function SongList(props: any) {
 		queryFn: () => fetchTempoData(bpm),
 		enabled: !!showSongs,
 	});
+
+	const {} = useSongList();
 
 	useEffect(() => {
 		setSongs(data?.slice(listStart, listEnd));

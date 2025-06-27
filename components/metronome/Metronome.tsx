@@ -13,6 +13,8 @@ import { ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
 import { SongListProvider } from "@/context/songListContext";
+import useCookies from "@/hooks/useCookies";
+import Modal from "../Modal";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -29,6 +31,7 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 	const [soundEffect, setSoundEffect] = useState("sidestick");
 	const [debouncedBpm, setDebouncedBpm] = useState(bpm);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
+	const [showRetrySpotifyLogin, setShowRetrySpotifyLogin] = useState(false);
 	// const [searchTerm, setSearchTerm] = useState('Search')
 	const [listSize, setListSize] = useState(12);
 	const [pulse, setPulse] = useState(false);
@@ -37,12 +40,20 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 		cowbell: undefined,
 		sidestick: undefined,
 	});
+	const { getCookie } = useCookies();
 
 	useEffect(() => {
 		const woodblock = new Audio("sounds/Woodblock.mp3");
 		const cowbell = new Audio("sounds/Cowbell.mp3");
 		const sidestick = new Audio("sounds/Click.wav");
 		setSounds({ woodblock, cowbell, sidestick });
+	}, []);
+
+	useEffect(() => {
+		const token = getCookie("token");
+		if (!token) {
+			setShowRetrySpotifyLogin(true);
+		}
 	}, []);
 
 	// ========================== Tap Tempo Logic:
@@ -202,6 +213,13 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 					</SongListProvider>
 				</div>
 			</div>
+			{showRetrySpotifyLogin && (
+				<Modal excludeRefs={[]} onClose={() => setShowRetrySpotifyLogin(false)}>
+					<h1>Spotify login expired</h1>
+					<p>You must login again to continue using the app!</p>
+					<LoginWithSpotifyButton />
+				</Modal>
+			)}
 		</QueryClientProvider>
 	);
 };

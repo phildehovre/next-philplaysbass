@@ -32,13 +32,18 @@ const Hero: React.FC = () => {
 										{textObject.nav.buttons.lessons.labels[language]}
 									</Link>
 								</li>
-								<li className="link_item disabled pointer-none:">
+								{/* <li className="link_item disabled pointer-none:">
 									<a href="/" className="md:flex pointer-none:">
 										{textObject.nav.buttons.shop.labels[language]}
 										<p className="md:text-center text-sm lowercase tracking-wider">
 											(coming soon...)
 										</p>
 									</a>
+								</li> */}
+								<li className="link_item">
+									<Link href="/games">
+										{textObject.nav.buttons.games.labels[language]}
+									</Link>
 								</li>
 								<li className="link_item">
 									<Link href="/">

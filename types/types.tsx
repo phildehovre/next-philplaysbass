@@ -94,3 +94,31 @@ export interface SpotifyPlayer {
 	previousTrack(): Promise<void>;
 	nextTrack(): Promise<void>;
 }
+
+export type Note =
+	| "C"
+	| "C#"
+	| "Db"
+	| "D"
+	| "D#"
+	| "Eb"
+	| "E"
+	| "F"
+	| "F#"
+	| "Gb"
+	| "G"
+	| "G#"
+	| "Ab"
+	| "A"
+	| "A#"
+	| "Bb"
+	| "B"
+	| "Cb";
+
+export type ChordQuality = "major" | "minor" | "diminished" | "augmented";
+
+export type ArpeggioMap = {
+	[key in Note]: {
+		[quality in ChordQuality]: string[];
+	};
+};

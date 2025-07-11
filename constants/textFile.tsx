@@ -49,6 +49,18 @@ export const textObject = {
 					nl: "open de metronoom-app",
 				},
 			},
+			games: {
+				labels: {
+					en: "games",
+					fr: "jeux",
+					nl: "spelen",
+				},
+				tooltips: {
+					en: "access the games page",
+					fr: "accéder aux jeux",
+					nl: "open de speeltjes",
+				},
+			},
 			lessons: {
 				labels: {
 					fr: "leçons",

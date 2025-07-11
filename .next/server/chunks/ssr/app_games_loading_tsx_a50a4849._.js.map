@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/phil/Dev/philplaysbass/app/games/loading.tsx"],"sourcesContent":["import React from \"react\";\n\nconst Loading = () => {\n\treturn <PageLoader />;\n};\n\nexport default Loading;\n"],"names":[],"mappings":";;;;;AAEA,MAAM,UAAU;IACf,qBAAO,8OAAC;;;;;AACT;uCAEe","debugId":null}}]
+}

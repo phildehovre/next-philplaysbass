@@ -327,29 +327,18 @@ const Hero = ()=>{
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                                className: "link_item disabled pointer-none:",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/",
-                                                    className: "md:flex pointer-none:",
-                                                    children: [
-                                                        __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.shop.labels[language],
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "md:text-center text-sm lowercase tracking-wider",
-                                                            children: "(coming soon...)"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/Hero.tsx",
-                                                            lineNumber: 38,
-                                                            columnNumber: 11
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
+                                                className: "link_item",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    href: "/games",
+                                                    children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.games.labels[language]
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/Hero.tsx",
-                                                    lineNumber: 36,
+                                                    lineNumber: 44,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Hero.tsx",
-                                                lineNumber: 35,
+                                                lineNumber: 43,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -359,12 +348,12 @@ const Hero = ()=>{
                                                     children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$textFile$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["textObject"].nav.buttons.about.labels[language]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Hero.tsx",
-                                                    lineNumber: 44,
+                                                    lineNumber: 49,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Hero.tsx",
-                                                lineNumber: 43,
+                                                lineNumber: 48,
                                                 columnNumber: 9
                                             }, this)
                                         ]
@@ -387,7 +376,7 @@ const Hero = ()=>{
                                             children: "Shop"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Hero.tsx",
-                                            lineNumber: 51,
+                                            lineNumber: 56,
                                             columnNumber: 8
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -396,18 +385,18 @@ const Hero = ()=>{
                                             children: "Learn"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Hero.tsx",
-                                            lineNumber: 54,
+                                            lineNumber: 59,
                                             columnNumber: 8
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Hero.tsx",
-                                    lineNumber: 50,
+                                    lineNumber: 55,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Socials$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                     fileName: "[project]/components/Hero.tsx",
-                                    lineNumber: 58,
+                                    lineNumber: 63,
                                     columnNumber: 7
                                 }, this)
                             ]

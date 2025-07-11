@@ -1,0 +1,3489 @@
+(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push([typeof document === "object" ? document.currentScript : undefined, {
+
+"[project]/components/metronome/DropdownItem.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+;
+const DropdownItem = (props)=>{
+    const { setDropdownOpen, setSoundEffect, dropdownOpen, sound } = props;
+    const handleClick = ()=>{
+        setSoundEffect(sound);
+        setDropdownOpen(!dropdownOpen);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "metro-dropdown-item",
+        onClick: handleClick,
+        children: sound
+    }, void 0, false, {
+        fileName: "[project]/components/metronome/DropdownItem.tsx",
+        lineNumber: 19,
+        columnNumber: 5
+    }, this);
+};
+_c = DropdownItem;
+const __TURBOPACK__default__export__ = DropdownItem;
+var _c;
+__turbopack_context__.k.register(_c, "DropdownItem");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/Dropdown.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$DropdownItem$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/DropdownItem.tsx [app-client] (ecmascript)");
+;
+;
+const Dropdown = (props)=>{
+    const { dropdownOpen, soundEffect, setSoundEffect, setDropdownOpen } = props;
+    const sounds = [
+        "sidestick",
+        "cowbell",
+        "woodblock"
+    ];
+    const renderDropdown = ()=>{
+        if (props.open) {
+            const newSounds = sounds.filter((sound)=>{
+                return sound !== soundEffect;
+            });
+            return newSounds.map((sound)=>{
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$DropdownItem$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    sound: sound,
+                    setSoundEffect: setSoundEffect,
+                    setDropdownOpen: setDropdownOpen,
+                    dropdownOpen: dropdownOpen
+                }, sound, false, {
+                    fileName: "[project]/components/metronome/Dropdown.tsx",
+                    lineNumber: 15,
+                    columnNumber: 11
+                }, this);
+            });
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `metro-dropdown${dropdownOpen ? ` open` : ` closed`}`,
+        children: renderDropdown()
+    }, void 0, false, {
+        fileName: "[project]/components/metronome/Dropdown.tsx",
+        lineNumber: 28,
+        columnNumber: 5
+    }, this);
+};
+_c = Dropdown;
+const __TURBOPACK__default__export__ = Dropdown;
+var _c;
+__turbopack_context__.k.register(_c, "Dropdown");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/hooks/useCookies.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+"use client";
+const useCookies = ()=>{
+    const getCookie = (name)=>{
+        const cookieString = document.cookie.split("; ").find((row)=>row.startsWith(`${name}=`));
+        return cookieString ? cookieString.split("=")[1] : null;
+    };
+    const setCookie = (name, value, days = 7)=>{
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+    };
+    const deleteCookie = (name)=>{
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    };
+    return {
+        getCookie,
+        setCookie,
+        deleteCookie
+    };
+};
+const __TURBOPACK__default__export__ = useCookies;
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/lib/utils/songUtils.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "consolidateSongDataWithSpotify": (()=>consolidateSongDataWithSpotify),
+    "formatDuration": (()=>formatDuration),
+    "mapGSBSongToSongInput": (()=>mapGSBSongToSongInput),
+    "mapSpotifyFieldsToSongInput": (()=>mapSpotifyFieldsToSongInput)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/Spotify.ts [app-client] (ecmascript)");
+;
+function mapGSBSongToSongInput(song, spotifyUri, duration) {
+    return {
+        getSongBpmId: song.song_id,
+        spotifyUri,
+        title: song.song_title,
+        uri: song.song_uri,
+        tempo: parseInt(song.tempo),
+        artist: song.artist.name,
+        duration: duration,
+        genres: song.artist.genres
+    };
+}
+function mapSpotifyFieldsToSongInput(song, spotifyUri, duration) {
+    const result = {
+        ...song,
+        spotifyUri: spotifyUri,
+        duration: duration
+    };
+    return result;
+}
+const consolidateSongDataWithSpotify = async (song, token)=>{
+    if (!token) {
+        throw new Error("No Spotify access token found");
+    }
+    const { access_token } = JSON.parse(token);
+    const mapped = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getTrackAndMapToSongInput"])(song, access_token);
+    if (!mapped) return;
+    return mapped;
+};
+const formatDuration = (duration)=>{
+    let formatted = {
+        seconds: 0,
+        minutes: 0
+    };
+    formatted.seconds = Math.floor(duration / 1000) % 60;
+    formatted.minutes = Math.floor(duration / 1000 / 60);
+    return formatted;
+};
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/services/Spotify.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "PlaySong": (()=>PlaySong),
+    "exportPlaylistToSpotify": (()=>exportPlaylistToSpotify),
+    "getSpotifyTrackByArtistAndTitle": (()=>getSpotifyTrackByArtistAndTitle),
+    "getTrackAndMapToSongInput": (()=>getTrackAndMapToSongInput),
+    "loadSpotifySDK": (()=>loadSpotifySDK),
+    "searchSpotifyArtistByName": (()=>searchSpotifyArtistByName),
+    "searchSpotifySongsByArtistName": (()=>searchSpotifySongsByArtistName)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
+;
+;
+const PlaySong = ()=>{
+    console.log("Beep boop");
+};
+_c = PlaySong;
+const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
+let spotifySDKPromise = null;
+function loadSpotifySDK() {
+    if (spotifySDKPromise) return spotifySDKPromise;
+    spotifySDKPromise = new Promise((resolve, reject)=>{
+        if (window.Spotify) {
+            resolve();
+            return;
+        }
+        const script = document.createElement("script");
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+        script.onload = ()=>{
+            window.onSpotifyWebPlaybackSDKReady = ()=>resolve();
+        };
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
+    return spotifySDKPromise;
+}
+async function getSpotifyTrackByArtistAndTitle(title, artistName, accessToken) {
+    const query = `track:${title} artist:${artistName}`;
+    const url = new URL(`${SPOTIFY_API_BASE}/search`);
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "track");
+    url.searchParams.append("limit", "1");
+    try {
+        const res = await fetch(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`Spotify search error: ${res.status} ${res.statusText} - ${errorData.error?.message}`);
+        }
+        const data = await res.json();
+        const track = data.tracks.items;
+        return track || null;
+    } catch (err) {
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
+        console.log("[Spotify Search Error]", err);
+        return null;
+    }
+}
+const getTrackAndMapToSongInput = async (song, token)=>{
+    if (token) {
+        const res = await getSpotifyTrackByArtistAndTitle(song.title, song.artist, token);
+        if (!res) {
+            throw new Error("no track was found");
+        }
+        var songWithSpotifyFields = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mapSpotifyFieldsToSongInput"])(song, res[0].uri, res[0].duration_ms);
+        return songWithSpotifyFields;
+    }
+};
+async function searchSpotifyArtistByName(name, accessToken) {
+    const query = `artist:${name}`;
+    const url = new URL(`${SPOTIFY_API_BASE}/search`);
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "artist");
+    url.searchParams.append("limit", "1");
+    try {
+        const res = await fetch(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`Spotify search error: ${res.status} ${res.statusText} - ${errorData.error?.message}`);
+        }
+        const data = await res.json();
+        const artist = data.artists.items[0];
+        return artist || null;
+    } catch (err) {
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
+        console.log("[Spotify Artist Search Error]", err);
+        return null;
+    }
+}
+async function searchSpotifySongsByArtistName(name, accessToken) {
+    const query = `artist:${name}`;
+    const url = new URL(`${SPOTIFY_API_BASE}/search`);
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "track");
+    // url.searchParams.append("limit", "10");
+    try {
+        const res = await fetch(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`Spotify search error: ${res.status} ${res.statusText} - ${errorData.error?.message}`);
+        }
+        const data = await res.json();
+        const artist = data.artists.items[0];
+        return artist || null;
+    } catch (err) {
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("The Spotify access has reset, please log in again", {});
+        console.log("[Spotify Artist Search Error]", err);
+        return null;
+    }
+}
+async function exportPlaylistToSpotify(playlistName, songUris, accessToken) {
+    const baseUrl = "https://api.spotify.com/v1";
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+    };
+    // Helper to fetch JSON or throw
+    const fetchOrThrow = async (url, options)=>{
+        const res = await fetch(url, options);
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Spotify API error: ${res.status} ${errText}`);
+        }
+        return res.json();
+    };
+    // 1. Get current user's Spotify ID
+    const { id: userId } = await fetchOrThrow(`${baseUrl}/me`, {
+        headers
+    });
+    // 2. Check for existing playlist with the same name
+    const userPlaylists = await fetchOrThrow(`${baseUrl}/users/${userId}/playlists?limit=50`, {
+        headers
+    });
+    let existingPlaylist = userPlaylists.items.find((p)=>p.name.toLowerCase() === playlistName.toLowerCase());
+    let playlistId;
+    if (existingPlaylist) {
+        playlistId = existingPlaylist.id;
+        // Clear existing tracks
+        await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({
+                uris: []
+            })
+        });
+    } else {
+        // 3. Create a new playlist
+        const playlist = await fetchOrThrow(`${baseUrl}/users/${userId}/playlists`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                name: playlistName,
+                public: false,
+                description: "Exported from Metronome"
+            })
+        });
+        playlistId = playlist.id;
+    }
+    // 4. Add tracks
+    if (songUris.length > 0) {
+        await fetchOrThrow(`${baseUrl}/playlists/${playlistId}/tracks`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                uris: songUris
+            })
+        });
+    }
+    // 5. Return playlist info
+    return await fetchOrThrow(`${baseUrl}/playlists/${playlistId}`, {
+        headers
+    });
+}
+var _c;
+__turbopack_context__.k.register(_c, "PlaySong");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/context/playerContext.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "PlayerContext": (()=>PlayerContext),
+    "PlayerProvider": (()=>PlayerProvider),
+    "usePlayer": (()=>usePlayer)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/Spotify.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+const PlayerContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])(undefined);
+const PlayerProvider = ({ children })=>{
+    _s();
+    const [player, setPlayer] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [currentTrack, setCurrentTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(undefined);
+    const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isPaused, setIsPaused] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [spotifyTrack, setSpotifyTrack] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const [deviceId, setDeviceId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [isNextSongLoading, setIsNextSongLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [resumePosition, setResumePosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [spotifyCache, setSpotifyCache] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const { setCookie, getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    // =====================
+    // Initialize player SKD
+    // =====================
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlayerProvider.useEffect": ()=>{
+            let player;
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["loadSpotifySDK"])().then({
+                "PlayerProvider.useEffect": ()=>{
+                    const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+                    if (!token) {
+                        console.warn("No access token found in cookies.");
+                        return;
+                    }
+                    player = new window.Spotify.Player({
+                        name: "PhilPlaysBass app",
+                        getOAuthToken: {
+                            "PlayerProvider.useEffect": (cb)=>cb(token)
+                        }["PlayerProvider.useEffect"],
+                        volume: 0.5
+                    });
+                    setPlayer(player);
+                    player.addListener("ready", {
+                        "PlayerProvider.useEffect": async ({ device_id })=>{
+                            console.log("✅ Ready with Device ID", device_id);
+                            setDeviceId(device_id);
+                            setCookie("device_id", device_id);
+                            const pb = await transferPlayback(device_id, token);
+                            console.log("🔁 Playback transferred", pb);
+                        }
+                    }["PlayerProvider.useEffect"]);
+                    player.addListener("not_ready", {
+                        "PlayerProvider.useEffect": ({ device_id })=>{
+                            console.log("❌ Device offline", device_id);
+                        }
+                    }["PlayerProvider.useEffect"]);
+                    player.addListener("player_state_changed", {
+                        "PlayerProvider.useEffect": (state)=>{
+                            if (!state) return;
+                            setResumePosition(state.position);
+                            setIsPaused(state.paused);
+                            setIsNextSongLoading(state.loading);
+                        }
+                    }["PlayerProvider.useEffect"]);
+                    player.connect().then({
+                        "PlayerProvider.useEffect": (success)=>{
+                            if (success) {
+                                console.log("✅ Web player connected");
+                            }
+                        }
+                    }["PlayerProvider.useEffect"]);
+                }
+            }["PlayerProvider.useEffect"]).catch({
+                "PlayerProvider.useEffect": (error)=>{
+                    console.error("❌ Failed to load Spotify SDK", error);
+                }
+            }["PlayerProvider.useEffect"]);
+            return ({
+                "PlayerProvider.useEffect": ()=>{
+                    if (player) {
+                        player.disconnect();
+                    }
+                }
+            })["PlayerProvider.useEffect"];
+        }
+    }["PlayerProvider.useEffect"], []);
+    // =================
+    // Fetch next song
+    // =================
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlayerProvider.useEffect": ()=>{
+            const data = getCookie("token");
+            setIsNextSongLoading(true);
+            if (!data) {
+                console.warn("No token cookie found");
+                return;
+            }
+            try {
+                const data = getCookie("token");
+                if (!data) {
+                    throw new Error("no token found in cookies");
+                }
+                const tokenObject = JSON.parse(data);
+                if (currentTrack && tokenObject?.access_token) {
+                    ({
+                        "PlayerProvider.useEffect": async ()=>{
+                            try {
+                                const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(currentTrack.title, currentTrack.artist, tokenObject.access_token);
+                                if (result) {
+                                    setSpotifyTrack(result[0]);
+                                    setSpotifyCache({
+                                        "PlayerProvider.useEffect": (prev)=>[
+                                                ...prev,
+                                                result[0]
+                                            ]
+                                    }["PlayerProvider.useEffect"]);
+                                } else {
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])("Not found", {
+                                        description: `Spotify did not find '${currentTrack.title}' by '${currentTrack.artist}'`,
+                                        className: "not-found_toast"
+                                    });
+                                }
+                            } catch (err) {
+                                console.error("Error fetching Spotify track ID:", err);
+                            }
+                        }
+                    })["PlayerProvider.useEffect"]();
+                }
+            } catch (err) {
+                console.error("Failed to parse token cookie:", err);
+            }
+        }
+    }["PlayerProvider.useEffect"], [
+        currentTrack
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlayerProvider.useEffect": ()=>{
+            if (isNextSongLoading) {
+                play();
+            }
+        }
+    }["PlayerProvider.useEffect"], [
+        spotifyTrack
+    ]);
+    // ================================================
+    // Necessary to ensure the app can control playback
+    // ================================================
+    async function transferPlayback(device_id, token) {
+        await fetch("https://api.spotify.com/v1/me/player", {
+            method: "PUT",
+            body: JSON.stringify({
+                device_ids: [
+                    device_id
+                ]
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
+    async function play(position) {
+        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+        const device_id = getCookie("device_id");
+        if (!token || !device_id) {
+            console.error("Missing token or deviceId");
+            return;
+        }
+        await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                uris: [
+                    spotifyTrack?.uri
+                ],
+                position_ms: position || 0
+            })
+        }).then(()=>setIsNextSongLoading(false));
+    }
+    const findCacheCorrespondance = (song)=>{
+        const track = spotifyCache.find((track)=>track.artists[0].name === song.artist && track.name === song.title);
+        return track || null;
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PlayerContext.Provider, {
+        value: {
+            player,
+            currentTrack,
+            setIsPlaying,
+            setCurrentTrack,
+            isPlaying,
+            isPaused,
+            setIsPaused,
+            play,
+            spotifyTrack,
+            setResumePosition,
+            resumePosition,
+            findCacheCorrespondance
+        },
+        children: children
+    }, void 0, false, {
+        fileName: "[project]/context/playerContext.tsx",
+        lineNumber: 210,
+        columnNumber: 3
+    }, this);
+};
+_s(PlayerProvider, "wwVoZlA1rQt7hg36dKvT6zCIZOc=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = PlayerProvider;
+const usePlayer = ()=>{
+    _s1();
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(PlayerContext);
+    if (!context) {
+        throw new Error("usePlayer must be used within a PlayerProvider");
+    }
+    return context;
+};
+_s1(usePlayer, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+var _c;
+__turbopack_context__.k.register(_c, "PlayerProvider");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/PlayButton.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pause.js [app-client] (ecmascript) <export default as PauseIcon>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/play.js [app-client] (ecmascript) <export default as PlayIcon>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+const PlayButton = ({ isShowing, player, song })=>{
+    _s();
+    const { setResumePosition, resumePosition, currentTrack, setIsPlaying, isPaused, setCurrentTrack, play } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const handlePlayClick = async ()=>{
+        const state = await player.getCurrentState();
+        const isDifferentTrack = currentTrack?.title !== song.title;
+        if (!isDifferentTrack && state?.paused) {
+            play(resumePosition);
+        }
+        if (isDifferentTrack) {
+            setCurrentTrack(song);
+            setIsPlaying(true);
+            setResumePosition(0);
+            return;
+        }
+        if (state?.paused) {
+            play(resumePosition);
+            setIsPlaying(true);
+        }
+    };
+    const handlePauseClick = async ()=>{
+        const state = await player.getCurrentState();
+        await player.pause();
+        setIsPlaying(false);
+        setResumePosition(state?.position);
+    };
+    const isCurrentSong = currentTrack?.title === song.title;
+    const showPause = isCurrentSong && !isPaused;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `play-button ${isShowing ? "showing" : ""}`,
+        children: showPause ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+            onClick: handlePauseClick,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
+                fileName: "[project]/components/metronome/PlayButton.tsx",
+                lineNumber: 62,
+                columnNumber: 6
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/metronome/PlayButton.tsx",
+            lineNumber: 61,
+            columnNumber: 5
+        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+            onClick: handlePlayClick,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__["PlayIcon"], {}, void 0, false, {
+                fileName: "[project]/components/metronome/PlayButton.tsx",
+                lineNumber: 66,
+                columnNumber: 6
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/metronome/PlayButton.tsx",
+            lineNumber: 65,
+            columnNumber: 5
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/metronome/PlayButton.tsx",
+        lineNumber: 59,
+        columnNumber: 3
+    }, this);
+};
+_s(PlayButton, "qn7F80kAbeNUFeDbrPUJJQty4oY=");
+_c = PlayButton;
+const __TURBOPACK__default__export__ = PlayButton;
+var _c;
+__turbopack_context__.k.register(_c, "PlayButton");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/actions/data:2d8ed6 [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2":"addSongToPlaylist"},"actions/playlistActions.ts",""] */ __turbopack_context__.s({
+    "addSongToPlaylist": (()=>addSongToPlaylist)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var addSongToPlaylist = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("60cf9667fbba0b2e236b99e3980f6510ebbeaba1b2", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "addSongToPlaylist"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vcGxheWxpc3RBY3Rpb25zLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHNlcnZlclwiO1xuXG5pbXBvcnQgeyBwcmlzbWEgfSBmcm9tIFwiQC9saWIvcHJpc21hXCI7XG5pbXBvcnQgeyBlbnN1cmVVc2VySW5EYiB9IGZyb20gXCJAL3NlcnZpY2VzL3VzZXJTZXJ2aWNlXCI7XG5pbXBvcnQgeyBQcmlzbWEsIFNvbmcgfSBmcm9tIFwiQC9saWIvZ2VuZXJhdGVkL3ByaXNtYVwiO1xuaW1wb3J0IHsgcmV2YWxpZGF0ZVBhdGggfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0VXNlclBsYXlsaXN0cygpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblxuXHR0cnkge1xuXHRcdGNvbnN0IHBsYXlsaXN0cyA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kTWFueSh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHR1c2VySWQ6IGRiVXNlci5pZCxcblx0XHRcdH0sXG5cdFx0XHRpbmNsdWRlOiB7XG5cdFx0XHRcdHNvbmdzOiB7XG5cdFx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdFx0c29uZzogdHJ1ZSwgLy8gSW5jbHVkZSBmdWxsIHNvbmcgZGF0YVxuXHRcdFx0XHRcdH0sXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHBsYXlsaXN0cztcblx0fSBjYXRjaCAoZXJyOiBhbnkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UpO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVQbGF5bGlzdChmb3JtRGF0YTogRm9ybURhdGEpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblx0Y29uc3QgbmFtZSA9IGZvcm1EYXRhLmdldChcInBsYXlsaXN0TmFtZVwiKT8udG9TdHJpbmcoKTtcblx0Y29uc3QgcmF3U29uZ0RhdGEgPSBmb3JtRGF0YS5nZXQoXCJzb25nRGF0YVwiKTtcblx0aWYgKCFuYW1lIHx8ICFyYXdTb25nRGF0YSkgcmV0dXJuO1xuXG5cdGNvbnN0IHNvbmcgPSBKU09OLnBhcnNlKHJhd1NvbmdEYXRhLnRvU3RyaW5nKCkpO1xuXG5cdHRyeSB7XG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblx0XHRpZiAoIWRiU29uZykge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiRmFpbGVkIHRvIGZpbmQgb3IgY3JlYXRlIHNvbmdcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGxheWxpc3QgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0bmFtZSxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXHRcdGF3YWl0IHByaXNtYS5wbGF5bGlzdFNvbmcuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0cGxheWxpc3RJZDogcGxheWxpc3QuaWQsXG5cdFx0XHRcdHNvbmdJZDogZGJTb25nLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBwbGF5bGlzdDtcblx0fSBjYXRjaCAoZXJyb3I6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnJvci5tZXNzYWdlKTtcblx0fVxufVxuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gYWRkU29uZ1RvUGxheWxpc3QoXG5cdHBsYXlsaXN0SWQ6IHN0cmluZyxcblx0c29uZzogUHJpc21hLlNvbmdDcmVhdGVJbnB1dFxuKSB7XG5cdGNvbnN0IGRiVXNlciA9IGF3YWl0IGVuc3VyZVVzZXJJbkRiKCk7XG5cblx0dHJ5IHtcblx0XHQvLyBPcHRpb25hbDogdmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblxuXHRcdC8vIENyZWF0ZSBqb2luIGVudHJ5XG5cdFx0YXdhaXQgcHJpc21hLnBsYXlsaXN0U29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YToge1xuXHRcdFx0XHRwbGF5bGlzdElkLFxuXHRcdFx0XHRzb25nSWQ6IGRiU29uZy5pZCxcblx0XHRcdH0sXG5cdFx0fSk7XG5cblx0XHQvLyBPcHRpb25hbDogUmV2YWxpZGF0ZSB0aGUgcGFnZVxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBzb25nO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnIubWVzc2FnZSk7XG5cdH1cbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBmaW5kT3JDcmVhdGVTb25nKFxuXHRkYXRhOiBQcmlzbWEuU29uZ0NyZWF0ZUlucHV0XG4pOiBQcm9taXNlPFNvbmc+IHtcblx0dHJ5IHtcblx0XHQvLyBDaGVjayBpZiBzb25nIGFscmVhZHkgZXhpc3RzIChieSB1bmlxdWUgZXh0ZXJuYWxJZClcblx0XHRjb25zdCBleGlzdGluZyA9IGF3YWl0IHByaXNtYS5zb25nLmZpbmRVbmlxdWUoe1xuXHRcdFx0d2hlcmU6IHsgZ2V0U29uZ0JwbUlkOiBkYXRhLmdldFNvbmdCcG1JZCB9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKGV4aXN0aW5nKSB7XG5cdFx0XHRyZXR1cm4gZXhpc3Rpbmc7XG5cdFx0fVxuXG5cdFx0Ly8gQ3JlYXRlIG5ldyBzb25nIGlmIG5vdCBmb3VuZFxuXHRcdGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBwcmlzbWEuc29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YSxcblx0XHR9KTtcblxuXHRcdHJldHVybiBjcmVhdGVkO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihgRXJyb3IgZmluZGluZyBvciBjcmVhdGluZyBzb25nOiAke2Vyci5tZXNzYWdlfWApO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRVc2VyUGxheWxpc3RzV2l0aFNvbmdzKCkge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXHRjb25zdCBwbGF5bGlzdHMgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuZmluZE1hbnkoe1xuXHRcdHdoZXJlOiB7IHVzZXJJZDogZGJVc2VyLmlkIH0sXG5cdFx0aW5jbHVkZToge1xuXHRcdFx0c29uZ3M6IHtcblx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdHNvbmc6IHRydWUsXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0sXG5cdFx0b3JkZXJCeToge1xuXHRcdFx0Y3JlYXRlZEF0OiBcImRlc2NcIixcblx0XHR9LFxuXHR9KTtcblx0cmV0dXJuIHBsYXlsaXN0cy5tYXAoKHBsYXlsaXN0KSA9PiAoe1xuXHRcdGlkOiBwbGF5bGlzdC5pZCxcblx0XHRuYW1lOiBwbGF5bGlzdC5uYW1lLFxuXHRcdGNyZWF0ZWRBdDogcGxheWxpc3QuY3JlYXRlZEF0LFxuXHRcdHNvbmdzOiBwbGF5bGlzdC5zb25ncy5tYXAoKHBsYXlsaXN0U29uZykgPT4gKHtcblx0XHRcdGlkOiBwbGF5bGlzdFNvbmcuc29uZy5pZCxcblx0XHRcdHRpdGxlOiBwbGF5bGlzdFNvbmcuc29uZy50aXRsZSxcblx0XHRcdGFydGlzdDogcGxheWxpc3RTb25nLnNvbmcuYXJ0aXN0LFxuXHRcdFx0dGVtcG86IHBsYXlsaXN0U29uZy5zb25nLnRlbXBvLFxuXHRcdFx0ZHVyYXRpb246IHBsYXlsaXN0U29uZy5zb25nLmR1cmF0aW9uLFxuXHRcdFx0c3BvdGlmeVVyaTogcGxheWxpc3RTb25nLnNvbmcuc3BvdGlmeVVyaSxcblx0XHRcdGdldFNvbmdCcG1JZDogcGxheWxpc3RTb25nLnNvbmcuZ2V0U29uZ0JwbUlkLFxuXHRcdFx0dXJpOiBwbGF5bGlzdFNvbmcuc29uZy51cmksXG5cdFx0XHRhZGRlZEF0OiBwbGF5bGlzdFNvbmcuYWRkZWRBdCxcblx0XHR9KSksXG5cdH0pKTtcbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZW1vdmVTb25nRnJvbVBsYXlsaXN0KFxuXHRwbGF5bGlzdElkOiBzdHJpbmcsXG5cdHNvbmc6IFByaXNtYS5Tb25nQ3JlYXRlSW5wdXRcbikge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Ly8gR2V0IGV4aXN0aW5nIG9yIG1hdGNoaW5nIHNvbmdcblx0XHRjb25zdCBkYlNvbmcgPSBhd2FpdCBmaW5kT3JDcmVhdGVTb25nKHNvbmcpO1xuXG5cdFx0Ly8gUmVtb3ZlIGpvaW4gZW50cnlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0cGxheWxpc3RJZCxcblx0XHRcdFx0c29uZ0lkOiBkYlNvbmcuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciByZW1vdmluZyBzb25nIGZyb20gcGxheWxpc3Q6XCIsIGVycik7XG5cdFx0dGhyb3cgbmV3IEVycm9yKGVyci5tZXNzYWdlIHx8IFwiRmFpbGVkIHRvIHJlbW92ZSBzb25nIGZyb20gcGxheWxpc3RcIik7XG5cdH1cbn1cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVBsYXlsaXN0KHBsYXlsaXN0SWQ6IHN0cmluZykge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHRoZSBwbGF5bGlzdCBiZWxvbmdzIHRvIHRoZSBjdXJyZW50IHVzZXJcblx0XHRjb25zdCBwbGF5bGlzdCA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kRmlyc3Qoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0aWQ6IHBsYXlsaXN0SWQsXG5cdFx0XHRcdHVzZXJJZDogZGJVc2VyLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdGlmICghcGxheWxpc3QpIHtcblx0XHRcdHRocm93IG5ldyBFcnJvcihcIlBsYXlsaXN0IG5vdCBmb3VuZCBvciBhY2Nlc3MgZGVuaWVkXCIpO1xuXHRcdH1cblxuXHRcdC8vIFJlbW92ZSBhbGwgc29uZ3MgZnJvbSB0aGUgcGxheWxpc3QgKGZyb20gam9pbiB0YWJsZSlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHsgcGxheWxpc3RJZCB9LFxuXHRcdH0pO1xuXG5cdFx0Ly8gRGVsZXRlIHRoZSBwbGF5bGlzdCBpdHNlbGZcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3QuZGVsZXRlKHtcblx0XHRcdHdoZXJlOiB7IGlkOiBwbGF5bGlzdElkIH0sXG5cdFx0fSk7XG5cblx0XHQvLyBSZXZhbGlkYXRlIHJlbGV2YW50IHBhdGggaWYgbmVlZGVkXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciBkZWxldGluZyBwbGF5bGlzdDpcIiwgZXJyKTtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UgfHwgXCJGYWlsZWQgdG8gZGVsZXRlIHBsYXlsaXN0XCIpO1xuXHR9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6InFTQWlFc0IifQ==
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/actions/data:61eced [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"406e27c1b2b07493df083338ccf835fa87c35bf350":"deletePlaylist"},"actions/playlistActions.ts",""] */ __turbopack_context__.s({
+    "deletePlaylist": (()=>deletePlaylist)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var deletePlaylist = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("406e27c1b2b07493df083338ccf835fa87c35bf350", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "deletePlaylist"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vcGxheWxpc3RBY3Rpb25zLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHNlcnZlclwiO1xuXG5pbXBvcnQgeyBwcmlzbWEgfSBmcm9tIFwiQC9saWIvcHJpc21hXCI7XG5pbXBvcnQgeyBlbnN1cmVVc2VySW5EYiB9IGZyb20gXCJAL3NlcnZpY2VzL3VzZXJTZXJ2aWNlXCI7XG5pbXBvcnQgeyBQcmlzbWEsIFNvbmcgfSBmcm9tIFwiQC9saWIvZ2VuZXJhdGVkL3ByaXNtYVwiO1xuaW1wb3J0IHsgcmV2YWxpZGF0ZVBhdGggfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0VXNlclBsYXlsaXN0cygpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblxuXHR0cnkge1xuXHRcdGNvbnN0IHBsYXlsaXN0cyA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kTWFueSh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHR1c2VySWQ6IGRiVXNlci5pZCxcblx0XHRcdH0sXG5cdFx0XHRpbmNsdWRlOiB7XG5cdFx0XHRcdHNvbmdzOiB7XG5cdFx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdFx0c29uZzogdHJ1ZSwgLy8gSW5jbHVkZSBmdWxsIHNvbmcgZGF0YVxuXHRcdFx0XHRcdH0sXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHBsYXlsaXN0cztcblx0fSBjYXRjaCAoZXJyOiBhbnkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UpO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVQbGF5bGlzdChmb3JtRGF0YTogRm9ybURhdGEpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblx0Y29uc3QgbmFtZSA9IGZvcm1EYXRhLmdldChcInBsYXlsaXN0TmFtZVwiKT8udG9TdHJpbmcoKTtcblx0Y29uc3QgcmF3U29uZ0RhdGEgPSBmb3JtRGF0YS5nZXQoXCJzb25nRGF0YVwiKTtcblx0aWYgKCFuYW1lIHx8ICFyYXdTb25nRGF0YSkgcmV0dXJuO1xuXG5cdGNvbnN0IHNvbmcgPSBKU09OLnBhcnNlKHJhd1NvbmdEYXRhLnRvU3RyaW5nKCkpO1xuXG5cdHRyeSB7XG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblx0XHRpZiAoIWRiU29uZykge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiRmFpbGVkIHRvIGZpbmQgb3IgY3JlYXRlIHNvbmdcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGxheWxpc3QgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0bmFtZSxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXHRcdGF3YWl0IHByaXNtYS5wbGF5bGlzdFNvbmcuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0cGxheWxpc3RJZDogcGxheWxpc3QuaWQsXG5cdFx0XHRcdHNvbmdJZDogZGJTb25nLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBwbGF5bGlzdDtcblx0fSBjYXRjaCAoZXJyb3I6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnJvci5tZXNzYWdlKTtcblx0fVxufVxuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gYWRkU29uZ1RvUGxheWxpc3QoXG5cdHBsYXlsaXN0SWQ6IHN0cmluZyxcblx0c29uZzogUHJpc21hLlNvbmdDcmVhdGVJbnB1dFxuKSB7XG5cdGNvbnN0IGRiVXNlciA9IGF3YWl0IGVuc3VyZVVzZXJJbkRiKCk7XG5cblx0dHJ5IHtcblx0XHQvLyBPcHRpb25hbDogdmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblxuXHRcdC8vIENyZWF0ZSBqb2luIGVudHJ5XG5cdFx0YXdhaXQgcHJpc21hLnBsYXlsaXN0U29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YToge1xuXHRcdFx0XHRwbGF5bGlzdElkLFxuXHRcdFx0XHRzb25nSWQ6IGRiU29uZy5pZCxcblx0XHRcdH0sXG5cdFx0fSk7XG5cblx0XHQvLyBPcHRpb25hbDogUmV2YWxpZGF0ZSB0aGUgcGFnZVxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBzb25nO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnIubWVzc2FnZSk7XG5cdH1cbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBmaW5kT3JDcmVhdGVTb25nKFxuXHRkYXRhOiBQcmlzbWEuU29uZ0NyZWF0ZUlucHV0XG4pOiBQcm9taXNlPFNvbmc+IHtcblx0dHJ5IHtcblx0XHQvLyBDaGVjayBpZiBzb25nIGFscmVhZHkgZXhpc3RzIChieSB1bmlxdWUgZXh0ZXJuYWxJZClcblx0XHRjb25zdCBleGlzdGluZyA9IGF3YWl0IHByaXNtYS5zb25nLmZpbmRVbmlxdWUoe1xuXHRcdFx0d2hlcmU6IHsgZ2V0U29uZ0JwbUlkOiBkYXRhLmdldFNvbmdCcG1JZCB9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKGV4aXN0aW5nKSB7XG5cdFx0XHRyZXR1cm4gZXhpc3Rpbmc7XG5cdFx0fVxuXG5cdFx0Ly8gQ3JlYXRlIG5ldyBzb25nIGlmIG5vdCBmb3VuZFxuXHRcdGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBwcmlzbWEuc29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YSxcblx0XHR9KTtcblxuXHRcdHJldHVybiBjcmVhdGVkO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihgRXJyb3IgZmluZGluZyBvciBjcmVhdGluZyBzb25nOiAke2Vyci5tZXNzYWdlfWApO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRVc2VyUGxheWxpc3RzV2l0aFNvbmdzKCkge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXHRjb25zdCBwbGF5bGlzdHMgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuZmluZE1hbnkoe1xuXHRcdHdoZXJlOiB7IHVzZXJJZDogZGJVc2VyLmlkIH0sXG5cdFx0aW5jbHVkZToge1xuXHRcdFx0c29uZ3M6IHtcblx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdHNvbmc6IHRydWUsXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0sXG5cdFx0b3JkZXJCeToge1xuXHRcdFx0Y3JlYXRlZEF0OiBcImRlc2NcIixcblx0XHR9LFxuXHR9KTtcblx0cmV0dXJuIHBsYXlsaXN0cy5tYXAoKHBsYXlsaXN0KSA9PiAoe1xuXHRcdGlkOiBwbGF5bGlzdC5pZCxcblx0XHRuYW1lOiBwbGF5bGlzdC5uYW1lLFxuXHRcdGNyZWF0ZWRBdDogcGxheWxpc3QuY3JlYXRlZEF0LFxuXHRcdHNvbmdzOiBwbGF5bGlzdC5zb25ncy5tYXAoKHBsYXlsaXN0U29uZykgPT4gKHtcblx0XHRcdGlkOiBwbGF5bGlzdFNvbmcuc29uZy5pZCxcblx0XHRcdHRpdGxlOiBwbGF5bGlzdFNvbmcuc29uZy50aXRsZSxcblx0XHRcdGFydGlzdDogcGxheWxpc3RTb25nLnNvbmcuYXJ0aXN0LFxuXHRcdFx0dGVtcG86IHBsYXlsaXN0U29uZy5zb25nLnRlbXBvLFxuXHRcdFx0ZHVyYXRpb246IHBsYXlsaXN0U29uZy5zb25nLmR1cmF0aW9uLFxuXHRcdFx0c3BvdGlmeVVyaTogcGxheWxpc3RTb25nLnNvbmcuc3BvdGlmeVVyaSxcblx0XHRcdGdldFNvbmdCcG1JZDogcGxheWxpc3RTb25nLnNvbmcuZ2V0U29uZ0JwbUlkLFxuXHRcdFx0dXJpOiBwbGF5bGlzdFNvbmcuc29uZy51cmksXG5cdFx0XHRhZGRlZEF0OiBwbGF5bGlzdFNvbmcuYWRkZWRBdCxcblx0XHR9KSksXG5cdH0pKTtcbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZW1vdmVTb25nRnJvbVBsYXlsaXN0KFxuXHRwbGF5bGlzdElkOiBzdHJpbmcsXG5cdHNvbmc6IFByaXNtYS5Tb25nQ3JlYXRlSW5wdXRcbikge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Ly8gR2V0IGV4aXN0aW5nIG9yIG1hdGNoaW5nIHNvbmdcblx0XHRjb25zdCBkYlNvbmcgPSBhd2FpdCBmaW5kT3JDcmVhdGVTb25nKHNvbmcpO1xuXG5cdFx0Ly8gUmVtb3ZlIGpvaW4gZW50cnlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0cGxheWxpc3RJZCxcblx0XHRcdFx0c29uZ0lkOiBkYlNvbmcuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciByZW1vdmluZyBzb25nIGZyb20gcGxheWxpc3Q6XCIsIGVycik7XG5cdFx0dGhyb3cgbmV3IEVycm9yKGVyci5tZXNzYWdlIHx8IFwiRmFpbGVkIHRvIHJlbW92ZSBzb25nIGZyb20gcGxheWxpc3RcIik7XG5cdH1cbn1cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVBsYXlsaXN0KHBsYXlsaXN0SWQ6IHN0cmluZykge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHRoZSBwbGF5bGlzdCBiZWxvbmdzIHRvIHRoZSBjdXJyZW50IHVzZXJcblx0XHRjb25zdCBwbGF5bGlzdCA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kRmlyc3Qoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0aWQ6IHBsYXlsaXN0SWQsXG5cdFx0XHRcdHVzZXJJZDogZGJVc2VyLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdGlmICghcGxheWxpc3QpIHtcblx0XHRcdHRocm93IG5ldyBFcnJvcihcIlBsYXlsaXN0IG5vdCBmb3VuZCBvciBhY2Nlc3MgZGVuaWVkXCIpO1xuXHRcdH1cblxuXHRcdC8vIFJlbW92ZSBhbGwgc29uZ3MgZnJvbSB0aGUgcGxheWxpc3QgKGZyb20gam9pbiB0YWJsZSlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHsgcGxheWxpc3RJZCB9LFxuXHRcdH0pO1xuXG5cdFx0Ly8gRGVsZXRlIHRoZSBwbGF5bGlzdCBpdHNlbGZcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3QuZGVsZXRlKHtcblx0XHRcdHdoZXJlOiB7IGlkOiBwbGF5bGlzdElkIH0sXG5cdFx0fSk7XG5cblx0XHQvLyBSZXZhbGlkYXRlIHJlbGV2YW50IHBhdGggaWYgbmVlZGVkXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciBkZWxldGluZyBwbGF5bGlzdDpcIiwgZXJyKTtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UgfHwgXCJGYWlsZWQgdG8gZGVsZXRlIHBsYXlsaXN0XCIpO1xuXHR9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6ImtTQXFNc0IifQ==
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/actions/data:8f27ff [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"00f8ea3445fe23581376afca79ebbe842b4935ac5b":"getUserPlaylistsWithSongs"},"actions/playlistActions.ts",""] */ __turbopack_context__.s({
+    "getUserPlaylistsWithSongs": (()=>getUserPlaylistsWithSongs)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var getUserPlaylistsWithSongs = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("00f8ea3445fe23581376afca79ebbe842b4935ac5b", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "getUserPlaylistsWithSongs"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vcGxheWxpc3RBY3Rpb25zLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHNlcnZlclwiO1xuXG5pbXBvcnQgeyBwcmlzbWEgfSBmcm9tIFwiQC9saWIvcHJpc21hXCI7XG5pbXBvcnQgeyBlbnN1cmVVc2VySW5EYiB9IGZyb20gXCJAL3NlcnZpY2VzL3VzZXJTZXJ2aWNlXCI7XG5pbXBvcnQgeyBQcmlzbWEsIFNvbmcgfSBmcm9tIFwiQC9saWIvZ2VuZXJhdGVkL3ByaXNtYVwiO1xuaW1wb3J0IHsgcmV2YWxpZGF0ZVBhdGggfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0VXNlclBsYXlsaXN0cygpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblxuXHR0cnkge1xuXHRcdGNvbnN0IHBsYXlsaXN0cyA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kTWFueSh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHR1c2VySWQ6IGRiVXNlci5pZCxcblx0XHRcdH0sXG5cdFx0XHRpbmNsdWRlOiB7XG5cdFx0XHRcdHNvbmdzOiB7XG5cdFx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdFx0c29uZzogdHJ1ZSwgLy8gSW5jbHVkZSBmdWxsIHNvbmcgZGF0YVxuXHRcdFx0XHRcdH0sXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHBsYXlsaXN0cztcblx0fSBjYXRjaCAoZXJyOiBhbnkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UpO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVQbGF5bGlzdChmb3JtRGF0YTogRm9ybURhdGEpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblx0Y29uc3QgbmFtZSA9IGZvcm1EYXRhLmdldChcInBsYXlsaXN0TmFtZVwiKT8udG9TdHJpbmcoKTtcblx0Y29uc3QgcmF3U29uZ0RhdGEgPSBmb3JtRGF0YS5nZXQoXCJzb25nRGF0YVwiKTtcblx0aWYgKCFuYW1lIHx8ICFyYXdTb25nRGF0YSkgcmV0dXJuO1xuXG5cdGNvbnN0IHNvbmcgPSBKU09OLnBhcnNlKHJhd1NvbmdEYXRhLnRvU3RyaW5nKCkpO1xuXG5cdHRyeSB7XG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblx0XHRpZiAoIWRiU29uZykge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiRmFpbGVkIHRvIGZpbmQgb3IgY3JlYXRlIHNvbmdcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGxheWxpc3QgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0bmFtZSxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXHRcdGF3YWl0IHByaXNtYS5wbGF5bGlzdFNvbmcuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0cGxheWxpc3RJZDogcGxheWxpc3QuaWQsXG5cdFx0XHRcdHNvbmdJZDogZGJTb25nLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBwbGF5bGlzdDtcblx0fSBjYXRjaCAoZXJyb3I6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnJvci5tZXNzYWdlKTtcblx0fVxufVxuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gYWRkU29uZ1RvUGxheWxpc3QoXG5cdHBsYXlsaXN0SWQ6IHN0cmluZyxcblx0c29uZzogUHJpc21hLlNvbmdDcmVhdGVJbnB1dFxuKSB7XG5cdGNvbnN0IGRiVXNlciA9IGF3YWl0IGVuc3VyZVVzZXJJbkRiKCk7XG5cblx0dHJ5IHtcblx0XHQvLyBPcHRpb25hbDogdmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblxuXHRcdC8vIENyZWF0ZSBqb2luIGVudHJ5XG5cdFx0YXdhaXQgcHJpc21hLnBsYXlsaXN0U29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YToge1xuXHRcdFx0XHRwbGF5bGlzdElkLFxuXHRcdFx0XHRzb25nSWQ6IGRiU29uZy5pZCxcblx0XHRcdH0sXG5cdFx0fSk7XG5cblx0XHQvLyBPcHRpb25hbDogUmV2YWxpZGF0ZSB0aGUgcGFnZVxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBzb25nO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnIubWVzc2FnZSk7XG5cdH1cbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBmaW5kT3JDcmVhdGVTb25nKFxuXHRkYXRhOiBQcmlzbWEuU29uZ0NyZWF0ZUlucHV0XG4pOiBQcm9taXNlPFNvbmc+IHtcblx0dHJ5IHtcblx0XHQvLyBDaGVjayBpZiBzb25nIGFscmVhZHkgZXhpc3RzIChieSB1bmlxdWUgZXh0ZXJuYWxJZClcblx0XHRjb25zdCBleGlzdGluZyA9IGF3YWl0IHByaXNtYS5zb25nLmZpbmRVbmlxdWUoe1xuXHRcdFx0d2hlcmU6IHsgZ2V0U29uZ0JwbUlkOiBkYXRhLmdldFNvbmdCcG1JZCB9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKGV4aXN0aW5nKSB7XG5cdFx0XHRyZXR1cm4gZXhpc3Rpbmc7XG5cdFx0fVxuXG5cdFx0Ly8gQ3JlYXRlIG5ldyBzb25nIGlmIG5vdCBmb3VuZFxuXHRcdGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBwcmlzbWEuc29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YSxcblx0XHR9KTtcblxuXHRcdHJldHVybiBjcmVhdGVkO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihgRXJyb3IgZmluZGluZyBvciBjcmVhdGluZyBzb25nOiAke2Vyci5tZXNzYWdlfWApO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRVc2VyUGxheWxpc3RzV2l0aFNvbmdzKCkge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXHRjb25zdCBwbGF5bGlzdHMgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuZmluZE1hbnkoe1xuXHRcdHdoZXJlOiB7IHVzZXJJZDogZGJVc2VyLmlkIH0sXG5cdFx0aW5jbHVkZToge1xuXHRcdFx0c29uZ3M6IHtcblx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdHNvbmc6IHRydWUsXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0sXG5cdFx0b3JkZXJCeToge1xuXHRcdFx0Y3JlYXRlZEF0OiBcImRlc2NcIixcblx0XHR9LFxuXHR9KTtcblx0cmV0dXJuIHBsYXlsaXN0cy5tYXAoKHBsYXlsaXN0KSA9PiAoe1xuXHRcdGlkOiBwbGF5bGlzdC5pZCxcblx0XHRuYW1lOiBwbGF5bGlzdC5uYW1lLFxuXHRcdGNyZWF0ZWRBdDogcGxheWxpc3QuY3JlYXRlZEF0LFxuXHRcdHNvbmdzOiBwbGF5bGlzdC5zb25ncy5tYXAoKHBsYXlsaXN0U29uZykgPT4gKHtcblx0XHRcdGlkOiBwbGF5bGlzdFNvbmcuc29uZy5pZCxcblx0XHRcdHRpdGxlOiBwbGF5bGlzdFNvbmcuc29uZy50aXRsZSxcblx0XHRcdGFydGlzdDogcGxheWxpc3RTb25nLnNvbmcuYXJ0aXN0LFxuXHRcdFx0dGVtcG86IHBsYXlsaXN0U29uZy5zb25nLnRlbXBvLFxuXHRcdFx0ZHVyYXRpb246IHBsYXlsaXN0U29uZy5zb25nLmR1cmF0aW9uLFxuXHRcdFx0c3BvdGlmeVVyaTogcGxheWxpc3RTb25nLnNvbmcuc3BvdGlmeVVyaSxcblx0XHRcdGdldFNvbmdCcG1JZDogcGxheWxpc3RTb25nLnNvbmcuZ2V0U29uZ0JwbUlkLFxuXHRcdFx0dXJpOiBwbGF5bGlzdFNvbmcuc29uZy51cmksXG5cdFx0XHRhZGRlZEF0OiBwbGF5bGlzdFNvbmcuYWRkZWRBdCxcblx0XHR9KSksXG5cdH0pKTtcbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZW1vdmVTb25nRnJvbVBsYXlsaXN0KFxuXHRwbGF5bGlzdElkOiBzdHJpbmcsXG5cdHNvbmc6IFByaXNtYS5Tb25nQ3JlYXRlSW5wdXRcbikge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Ly8gR2V0IGV4aXN0aW5nIG9yIG1hdGNoaW5nIHNvbmdcblx0XHRjb25zdCBkYlNvbmcgPSBhd2FpdCBmaW5kT3JDcmVhdGVTb25nKHNvbmcpO1xuXG5cdFx0Ly8gUmVtb3ZlIGpvaW4gZW50cnlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0cGxheWxpc3RJZCxcblx0XHRcdFx0c29uZ0lkOiBkYlNvbmcuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciByZW1vdmluZyBzb25nIGZyb20gcGxheWxpc3Q6XCIsIGVycik7XG5cdFx0dGhyb3cgbmV3IEVycm9yKGVyci5tZXNzYWdlIHx8IFwiRmFpbGVkIHRvIHJlbW92ZSBzb25nIGZyb20gcGxheWxpc3RcIik7XG5cdH1cbn1cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVBsYXlsaXN0KHBsYXlsaXN0SWQ6IHN0cmluZykge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHRoZSBwbGF5bGlzdCBiZWxvbmdzIHRvIHRoZSBjdXJyZW50IHVzZXJcblx0XHRjb25zdCBwbGF5bGlzdCA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kRmlyc3Qoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0aWQ6IHBsYXlsaXN0SWQsXG5cdFx0XHRcdHVzZXJJZDogZGJVc2VyLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdGlmICghcGxheWxpc3QpIHtcblx0XHRcdHRocm93IG5ldyBFcnJvcihcIlBsYXlsaXN0IG5vdCBmb3VuZCBvciBhY2Nlc3MgZGVuaWVkXCIpO1xuXHRcdH1cblxuXHRcdC8vIFJlbW92ZSBhbGwgc29uZ3MgZnJvbSB0aGUgcGxheWxpc3QgKGZyb20gam9pbiB0YWJsZSlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHsgcGxheWxpc3RJZCB9LFxuXHRcdH0pO1xuXG5cdFx0Ly8gRGVsZXRlIHRoZSBwbGF5bGlzdCBpdHNlbGZcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3QuZGVsZXRlKHtcblx0XHRcdHdoZXJlOiB7IGlkOiBwbGF5bGlzdElkIH0sXG5cdFx0fSk7XG5cblx0XHQvLyBSZXZhbGlkYXRlIHJlbGV2YW50IHBhdGggaWYgbmVlZGVkXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciBkZWxldGluZyBwbGF5bGlzdDpcIiwgZXJyKTtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UgfHwgXCJGYWlsZWQgdG8gZGVsZXRlIHBsYXlsaXN0XCIpO1xuXHR9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjZTQThIc0IifQ==
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/actions/data:4b67d3 [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"60c4bb7de432aa11fc2840d3294c3df801a6003eb4":"removeSongFromPlaylist"},"actions/playlistActions.ts",""] */ __turbopack_context__.s({
+    "removeSongFromPlaylist": (()=>removeSongFromPlaylist)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var removeSongFromPlaylist = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("60c4bb7de432aa11fc2840d3294c3df801a6003eb4", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "removeSongFromPlaylist"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vcGxheWxpc3RBY3Rpb25zLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHNlcnZlclwiO1xuXG5pbXBvcnQgeyBwcmlzbWEgfSBmcm9tIFwiQC9saWIvcHJpc21hXCI7XG5pbXBvcnQgeyBlbnN1cmVVc2VySW5EYiB9IGZyb20gXCJAL3NlcnZpY2VzL3VzZXJTZXJ2aWNlXCI7XG5pbXBvcnQgeyBQcmlzbWEsIFNvbmcgfSBmcm9tIFwiQC9saWIvZ2VuZXJhdGVkL3ByaXNtYVwiO1xuaW1wb3J0IHsgcmV2YWxpZGF0ZVBhdGggfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0VXNlclBsYXlsaXN0cygpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblxuXHR0cnkge1xuXHRcdGNvbnN0IHBsYXlsaXN0cyA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kTWFueSh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHR1c2VySWQ6IGRiVXNlci5pZCxcblx0XHRcdH0sXG5cdFx0XHRpbmNsdWRlOiB7XG5cdFx0XHRcdHNvbmdzOiB7XG5cdFx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdFx0c29uZzogdHJ1ZSwgLy8gSW5jbHVkZSBmdWxsIHNvbmcgZGF0YVxuXHRcdFx0XHRcdH0sXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHBsYXlsaXN0cztcblx0fSBjYXRjaCAoZXJyOiBhbnkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UpO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVQbGF5bGlzdChmb3JtRGF0YTogRm9ybURhdGEpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblx0Y29uc3QgbmFtZSA9IGZvcm1EYXRhLmdldChcInBsYXlsaXN0TmFtZVwiKT8udG9TdHJpbmcoKTtcblx0Y29uc3QgcmF3U29uZ0RhdGEgPSBmb3JtRGF0YS5nZXQoXCJzb25nRGF0YVwiKTtcblx0aWYgKCFuYW1lIHx8ICFyYXdTb25nRGF0YSkgcmV0dXJuO1xuXG5cdGNvbnN0IHNvbmcgPSBKU09OLnBhcnNlKHJhd1NvbmdEYXRhLnRvU3RyaW5nKCkpO1xuXG5cdHRyeSB7XG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblx0XHRpZiAoIWRiU29uZykge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiRmFpbGVkIHRvIGZpbmQgb3IgY3JlYXRlIHNvbmdcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGxheWxpc3QgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0bmFtZSxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXHRcdGF3YWl0IHByaXNtYS5wbGF5bGlzdFNvbmcuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0cGxheWxpc3RJZDogcGxheWxpc3QuaWQsXG5cdFx0XHRcdHNvbmdJZDogZGJTb25nLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBwbGF5bGlzdDtcblx0fSBjYXRjaCAoZXJyb3I6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnJvci5tZXNzYWdlKTtcblx0fVxufVxuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gYWRkU29uZ1RvUGxheWxpc3QoXG5cdHBsYXlsaXN0SWQ6IHN0cmluZyxcblx0c29uZzogUHJpc21hLlNvbmdDcmVhdGVJbnB1dFxuKSB7XG5cdGNvbnN0IGRiVXNlciA9IGF3YWl0IGVuc3VyZVVzZXJJbkRiKCk7XG5cblx0dHJ5IHtcblx0XHQvLyBPcHRpb25hbDogdmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblxuXHRcdC8vIENyZWF0ZSBqb2luIGVudHJ5XG5cdFx0YXdhaXQgcHJpc21hLnBsYXlsaXN0U29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YToge1xuXHRcdFx0XHRwbGF5bGlzdElkLFxuXHRcdFx0XHRzb25nSWQ6IGRiU29uZy5pZCxcblx0XHRcdH0sXG5cdFx0fSk7XG5cblx0XHQvLyBPcHRpb25hbDogUmV2YWxpZGF0ZSB0aGUgcGFnZVxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBzb25nO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnIubWVzc2FnZSk7XG5cdH1cbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBmaW5kT3JDcmVhdGVTb25nKFxuXHRkYXRhOiBQcmlzbWEuU29uZ0NyZWF0ZUlucHV0XG4pOiBQcm9taXNlPFNvbmc+IHtcblx0dHJ5IHtcblx0XHQvLyBDaGVjayBpZiBzb25nIGFscmVhZHkgZXhpc3RzIChieSB1bmlxdWUgZXh0ZXJuYWxJZClcblx0XHRjb25zdCBleGlzdGluZyA9IGF3YWl0IHByaXNtYS5zb25nLmZpbmRVbmlxdWUoe1xuXHRcdFx0d2hlcmU6IHsgZ2V0U29uZ0JwbUlkOiBkYXRhLmdldFNvbmdCcG1JZCB9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKGV4aXN0aW5nKSB7XG5cdFx0XHRyZXR1cm4gZXhpc3Rpbmc7XG5cdFx0fVxuXG5cdFx0Ly8gQ3JlYXRlIG5ldyBzb25nIGlmIG5vdCBmb3VuZFxuXHRcdGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBwcmlzbWEuc29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YSxcblx0XHR9KTtcblxuXHRcdHJldHVybiBjcmVhdGVkO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihgRXJyb3IgZmluZGluZyBvciBjcmVhdGluZyBzb25nOiAke2Vyci5tZXNzYWdlfWApO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRVc2VyUGxheWxpc3RzV2l0aFNvbmdzKCkge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXHRjb25zdCBwbGF5bGlzdHMgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuZmluZE1hbnkoe1xuXHRcdHdoZXJlOiB7IHVzZXJJZDogZGJVc2VyLmlkIH0sXG5cdFx0aW5jbHVkZToge1xuXHRcdFx0c29uZ3M6IHtcblx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdHNvbmc6IHRydWUsXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0sXG5cdFx0b3JkZXJCeToge1xuXHRcdFx0Y3JlYXRlZEF0OiBcImRlc2NcIixcblx0XHR9LFxuXHR9KTtcblx0cmV0dXJuIHBsYXlsaXN0cy5tYXAoKHBsYXlsaXN0KSA9PiAoe1xuXHRcdGlkOiBwbGF5bGlzdC5pZCxcblx0XHRuYW1lOiBwbGF5bGlzdC5uYW1lLFxuXHRcdGNyZWF0ZWRBdDogcGxheWxpc3QuY3JlYXRlZEF0LFxuXHRcdHNvbmdzOiBwbGF5bGlzdC5zb25ncy5tYXAoKHBsYXlsaXN0U29uZykgPT4gKHtcblx0XHRcdGlkOiBwbGF5bGlzdFNvbmcuc29uZy5pZCxcblx0XHRcdHRpdGxlOiBwbGF5bGlzdFNvbmcuc29uZy50aXRsZSxcblx0XHRcdGFydGlzdDogcGxheWxpc3RTb25nLnNvbmcuYXJ0aXN0LFxuXHRcdFx0dGVtcG86IHBsYXlsaXN0U29uZy5zb25nLnRlbXBvLFxuXHRcdFx0ZHVyYXRpb246IHBsYXlsaXN0U29uZy5zb25nLmR1cmF0aW9uLFxuXHRcdFx0c3BvdGlmeVVyaTogcGxheWxpc3RTb25nLnNvbmcuc3BvdGlmeVVyaSxcblx0XHRcdGdldFNvbmdCcG1JZDogcGxheWxpc3RTb25nLnNvbmcuZ2V0U29uZ0JwbUlkLFxuXHRcdFx0dXJpOiBwbGF5bGlzdFNvbmcuc29uZy51cmksXG5cdFx0XHRhZGRlZEF0OiBwbGF5bGlzdFNvbmcuYWRkZWRBdCxcblx0XHR9KSksXG5cdH0pKTtcbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZW1vdmVTb25nRnJvbVBsYXlsaXN0KFxuXHRwbGF5bGlzdElkOiBzdHJpbmcsXG5cdHNvbmc6IFByaXNtYS5Tb25nQ3JlYXRlSW5wdXRcbikge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Ly8gR2V0IGV4aXN0aW5nIG9yIG1hdGNoaW5nIHNvbmdcblx0XHRjb25zdCBkYlNvbmcgPSBhd2FpdCBmaW5kT3JDcmVhdGVTb25nKHNvbmcpO1xuXG5cdFx0Ly8gUmVtb3ZlIGpvaW4gZW50cnlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0cGxheWxpc3RJZCxcblx0XHRcdFx0c29uZ0lkOiBkYlNvbmcuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciByZW1vdmluZyBzb25nIGZyb20gcGxheWxpc3Q6XCIsIGVycik7XG5cdFx0dGhyb3cgbmV3IEVycm9yKGVyci5tZXNzYWdlIHx8IFwiRmFpbGVkIHRvIHJlbW92ZSBzb25nIGZyb20gcGxheWxpc3RcIik7XG5cdH1cbn1cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVBsYXlsaXN0KHBsYXlsaXN0SWQ6IHN0cmluZykge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHRoZSBwbGF5bGlzdCBiZWxvbmdzIHRvIHRoZSBjdXJyZW50IHVzZXJcblx0XHRjb25zdCBwbGF5bGlzdCA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kRmlyc3Qoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0aWQ6IHBsYXlsaXN0SWQsXG5cdFx0XHRcdHVzZXJJZDogZGJVc2VyLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdGlmICghcGxheWxpc3QpIHtcblx0XHRcdHRocm93IG5ldyBFcnJvcihcIlBsYXlsaXN0IG5vdCBmb3VuZCBvciBhY2Nlc3MgZGVuaWVkXCIpO1xuXHRcdH1cblxuXHRcdC8vIFJlbW92ZSBhbGwgc29uZ3MgZnJvbSB0aGUgcGxheWxpc3QgKGZyb20gam9pbiB0YWJsZSlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHsgcGxheWxpc3RJZCB9LFxuXHRcdH0pO1xuXG5cdFx0Ly8gRGVsZXRlIHRoZSBwbGF5bGlzdCBpdHNlbGZcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3QuZGVsZXRlKHtcblx0XHRcdHdoZXJlOiB7IGlkOiBwbGF5bGlzdElkIH0sXG5cdFx0fSk7XG5cblx0XHQvLyBSZXZhbGlkYXRlIHJlbGV2YW50IHBhdGggaWYgbmVlZGVkXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciBkZWxldGluZyBwbGF5bGlzdDpcIiwgZXJyKTtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UgfHwgXCJGYWlsZWQgdG8gZGVsZXRlIHBsYXlsaXN0XCIpO1xuXHR9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjBTQThKc0IifQ==
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/context/playlistContext.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "PlaylistProvider": (()=>PlaylistProvider),
+    "usePlaylists": (()=>usePlaylists)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$61eced__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/actions/data:61eced [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$8f27ff__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/actions/data:8f27ff [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$4b67d3__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/actions/data:4b67d3 [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+const PlaylistContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])(undefined);
+const PlaylistProvider = ({ children })=>{
+    _s();
+    const [playlists, setPlaylists] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [token, setToken] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlaylistProvider.useEffect": ()=>{
+            const token = getCookie("token");
+            setToken(token);
+        }
+    }["PlaylistProvider.useEffect"], []);
+    const addPlaylist = (playlist)=>{
+        setPlaylists((prev)=>[
+                ...prev,
+                playlist
+            ]);
+    };
+    const addSongToPlaylist = async (playlistId, song)=>{
+        const mapped = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["consolidateSongDataWithSpotify"])(song, token);
+        if (!mapped) {
+            throw new Error("could not fetch spotify track data for consolidation");
+        }
+        setPlaylists((prev)=>prev.map((p)=>p.id === playlistId ? {
+                    ...p,
+                    songs: [
+                        ...p.songs,
+                        mapped
+                    ]
+                } : p));
+    };
+    const removePlaylist = async (playlistId)=>{
+        setIsLoading(true);
+        try {
+            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$61eced__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["deletePlaylist"])(playlistId);
+            if (result.success) {
+                setPlaylists((prev)=>{
+                    return prev.filter((p)=>{
+                        p.id !== playlistId;
+                    });
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        } finally{
+            setIsLoading(false);
+            await refreshPlaylists();
+        }
+    };
+    const removeFromPlaylist = async (playlistId, song)=>{
+        setIsLoading(true);
+        try {
+            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$4b67d3__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["removeSongFromPlaylist"])(playlistId, song);
+            console.log("result: ", result);
+            if (result.success) {
+                setPlaylists((prev)=>prev.map((p)=>p.id === playlistId ? {
+                            ...p,
+                            songs: p.songs.filter((s)=>s.id !== song.id)
+                        } : p));
+            }
+        } catch (err) {
+            console.error(err);
+        } finally{
+            setIsLoading(false);
+            await refreshPlaylists();
+        }
+    };
+    const refreshPlaylists = async ()=>{
+        const fresh = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$8f27ff__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["getUserPlaylistsWithSongs"])();
+        setPlaylists(fresh);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PlaylistContext.Provider, {
+        value: {
+            playlists,
+            setPlaylists,
+            addPlaylist,
+            addSongToPlaylist,
+            refreshPlaylists,
+            removeFromPlaylist,
+            removePlaylist,
+            isLoading
+        },
+        children: children
+    }, void 0, false, {
+        fileName: "[project]/context/playlistContext.tsx",
+        lineNumber: 119,
+        columnNumber: 3
+    }, this);
+};
+_s(PlaylistProvider, "qNO2fLapozb+k/Jo/YebQmOSeLU=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = PlaylistProvider;
+const usePlaylists = ()=>{
+    _s1();
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(PlaylistContext);
+    if (!context) {
+        throw new Error("usePlaylists must be used within a PlaylistProvider");
+    }
+    return context;
+};
+_s1(usePlaylists, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+var _c;
+__turbopack_context__.k.register(_c, "PlaylistProvider");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/Spinner.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$pinwheel$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LoaderPinwheelIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-pinwheel.js [app-client] (ecmascript) <export default as LoaderPinwheelIcon>");
+;
+;
+;
+const Spinner = ()=>{
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$pinwheel$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LoaderPinwheelIcon$3e$__["LoaderPinwheelIcon"], {
+        className: "spinner"
+    }, void 0, false, {
+        fileName: "[project]/components/Spinner.tsx",
+        lineNumber: 6,
+        columnNumber: 9
+    }, this);
+};
+_c = Spinner;
+const __TURBOPACK__default__export__ = Spinner;
+var _c;
+__turbopack_context__.k.register(_c, "Spinner");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/SongDropdown.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/dropdown-menu.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2d$vertical$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__EllipsisVertical$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/ellipsis-vertical.js [app-client] (ecmascript) <export default as EllipsisVertical>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/Spotify.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$2d8ed6__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/actions/data:2d8ed6 [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playlistContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Spinner.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const SongDropdown = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c = _s((props, ref)=>{
+    _s();
+    const { playlists, setShowSongPortal, song, isPlaylist } = props;
+    const [showSongDropdown, setShowSongDropdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    const { addSongToPlaylist: ctxAddSongToPlaylist, playlists: ctxPlaylists } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
+    const handleAddToPlaylist = async (playlist, song)=>{
+        setIsLoading(true);
+        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+        const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyTrackByArtistAndTitle"])(song.title, song.artist, token);
+        if (!res) return;
+        var spotifyTrack = res[0];
+        try {
+            if (!spotifyTrack) {
+                throw new Error("There was an error getting through to Spotify!");
+            }
+            const mapped = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mapSpotifyFieldsToSongInput"])(song, spotifyTrack.uri, spotifyTrack.duration_ms);
+            ctxAddSongToPlaylist(playlist.id, song);
+            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$2d8ed6__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["addSongToPlaylist"])(playlist.id, mapped);
+            if (!result) {
+                console.log("Failed to add song to db");
+                return;
+            }
+            console.log("✅ Song added to playlist!");
+        } catch (err) {
+            console.error("❌ Error adding song to playlist:", err);
+        } finally{
+            setIsLoading(false);
+        }
+    };
+    const handleRemoveFromPlaylist = async (e)=>{
+        console.log("Clicked remove frmo playlsist");
+    };
+    const renderPlaylists = ()=>{
+        return ctxPlaylists.map((pl, index)=>{
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                onClick: ()=>handleAddToPlaylist(pl, song),
+                children: pl.name
+            }, `${pl.id}-${index}`, false, {
+                fileName: "[project]/components/metronome/SongDropdown.tsx",
+                lineNumber: 91,
+                columnNumber: 6
+            }, this);
+        });
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenu"], {
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
+                    className: "song-dropdown_trigger flex items-center justify-center",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2d$vertical$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__EllipsisVertical$3e$__["EllipsisVertical"], {
+                        onClick: ()=>setShowSongDropdown(!showSongDropdown)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SongDropdown.tsx",
+                        lineNumber: 104,
+                        columnNumber: 7
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/metronome/SongDropdown.tsx",
+                    lineNumber: 103,
+                    columnNumber: 6
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
+                    className: "song-dropdown_ctn",
+                    ref: ref,
+                    children: [
+                        isPlaylist && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                            className: "song-dropdown_item",
+                            onClick: (e)=>handleRemoveFromPlaylist(e),
+                            children: "Remove from playlist"
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/SongDropdown.tsx",
+                            lineNumber: 110,
+                            columnNumber: 8
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSub"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSubTrigger"], {
+                                    className: "song-dropdown_item",
+                                    children: "Add to playlist"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                    lineNumber: 118,
+                                    columnNumber: 8
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuPortal"], {
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSubContent"], {
+                                        className: "song-dropdown_ctn",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                className: "song-dropdown_item",
+                                                onClick: ()=>setShowSongPortal(true),
+                                                children: "New..."
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                                lineNumber: 123,
+                                                columnNumber: 10
+                                            }, this),
+                                            playlists.length ? renderPlaylists() : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                                                fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                                lineNumber: 129,
+                                                columnNumber: 50
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
+                                                fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                                lineNumber: 130,
+                                                columnNumber: 10
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                className: "song-dropdown_item",
+                                                onClick: ()=>console.log("Another item"),
+                                                children: "More..."
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                                lineNumber: 131,
+                                                columnNumber: 10
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                        lineNumber: 122,
+                                        columnNumber: 9
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/SongDropdown.tsx",
+                                    lineNumber: 121,
+                                    columnNumber: 8
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/SongDropdown.tsx",
+                            lineNumber: 117,
+                            columnNumber: 7
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                            className: "song-dropdown_item",
+                            children: "More..."
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/SongDropdown.tsx",
+                            lineNumber: 140,
+                            columnNumber: 7
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/metronome/SongDropdown.tsx",
+                    lineNumber: 108,
+                    columnNumber: 6
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/components/metronome/SongDropdown.tsx",
+            lineNumber: 102,
+            columnNumber: 5
+        }, this)
+    }, void 0, false);
+}, "EyDxWoaJWxLHyoMGP9eRSJGoUrY=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"]
+    ];
+})), "EyDxWoaJWxLHyoMGP9eRSJGoUrY=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"]
+    ];
+});
+_c1 = SongDropdown;
+const __TURBOPACK__default__export__ = SongDropdown;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "SongDropdown$forwardRef");
+__turbopack_context__.k.register(_c1, "SongDropdown");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/actions/data:7e6197 [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"4067325ccab1647e985221060a630322ea73039eb1":"createPlaylist"},"actions/playlistActions.ts",""] */ __turbopack_context__.s({
+    "createPlaylist": (()=>createPlaylist)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var createPlaylist = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("4067325ccab1647e985221060a630322ea73039eb1", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "createPlaylist"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vcGxheWxpc3RBY3Rpb25zLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHNlcnZlclwiO1xuXG5pbXBvcnQgeyBwcmlzbWEgfSBmcm9tIFwiQC9saWIvcHJpc21hXCI7XG5pbXBvcnQgeyBlbnN1cmVVc2VySW5EYiB9IGZyb20gXCJAL3NlcnZpY2VzL3VzZXJTZXJ2aWNlXCI7XG5pbXBvcnQgeyBQcmlzbWEsIFNvbmcgfSBmcm9tIFwiQC9saWIvZ2VuZXJhdGVkL3ByaXNtYVwiO1xuaW1wb3J0IHsgcmV2YWxpZGF0ZVBhdGggfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0VXNlclBsYXlsaXN0cygpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblxuXHR0cnkge1xuXHRcdGNvbnN0IHBsYXlsaXN0cyA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kTWFueSh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHR1c2VySWQ6IGRiVXNlci5pZCxcblx0XHRcdH0sXG5cdFx0XHRpbmNsdWRlOiB7XG5cdFx0XHRcdHNvbmdzOiB7XG5cdFx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdFx0c29uZzogdHJ1ZSwgLy8gSW5jbHVkZSBmdWxsIHNvbmcgZGF0YVxuXHRcdFx0XHRcdH0sXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHBsYXlsaXN0cztcblx0fSBjYXRjaCAoZXJyOiBhbnkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UpO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVQbGF5bGlzdChmb3JtRGF0YTogRm9ybURhdGEpIHtcblx0Y29uc3QgZGJVc2VyID0gYXdhaXQgZW5zdXJlVXNlckluRGIoKTtcblx0Y29uc3QgbmFtZSA9IGZvcm1EYXRhLmdldChcInBsYXlsaXN0TmFtZVwiKT8udG9TdHJpbmcoKTtcblx0Y29uc3QgcmF3U29uZ0RhdGEgPSBmb3JtRGF0YS5nZXQoXCJzb25nRGF0YVwiKTtcblx0aWYgKCFuYW1lIHx8ICFyYXdTb25nRGF0YSkgcmV0dXJuO1xuXG5cdGNvbnN0IHNvbmcgPSBKU09OLnBhcnNlKHJhd1NvbmdEYXRhLnRvU3RyaW5nKCkpO1xuXG5cdHRyeSB7XG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblx0XHRpZiAoIWRiU29uZykge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiRmFpbGVkIHRvIGZpbmQgb3IgY3JlYXRlIHNvbmdcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGxheWxpc3QgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0bmFtZSxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXHRcdGF3YWl0IHByaXNtYS5wbGF5bGlzdFNvbmcuY3JlYXRlKHtcblx0XHRcdGRhdGE6IHtcblx0XHRcdFx0cGxheWxpc3RJZDogcGxheWxpc3QuaWQsXG5cdFx0XHRcdHNvbmdJZDogZGJTb25nLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBwbGF5bGlzdDtcblx0fSBjYXRjaCAoZXJyb3I6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnJvci5tZXNzYWdlKTtcblx0fVxufVxuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gYWRkU29uZ1RvUGxheWxpc3QoXG5cdHBsYXlsaXN0SWQ6IHN0cmluZyxcblx0c29uZzogUHJpc21hLlNvbmdDcmVhdGVJbnB1dFxuKSB7XG5cdGNvbnN0IGRiVXNlciA9IGF3YWl0IGVuc3VyZVVzZXJJbkRiKCk7XG5cblx0dHJ5IHtcblx0XHQvLyBPcHRpb25hbDogdmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZGJTb25nID0gYXdhaXQgZmluZE9yQ3JlYXRlU29uZyhzb25nKTtcblxuXHRcdC8vIENyZWF0ZSBqb2luIGVudHJ5XG5cdFx0YXdhaXQgcHJpc21hLnBsYXlsaXN0U29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YToge1xuXHRcdFx0XHRwbGF5bGlzdElkLFxuXHRcdFx0XHRzb25nSWQ6IGRiU29uZy5pZCxcblx0XHRcdH0sXG5cdFx0fSk7XG5cblx0XHQvLyBPcHRpb25hbDogUmV2YWxpZGF0ZSB0aGUgcGFnZVxuXHRcdHJldmFsaWRhdGVQYXRoKFwiL21ldHJvbm9tZVwiKTtcblxuXHRcdHJldHVybiBzb25nO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihlcnIubWVzc2FnZSk7XG5cdH1cbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBmaW5kT3JDcmVhdGVTb25nKFxuXHRkYXRhOiBQcmlzbWEuU29uZ0NyZWF0ZUlucHV0XG4pOiBQcm9taXNlPFNvbmc+IHtcblx0dHJ5IHtcblx0XHQvLyBDaGVjayBpZiBzb25nIGFscmVhZHkgZXhpc3RzIChieSB1bmlxdWUgZXh0ZXJuYWxJZClcblx0XHRjb25zdCBleGlzdGluZyA9IGF3YWl0IHByaXNtYS5zb25nLmZpbmRVbmlxdWUoe1xuXHRcdFx0d2hlcmU6IHsgZ2V0U29uZ0JwbUlkOiBkYXRhLmdldFNvbmdCcG1JZCB9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKGV4aXN0aW5nKSB7XG5cdFx0XHRyZXR1cm4gZXhpc3Rpbmc7XG5cdFx0fVxuXG5cdFx0Ly8gQ3JlYXRlIG5ldyBzb25nIGlmIG5vdCBmb3VuZFxuXHRcdGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBwcmlzbWEuc29uZy5jcmVhdGUoe1xuXHRcdFx0ZGF0YSxcblx0XHR9KTtcblxuXHRcdHJldHVybiBjcmVhdGVkO1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdHRocm93IG5ldyBFcnJvcihgRXJyb3IgZmluZGluZyBvciBjcmVhdGluZyBzb25nOiAke2Vyci5tZXNzYWdlfWApO1xuXHR9XG59XG5cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRVc2VyUGxheWxpc3RzV2l0aFNvbmdzKCkge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXHRjb25zdCBwbGF5bGlzdHMgPSBhd2FpdCBwcmlzbWEucGxheWxpc3QuZmluZE1hbnkoe1xuXHRcdHdoZXJlOiB7IHVzZXJJZDogZGJVc2VyLmlkIH0sXG5cdFx0aW5jbHVkZToge1xuXHRcdFx0c29uZ3M6IHtcblx0XHRcdFx0aW5jbHVkZToge1xuXHRcdFx0XHRcdHNvbmc6IHRydWUsXG5cdFx0XHRcdH0sXG5cdFx0XHR9LFxuXHRcdH0sXG5cdFx0b3JkZXJCeToge1xuXHRcdFx0Y3JlYXRlZEF0OiBcImRlc2NcIixcblx0XHR9LFxuXHR9KTtcblx0cmV0dXJuIHBsYXlsaXN0cy5tYXAoKHBsYXlsaXN0KSA9PiAoe1xuXHRcdGlkOiBwbGF5bGlzdC5pZCxcblx0XHRuYW1lOiBwbGF5bGlzdC5uYW1lLFxuXHRcdGNyZWF0ZWRBdDogcGxheWxpc3QuY3JlYXRlZEF0LFxuXHRcdHNvbmdzOiBwbGF5bGlzdC5zb25ncy5tYXAoKHBsYXlsaXN0U29uZykgPT4gKHtcblx0XHRcdGlkOiBwbGF5bGlzdFNvbmcuc29uZy5pZCxcblx0XHRcdHRpdGxlOiBwbGF5bGlzdFNvbmcuc29uZy50aXRsZSxcblx0XHRcdGFydGlzdDogcGxheWxpc3RTb25nLnNvbmcuYXJ0aXN0LFxuXHRcdFx0dGVtcG86IHBsYXlsaXN0U29uZy5zb25nLnRlbXBvLFxuXHRcdFx0ZHVyYXRpb246IHBsYXlsaXN0U29uZy5zb25nLmR1cmF0aW9uLFxuXHRcdFx0c3BvdGlmeVVyaTogcGxheWxpc3RTb25nLnNvbmcuc3BvdGlmeVVyaSxcblx0XHRcdGdldFNvbmdCcG1JZDogcGxheWxpc3RTb25nLnNvbmcuZ2V0U29uZ0JwbUlkLFxuXHRcdFx0dXJpOiBwbGF5bGlzdFNvbmcuc29uZy51cmksXG5cdFx0XHRhZGRlZEF0OiBwbGF5bGlzdFNvbmcuYWRkZWRBdCxcblx0XHR9KSksXG5cdH0pKTtcbn1cbmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZW1vdmVTb25nRnJvbVBsYXlsaXN0KFxuXHRwbGF5bGlzdElkOiBzdHJpbmcsXG5cdHNvbmc6IFByaXNtYS5Tb25nQ3JlYXRlSW5wdXRcbikge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHBsYXlsaXN0IGJlbG9uZ3MgdG8gdXNlclxuXHRcdGNvbnN0IHBsYXlsaXN0ID0gYXdhaXQgcHJpc21hLnBsYXlsaXN0LmZpbmRGaXJzdCh7XG5cdFx0XHR3aGVyZToge1xuXHRcdFx0XHRpZDogcGxheWxpc3RJZCxcblx0XHRcdFx0dXNlcklkOiBkYlVzZXIuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0aWYgKCFwbGF5bGlzdCkge1xuXHRcdFx0dGhyb3cgbmV3IEVycm9yKFwiUGxheWxpc3Qgbm90IGZvdW5kIG9yIGFjY2VzcyBkZW5pZWRcIik7XG5cdFx0fVxuXG5cdFx0Ly8gR2V0IGV4aXN0aW5nIG9yIG1hdGNoaW5nIHNvbmdcblx0XHRjb25zdCBkYlNvbmcgPSBhd2FpdCBmaW5kT3JDcmVhdGVTb25nKHNvbmcpO1xuXG5cdFx0Ly8gUmVtb3ZlIGpvaW4gZW50cnlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0cGxheWxpc3RJZCxcblx0XHRcdFx0c29uZ0lkOiBkYlNvbmcuaWQsXG5cdFx0XHR9LFxuXHRcdH0pO1xuXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciByZW1vdmluZyBzb25nIGZyb20gcGxheWxpc3Q6XCIsIGVycik7XG5cdFx0dGhyb3cgbmV3IEVycm9yKGVyci5tZXNzYWdlIHx8IFwiRmFpbGVkIHRvIHJlbW92ZSBzb25nIGZyb20gcGxheWxpc3RcIik7XG5cdH1cbn1cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVBsYXlsaXN0KHBsYXlsaXN0SWQ6IHN0cmluZykge1xuXHRjb25zdCBkYlVzZXIgPSBhd2FpdCBlbnN1cmVVc2VySW5EYigpO1xuXG5cdHRyeSB7XG5cdFx0Ly8gVmVyaWZ5IHRoZSBwbGF5bGlzdCBiZWxvbmdzIHRvIHRoZSBjdXJyZW50IHVzZXJcblx0XHRjb25zdCBwbGF5bGlzdCA9IGF3YWl0IHByaXNtYS5wbGF5bGlzdC5maW5kRmlyc3Qoe1xuXHRcdFx0d2hlcmU6IHtcblx0XHRcdFx0aWQ6IHBsYXlsaXN0SWQsXG5cdFx0XHRcdHVzZXJJZDogZGJVc2VyLmlkLFxuXHRcdFx0fSxcblx0XHR9KTtcblxuXHRcdGlmICghcGxheWxpc3QpIHtcblx0XHRcdHRocm93IG5ldyBFcnJvcihcIlBsYXlsaXN0IG5vdCBmb3VuZCBvciBhY2Nlc3MgZGVuaWVkXCIpO1xuXHRcdH1cblxuXHRcdC8vIFJlbW92ZSBhbGwgc29uZ3MgZnJvbSB0aGUgcGxheWxpc3QgKGZyb20gam9pbiB0YWJsZSlcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3RTb25nLmRlbGV0ZU1hbnkoe1xuXHRcdFx0d2hlcmU6IHsgcGxheWxpc3RJZCB9LFxuXHRcdH0pO1xuXG5cdFx0Ly8gRGVsZXRlIHRoZSBwbGF5bGlzdCBpdHNlbGZcblx0XHRhd2FpdCBwcmlzbWEucGxheWxpc3QuZGVsZXRlKHtcblx0XHRcdHdoZXJlOiB7IGlkOiBwbGF5bGlzdElkIH0sXG5cdFx0fSk7XG5cblx0XHQvLyBSZXZhbGlkYXRlIHJlbGV2YW50IHBhdGggaWYgbmVlZGVkXG5cdFx0cmV2YWxpZGF0ZVBhdGgoXCIvbWV0cm9ub21lXCIpO1xuXG5cdFx0cmV0dXJuIHsgc3VjY2VzczogdHJ1ZSB9O1xuXHR9IGNhdGNoIChlcnI6IGFueSkge1xuXHRcdGNvbnNvbGUuZXJyb3IoXCJFcnJvciBkZWxldGluZyBwbGF5bGlzdDpcIiwgZXJyKTtcblx0XHR0aHJvdyBuZXcgRXJyb3IoZXJyLm1lc3NhZ2UgfHwgXCJGYWlsZWQgdG8gZGVsZXRlIHBsYXlsaXN0XCIpO1xuXHR9XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6ImtTQThCc0IifQ==
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/PlaylistModal.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-hook-form/dist/index.esm.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$7e6197__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/actions/data:7e6197 [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playlistContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Spinner.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+const PlaylistModal = ({ setShow, song, onClose })=>{
+    _s();
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [playlistName, setPlaylistName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [mappedSongData, setMappedSongData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const { register, handleSubmit, reset, formState: { errors }, setFocus } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])();
+    const modalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const { addPlaylist, refreshPlaylists } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    const tokenCookie = getCookie("token");
+    // Close on click outside
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlaylistModal.useEffect": ()=>{
+            const handleClickOutside = {
+                "PlaylistModal.useEffect.handleClickOutside": (event)=>{
+                    if (modalRef.current && !modalRef.current.contains(event.target)) {
+                        setShow(false);
+                    }
+                }
+            }["PlaylistModal.useEffect.handleClickOutside"];
+            document.addEventListener("mousedown", handleClickOutside);
+            return ({
+                "PlaylistModal.useEffect": ()=>{
+                    document.removeEventListener("mousedown", handleClickOutside);
+                }
+            })["PlaylistModal.useEffect"];
+        }
+    }["PlaylistModal.useEffect"], [
+        setShow
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlaylistModal.useEffect": ()=>{
+            if (!mappedSongData) {
+                setIsLoading(true);
+            }
+            if (mappedSongData) {
+                setIsLoading(false);
+            }
+        }
+    }["PlaylistModal.useEffect"], [
+        mappedSongData
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlaylistModal.useEffect": ()=>{
+            setFocus("playlistName");
+        }
+    }["PlaylistModal.useEffect"], [
+        setFocus,
+        mappedSongData
+    ]);
+    // Fetch spotify URI and duration_ms
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PlaylistModal.useEffect": ()=>{
+            setIsLoading(true);
+            try {
+                ({
+                    "PlaylistModal.useEffect": async ()=>{
+                        const mapped = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["consolidateSongDataWithSpotify"])(song, tokenCookie);
+                        setMappedSongData(mapped);
+                    }
+                })["PlaylistModal.useEffect"]();
+            } catch  {
+                throw new Error("spotify data mapping failed");
+            } finally{
+                setIsLoading(false);
+            }
+        }
+    }["PlaylistModal.useEffect"], []);
+    const formRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const onSubmit = async (data)=>{
+        setIsLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("playlistName", data.playlistName);
+            formData.append("songData", JSON.stringify(mappedSongData));
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$actions$2f$data$3a$7e6197__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["createPlaylist"])(formData);
+            await refreshPlaylists();
+            reset();
+            onClose();
+        } catch (err) {
+            console.error("Playlist creation failed:", err);
+        } finally{
+            setIsLoading(false);
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "modal_overlay",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "modal_ctn",
+            ref: modalRef,
+            children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                lineNumber: 112,
+                columnNumber: 6
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                ref: formRef,
+                onSubmit: handleSubmit(onSubmit),
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                        htmlFor: "name",
+                        children: "Playlist Name:"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                        lineNumber: 115,
+                        columnNumber: 7
+                    }, this),
+                    errors.playlistName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "modal_error",
+                        children: "Please enter a playlist name."
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                        lineNumber: 117,
+                        columnNumber: 8
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                        type: "text",
+                        id: "playlist-name",
+                        placeholder: "Enter your name here...",
+                        ...register("playlistName", {
+                            required: true
+                        }),
+                        name: "playlistName"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                        lineNumber: 119,
+                        columnNumber: 7
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                        type: "hidden",
+                        name: "songData",
+                        value: JSON.stringify(mappedSongData)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                        lineNumber: 127,
+                        columnNumber: 7
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        className: `submit_btn ${isLoading ? "loading" : ""}`,
+                        type: "submit",
+                        disabled: isLoading,
+                        children: isLoading && mappedSongData ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                            fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                            lineNumber: 137,
+                            columnNumber: 39
+                        }, this) : "Create playlist"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                        lineNumber: 132,
+                        columnNumber: 7
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/PlaylistModal.tsx",
+                lineNumber: 114,
+                columnNumber: 6
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/metronome/PlaylistModal.tsx",
+            lineNumber: 110,
+            columnNumber: 4
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/metronome/PlaylistModal.tsx",
+        lineNumber: 109,
+        columnNumber: 3
+    }, this);
+};
+_s(PlaylistModal, "pTYZ1Ia+YlW+APgJQsTLtPrkSv8=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = PlaylistModal;
+const __TURBOPACK__default__export__ = PlaylistModal;
+var _c;
+__turbopack_context__.k.register(_c, "PlaylistModal");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/SongCard.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$animate$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/motion/dist/animate.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$motionone$2f$dom$2f$dist$2f$utils$2f$stagger$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@motionone/dom/dist/utils/stagger.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlayButton.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongDropdown$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/SongDropdown.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlaylistModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlaylistModal.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+const SongCard = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c = _s((props, ref)=>{
+    _s();
+    const { song, playlists, isPlaylist } = props;
+    const [showPlayButton, setShowPlayButton] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showSongPortal, setShowSongPortal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { player, currentTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SongCard.useEffect": ()=>{
+            setIsPlaying(song.title === currentTrack?.title);
+        }
+    }["SongCard.useEffect"], [
+        currentTrack
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLayoutEffect"])({
+        "SongCard.useLayoutEffect": ()=>{
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$animate$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["animate"])(".songcard", {
+                opacity: [
+                    0,
+                    1
+                ]
+            }, {
+                duration: 0.5,
+                delay: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$motionone$2f$dom$2f$dist$2f$utils$2f$stagger$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stagger"])(0.05)
+            });
+        }
+    }["SongCard.useLayoutEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SongCard.useEffect": ()=>{
+            if (currentTrack && currentTrack.song_title == song.title) {
+                setShowPlayButton(true);
+            } else {
+                setShowPlayButton(false);
+            }
+        }
+    }["SongCard.useEffect"], [
+        currentTrack
+    ]);
+    const renderGenres = (genres)=>{
+        if (genres) {
+            const newArr = [];
+            for(let i = 0; i < genres.length; i++){
+                newArr.push(genres[i][0].toUpperCase() + genres[i].slice(1));
+            }
+            return newArr.join(", ");
+        }
+        return undefined;
+    };
+    const formatTitle = (title)=>{
+        if (title.length > 30) {
+            return title.split(" ").slice(0, 5).join(" ") + "...";
+        }
+        return title;
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            showSongPortal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlaylistModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                setShow: setShowSongPortal,
+                song: song,
+                onClose: ()=>setShowSongPortal(false)
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/SongCard.tsx",
+                lineNumber: 72,
+                columnNumber: 5
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: `songcard ${isPlaying ? "active" : ""}`,
+                onMouseEnter: ()=>setShowPlayButton(true),
+                onMouseLeave: ()=>{
+                    if (currentTrack && currentTrack.song_title !== song.title) {
+                        setShowPlayButton(false);
+                    }
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "songcard-left",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "songcard-title",
+                                    children: formatTitle(song.title)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/SongCard.tsx",
+                                    lineNumber: 89,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "songcard-artist",
+                                    children: song.artist
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/SongCard.tsx",
+                                    lineNumber: 90,
+                                    columnNumber: 7
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/SongCard.tsx",
+                            lineNumber: 88,
+                            columnNumber: 6
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SongCard.tsx",
+                        lineNumber: 87,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "songcard-right flex items-center",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "songcard-genres",
+                                children: renderGenres(song.genres)
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/SongCard.tsx",
+                                lineNumber: 94,
+                                columnNumber: 6
+                            }, this),
+                            player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                isShowing: showPlayButton,
+                                player: player,
+                                song: song
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/SongCard.tsx",
+                                lineNumber: 98,
+                                columnNumber: 7
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "song-dropdown_btn flex items-center justify-center",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongDropdown$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    playlists: playlists,
+                                    setShowSongPortal: setShowSongPortal,
+                                    song: song,
+                                    isPlaylist: isPlaylist,
+                                    ref: ref
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/SongCard.tsx",
+                                    lineNumber: 105,
+                                    columnNumber: 7
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/SongCard.tsx",
+                                lineNumber: 104,
+                                columnNumber: 6
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/metronome/SongCard.tsx",
+                        lineNumber: 93,
+                        columnNumber: 5
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/SongCard.tsx",
+                lineNumber: 78,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true);
+}, "mX1o5SbbC0+/XaaEI06GqZadRNw=")), "mX1o5SbbC0+/XaaEI06GqZadRNw=");
+_c1 = SongCard;
+const __TURBOPACK__default__export__ = SongCard;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "SongCard$forwardRef");
+__turbopack_context__.k.register(_c1, "SongCard");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/services/getSongBpm.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "fetchArtist": (()=>fetchArtist),
+    "fetchTempoData": (()=>fetchTempoData)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+;
+const fetchTempoData = async (bpm)=>{
+    const apiUrl = `https://api.getsong.co/tempo/?api_key=${("TURBOPACK compile-time value", "5342973719315b31c98d26528094f76e")}&bpm=${bpm}`;
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    const result = data.tempo.map((item)=>{
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mapGSBSongToSongInput"])(item, "", 0);
+    });
+    return result;
+};
+const fetchArtist = async (artistName)=>{
+    const artistString = artistName.split(" ").length > 1 ? artistName.split(" ").join("+") : artistName;
+    const apiUrl = `https://api.getsong.co/search/?api_key=${("TURBOPACK compile-time value", "5342973719315b31c98d26528094f76e")}&type=song&lookup=${artistString}&limit=50`;
+    const response = await fetch(apiUrl);
+    if (!response) {
+        throw new Error("network response was not ok, artist/song lookup");
+    }
+    return response;
+};
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/context/songListContext.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "SongListProvider": (()=>SongListProvider),
+    "useSongList": (()=>useSongList)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
+;
+const SongListContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])(undefined);
+const SongListProvider = ({ children })=>{
+    _s();
+    const [songs, setSongs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [filters, setFilters] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SongListProvider.useEffect": ()=>{
+            console.log("Songlist context initialized");
+        }
+    }["SongListProvider.useEffect"], []);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SongListContext.Provider, {
+        value: {
+            songs,
+            isLoading,
+            filters,
+            searchTerm,
+            setSongs,
+            setIsLoading,
+            setFilters,
+            setSearchTerm
+        },
+        children: children
+    }, void 0, false, {
+        fileName: "[project]/context/songListContext.tsx",
+        lineNumber: 45,
+        columnNumber: 3
+    }, this);
+};
+_s(SongListProvider, "EYtsj4mA59MqWZ0b2EeFMhLyjJs=");
+_c = SongListProvider;
+const useSongList = ()=>{
+    _s1();
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(SongListContext);
+    if (!context) {
+        throw new Error("usePlaylists must be used within a PlaylistProvider");
+    }
+    return context;
+};
+_s1(useSongList, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+var _c;
+__turbopack_context__.k.register(_c, "SongListProvider");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/SongList.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongCard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/SongCard.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$getSongBpm$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/getSongBpm.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/react-query/build/modern/useQuery.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@fortawesome/react-fontawesome/index.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@fortawesome/free-solid-svg-icons/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/songListContext.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+function SongList(props) {
+    _s();
+    const { bpm, showSongs, playlists } = props;
+    const [songs, setSongs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [listStart, setListStart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [listEnd, setListEnd] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(12);
+    const [pageCounter, setPageCounter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(1);
+    const { data, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useQuery"])({
+        queryKey: [
+            "tempoData",
+            bpm
+        ],
+        queryFn: {
+            "SongList.useQuery": ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$getSongBpm$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchTempoData"])(bpm)
+        }["SongList.useQuery"],
+        enabled: !!showSongs
+    });
+    const {} = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSongList"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SongList.useEffect": ()=>{
+            setSongs(data?.slice(listStart, listEnd));
+        }
+    }["SongList.useEffect"], [
+        data,
+        listStart,
+        listEnd
+    ]);
+    const renderSongListWithNav = ()=>{
+        if (data && showSongs) {
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                children: [
+                    renderSongList(),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "songlist-nav-ctn",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FontAwesomeIcon"], {
+                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["faChevronLeft"],
+                                className: "songlist-nav-btn",
+                                onClick: ()=>handleNavClick("prev"),
+                                size: "xl"
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/SongList.tsx",
+                                lineNumber: 43,
+                                columnNumber: 7
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    "Page ",
+                                    pageCounter
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/metronome/SongList.tsx",
+                                lineNumber: 49,
+                                columnNumber: 7
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FontAwesomeIcon"], {
+                                icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["faChevronRight"],
+                                className: "songlist-nav-btn",
+                                onClick: ()=>handleNavClick("next"),
+                                size: "xl"
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/SongList.tsx",
+                                lineNumber: 50,
+                                columnNumber: 7
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/metronome/SongList.tsx",
+                        lineNumber: 42,
+                        columnNumber: 6
+                    }, this)
+                ]
+            }, void 0, true);
+        }
+    };
+    const renderSongList = ()=>{
+        if (!songs) return;
+        return songs.map((song)=>{
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongCard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                song: song,
+                playlists: playlists,
+                isPlaylist: false
+            }, song.getSongBpmId, false, {
+                fileName: "[project]/components/metronome/SongList.tsx",
+                lineNumber: 66,
+                columnNumber: 5
+            }, this);
+        });
+    };
+    const handleNavClick = (value)=>{
+        if (value === "prev") {
+            if (listStart > 0) {
+                setListStart(listStart - 10);
+                setListEnd(listEnd - 10);
+                if (pageCounter !== 1) {
+                    setPageCounter(pageCounter - 1);
+                }
+            }
+        }
+        if (value === "next") {
+            if (listEnd < 250) {
+                setListStart(listStart + 10);
+                setListEnd(listEnd + 10);
+                setPageCounter(pageCounter + 1);
+            }
+        }
+    };
+    if (!showSongs) return;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: `metro-songlist ${showSongs ? "open" : "closed"}`,
+            children: !isLoading && data?.length > 0 ? renderSongListWithNav() : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FontAwesomeIcon"], {
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["faSpinner"],
+                spin: true,
+                className: "songList-spinner",
+                size: "2xl"
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/SongList.tsx",
+                lineNumber: 103,
+                columnNumber: 6
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/metronome/SongList.tsx",
+            lineNumber: 99,
+            columnNumber: 4
+        }, this)
+    }, void 0, false);
+}
+_s(SongList, "Um05da/DIThIYVcpDXWCeEM06a4=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useQuery"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSongList"]
+    ];
+});
+_c = SongList;
+const __TURBOPACK__default__export__ = SongList;
+var _c;
+__turbopack_context__.k.register(_c, "SongList");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/utils/spotifyAuth.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "getSpotifyLoginUrl": (()=>getSpotifyLoginUrl)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+function getSpotifyLoginUrl() {
+    const params = new URLSearchParams({
+        client_id: ("TURBOPACK compile-time value", "1b6e57ce73a04adba0cb72a6173d6604"),
+        response_type: "code",
+        redirect_uri: ("TURBOPACK compile-time value", "http://localhost:3000/callback"),
+        scope: [
+            "user-read-email",
+            "user-read-private",
+            "streaming",
+            "user-modify-playback-state",
+            "user-read-playback-state",
+            "playlist-modify-public",
+            "playlist-modify-private"
+        ].join(" ")
+    });
+    return `https://accounts.spotify.com/authorize?${params.toString()}`;
+}
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/LoginWithSpotifyButton.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "LoginWithSpotifyButton": (()=>LoginWithSpotifyButton)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$spotifyAuth$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/spotifyAuth.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-client] (ecmascript)");
+"use client";
+;
+;
+;
+;
+function LoginWithSpotifyButton() {
+    const handleLogin = ()=>{
+        window.location.href = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$spotifyAuth$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSpotifyLoginUrl"])();
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+        onClick: handleLogin,
+        className: "spotify-login_btn",
+        children: [
+            "Log in with",
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                src: "/icons/spotify.png",
+                alt: "spotify logo",
+                width: 50,
+                height: 50,
+                quality: 100
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/LoginWithSpotifyButton.tsx",
+                lineNumber: 15,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/metronome/LoginWithSpotifyButton.tsx",
+        lineNumber: 13,
+        columnNumber: 3
+    }, this);
+}
+_c = LoginWithSpotifyButton;
+var _c;
+__turbopack_context__.k.register(_c, "LoginWithSpotifyButton");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/Modal.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+const Modal = ({ children, onClose, className = "", excludeRefs = [] })=>{
+    _s();
+    const modalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Modal.useEffect": ()=>{
+            const handleClickOutside = {
+                "Modal.useEffect.handleClickOutside": (event)=>{
+                    const target = event.target;
+                    const clickedOutsideModal = modalRef.current && !modalRef.current.contains(target);
+                    const clickedInsideExcluded = excludeRefs.some({
+                        "Modal.useEffect.handleClickOutside.clickedInsideExcluded": (ref)=>ref.current && ref.current.contains(target)
+                    }["Modal.useEffect.handleClickOutside.clickedInsideExcluded"]);
+                    if (modalRef.current && !modalRef.current.contains(event.target) && !event.target.closest(".song-dropdown_ctn") // fallback safety
+                    ) {
+                        onClose();
+                    }
+                    if (clickedOutsideModal && !clickedInsideExcluded) {
+                        onClose();
+                    }
+                }
+            }["Modal.useEffect.handleClickOutside"];
+            document.addEventListener("mousedown", handleClickOutside);
+            return ({
+                "Modal.useEffect": ()=>{
+                    document.removeEventListener("mousedown", handleClickOutside);
+                }
+            })["Modal.useEffect"];
+        }
+    }["Modal.useEffect"], [
+        onClose,
+        excludeRefs
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "modal_overlay",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: `modal_ctn ${className}`,
+            ref: modalRef,
+            children: children
+        }, void 0, false, {
+            fileName: "[project]/components/Modal.tsx",
+            lineNumber: 48,
+            columnNumber: 4
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/Modal.tsx",
+        lineNumber: 47,
+        columnNumber: 3
+    }, this);
+};
+_s(Modal, "iXNJws+mDn9J+ZcpHudMXHGV85c=");
+_c = Modal;
+const __TURBOPACK__default__export__ = Modal;
+var _c;
+__turbopack_context__.k.register(_c, "Modal");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/SongSearch.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/songListContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/Spotify.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-hook-form/dist/index.esm.mjs [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+;
+;
+;
+;
+const SongSearch = ()=>{
+    _s();
+    const { handleSubmit, register } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])();
+    const { searchTerm, setSearchTerm } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSongList"])();
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    const onSubmit = async (data)=>{
+        const token = JSON.parse(getCookie("token") || "{}")?.access_token;
+        if (!token) {
+            console.warn("No access token found in cookies.");
+            return;
+        }
+        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["searchSpotifySongsByArtistName"])(data.searchTerm, token);
+        console.log(result);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+        onSubmit: handleSubmit(onSubmit),
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+            type: "text",
+            ...register("searchTerm")
+        }, void 0, false, {
+            fileName: "[project]/components/metronome/SongSearch.tsx",
+            lineNumber: 28,
+            columnNumber: 4
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/metronome/SongSearch.tsx",
+        lineNumber: 27,
+        columnNumber: 3
+    }, this);
+};
+_s(SongSearch, "Fysp5uNQkbm+kMInugtbzSGMkZ0=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSongList"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = SongSearch;
+const __TURBOPACK__default__export__ = SongSearch;
+var _c;
+__turbopack_context__.k.register(_c, "SongSearch");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/Metronome.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Dropdown$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/Dropdown.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/SongList.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@fortawesome/react-fontawesome/index.es.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@fortawesome/free-solid-svg-icons/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$queryClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/query-core/build/modern/queryClient.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$QueryClientProvider$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-down.js [app-client] (ecmascript) <export default as ChevronDown>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Logo$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/Logo.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$LoginWithSpotifyButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/LoginWithSpotifyButton.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/songListContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Modal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Modal.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongSearch$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/SongSearch.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const Metronome = ({ playlists })=>{
+    _s();
+    const [showSongs, setShowSongs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [play, setPlay] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [bpm, setBpm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(120);
+    const [tempoInterval, setTempoInterval] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [tapped, setTapped] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const [soundEffect, setSoundEffect] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("sidestick");
+    const [debouncedBpm, setDebouncedBpm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(bpm);
+    const [dropdownOpen, setDropdownOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showRetrySpotifyLogin, setShowRetrySpotifyLogin] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // const [searchTerm, setSearchTerm] = useState('Search')
+    const [listSize, setListSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(12);
+    const [pulse, setPulse] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [sounds, setSounds] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        woodblock: undefined,
+        cowbell: undefined,
+        sidestick: undefined
+    });
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Metronome.useEffect": ()=>{
+            const woodblock = new Audio("sounds/Woodblock.mp3");
+            const cowbell = new Audio("sounds/Cowbell.mp3");
+            const sidestick = new Audio("sounds/Click.wav");
+            setSounds({
+                woodblock,
+                cowbell,
+                sidestick
+            });
+        }
+    }["Metronome.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Metronome.useEffect": ()=>{
+            const token = getCookie("token");
+            if (!token) {
+                setShowRetrySpotifyLogin(true);
+            }
+        }
+    }["Metronome.useEffect"], []);
+    // ========================== Tap Tempo Logic:
+    const tapTempo = ()=>{
+        if (tapped) {
+            let elapsed = new Date().getTime() - tapped;
+            if (elapsed < 2500) {
+                const tappedBpm = Math.round(6000 / elapsed * 10);
+                setBpm(tappedBpm);
+            } else {
+                setTapped(new Date().getTime());
+            }
+        }
+        setTapped(new Date().getTime());
+    };
+    const playSound = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Metronome.useCallback[playSound]": ()=>{
+            if (soundEffect === "cowbell") {
+                sounds?.cowbell?.play();
+            } else if (sounds && soundEffect === "woodblock") {
+                sounds?.woodblock?.play();
+            } else {
+                sounds?.sidestick?.play();
+            }
+        }
+    }["Metronome.useCallback[playSound]"], [
+        soundEffect,
+        sounds
+    ]);
+    // Sound and Visual:
+    const trigger = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Metronome.useCallback[trigger]": ()=>{
+            if (play) {
+                playSound();
+            } else {
+                return;
+            }
+        }
+    }["Metronome.useCallback[trigger]"], [
+        play,
+        playSound
+    ]);
+    const startClick = ()=>{
+        setPlay(!play);
+    };
+    // Tempo setter:
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Metronome.useEffect": ()=>{
+            if (play) {
+                const intervalId = setInterval({
+                    "Metronome.useEffect.intervalId": ()=>{
+                        trigger();
+                        setPulse(true);
+                        setTimeout({
+                            "Metronome.useEffect.intervalId": ()=>{
+                                setPulse(false);
+                            }
+                        }["Metronome.useEffect.intervalId"], tempoInterval - tempoInterval * 0.1);
+                    }
+                }["Metronome.useEffect.intervalId"], tempoInterval);
+                return ({
+                    "Metronome.useEffect": ()=>{
+                        clearInterval(intervalId);
+                    }
+                })["Metronome.useEffect"];
+            }
+        }
+    }["Metronome.useEffect"], [
+        play,
+        tempoInterval,
+        soundEffect,
+        trigger
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Metronome.useEffect": ()=>{
+            setTempoInterval(60 / bpm * 1000);
+            if (bpm <= 40) {
+                setBpm(40);
+            }
+            if (bpm >= 220) {
+                setBpm(220);
+            }
+            const intervalId = setTimeout({
+                "Metronome.useEffect.intervalId": ()=>{
+                    setDebouncedBpm(bpm);
+                }
+            }["Metronome.useEffect.intervalId"], 500);
+            return ({
+                "Metronome.useEffect": ()=>{
+                    clearTimeout(intervalId);
+                }
+            })["Metronome.useEffect"];
+        }
+    }["Metronome.useEffect"], [
+        bpm
+    ]);
+    const handleDisplaySongsList = ()=>{
+        setShowSongs(!showSongs);
+    };
+    const increment = ()=>{
+        setBpm(Number(bpm) + 1);
+    };
+    const decrement = ()=>{
+        setBpm(Number(bpm) - 1);
+    };
+    const queryClient = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$query$2d$core$2f$build$2f$modern$2f$queryClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QueryClient"]();
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$QueryClientProvider$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QueryClientProvider"], {
+        client: queryClient,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "metronome-ctn",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: `metronome ${pulse ? "pulse" : ""}`,
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "header",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Logo$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                size: 60
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/Metronome.tsx",
+                                lineNumber: 148,
+                                columnNumber: 7
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 147,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "metro-display",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "metro-btn decrement",
+                                    onClick: decrement,
+                                    children: "-"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 151,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "metro-display bpm",
+                                    children: bpm
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 154,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "metro-btn increment",
+                                    onClick: increment,
+                                    children: "+"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 155,
+                                    columnNumber: 7
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 150,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "range",
+                            min: "40",
+                            max: "220",
+                            value: bpm,
+                            onChange: (e)=>setBpm(Number(e.target.value))
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 159,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "metro-controls",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    onClick: startClick,
+                                    className: `metro-btn ${play ? `pause` : `play`} noSelect`,
+                                    id: "metro-there",
+                                    style: {
+                                        animationDuration: `${tempoInterval}ms`
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 167,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "metro-btn-generate",
+                                    onClick: ()=>handleDisplaySongsList(),
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$react$2d$fontawesome$2f$index$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FontAwesomeIcon"], {
+                                        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$fortawesome$2f$free$2d$solid$2d$svg$2d$icons$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["faBars"],
+                                        size: "2x"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/metronome/Metronome.tsx",
+                                        lineNumber: 177,
+                                        columnNumber: 8
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 173,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    onClick: tapTempo,
+                                    className: "metro-btn-tap",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "outer",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "inner"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/metronome/Metronome.tsx",
+                                            lineNumber: 182,
+                                            columnNumber: 9
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/metronome/Metronome.tsx",
+                                        lineNumber: 181,
+                                        columnNumber: 8
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 180,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "metro-dropdown-header",
+                                    onClick: ()=>setDropdownOpen(!dropdownOpen),
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {}, void 0, false, {
+                                            fileName: "[project]/components/metronome/Metronome.tsx",
+                                            lineNumber: 189,
+                                            columnNumber: 8
+                                        }, this),
+                                        soundEffect,
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Dropdown$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                            open: dropdownOpen,
+                                            soundEffect: soundEffect,
+                                            setSoundEffect: setSoundEffect,
+                                            dropdownOpen: dropdownOpen,
+                                            setDropdownOpen: setDropdownOpen
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/metronome/Metronome.tsx",
+                                            lineNumber: 191,
+                                            columnNumber: 8
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 185,
+                                    columnNumber: 7
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 166,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$LoginWithSpotifyButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoginWithSpotifyButton"], {}, void 0, false, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 200,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
+                            style: {
+                                color: "var(--secondary)"
+                            },
+                            children: [
+                                "Powered by",
+                                " ",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "https://www.getsongbpm.com",
+                                    children: "getsongbpm.com"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 204,
+                                    columnNumber: 7
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 202,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$songListContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SongListProvider"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongSearch$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 207,
+                                    columnNumber: 7
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$SongList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    bpm: debouncedBpm,
+                                    showSongs: showSongs,
+                                    listSize: listSize,
+                                    setListSize: setListSize,
+                                    playlists: playlists
+                                }, void 0, false, {
+                                    fileName: "[project]/components/metronome/Metronome.tsx",
+                                    lineNumber: 208,
+                                    columnNumber: 7
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/metronome/Metronome.tsx",
+                            lineNumber: 206,
+                            columnNumber: 6
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/metronome/Metronome.tsx",
+                    lineNumber: 146,
+                    columnNumber: 5
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/Metronome.tsx",
+                lineNumber: 145,
+                columnNumber: 4
+            }, this),
+            showRetrySpotifyLogin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Modal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                excludeRefs: [],
+                onClose: ()=>setShowRetrySpotifyLogin(false),
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        children: "Spotify login expired"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/Metronome.tsx",
+                        lineNumber: 220,
+                        columnNumber: 6
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: "You must login again to continue using the app!"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/Metronome.tsx",
+                        lineNumber: 221,
+                        columnNumber: 6
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$LoginWithSpotifyButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoginWithSpotifyButton"], {}, void 0, false, {
+                        fileName: "[project]/components/metronome/Metronome.tsx",
+                        lineNumber: 222,
+                        columnNumber: 6
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/Metronome.tsx",
+                lineNumber: 219,
+                columnNumber: 5
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/metronome/Metronome.tsx",
+        lineNumber: 144,
+        columnNumber: 3
+    }, this);
+};
+_s(Metronome, "DbWAubfWe7a7Eek4f3UVE4i6qsw=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = Metronome;
+const __TURBOPACK__default__export__ = Metronome;
+var _c;
+__turbopack_context__.k.register(_c, "Metronome");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/ui/slider.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "Slider": (()=>Slider)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$slider$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@radix-ui/react-slider/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }) {
+    _s();
+    const _values = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "Slider.useMemo[_values]": ()=>Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [
+                min,
+                max
+            ]
+    }["Slider.useMemo[_values]"], [
+        value,
+        defaultValue,
+        min,
+        max
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$slider$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"], {
+        "data-slot": "slider",
+        defaultValue: defaultValue,
+        value: value,
+        min: min,
+        max: max,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col", className),
+        ...props,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$slider$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Track"], {
+                "data-slot": "slider-track",
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$slider$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Range"], {
+                    "data-slot": "slider-range",
+                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full")
+                }, void 0, false, {
+                    fileName: "[project]/components/ui/slider.tsx",
+                    lineNumber: 45,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/ui/slider.tsx",
+                lineNumber: 39,
+                columnNumber: 7
+            }, this),
+            Array.from({
+                length: _values.length
+            }, (_, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$slider$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Thumb"], {
+                    "data-slot": "slider-thumb",
+                    className: "border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+                }, index, false, {
+                    fileName: "[project]/components/ui/slider.tsx",
+                    lineNumber: 53,
+                    columnNumber: 9
+                }, this))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/ui/slider.tsx",
+        lineNumber: 27,
+        columnNumber: 5
+    }, this);
+}
+_s(Slider, "g0y/PG/feYg861SE8jxuAUMRVc0=");
+_c = Slider;
+;
+var _c;
+__turbopack_context__.k.register(_c, "Slider");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/utils/helpers.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "areTitlesSimilar": (()=>areTitlesSimilar),
+    "fetchTempoData": (()=>fetchTempoData),
+    "formatTime": (()=>formatTime)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+const fetchTempoData = async (bpm)=>{
+    const apiUrl = `https://api.getsongbpm.com/tempo/?api_key=${__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.SONGBPM_API_KEY}&bpm=${bpm}`;
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data.tempo;
+};
+function normalizeTitle(title) {
+    return title.normalize("NFD") // Decompose accents
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .toLowerCase() // Lowercase
+    .replace(/[^a-z0-9]/gi, ""); // Remove non-alphanumeric characters
+}
+function areTitlesSimilar(title1, title2) {
+    if (title1 == undefined || title2 == undefined) {
+        console.log("Some titles are missing, 1, 2: ", title1, title2);
+    }
+    if (title1 && title2) {
+        return normalizeTitle(title1) === normalizeTitle(title2);
+    }
+    console.log("Some titles are missing, 1, 2: ", title1, title2);
+}
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/SpotifyPlayer.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$slider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/slider.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$helpers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/helpers.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevrons$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronsDown$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevrons-down.js [app-client] (ecmascript) <export default as ChevronsDown>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pause.js [app-client] (ecmascript) <export default as PauseIcon>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/play.js [app-client] (ecmascript) <export default as PlayIcon>");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+const SpotifyPlayer = ()=>{
+    _s();
+    const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [position, setPosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [sliderValue, setSliderValue] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [duration, setDuration] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [isPlaying, setIsPlaying] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { isNextSongLoading, player, spotifyTrack, currentTrack } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            if (isPlaying) {
+                setIsOpen(true);
+            }
+        }
+    }["SpotifyPlayer.useEffect"], [
+        isPlaying
+    ]);
+    const isSeekingRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(false);
+    const previousSliderValueRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(sliderValue);
+    // Open player when currentTrack changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            if (currentTrack) {
+                setIsOpen(true);
+            }
+        }
+    }["SpotifyPlayer.useEffect"], [
+        currentTrack
+    ]);
+    // Reset position and slider on new track
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            if (!currentTrack) return;
+            setPosition(0);
+            setSliderValue(0);
+            setDuration(0);
+        }
+    }["SpotifyPlayer.useEffect"], [
+        currentTrack
+    ]);
+    // Initialize slider when player is ready
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            if (!player) return;
+            const updateInitialSlider = {
+                "SpotifyPlayer.useEffect.updateInitialSlider": async ()=>{
+                    const state = await player.getCurrentState();
+                    if (state && !state.paused && state.duration) {
+                        setPosition(state.position);
+                        setDuration(state.duration);
+                        setSliderValue(state.position / state.duration * 100);
+                        setIsPlaying(!state.paused);
+                    }
+                }
+            }["SpotifyPlayer.useEffect.updateInitialSlider"];
+            updateInitialSlider();
+        }
+    }["SpotifyPlayer.useEffect"], [
+        player
+    ]);
+    // Poll player position every 500ms (but pause updates if seeking)
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            if (!player) return;
+            let interval;
+            const startPolling = {
+                "SpotifyPlayer.useEffect.startPolling": ()=>{
+                    interval = setInterval({
+                        "SpotifyPlayer.useEffect.startPolling": async ()=>{
+                            const state = await player.getCurrentState();
+                            if (!state || !state.duration) return;
+                            setDuration(state.duration);
+                            setIsPlaying(!state.paused);
+                            if (!isSeekingRef.current) {
+                                setPosition(state.position);
+                                setSliderValue(state.position / state.duration * 100);
+                            }
+                        }
+                    }["SpotifyPlayer.useEffect.startPolling"], 500);
+                }
+            }["SpotifyPlayer.useEffect.startPolling"];
+            startPolling();
+            return ({
+                "SpotifyPlayer.useEffect": ()=>clearInterval(interval)
+            })["SpotifyPlayer.useEffect"];
+        }
+    }["SpotifyPlayer.useEffect"], [
+        player
+    ]);
+    // Mismatch detection (toast notification)
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SpotifyPlayer.useEffect": ()=>{
+            setTimeout({
+                "SpotifyPlayer.useEffect": ()=>{
+                    if (!player || isNextSongLoading) return;
+                    player.getCurrentState().then({
+                        "SpotifyPlayer.useEffect": (state)=>{
+                            if (currentTrack?.artist.name !== state?.track_window?.current_track.artists[0].name) {
+                                (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"])(`Mismatch: Showing: ${currentTrack?.artist.name}, Playing: ${state?.track_window?.current_track.artists[0].name}`);
+                            }
+                        }
+                    }["SpotifyPlayer.useEffect"]);
+                }
+            }["SpotifyPlayer.useEffect"], 2000);
+        }
+    }["SpotifyPlayer.useEffect"], [
+        player,
+        isNextSongLoading,
+        spotifyTrack
+    ]);
+    // Play/pause toggle handler
+    const togglePlayPause = async ()=>{
+        if (!player) return;
+        const state = await player.getCurrentState();
+        if (!state) return;
+        if (state.paused) {
+            await player.resume();
+            setIsPlaying(true);
+        } else {
+            await player.pause();
+            setIsPlaying(false);
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `player_ctn ${isOpen ? "open" : ""}`,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevrons$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronsDown$3e$__["ChevronsDown"], {
+                className: "close_btn",
+                onClick: ()=>setIsOpen(false)
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                lineNumber: 128,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "header",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: togglePlayPause,
+                        className: "player-toggle_btn",
+                        "aria-label": isPlaying ? "Pause" : "Play",
+                        children: !isPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayIcon$3e$__["PlayIcon"], {}, void 0, false, {
+                            fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                            lineNumber: 135,
+                            columnNumber: 20
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PauseIcon$3e$__["PauseIcon"], {}, void 0, false, {
+                            fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                            lineNumber: 135,
+                            columnNumber: 35
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                        lineNumber: 130,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        children: spotifyTrack?.name
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                        lineNumber: 137,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: spotifyTrack?.artists[0].name
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                        lineNumber: 138,
+                        columnNumber: 5
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                lineNumber: 129,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$slider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Slider"], {
+                value: [
+                    sliderValue
+                ],
+                max: 100,
+                step: 0.1,
+                onValueChange: (value)=>{
+                    setSliderValue(value[0]);
+                    isSeekingRef.current = true;
+                    if (duration && value[0] !== previousSliderValueRef.current) {
+                        const previewPosition = value[0] / 100 * duration;
+                        setPosition(previewPosition);
+                        previousSliderValueRef.current = value[0];
+                    }
+                },
+                onValueCommit: (value)=>{
+                    if (!player) return;
+                    player.getCurrentState().then((state)=>{
+                        if (!state) return;
+                        const duration = state.duration;
+                        const newPosition = value[0] / 100 * duration;
+                        player.seek(newPosition);
+                        setPosition(newPosition);
+                        setSliderValue(value[0]);
+                        isSeekingRef.current = false;
+                        previousSliderValueRef.current = value[0];
+                    });
+                }
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                lineNumber: 140,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-between text-xs text-gray-400 mt-1",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$helpers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatTime"])(position || 0)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                        lineNumber: 169,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$helpers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatTime"])(duration || 0)
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                        lineNumber: 170,
+                        columnNumber: 5
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+                lineNumber: 168,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/metronome/SpotifyPlayer.tsx",
+        lineNumber: 127,
+        columnNumber: 3
+    }, this);
+};
+_s(SpotifyPlayer, "gA90AttHbCnsCwi/OVDkaxbf5CM=");
+_c = SpotifyPlayer;
+const __TURBOPACK__default__export__ = SpotifyPlayer;
+var _c;
+__turbopack_context__.k.register(_c, "SpotifyPlayer");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/PlaylistItem.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils/songUtils.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlayButton.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playerContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LucideMinusCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-minus.js [app-client] (ecmascript) <export default as LucideMinusCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playlistContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Spinner.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+;
+;
+;
+;
+;
+;
+;
+;
+const PlaylistItem = ({ song, handleRemoveFromPlaylist, playlist })=>{
+    _s();
+    if (!song || !song.duration) return;
+    const [isShowing, setIsShowing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playerContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PlayerContext"]);
+    const { isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
+    const duration = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$songUtils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDuration"])(song.duration);
+    const renderActionButton = ()=>{
+        if (!isShowing) return;
+        if (isLoading) {
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 34,
+                columnNumber: 11
+            }, this);
+        }
+        if (isShowing && !isLoading) {
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LucideMinusCircle$3e$__["LucideMinusCircle"], {
+                color: "red",
+                onClick: ()=>{
+                    handleRemoveFromPlaylist(playlist.id, song);
+                }
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 38,
+                columnNumber: 5
+            }, this);
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "songcard",
+        onMouseEnter: ()=>setIsShowing(true),
+        onMouseLeave: ()=>setIsShowing(false),
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "songcard-left",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "songcard-title",
+                            children: song.title
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                            lineNumber: 55,
+                            columnNumber: 6
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "songcard-artist",
+                            children: song.artist
+                        }, void 0, false, {
+                            fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                            lineNumber: 56,
+                            columnNumber: 6
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                    lineNumber: 54,
+                    columnNumber: 5
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 53,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "songcard-right flex items-center",
+                children: [
+                    duration.minutes,
+                    ":",
+                    duration.seconds,
+                    context && context.player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlayButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        song: song,
+                        player: context.player,
+                        isShowing: isShowing
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                        lineNumber: 62,
+                        columnNumber: 6
+                    }, this),
+                    renderActionButton()
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/PlaylistItem.tsx",
+                lineNumber: 59,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/metronome/PlaylistItem.tsx",
+        lineNumber: 48,
+        columnNumber: 3
+    }, this);
+};
+_s(PlaylistItem, "ym6LSFpL0A72Jbg5EMpjCOFBAkA=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"]
+    ];
+});
+_c = PlaylistItem;
+const __TURBOPACK__default__export__ = PlaylistItem;
+var _c;
+__turbopack_context__.k.register(_c, "PlaylistItem");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/metronome/Sidebar.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/sidebar.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Spinner.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Modal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Modal.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/context/playlistContext.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/services/Spotify.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/useCookies.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlaylistItem$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/PlaylistItem.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-client] (ecmascript) <export default as Trash2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const MetroSidebar = ()=>{
+    _s();
+    const [selectedPlaylist, setSelectedPlaylist] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])();
+    const [playlistUris, setPlaylistUris] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [token, setToken] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [confirmDelete, setConfirmDelete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const { playlists: ctxPlaylists, refreshPlaylists, removeFromPlaylist, removePlaylist, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"])();
+    const dropdownRefs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])([]);
+    const { getCookie } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "MetroSidebar.useEffect": ()=>{
+            refreshPlaylists();
+            const res = getCookie("token");
+            if (!res) return;
+            const { access_token } = JSON.parse(res);
+            setToken(access_token);
+        }
+    }["MetroSidebar.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "MetroSidebar.useEffect": ()=>{
+            if (selectedPlaylist) {
+                renderPlaylistSongs(selectedPlaylist);
+            }
+        }
+    }["MetroSidebar.useEffect"], [
+        selectedPlaylist
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "MetroSidebar.useEffect": ()=>{
+            setSelectedPlaylist({
+                "MetroSidebar.useEffect": (prev)=>ctxPlaylists.find({
+                        "MetroSidebar.useEffect": (pl)=>pl.id === prev?.id
+                    }["MetroSidebar.useEffect"])
+            }["MetroSidebar.useEffect"]);
+        }
+    }["MetroSidebar.useEffect"], [
+        ctxPlaylists
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "MetroSidebar.useEffect": ()=>{
+            let array = [];
+            if (selectedPlaylist) {
+                selectedPlaylist.songs.forEach({
+                    "MetroSidebar.useEffect": (item)=>array.push(item.spotifyUri)
+                }["MetroSidebar.useEffect"]);
+            }
+            setPlaylistUris(array);
+        }
+    }["MetroSidebar.useEffect"], [
+        selectedPlaylist
+    ]);
+    const handleConfirmDelete = async ()=>{
+        try {
+            if (!selectedPlaylist) return;
+            removePlaylist(selectedPlaylist.id).then(()=>setConfirmDelete(false));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const renderPlaylists = ()=>{
+        return ctxPlaylists.map((pl, index)=>{
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "playlist-card hover:opacity-45 cursor-pointer",
+                onClick: ()=>setSelectedPlaylist(pl),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                    className: "playlist-card_title",
+                    children: pl.name
+                }, void 0, false, {
+                    fileName: "[project]/components/metronome/Sidebar.tsx",
+                    lineNumber: 81,
+                    columnNumber: 6
+                }, this)
+            }, `${pl.id}-${pl.createdAt}-${index}`, false, {
+                fileName: "[project]/components/metronome/Sidebar.tsx",
+                lineNumber: 76,
+                columnNumber: 5
+            }, this);
+        });
+    };
+    const renderPlaylistSongs = (pl)=>{
+        if (!pl?.songs) return null;
+        return pl.songs.map((song, index)=>{
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$PlaylistItem$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                song: song,
+                playlist: pl,
+                handleRemoveFromPlaylist: removeFromPlaylist
+            }, `${pl.id}-${song.getSongBpmId}`, false, {
+                fileName: "[project]/components/metronome/Sidebar.tsx",
+                lineNumber: 92,
+                columnNumber: 5
+            }, this);
+        });
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sidebar"], {
+        side: "right",
+        className: "sidebar_main",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarHeader"], {
+                title: "Playlists"
+            }, void 0, false, {
+                fileName: "[project]/components/metronome/Sidebar.tsx",
+                lineNumber: 104,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarContent"], {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "text-3xl",
+                        children: "Playlists"
+                    }, void 0, false, {
+                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                        lineNumber: 106,
+                        columnNumber: 5
+                    }, this),
+                    ctxPlaylists.length ? renderPlaylists() : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                        lineNumber: 107,
+                        columnNumber: 48
+                    }, this),
+                    selectedPlaylist && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Modal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        onClose: ()=>setSelectedPlaylist(undefined),
+                        excludeRefs: dropdownRefs.current,
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "modal_header flex gap-1",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                        className: "text-3xl w-50",
+                                        children: selectedPlaylist.name
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                                        lineNumber: 114,
+                                        columnNumber: 8
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "btn_ctn flex gap-2 w-50",
+                                        children: !confirmDelete ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "submit_btn",
+                                                    onClick: ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$Spotify$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["exportPlaylistToSpotify"])(selectedPlaylist.name, playlistUris, token),
+                                                    children: "Export"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                    lineNumber: 118,
+                                                    columnNumber: 11
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    onClick: ()=>setConfirmDelete(true),
+                                                    className: "submit_btn ",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
+                                                        color: "black"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                        lineNumber: 134,
+                                                        columnNumber: 12
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                    lineNumber: 130,
+                                                    columnNumber: 11
+                                                }, this)
+                                            ]
+                                        }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "w-50 h-full bg-red-800 text-center",
+                                                    onClick: ()=>handleConfirmDelete(),
+                                                    children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Spinner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                                                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                        lineNumber: 143,
+                                                        columnNumber: 25
+                                                    }, this) : "Delete"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                    lineNumber: 139,
+                                                    columnNumber: 11
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "w-50 text-center rounded-2xl",
+                                                    onClick: ()=>setConfirmDelete(false),
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {}, void 0, false, {
+                                                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                        lineNumber: 149,
+                                                        columnNumber: 12
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/metronome/Sidebar.tsx",
+                                                    lineNumber: 145,
+                                                    columnNumber: 11
+                                                }, this)
+                                            ]
+                                        }, void 0, true)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                                        lineNumber: 115,
+                                        columnNumber: 8
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/metronome/Sidebar.tsx",
+                                lineNumber: 113,
+                                columnNumber: 7
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "playlist_list flex flex-col justify-start overflow-y-scroll max-h-[70svh] ",
+                                children: renderPlaylistSongs(selectedPlaylist)
+                            }, void 0, false, {
+                                fileName: "[project]/components/metronome/Sidebar.tsx",
+                                lineNumber: 155,
+                                columnNumber: 7
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/metronome/Sidebar.tsx",
+                        lineNumber: 109,
+                        columnNumber: 6
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/metronome/Sidebar.tsx",
+                lineNumber: 105,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarFooter"], {}, void 0, false, {
+                fileName: "[project]/components/metronome/Sidebar.tsx",
+                lineNumber: 161,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/metronome/Sidebar.tsx",
+        lineNumber: 103,
+        columnNumber: 3
+    }, this);
+};
+_s(MetroSidebar, "tccsEHrzY6y4cle33GC0SOnEzbU=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$context$2f$playlistContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePlaylists"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCookies$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
+    ];
+});
+_c = MetroSidebar;
+const __TURBOPACK__default__export__ = MetroSidebar;
+var _c;
+__turbopack_context__.k.register(_c, "MetroSidebar");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/context/sidebarContext.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "SidebarProvider": (()=>SidebarProvider),
+    "useSidebar": (()=>useSidebar)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
+;
+const SidebarContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])(undefined);
+const SidebarProvider = ({ children })=>{
+    _s();
+    const [state, setState] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        playlists: {},
+        songs: {}
+    });
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContext.Provider, {
+        value: {
+            state,
+            setState
+        },
+        children: children
+    }, void 0, false, {
+        fileName: "[project]/context/sidebarContext.tsx",
+        lineNumber: 38,
+        columnNumber: 3
+    }, this);
+};
+_s(SidebarProvider, "2HOv17/tmKFeSJ+PiCu4ggfjSOk=");
+_c = SidebarProvider;
+const useSidebar = ()=>{
+    _s1();
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(SidebarContext);
+    if (!context) {
+        throw new Error("useSidebar must be used within a SidebarProvider");
+    }
+    return context;
+};
+_s1(useSidebar, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+var _c;
+__turbopack_context__.k.register(_c, "SidebarProvider");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/games/ChordalPractice.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+;
+const ChordalPractice = ()=>{
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        children: "ChordalPractice"
+    }, void 0, false, {
+        fileName: "[project]/components/games/ChordalPractice.tsx",
+        lineNumber: 4,
+        columnNumber: 9
+    }, this);
+};
+_c = ChordalPractice;
+const __TURBOPACK__default__export__ = ChordalPractice;
+var _c;
+__turbopack_context__.k.register(_c, "ChordalPractice");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/components/GameSelection.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Metronome$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/metronome/Metronome.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$games$2f$ChordalPractice$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/games/ChordalPractice.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+const GameSelection = (props)=>{
+    _s();
+    const { playlists } = props;
+    const [selectedGame, setSelectedGame] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const renderSelectedGame = ()=>{
+        switch(selectedGame){
+            case "metronome":
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$metronome$2f$Metronome$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    playlists: playlists
+                }, void 0, false, {
+                    fileName: "[project]/components/GameSelection.tsx",
+                    lineNumber: 13,
+                    columnNumber: 12
+                }, this);
+            case "chordal":
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$games$2f$ChordalPractice$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                    fileName: "[project]/components/GameSelection.tsx",
+                    lineNumber: 15,
+                    columnNumber: 12
+                }, this);
+            default:
+                break;
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "h-full w-full flex justify-center items-center text-white",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                className: "tabs",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                        className: "tab",
+                        onClick: ()=>setSelectedGame("metronome")
+                    }, void 0, false, {
+                        fileName: "[project]/components/GameSelection.tsx",
+                        lineNumber: 25,
+                        columnNumber: 5
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                        className: "tab",
+                        onClick: ()=>setSelectedGame("chordal")
+                    }, void 0, false, {
+                        fileName: "[project]/components/GameSelection.tsx",
+                        lineNumber: 26,
+                        columnNumber: 5
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/GameSelection.tsx",
+                lineNumber: 24,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "game_ctn",
+                children: renderSelectedGame()
+            }, void 0, false, {
+                fileName: "[project]/components/GameSelection.tsx",
+                lineNumber: 28,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/components/GameSelection.tsx",
+        lineNumber: 23,
+        columnNumber: 3
+    }, this);
+};
+_s(GameSelection, "aZlFp0aOUNC60boOZLWgPNYOSMc=");
+_c = GameSelection;
+const __TURBOPACK__default__export__ = GameSelection;
+var _c;
+__turbopack_context__.k.register(_c, "GameSelection");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+}]);
+
+//# sourceMappingURL=_ef710e13._.js.map

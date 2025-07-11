@@ -15,6 +15,7 @@ import { LoginWithSpotifyButton } from "./LoginWithSpotifyButton";
 import { SongListProvider } from "@/context/songListContext";
 import useCookies from "@/hooks/useCookies";
 import Modal from "../Modal";
+import SongSearch from "./SongSearch";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -203,6 +204,7 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 						<Link href="https://www.getsongbpm.com">getsongbpm.com</Link>
 					</h6>
 					<SongListProvider>
+						<SongSearch />
 						<SongList
 							bpm={debouncedBpm}
 							showSongs={showSongs}

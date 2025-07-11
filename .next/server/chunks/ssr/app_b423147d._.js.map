@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 25, "column": 0}, "map": {"version":3,"sources":["file:///Users/phil/Dev/philplaysbass/app/games/arpeggio/ArpeggioGame.tsx"],"sourcesContent":["import React from \"react\";\n\nconst ArpeggioGame = () => {\n\treturn <div>ArpeggioGame</div>;\n};\n\nexport default ArpeggioGame;\n"],"names":[],"mappings":";;;;;AAEA,MAAM,eAAe;IACpB,qBAAO,8OAAC;kBAAI;;;;;;AACb;uCAEe","debugId":null}},
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///Users/phil/Dev/philplaysbass/app/games/arpeggio/page.tsx"],"sourcesContent":["import React from \"react\";\nimport ArpeggioGame from \"./ArpeggioGame\";\n\nconst page = () => {\n\treturn (\n\t\t<div>\n\t\t\t<ArpeggioGame />\n\t\t</div>\n\t);\n};\n\nexport default page;\n"],"names":[],"mappings":";;;;AACA;;;AAEA,MAAM,OAAO;IACZ,qBACC,8OAAC;kBACA,cAAA,8OAAC,yIAAA,CAAA,UAAY;;;;;;;;;;AAGhB;uCAEe","debugId":null}}]
+}

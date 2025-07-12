@@ -4,6 +4,7 @@ import {
 	NOTE_LETTER_ORDER,
 	ScaleQuality,
 } from "@/constants/chromaticScale";
+import { Note } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array

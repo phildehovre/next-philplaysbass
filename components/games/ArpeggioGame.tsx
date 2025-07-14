@@ -1,23 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-	arrayChromaticScale,
-	formulae,
-	QUALITY,
-	ScaleQuality,
-} from "@/constants/chromaticScale";
+import { arrayChromaticScale, QUALITY } from "@/constants/chromaticScale";
 import { ChordQuality, Note } from "@/types/types";
 import {
 	buildScale,
 	selectRandomNote,
 	shuffleArray,
 } from "@/lib/utils/gameUtils";
+import "./ArpeggioGame.css";
 
 const ArpeggioGame = () => {
 	const [question, setQuestion] = useState<string[]>([]);
 	const [answer, setAnswer] = useState<{
-		root?: Note;
-		quality?: ChordQuality;
+		root: Note;
+		quality: ChordQuality;
 		notes?: string[];
 	}>();
 	const [selectedRoot, setSelectedRoot] = useState<string[]>([]);
@@ -44,6 +40,12 @@ const ArpeggioGame = () => {
 	};
 
 	useEffect(() => {
+		init();
+	}, []);
+
+	const init = () => {
+		setSelectedQuality("");
+		setSelectedRoot([]);
 		const note = selectRandomNote() as Note;
 		if (!note) return;
 		const rQuality = QUALITY[
@@ -53,25 +55,48 @@ const ArpeggioGame = () => {
 		const arpeggio = [majorScale[0], majorScale[2], majorScale[4]];
 		setQuestion(shuffleArray(arpeggio));
 		setAnswer({ root: note, quality: rQuality });
-	}, []);
+	};
 
 	const renderArpeggio = () => {
 		return question.map((note, index) => {
 			return (
-				<div key={note + index} className="arpeggio-note">
+				<div key={note + index} className="game_question ">
 					{note}
 				</div>
 			);
 		});
 	};
 
-	console.log(question, answer);
+	const evaluate = () => {
+		console.log(answer);
+		if (
+			selectedQuality === answer?.quality &&
+			selectedRoot.indexOf(answer.root) !== -1
+		) {
+			console.log("WIN!");
+			init();
+		} else {
+			console.log("Incorrect!");
+			setSelectedQuality("");
+			setSelectedRoot([]);
+		}
+	};
+
+	useEffect(() => {
+		if (selectedQuality && selectedRoot) {
+			evaluate();
+		}
+	}, [selectedQuality, selectedRoot]);
 
 	const renderNotes = () => {
 		return arrayChromaticScale.map((n, i) => {
 			return (
-				<div className="note" key={n[0]} onClick={() => setSelectedRoot(n)}>
-					{...n}
+				<div
+					className={`game_btn note ${selectedRoot === n ? "selected" : ""}`}
+					key={n[0]}
+					onClick={() => setSelectedRoot((prev) => (prev !== n ? n : prev))}
+				>
+					{n.length > 1 ? n[0] + " / " + n[1] : n[0]}
 				</div>
 			);
 		});
@@ -79,14 +104,18 @@ const ArpeggioGame = () => {
 	const renderQualities = () => {
 		return QUALITY.map((q, i) => {
 			return (
-				<div className="note" key={q[0]} onClick={() => setSelectedQuality(q)}>
+				<div
+					className={`game_btn quality ${
+						selectedQuality === q ? "selected" : ""
+					}`}
+					key={q}
+					onClick={() => setSelectedQuality(q)}
+				>
 					{q}
 				</div>
 			);
 		});
 	};
-
-	console.log(selectedRoot, selectedQuality);
 
 	return (
 		<div className="game_ctn">

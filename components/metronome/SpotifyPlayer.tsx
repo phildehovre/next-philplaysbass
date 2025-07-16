@@ -5,13 +5,7 @@ import "./SpotifyPlayer.css";
 import { Slider } from "../ui/slider";
 import { toast } from "sonner";
 import { formatTime } from "@/utils/helpers";
-import {
-	ChevronDown,
-	ChevronsDown,
-	ChevronUp,
-	PauseIcon,
-	PlayIcon,
-} from "lucide-react";
+import { ChevronsDown, PauseIcon, PlayIcon } from "lucide-react";
 
 const SpotifyPlayer = () => {
 	const [isOpen, setIsOpen] = useState(false);

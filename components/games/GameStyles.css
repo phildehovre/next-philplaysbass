@@ -1,0 +1,187 @@
+.game_ctn {
+	border: 1px solid var(--secondary-o2);
+	padding: 1em;
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+	align-items: center;
+	justify-content: center;
+}
+
+.game_btn {
+	background-color: var(--secondary-o2);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.25em;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 150ms all ease-in-out;
+
+	&.quality {
+		width: 6em;
+		text-transform: capitalize;
+	}
+
+	&.selected {
+		background-color: var(--clr-cta-primary);
+		color: black;
+	}
+}
+.game_btn:hover {
+	outline: 1px solid var(--clr-cta-primary);
+}
+
+.question_ctn {
+	width: 100%;
+	display: flex;
+	gap: 0.25em;
+	justify-content: center;
+}
+.game_question {
+	color: var(--clr-cta-primary);
+	font-weight: bold;
+	font-size: 2.5em;
+	display: flex;
+	justify-content: center;
+	padding: 0.25em;
+	border-radius: 10px;
+
+	&.root {
+		text-decoration: underline;
+	}
+
+	&.inversions {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		> .note {
+			line-height: 1;
+			color: var(--clr-cta-primary);
+		}
+		> .quality {
+			font-size: 0.5em;
+			margin: 0;
+			padding: 0;
+			color: var(--clr-cta-primary);
+		}
+	}
+}
+.filter_ctn {
+	display: flex;
+	justify-content: center;
+	gap: 0.25em;
+}
+.filter_btn {
+	outline: 1px solid rgba(255, 255, 255, 0.275);
+	border-radius: 6px;
+	padding: 0.25em;
+	transition: 150ms ease-in-out transform;
+
+	&.active {
+		outline: 2px solid var(--clr-cta-primary);
+	}
+}
+
+.filter_icon {
+	transition: 150ms ease-in-out transform;
+	&.active {
+		transform: rotate(-45deg);
+	}
+}
+
+.notes_ctn {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 0.25em;
+}
+
+.qualities_ctn {
+	gap: 0.25em;
+}
+
+.scoreboard {
+	display: flex;
+	justify-content: center;
+	gap: 0.25em;
+	padding: 0.25em;
+	border-radius: 6px;
+	border: 1px solid var(--clr-cta-primary);
+	border: 1px solid rgba(128, 128, 128, 0.458);
+
+	&.timer {
+		font-weight: bold;
+		/* color: var(--clr-cta-primary); */
+	}
+
+	> * {
+		color: var(--clr-cta-primary);
+	}
+}
+
+.flashing_el {
+	position: absolute;
+	height: 1em;
+	width: 1em;
+	z-index: 999;
+	border-radius: 100%;
+
+	&.won {
+		background-color: rgb(0, 246, 0);
+	}
+	&.lost {
+		background-color: red;
+	}
+}
+
+.clock-face {
+	width: 175px;
+	height: 175px;
+	margin: 1rem auto;
+	position: relative;
+}
+
+.clock-svg {
+	width: 100%;
+	height: 100%;
+	transform: rotate(-90deg);
+}
+
+.clock-bg {
+	fill: none;
+	stroke: #e6e6e626;
+	stroke-width: 10;
+}
+
+.clock-progress {
+	fill: none;
+	stroke: var(--clr-cta-primary);
+	stroke-width: 10;
+	/* transition: stroke-dashoffset 0.05s infinite; */
+}
+
+.clock-text {
+	font-size: 16px;
+	fill: #333;
+	transform: rotate(90deg); /* fix text rotation */
+}
+
+.progress_container {
+	width: 100%;
+	height: 10px;
+	background-color: transparent;
+	border-radius: 5px;
+	overflow: hidden;
+	margin-bottom: 1rem;
+}
+
+.progress_bar {
+	height: 100%;
+	background-color: var(--clr-cta-primary);
+}

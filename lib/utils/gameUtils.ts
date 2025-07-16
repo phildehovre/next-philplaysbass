@@ -18,7 +18,7 @@ export function shuffleArray(arr: string[]): string[] {
 export const buildScale = (
 	startingNote: string,
 	quality: ScaleQuality
-): string[] => {
+): Note[] => {
 	const rootIndex = arrayChromaticScale.findIndex((arr) =>
 		arr.includes(startingNote)
 	);
@@ -54,7 +54,7 @@ export const buildScale = (
 		finalScale.push(match || options[0]); // fallback to first enharmonic if no match
 	});
 
-	return finalScale;
+	return finalScale as Note[];
 };
 
 export const buildNaturalScale = (startingNote: string) => {
@@ -80,10 +80,8 @@ export const selectRandomNote = () => {
 		let i = arrayChromaticScale.indexOf(selected);
 		selected = arrayChromaticScale[i];
 	}
-	if (selected.length > 1) {
-		return Math.round(Math.random() * selected.length) > 0.5
-			? selected[0]
-			: selected[1];
+	if (selected[1]) {
+		return Math.random() > 0.5 ? selected[0] : selected[1];
 	}
 	return selected[0] as Note;
 };

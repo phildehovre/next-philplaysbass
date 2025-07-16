@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const GameSelection = (props: any) => {
 	return (
-		<div className="h-[10em] w-full flex justify-center items-end text-white mt-[60px]">
+		<div className="h-[12em] w-full flex justify-center items-center text-white mt-[60px] mb-[60px]">
 			<ul className="tabs flex gap-1 w-full justify-evenly text-2xl ">
 				<li className="tab ">
 					<Link href="/games/arpeggio">Arpeggio</Link>

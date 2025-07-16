@@ -4,7 +4,6 @@ import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/AuthProvider";
 import Footer from "@/components/Footer";
-import Nav from "@/components/Nav";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Nav_alt from "@/components/Nav_alt";
 import ActiveSectionContextProvider from "@/context/activeElementContext";

@@ -103,6 +103,12 @@ button:focus-visible,
 	}
 }
 
+.tab {
+	border-bottom: 1px solid white;
+	padding: 0.25em;
+	margin-bottom: 0.25em;
+}
+
 .mobile {
 	display: block;
 }

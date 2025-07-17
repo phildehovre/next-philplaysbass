@@ -57,6 +57,13 @@ const InversionsGame = () => {
 		});
 	};
 
+	const recordLoss = () => {
+		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
+	};
+	const recordWin = () => {
+		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
+	};
+
 	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
 		if (evaluateCooldownRef.current) {
 			// Still cooling down, ignore this call
@@ -73,12 +80,10 @@ const InversionsGame = () => {
 		const isMatch = matchSet?.includes(selected);
 
 		if (isMatch) {
-			console.log("It's a win!!");
-			setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
+			recordWin();
 			init();
 		} else {
-			console.log("Try again...");
-			setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
+			recordLoss();
 		}
 
 		// Enter cooldown
@@ -87,6 +92,11 @@ const InversionsGame = () => {
 			evaluateCooldownRef.current = false;
 		}, COOLDOWN_MS);
 	};
+
+	useEffect(() => {
+		if (progress == 100) {
+		}
+	}, [progress]);
 
 	useEffect(() => {
 		init();
@@ -105,10 +115,11 @@ const InversionsGame = () => {
 				}
 			};
 
-			init(); // initialize the first round
-			step(); // start tracking progress
+			init();
+			step();
 
 			timeoutId = setInterval(() => {
+				recordLoss();
 				start = Date.now();
 				setProgress(0);
 				init();
@@ -135,8 +146,6 @@ const InversionsGame = () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [withTimer]);
-
-	useEffect(() => {}, [previousNotes]);
 
 	const renderFilters = () => {
 		return QUALITY.map((filter, index) => {

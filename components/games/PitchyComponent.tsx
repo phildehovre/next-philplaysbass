@@ -24,13 +24,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const timeoutRef = useRef<number>(null);
 
 	useEffect(() => {
-		// navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
-		// 	const inputs = deviceInfos.filter((d) => d.kind === "audioinput");
-		// 	setDevices(inputs);
-		// 	if (inputs.length > 0) {
-		// 		setSelectedDeviceId(inputs[0].deviceId); // auto-select first
-		// 	}
-		// });
 		(async () => {
 			try {
 				const inputs = await getAudioInputs();

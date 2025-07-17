@@ -85,3 +85,42 @@ export const selectRandomNote = () => {
 	}
 	return selected[0] as Note;
 };
+
+const NOTE_NAMES = [
+	"C",
+	"C#",
+	"D",
+	"D#",
+	"E",
+	"F",
+	"F#",
+	"G",
+	"G#",
+	"A",
+	"A#",
+	"B",
+];
+
+// A4 = 440 Hz, MIDI number 69
+export function getNoteFromPitch(frequency: number) {
+	const A4 = 440;
+	const SEMITONES_PER_OCTAVE = 12;
+
+	const midiNumber = Math.round(
+		SEMITONES_PER_OCTAVE * Math.log2(frequency / A4) + 69
+	);
+
+	const noteIndex = midiNumber % 12;
+	const octave = Math.floor(midiNumber / 12) - 1;
+	const noteName = NOTE_NAMES[noteIndex];
+
+	const closestFreq = A4 * Math.pow(2, (midiNumber - 69) / 12);
+	const centsOff = 1200 * Math.log2(frequency / closestFreq);
+
+	return {
+		noteName,
+		octave,
+		centsOff,
+		display: `${noteName}${octave}`,
+	};
+}

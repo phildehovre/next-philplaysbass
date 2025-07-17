@@ -1,7 +1,8 @@
+import PitchyComponent from "@/components/games/PitchyComponent";
 import React from "react";
 
 const page = () => {
-	return <div>Under construction</div>;
+	return <div></div>;
 };
 
 export default page;

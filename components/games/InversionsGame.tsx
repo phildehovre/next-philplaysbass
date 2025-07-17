@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import { selectRandomNote } from "@/lib/utils/gameUtils";
-import { QUALITY } from "@/constants/chromaticScale";
+import { arrayChromaticScale, QUALITY } from "@/constants/chromaticScale";
 import { PlusIcon, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
+import PitchyComponent from "./PitchyComponent";
+import { NoteInfo } from "@/types/types";
+import AnimatedNumber from "./AnimatedNumber";
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
@@ -17,11 +20,15 @@ const InversionsGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [withTimer, setWithTimer] = useState(false);
+	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<string[]>([
 		"major",
 	]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
+
+	const evaluateCooldownRef = useRef(false);
+	const COOLDOWN_MS = 500; // 1 second cooldown, adjust as needed
 
 	const init = () => {
 		const notePoolLimit = 3;
@@ -48,6 +55,37 @@ const InversionsGame = () => {
 			setSelectedNote(note); // Only set note after final value is chosen
 			return newHistory;
 		});
+	};
+
+	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
+		if (evaluateCooldownRef.current) {
+			// Still cooling down, ignore this call
+			return;
+		}
+
+		const notePlayed = noteInfo.noteName;
+		const selected = selectedNote;
+
+		const matchSet = arrayChromaticScale.find((group) =>
+			group.includes(notePlayed)
+		);
+
+		const isMatch = matchSet?.includes(selected);
+
+		if (isMatch) {
+			console.log("It's a win!!");
+			setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
+			init();
+		} else {
+			console.log("Try again...");
+			setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
+		}
+
+		// Enter cooldown
+		evaluateCooldownRef.current = true;
+		setTimeout(() => {
+			evaluateCooldownRef.current = false;
+		}, COOLDOWN_MS);
 	};
 
 	useEffect(() => {
@@ -138,6 +176,10 @@ const InversionsGame = () => {
 				<span className="highlight">spacebar</span> or start the{" "}
 				<span className="highlight">timer</span>!
 			</p>
+			<div className="scoreboard text-2xl font-mono">
+				<AnimatedNumber number={score.losses} />:
+				<AnimatedNumber number={score.wins} />
+			</div>
 			<label htmlFor="withTimer" className="flex items-center gap-2">
 				<Timer />
 				<SwitchPrimitive.Root
@@ -196,6 +238,7 @@ const InversionsGame = () => {
 			</div>
 
 			<div className="qualities_ctn flex">{renderFilters()}</div>
+			<PitchyComponent onNoteDetection={evaluateNotePlayed} />
 		</div>
 	);
 };

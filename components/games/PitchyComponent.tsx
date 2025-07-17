@@ -23,16 +23,41 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const streamRef = useRef<MediaStream | null>(null);
 	const timeoutRef = useRef<number>(null);
 
-	// Get list of audio input devices
 	useEffect(() => {
-		navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
-			const inputs = deviceInfos.filter((d) => d.kind === "audioinput");
-			setDevices(inputs);
-			if (inputs.length > 0) {
-				setSelectedDeviceId(inputs[0].deviceId); // auto-select first
+		// navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
+		// 	const inputs = deviceInfos.filter((d) => d.kind === "audioinput");
+		// 	setDevices(inputs);
+		// 	if (inputs.length > 0) {
+		// 		setSelectedDeviceId(inputs[0].deviceId); // auto-select first
+		// 	}
+		// });
+		(async () => {
+			try {
+				const inputs = await getAudioInputs();
+				if (inputs) {
+					setDevices(inputs);
+				}
+			} catch (err) {
+				console.log(err);
 			}
-		});
+		})();
 	}, []);
+
+	const getAudioInputs = async () => {
+		try {
+			// Ask for permission first
+			await navigator.mediaDevices.getUserMedia({ audio: true });
+
+			// Then enumerate devices
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const inputs = devices.filter((d) => d.kind === "audioinput");
+			console.log(inputs);
+			return inputs;
+		} catch (err) {
+			console.error("Error accessing audio devices:", err);
+		}
+	};
+
 	const COOLDOWN_MS = 100;
 
 	const cooldownRef = useRef(false);

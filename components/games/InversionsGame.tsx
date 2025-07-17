@@ -52,7 +52,8 @@ const InversionsGame = () => {
 					? [...prev.slice(1), note]
 					: [...prev, note];
 
-			setSelectedNote(note); // Only set note after final value is chosen
+			// Only set note after final value is chosen
+			setSelectedNote(note);
 			return newHistory;
 		});
 	};

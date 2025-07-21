@@ -12,7 +12,7 @@ import {
 	QUALITY,
 	ScaleQuality,
 } from "@/constants/chromaticScale";
-import { Piano, PlusIcon, Timer } from "lucide-react";
+import { Drum, Drumstick, Piano, PlusIcon, Timer } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
@@ -223,21 +223,12 @@ const InversionsGame = () => {
 			</div>
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
-					<label htmlFor="withTimer" className="flex items-center gap-2">
-						<Timer />
-						<Switch checked={withTimer} onCheckChange={setWithTimer} />
-					</label>
-				</TooltipTrigger>
-				<TooltipContent>Practice with a time limit</TooltipContent>
-			</Tooltip>
-			<Tooltip>
-				<TooltipTrigger asChild={true}>
 					<label htmlFor="withMetronome" className="flex items-center gap-2">
-						<img src="assets/metronome-icon.svg" />
+						<Drum />
 						<Switch checked={withMetronome} onCheckChange={setWithMetronome} />
 					</label>
 				</TooltipTrigger>
-				<TooltipContent>Practice with a metronome</TooltipContent>
+				<TooltipContent>[coming soon] Practice with a metronome</TooltipContent>
 			</Tooltip>
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
@@ -247,6 +238,15 @@ const InversionsGame = () => {
 					</label>
 				</TooltipTrigger>
 				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
+			</Tooltip>
+			<Tooltip>
+				<TooltipTrigger asChild={true}>
+					<label htmlFor="withTimer" className="flex items-center gap-2 ">
+						<Timer />
+						<Switch checked={withTimer} onCheckChange={setWithTimer} />
+					</label>
+				</TooltipTrigger>
+				<TooltipContent>Practice with a time limit</TooltipContent>
 			</Tooltip>
 			<div>
 				<h1 className="scoreboard timer">{displayedDuration / 1000} sec</h1>
@@ -283,7 +283,7 @@ const InversionsGame = () => {
 						<div className="note">{selectedNote}</div>
 						{withArpeggios && <div className="quality">{questionQuality}</div>}
 						{withArpeggios && (
-							<div className="arpeggio-progress_ctn flex gap-1 w-full justify-between">
+							<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
 								<div
 									className={`dot ${
 										arpeggioPlayed.length >= 1 ? "checked" : ""

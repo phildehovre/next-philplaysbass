@@ -4,12 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import { selectRandomNote } from "@/lib/utils/gameUtils";
 import { arrayChromaticScale, QUALITY } from "@/constants/chromaticScale";
-import { PlusIcon, Timer } from "lucide-react";
+import { Key, Piano, PlusIcon, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import PitchyComponent from "./PitchyComponent";
 import { NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
+import Switch from "../Switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
@@ -20,10 +22,13 @@ const InversionsGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [withTimer, setWithTimer] = useState(false);
+	const [withMetronome, setWithMetronome] = useState(false);
+	const [withArpeggios, setWithArpeggios] = useState(false);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<string[]>([
 		"major",
 	]);
+	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
 
@@ -65,33 +70,50 @@ const InversionsGame = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
 	};
 
-	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
-		if (evaluateCooldownRef.current) {
-			// Still cooling down, ignore this call
-			return;
+	const evaluateRound = (note: NoteInfo) => {
+		if (evaluateCooldownRef.current) return;
+		if (!withArpeggios) {
+			const isMatch = evaluateNotePlayed(note);
+			if (isMatch) {
+				recordWin();
+				init();
+			} else {
+				recordLoss();
+			}
 		}
 
-		const notePlayed = noteInfo.noteName;
-		const selected = selectedNote;
-
-		const matchSet = arrayChromaticScale.find((group) =>
-			group.includes(notePlayed)
-		);
-
-		const isMatch = matchSet?.includes(selected);
-
-		if (isMatch) {
-			recordWin();
-			init();
-		} else {
-			recordLoss();
+		if (withArpeggios) {
+			const isMatch = evaluateNotePlayed(note);
+			if (isMatch) {
+				setArpeggioPlayed((prev) => [...prev, note]);
+			}
 		}
-
-		// Enter cooldown
 		evaluateCooldownRef.current = true;
 		setTimeout(() => {
 			evaluateCooldownRef.current = false;
 		}, COOLDOWN_MS);
+	};
+
+	useEffect(() => {
+		if (arpeggioPlayed.length === 3) {
+			recordWin();
+			init();
+		}
+	}, [arpeggioPlayed]);
+
+	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
+		const notePlayed = noteInfo.noteName;
+		const selected = selectedNote;
+
+		console.log("Selected:", selectedNote, "| Played:", noteInfo.noteName);
+		// Find group that contains the played note
+		const matchSet = arrayChromaticScale.find((group) =>
+			group.includes(notePlayed)
+		);
+
+		// ✅ FIX: Check if selectedNote is in the same group
+		const isMatch = matchSet?.includes(selected);
+		return isMatch;
 	};
 
 	useEffect(() => {
@@ -190,25 +212,33 @@ const InversionsGame = () => {
 				<AnimatedNumber number={score.losses} />:
 				<AnimatedNumber number={score.wins} />
 			</div>
-			<label htmlFor="withTimer" className="flex items-center gap-2">
-				<Timer />
-				<SwitchPrimitive.Root
-					data-slot="switch"
-					className={cn(
-						"peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
-						`timer_switch ${withTimer ? "checked" : ""}`
-					)}
-					onCheckedChange={() => setWithTimer(!withTimer)}
-					checked={withTimer}
-				>
-					<SwitchPrimitive.Thumb
-						data-slot="switch-thumb"
-						className={cn(
-							"bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground shadow-blackj pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
-						)}
-					/>
-				</SwitchPrimitive.Root>
-			</label>
+			<Tooltip>
+				<TooltipTrigger asChild={true}>
+					<label htmlFor="withTimer" className="flex items-center gap-2">
+						<Timer />
+						<Switch checked={withTimer} onCheckChange={setWithTimer} />
+					</label>
+				</TooltipTrigger>
+				<TooltipContent>Practice with a time limit</TooltipContent>
+			</Tooltip>
+			<Tooltip>
+				<TooltipTrigger asChild={true}>
+					<label htmlFor="withMetronome" className="flex items-center gap-2">
+						<img src="assets/metronome-icon.svg" />
+						<Switch checked={withMetronome} onCheckChange={setWithMetronome} />
+					</label>
+				</TooltipTrigger>
+				<TooltipContent>Practice with a metronome</TooltipContent>
+			</Tooltip>
+			<Tooltip>
+				<TooltipTrigger asChild={true}>
+					<label htmlFor="withArpeggios" className="flex items-center gap-2">
+						<Piano />
+						<Switch checked={withArpeggios} onCheckChange={setWithArpeggios} />
+					</label>
+				</TooltipTrigger>
+				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
+			</Tooltip>
 			<div>
 				<h1 className="scoreboard timer">{displayedDuration / 1000} sec</h1>
 				<input
@@ -242,13 +272,12 @@ const InversionsGame = () => {
 					</svg>
 					<div className="game_question inversions">
 						<div className="note">{selectedNote}</div>
-						<div className="quality">{questionQuality}</div>
+						{withArpeggios && <div className="quality">{questionQuality}</div>}
 					</div>
 				</div>
 			</div>
-
 			<div className="qualities_ctn flex">{renderFilters()}</div>
-			<PitchyComponent onNoteDetection={evaluateNotePlayed} />
+			<PitchyComponent onNoteDetection={evaluateRound} />
 		</div>
 	);
 };

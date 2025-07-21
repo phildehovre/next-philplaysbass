@@ -6,7 +6,7 @@ import { getNoteFromPitch } from "@/lib/utils/gameUtils";
 import { NoteInfo } from "@/types/types";
 
 type PitchyComponentProps = {
-	onNoteDetection: (note: NoteInfo) => void;
+	onNoteDetection: (notes: NoteInfo) => void;
 };
 
 export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {

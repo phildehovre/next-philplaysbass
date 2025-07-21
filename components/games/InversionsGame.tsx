@@ -2,13 +2,19 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
-import { selectRandomNote } from "@/lib/utils/gameUtils";
-import { arrayChromaticScale, QUALITY } from "@/constants/chromaticScale";
-import { Key, Piano, PlusIcon, Timer } from "lucide-react";
-import { cn } from "@/lib/utils";
-import * as SwitchPrimitive from "@radix-ui/react-switch";
+import {
+	buildNaturalScale,
+	buildScale,
+	selectRandomNote,
+} from "@/lib/utils/gameUtils";
+import {
+	arrayChromaticScale,
+	QUALITY,
+	ScaleQuality,
+} from "@/constants/chromaticScale";
+import { Piano, PlusIcon, Timer } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
-import { NoteInfo } from "@/types/types";
+import { Note, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
 import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -18,14 +24,15 @@ const CIRCLE_CANVAS = "50";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
-	const [questionQuality, setQuestionQuality] = useState("");
+	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
+	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [withTimer, setWithTimer] = useState(false);
 	const [withMetronome, setWithMetronome] = useState(false);
 	const [withArpeggios, setWithArpeggios] = useState(false);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
-	const [selectedQualities, setSelectedQualities] = useState<string[]>([
+	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
@@ -33,7 +40,7 @@ const InversionsGame = () => {
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
 
 	const evaluateCooldownRef = useRef(false);
-	const COOLDOWN_MS = 500; // 1 second cooldown, adjust as needed
+	const COOLDOWN_MS = 500;
 
 	const init = () => {
 		const notePoolLimit = 3;
@@ -59,6 +66,10 @@ const InversionsGame = () => {
 
 			// Only set note after final value is chosen
 			setSelectedNote(note);
+			const scale = buildScale(note, quality);
+			const arpeggio = [scale[0], scale[2], scale[4]];
+			setQuestionArpeggio(arpeggio);
+
 			return newHistory;
 		});
 	};
@@ -82,10 +93,12 @@ const InversionsGame = () => {
 			}
 		}
 
-		if (withArpeggios) {
+		if (withArpeggios && questionArpeggio) {
 			const isMatch = evaluateNotePlayed(note);
 			if (isMatch) {
 				setArpeggioPlayed((prev) => [...prev, note]);
+			} else {
+				recordLoss();
 			}
 		}
 		evaluateCooldownRef.current = true;
@@ -97,29 +110,25 @@ const InversionsGame = () => {
 	useEffect(() => {
 		if (arpeggioPlayed.length === 3) {
 			recordWin();
+			setArpeggioPlayed([]);
 			init();
 		}
 	}, [arpeggioPlayed]);
 
 	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
 		const notePlayed = noteInfo.noteName;
-		const selected = selectedNote;
+		const selected = withArpeggios
+			? questionArpeggio[arpeggioPlayed.length]
+			: selectedNote;
 
-		console.log("Selected:", selectedNote, "| Played:", noteInfo.noteName);
 		// Find group that contains the played note
 		const matchSet = arrayChromaticScale.find((group) =>
 			group.includes(notePlayed)
 		);
 
-		// ✅ FIX: Check if selectedNote is in the same group
 		const isMatch = matchSet?.includes(selected);
 		return isMatch;
 	};
-
-	useEffect(() => {
-		if (progress == 100) {
-		}
-	}, [progress]);
 
 	useEffect(() => {
 		init();
@@ -146,7 +155,7 @@ const InversionsGame = () => {
 				start = Date.now();
 				setProgress(0);
 				init();
-				step(); // restart animation each round
+				step(); // restart animation!!
 			}, duration);
 
 			return () => {
@@ -273,6 +282,25 @@ const InversionsGame = () => {
 					<div className="game_question inversions">
 						<div className="note">{selectedNote}</div>
 						{withArpeggios && <div className="quality">{questionQuality}</div>}
+						{withArpeggios && (
+							<div className="arpeggio-progress_ctn flex gap-1 w-full justify-between">
+								<div
+									className={`dot ${
+										arpeggioPlayed.length >= 1 ? "checked" : ""
+									}`}
+								></div>
+								<div
+									className={`dot ${
+										arpeggioPlayed.length >= 2 ? "checked" : ""
+									}`}
+								></div>
+								<div
+									className={`dot ${
+										arpeggioPlayed.length >= 3 ? "checked" : ""
+									}`}
+								></div>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>

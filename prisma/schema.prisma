@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+  provider   = "prisma-client-js"
+  output     = "../lib/generated/prisma"
   engineType = "binary"
 }
 
@@ -10,44 +10,95 @@ datasource db {
 }
 
 model User {
-  id        String           @id @default(uuid()) @unique
-  email     String     @unique
-  name      String
-  playlists Playlist[] 
-  kindeId   String   @unique
+  id              String            @id @unique @default(uuid())
+  email           String            @unique
+  name            String
+  playlists       Playlist[]
+  kindeId         String            @unique
+  PracticeSession PracticeSession[]
+  UserStats       UserStats?
 }
 
 model Playlist {
-  id        String           @id @default(uuid()) @unique
+  id        String         @id @unique @default(uuid())
   name      String
-  createdAt DateTime      @default(now())
-  user      User          @relation(fields: [userId], references: [id])
-  userId   String 
-  songs     PlaylistSong[] 
+  createdAt DateTime       @default(now())
+  user      User           @relation(fields: [userId], references: [id])
+  userId    String
+  songs     PlaylistSong[]
 }
 
 model Song {
-  id         String   @id @default(uuid()) @unique
-  spotifyUri String @unique
-  getSongBpmId String @unique 
-  title      String
-  uri        String
-  tempo      Int
-  artist     String
-  duration   Int?
-  genres String[]
-  playlists  PlaylistSong[]
+  id           String         @id @unique @default(uuid())
+  spotifyUri   String         @unique
+  getSongBpmId String         @unique
+  title        String
+  uri          String
+  tempo        Int
+  artist       String
+  duration     Int?
+  genres       String[]
+  playlists    PlaylistSong[]
 }
-
 
 model PlaylistSong {
   playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  playlistId String 
+  playlistId String
 
-  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
-  songId    String @default(uuid()) 
+  song   Song   @relation(fields: [songId], references: [id], onDelete: Cascade)
+  songId String @default(uuid())
 
-  addedAt    DateTime @default(now())
+  addedAt DateTime @default(now())
 
-  @@id([playlistId, songId]) 
+  @@id([playlistId, songId])
+}
+
+model PracticeSession {
+  id        String          @id @default(uuid())
+  user      User            @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime        @default(now())
+  gameType  String // "note-match", "arpeggio", "scale", etc.
+  scaleType String? // "major", "minor", "diminished", "augmented"
+  key       String? // e.g. "C", "F#", "Eb"
+  bpm       Int? // if played with metronome
+  withTimer Boolean
+  duration  Int // in seconds
+  result    PracticeResult? @relation(fields: [resultId], references: [id])
+  resultId  String?
+
+  events PracticeEvent[]
+}
+
+model PracticeEvent {
+  id        String          @id @default(uuid())
+  session   PracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+
+  expectedNote      String // "C", "F#", etc.
+  playedNote        String? // null if missed
+  isCorrect         Boolean
+  playedAt          DateTime // when user attempted
+  timeToHitMs       Int? // ms between note shown and played
+  metronomeOffsetMs Int? // ms offset from beat if applicable
+}
+
+model PracticeResult {
+  id               String            @id @default(uuid())
+  totalNotes       Int
+  correctNotes     Int
+  averageHitTimeMs Int?
+  rhythmAccuracy   Float? // e.g. deviation in ms from metronome avg
+  score            Int // weighted score
+  PracticeSession  PracticeSession[]
+}
+
+model UserStats {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  totalSessions Int
+  totalTime     Int // seconds
+  avgScore      Float
+  lastPracticed DateTime
 }

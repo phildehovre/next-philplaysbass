@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; // update to your actual prisma path
 
-export async function POST(
-	req: NextRequest,
-	context: { params: { sessionId: string } }
-) {
+// ✅ Explicit type for the second argument to satisfy Vercel's build
+interface Context {
+	params: {
+		sessionId: string;
+	};
+}
+
+export async function POST(req: NextRequest, context: Context) {
 	const { sessionId } = context.params;
+
 	try {
 		if (!sessionId) {
 			return NextResponse.json({ error: "Missing sessionId" }, { status: 400 });
@@ -32,8 +37,9 @@ export async function POST(
 
 		const res = await prisma.practiceEvent.createMany({
 			data: formattedEvents,
-			skipDuplicates: true, // optional, avoids crashing on duplicate UUIDs
+			skipDuplicates: true,
 		});
+
 		console.log("RESULT: ", res);
 
 		return NextResponse.json({ success: true }, { status: 201 });

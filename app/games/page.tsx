@@ -1,19 +1,21 @@
 import Dashboard from "@/components/games/Dashboard";
-import GameSelection from "@/components/GameSelection";
 import { prisma } from "@/lib/prisma";
-import { ensureUserInDb } from "@/services/userService";
-import { NextResponse } from "next/server";
+import { getCurrentUserId } from "@/services/userService";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const page = async () => {
-	const user = await ensureUserInDb();
+export const dynamic = "force-dynamic"; // optional, but recommended for auth
 
-	if (!user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+const Page = async () => {
+	const userId = await getCurrentUserId();
+
+	if (!userId) {
+		redirect("/login"); // ✅ this is the right way to redirect in a page component
+	}
 
 	// Step 1: Get all session IDs for this user
 	const sessions = await prisma.practiceSession.findMany({
-		where: { userId: user.id },
+		where: { userId },
 		select: { id: true },
 	});
 
@@ -35,4 +37,4 @@ const page = async () => {
 	);
 };
 
-export default page;
+export default Page;

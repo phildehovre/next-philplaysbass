@@ -23,3 +23,11 @@ export async function ensureUserInDb() {
 
 	return user;
 }
+
+export async function getCurrentUserId(): Promise<string | null> {
+	const { getUser, isAuthenticated } = getKindeServerSession();
+	if (!(await isAuthenticated())) return null;
+
+	const user = await getUser();
+	return user?.id || null;
+}

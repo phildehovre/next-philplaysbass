@@ -6,7 +6,6 @@ export async function middleware(request: NextRequest) {
 	// const token = request.cookies.get("auth_token");
 
 	const { isAuthenticated } = getKindeServerSession();
-	console.log("API ROUTE MIDDLEWARE: ", isAuthenticated);
 
 	if (pathname.startsWith("/api") && !(await isAuthenticated())) {
 		return NextResponse.redirect(new URL("/login", request.url));

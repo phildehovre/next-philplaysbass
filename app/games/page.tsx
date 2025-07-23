@@ -2,10 +2,14 @@ import Dashboard from "@/components/games/Dashboard";
 import GameSelection from "@/components/GameSelection";
 import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
+import { NextResponse } from "next/server";
 import React from "react";
 
 const page = async () => {
 	const user = await ensureUserInDb();
+
+	if (!user)
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
 	// Step 1: Get all session IDs for this user
 	const sessions = await prisma.practiceSession.findMany({

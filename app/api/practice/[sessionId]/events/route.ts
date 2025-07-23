@@ -3,10 +3,10 @@ import { prisma } from "@/lib/prisma"; // update to your actual prisma path
 
 export async function POST(
 	req: NextRequest,
-	{ params }: { params: { sessionId: string } }
+	context: { params: { sessionId: string } }
 ) {
+	const { sessionId } = context.params;
 	try {
-		const sessionId = await params.sessionId;
 		if (!sessionId) {
 			return NextResponse.json({ error: "Missing sessionId" }, { status: 400 });
 		}

@@ -1,7 +1,7 @@
 import InversionsGame from "@/components/games/InversionsGame";
 import React from "react";
 
-const page = () => {
+const page = async () => {
 	return <InversionsGame />;
 };
 

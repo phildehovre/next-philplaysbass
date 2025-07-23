@@ -1,5 +1,6 @@
 import { Track } from "spotify-api.js";
 import { Song } from "@/lib/generated/prisma";
+import { ScaleQuality } from "@/constants/chromaticScale";
 
 export type LanguagesType = "en" | "fr" | "nl";
 
@@ -128,4 +129,31 @@ export type NoteInfo = {
 	octave: number; // e.g., 2
 	centsOff: number; // e.g., 3.83 — how far off from the ideal frequency, in cents
 	display: string; // e.g., "G2"
+};
+
+export interface NoteEvent {
+	expectedNote: string;
+	playedNote?: string;
+	isCorrect: boolean;
+	timeToHitMs?: number;
+	metronomeOffsetMs?: number;
+	playedAt: Date;
+}
+
+export type GameTypes = "note-match" | "arpeggio-match" | "note-match-tempo";
+
+export type NoteMatchParams = {
+	scaleType: ScaleQuality | undefined;
+	key: string;
+	bpm: number;
+	withTimer: boolean;
+	duration: number;
+};
+
+export type ArpeggioMatchParams = {
+	scaleType: ScaleQuality;
+	key: string;
+	bpm: number;
+	withTimer: boolean;
+	duration: number;
 };

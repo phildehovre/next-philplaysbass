@@ -2,22 +2,20 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
-import {
-	buildNaturalScale,
-	buildScale,
-	selectRandomNote,
-} from "@/lib/utils/gameUtils";
+import { buildScale, selectRandomNote } from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
 	QUALITY,
 	ScaleQuality,
 } from "@/constants/chromaticScale";
-import { Drum, Drumstick, Piano, PlusIcon, Timer } from "lucide-react";
+import { Drum, Piano, PlusIcon, Timer } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
 import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import GameSession from "./GameSession";
+import { usePracticeSession } from "@/context/practiceSessionsContext";
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
@@ -38,6 +36,9 @@ const InversionsGame = () => {
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+
+	const { sessionId, finishSession } = usePracticeSession();
 
 	const evaluateCooldownRef = useRef(false);
 	const COOLDOWN_MS = 500;
@@ -81,10 +82,10 @@ const InversionsGame = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
 	};
 
-	const evaluateRound = (note: NoteInfo) => {
+	const evaluateRound = async (note: NoteInfo) => {
 		if (evaluateCooldownRef.current) return;
 		if (!withArpeggios) {
-			const isMatch = evaluateNotePlayed(note);
+			const isMatch = await evaluateNotePlayed(note);
 			if (isMatch) {
 				recordWin();
 				init();
@@ -94,7 +95,7 @@ const InversionsGame = () => {
 		}
 
 		if (withArpeggios && questionArpeggio) {
-			const isMatch = evaluateNotePlayed(note);
+			const isMatch = await evaluateNotePlayed(note);
 			if (isMatch) {
 				setArpeggioPlayed((prev) => [...prev, note]);
 			} else {
@@ -115,7 +116,15 @@ const InversionsGame = () => {
 		}
 	}, [arpeggioPlayed]);
 
-	const evaluateNotePlayed = (noteInfo: NoteInfo) => {
+	const onGameSessionStart = async (callback: () => Promise<void>) => {
+		if (!sessionId) {
+			const id = await callback();
+			// setComponentSessionId(id);
+			return id;
+		}
+	};
+
+	const evaluateNotePlayed = async (noteInfo: NoteInfo) => {
 		const notePlayed = noteInfo.noteName;
 		const selected = withArpeggios
 			? questionArpeggio[arpeggioPlayed.length]
@@ -152,6 +161,7 @@ const InversionsGame = () => {
 
 			timeoutId = setInterval(() => {
 				recordLoss();
+				init();
 				start = Date.now();
 				setProgress(0);
 				init();
@@ -211,6 +221,18 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn">
+			<GameSession
+				setIsLoading={setIsLoading}
+				onGameSessionsStart={() => console.log("hello")}
+				gameType="note-match"
+				gameParams={{
+					scaleType: questionQuality,
+					key: selectedNote,
+					bpm: 120,
+					withTimer,
+					duration,
+				}}
+			/>
 			<p className="game_instructions w-50">
 				Change <span className="highlight-white">note</span> and{" "}
 				<span className="highlight-white">quality</span> by pressing the{" "}

@@ -142,12 +142,13 @@ export interface NoteEvent {
 
 export type GameTypes = "note-match" | "arpeggio-match" | "note-match-tempo";
 
-export type NoteMatchParams = {
-	scaleType: ScaleQuality | undefined;
+export type NoteMatchEvent = {
+	scaleType: ScaleQuality;
 	key: string;
 	bpm: number;
 	withTimer: boolean;
 	duration: number;
+	speed: number;
 };
 
 export type ArpeggioMatchParams = {

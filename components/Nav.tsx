@@ -51,6 +51,11 @@ const Nav: React.FC<NavProps> = ({ isLoggedIn }) => {
 			label: btns.lessons.labels[language],
 			tooltip: btns.lessons.tooltip[language],
 		},
+		{
+			href: "/games",
+			label: btns.games.labels[language],
+			tooltip: btns.games.tooltips[language],
+		},
 	];
 
 	return (

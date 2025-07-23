@@ -58,12 +58,8 @@ model PracticeSession {
   user      User            @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime        @default(now())
-  gameType  String // "note-match", "arpeggio", "scale", etc.
-  scaleType String? // "major", "minor", "diminished", "augmented"
-  key       String? // e.g. "C", "F#", "Eb"
-  bpm       Int? // if played with metronome
-  withTimer Boolean
-  duration  Int // in seconds
+  gameType  String 
+  duration  Int
   result    PracticeResult? @relation(fields: [resultId], references: [id])
   resultId  String?
 

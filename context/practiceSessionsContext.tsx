@@ -2,8 +2,14 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
-import { NoteEvent } from "@/types/types";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	useCallback,
+	useEffect,
+} from "react";
+import { GameTypes, NoteEvent } from "@/types/types";
 
 interface PracticeSessionContextType {
 	sessionId: string | null;
@@ -12,6 +18,7 @@ interface PracticeSessionContextType {
 	addEvent: (event: NoteEvent) => void;
 	finishSession: () => Promise<void>;
 	resetSession: () => void;
+	startSession: (gameType: GameTypes) => Promise<void>;
 }
 
 const PracticeSessionContext = createContext<
@@ -28,10 +35,17 @@ export const PracticeSessionProvider = ({
 	const [events, setEvents] = useState<NoteEvent[]>([]);
 
 	const addEvent = useCallback((event: NoteEvent) => {
-		setEvents((prev) => [...prev, event]);
+		setEvents((prev) => {
+			// Should start practice session on first event being logged?
+			if (prev.length == 0) {
+				console.log("This logs in the events of first event");
+			}
+			return [...prev, event];
+		});
 	}, []);
 
 	const finishSession = useCallback(async () => {
+		console.log("Finishing session!");
 		if (!sessionId) return;
 
 		// 1. Send events
@@ -44,6 +58,7 @@ export const PracticeSessionProvider = ({
 		// 2. Trigger scoring
 		await fetch(`/api/practice/${sessionId}/end`, {
 			method: "POST",
+			body: JSON.stringify({ sessionId }),
 		});
 
 		// 3. Reset (optional)
@@ -57,12 +72,35 @@ export const PracticeSessionProvider = ({
 		setEvents([]);
 	};
 
+	const startSession = async (gameType: GameTypes) => {
+		console.log("Starting session");
+		try {
+			const res = await fetch("/api/practice/start", {
+				method: "POST",
+				body: JSON.stringify({
+					gameType,
+				}),
+				headers: { "Content-Type": "application/json" },
+			});
+			const { sessionId } = await res.json();
+			setSessionId(sessionId);
+			return sessionId;
+		} catch (error) {
+			console.log(
+				"%cerror components/games/GameSession.tsx line:42 ",
+				"color: red; display: block; width: 100%;",
+				error
+			);
+		}
+	};
+
 	const contextValue: PracticeSessionContextType = {
 		sessionId,
 		startTime,
 		events,
 		addEvent,
 		finishSession,
+		startSession,
 		resetSession,
 	};
 

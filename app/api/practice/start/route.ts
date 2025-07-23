@@ -9,17 +9,13 @@ export async function POST(req: NextRequest) {
 		const body = await req.json();
 		const user = await ensureUserInDb();
 
-		const { gameType, scaleType, key, bpm, withTimer, duration } = body;
+		const { gameType } = body;
 
 		const session = await prisma.practiceSession.create({
 			data: {
 				userId: user.id,
 				gameType,
-				scaleType,
-				key,
-				bpm,
-				withTimer,
-				duration,
+				duration: 0,
 			},
 		});
 

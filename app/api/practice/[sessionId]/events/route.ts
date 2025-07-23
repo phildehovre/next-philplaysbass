@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; // update to your actual prisma path
 
-// ✅ Explicit type for the second argument to satisfy Vercel's build
-interface Context {
-	params: {
-		sessionId: string;
-	};
-}
-
-export async function POST(req: NextRequest, context: Context) {
-	const { sessionId } = context.params;
+export async function POST(req: NextRequest) {
+	const sessionId = "nla";
 
 	try {
 		if (!sessionId) {

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Card,
 	CardAction,
@@ -9,13 +9,27 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { PracticeEvent } from "@/lib/generated/prisma";
+import Spinner from "../Spinner";
 
 const Dashboard = (props: any) => {
-	const { userData } = props;
+	const [userData, setUserData] = useState<PracticeEvent[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const userWins = userData.filter((i: PracticeEvent) => i.isCorrect).length;
-	const userLosses = userData.filter((i: PracticeEvent) => !i.isCorrect).length;
-	console.log(userWins, userLosses);
+	useEffect(() => {
+		setIsLoading(true);
+		(async () => {
+			const res = await fetch(`/api/practice`);
+			const data = await res.json();
+			setUserData(data);
+		})();
+		setIsLoading(false);
+	}, []);
+
+	useEffect(() => {
+		if (userData) {
+		}
+	}, [userData]);
+
 	return (
 		<div className="flex w-full justify-center gap-2">
 			<Card className="w-50 h-50 bg-transparent flex flex-col text-center border-gray-600">
@@ -23,7 +37,12 @@ const Dashboard = (props: any) => {
 					<CardTitle>Correct</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<h2 className="text-8xl">{userWins}</h2>
+					{isLoading && <Spinner />}
+					<h2 className="text-8xl">
+						{userData
+							? userData.filter((i: PracticeEvent) => i.isCorrect).length
+							: "No data"}
+					</h2>
 				</CardContent>
 			</Card>
 			<Card className="w-50 bg-transparent  flex text-center border-gray-600">
@@ -31,7 +50,12 @@ const Dashboard = (props: any) => {
 					<CardTitle>Incorrect</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<h2 className="text-8xl">{userLosses}</h2>
+					{isLoading && <Spinner />}
+					<h2 className="text-8xl">
+						{userData
+							? userData.filter((i: PracticeEvent) => !i.isCorrect).length
+							: "No data yet"}
+					</h2>
 				</CardContent>
 			</Card>
 		</div>

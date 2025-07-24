@@ -7,9 +7,10 @@ import React from "react";
 export const dynamic = "force-dynamic";
 
 const Page = async () => {
-	const user = await ensureUserInDb();
-
-	if (!user) {
+	let user;
+	try {
+		user = await ensureUserInDb();
+	} catch (error) {
 		redirect("/login");
 	}
 

@@ -33,6 +33,10 @@
 		outline: 1px solid var(--clr-cta-primary);
 	}
 
+	&.stop-game_btn {
+		background-color: rgba(255, 0, 0, 0.207);
+	}
+
 	&.quality {
 		width: 6em;
 		text-transform: capitalize;
@@ -66,6 +70,7 @@
 	justify-content: center;
 	padding: 0.25em;
 	border-radius: 10px;
+	transition: background-color 250ms ease;
 
 	&.root {
 		text-decoration: underline;
@@ -325,4 +330,59 @@ input[type="range"]:focus::-ms-fill-upper {
 	&.checked {
 		background-color: var(--clr-cta-primary);
 	}
+}
+
+.pulse-ripple {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 120px;
+	height: 120px;
+	background: rgba(0, 191, 255, 0.3); /* or any cool aqua tone */
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	animation: ripple 250ms ease-out;
+	pointer-events: none;
+	z-index: 0;
+}
+
+@keyframes ripple {
+	0% {
+		transform: translate(-50%, -50%) scale(0.8);
+		opacity: 0.7;
+	}
+	70% {
+		transform: translate(-50%, -50%) scale(1.8);
+		opacity: 0.2;
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(2);
+		opacity: 0;
+	}
+}
+
+@keyframes shake {
+	0% {
+		transform: translateX(0);
+	}
+	20% {
+		transform: translateY(-5px);
+	}
+	40% {
+		transform: translateY(5px);
+	}
+	60% {
+		transform: translateY(-4px);
+	}
+	80% {
+		transform: translateY(4px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.shake-error {
+	animation: shake 250ms ease-in-out;
+	color: rgb(58, 58, 58) !important;
 }

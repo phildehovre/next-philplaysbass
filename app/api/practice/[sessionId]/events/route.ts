@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; // update to your actual prisma path
 
-export async function POST(
-	req: NextRequest,
-	context: { params: { sessionId: string } }
-) {
-	const { sessionId } = context.params;
+export async function POST(req: NextRequest) {
 	try {
+		const body = await req.json();
+		const { sessionId } = body;
 		if (!sessionId) {
 			return NextResponse.json({ error: "Missing sessionId" }, { status: 400 });
 		}
-
-		const body = await req.json();
 
 		if (!Array.isArray(body.events)) {
 			return NextResponse.json(

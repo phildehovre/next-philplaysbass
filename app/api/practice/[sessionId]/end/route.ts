@@ -8,8 +8,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
 		const user = await ensureUserInDb();
-		console.log("Hitting END ROUTE");
-		console.log("REQ BODY", body);
 
 		const { sessionId } = body;
 

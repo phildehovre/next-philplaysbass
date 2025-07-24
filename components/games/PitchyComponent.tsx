@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { PitchDetector } from "pitchy";
 import { getNoteFromPitch } from "@/lib/utils/gameUtils";
 import { NoteInfo } from "@/types/types";
+import useCookies from "@/hooks/useCookies";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
@@ -22,6 +23,22 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const inputArrayRef = useRef<Float32Array | null>(null);
 	const streamRef = useRef<MediaStream | null>(null);
 	const timeoutRef = useRef<number>(null);
+
+	const { setCookie, getCookie } = useCookies();
+
+	useEffect(() => {
+		if (!selectedDeviceId) {
+			const deviceId = getCookie("device-id");
+			if (deviceId) {
+				setSelectedDeviceId(deviceId);
+			}
+		}
+	}, []);
+	useEffect(() => {
+		if (selectedDeviceId) {
+			setCookie("device-id", selectedDeviceId);
+		}
+	}, [selectedDeviceId]);
 
 	useEffect(() => {
 		(async () => {
@@ -44,7 +61,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			// Then enumerate devices
 			const devices = await navigator.mediaDevices.enumerateDevices();
 			const inputs = devices.filter((d) => d.kind === "audioinput");
-			console.log(inputs);
 			return inputs;
 		} catch (err) {
 			console.error("Error accessing audio devices:", err);
@@ -66,7 +82,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
-		console.log(evaluatedPitch);
 		onNoteDetection(evaluatedPitch);
 
 		// Set timeout to reset cooldown
@@ -109,7 +124,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			source.connect(analyser);
 
 			const detector = PitchDetector.forFloat32Array(analyser.fftSize);
-			detector.minVolumeDecibels = -10;
+			detector.minVolumeDecibels = -15;
 			const input = new Float32Array(
 				new ArrayBuffer(detector.inputLength * Float32Array.BYTES_PER_ELEMENT)
 			) as Float32Array & { buffer: ArrayBuffer };

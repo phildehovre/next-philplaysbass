@@ -1,3 +1,5 @@
+import { Note } from "@/types/types";
+
 export const arrayChromaticScale = [
 	["C"],
 	["C#", "Db"],
@@ -29,3 +31,23 @@ export const QUALITY: ScaleQuality[] = [
 ];
 
 export const NOTE_LETTER_ORDER = ["C", "D", "E", "F", "G", "A", "B"];
+
+export const INVERSIONS = ["root", "first", "second"];
+
+export const rootInversion = (arpeggio: Note[]) => {
+	return arpeggio;
+};
+
+export const firstInversion = (arpeggio: Note[]) => {
+	const [root, third, fifth] = arpeggio;
+	return [third, root, fifth];
+};
+
+export const secondInversion = (arpeggio: Note[]) => {
+	const [root, third, fifth] = arpeggio;
+	return [fifth, third, root];
+};
+
+export const selectRandomInversion = (arpeggio: Note[]) => {
+	return INVERSIONS[Math.round(Math.random()) * INVERSIONS.length];
+};

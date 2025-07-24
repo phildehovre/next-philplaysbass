@@ -53,7 +53,7 @@ export const PracticeSessionProvider = ({
 		// 1. Send events
 		await fetch(`/api/practice/${sessionId}/events`, {
 			method: "POST",
-			body: JSON.stringify({ events }),
+			body: JSON.stringify({ sessionId, events }),
 			headers: { "Content-Type": "application/json" },
 		});
 

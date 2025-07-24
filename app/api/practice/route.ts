@@ -1,5 +1,3 @@
-// app/api/practice/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
@@ -12,15 +10,21 @@ export async function GET(req: NextRequest) {
 			return NextResponse.json({ error: "Missing userId" }, { status: 400 });
 		}
 
-		const sessions = await prisma.practiceSession.findMany({
-			where: { userId: user.id },
-			orderBy: { createdAt: "desc" }, // most recent first
+		const events = await prisma.practiceEvent.findMany({
+			where: {
+				session: {
+					userId: user.id,
+				},
+			},
+			orderBy: {
+				playedAt: "desc",
+			},
 			include: {
-				events: true, // or false if you don’t want to include events
+				session: true, // if you still want to show info about the session
 			},
 		});
 
-		return NextResponse.json(sessions);
+		return NextResponse.json(events);
 	} catch (err) {
 		console.error("Error fetching sessions:", err);
 		return NextResponse.json(

@@ -5,10 +5,12 @@ import "./GameStyles.css";
 import { buildScale, selectRandomNote } from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
+	INVERSIONS,
 	QUALITY,
 	ScaleQuality,
+	selectRandomInversion,
 } from "@/constants/chromaticScale";
-import { Drum, Piano, PlusIcon, Timer } from "lucide-react";
+import { ArrowUpDown, Drum, Piano, PlusIcon, Timer } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
@@ -16,6 +18,7 @@ import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
+import { ButtonThemeOption } from "@stripe/stripe-js";
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
@@ -24,11 +27,13 @@ const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
 	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
+	const [questionInversion, setQuestionInversion] = useState<string | "">("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [withTimer, setWithTimer] = useState(false);
 	const [withMetronome, setWithMetronome] = useState(false);
 	const [withArpeggios, setWithArpeggios] = useState(false);
+	const [withInversions, setWithInversions] = useState(false);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
@@ -40,6 +45,8 @@ const InversionsGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 	const [gameStarted, setGameStarted] = useState(false);
 	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
+	const [showPulse, setShowPulse] = useState<Boolean>(false);
+	const [showShake, setShowShake] = useState(false);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -100,8 +107,13 @@ const InversionsGame = () => {
 
 			setSelectedNote(note);
 			const scale = buildScale(note, quality);
-			const arpeggio = [scale[0], scale[2], scale[4]];
-			setQuestionArpeggio(arpeggio);
+			let arpeggio = [scale[0], scale[2], scale[4]];
+			if (withInversions) {
+				setQuestionInversion(selectRandomInversion(arpeggio));
+				setQuestionArpeggio(arpeggio);
+			} else {
+				setQuestionArpeggio(arpeggio);
+			}
 			noteShownAtRef.current = Date.now();
 
 			return newHistory;
@@ -110,12 +122,18 @@ const InversionsGame = () => {
 
 	const recordLoss = () => {
 		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
+		setShowShake(true);
+		setTimeout(() => setShowShake(false), 300);
 	};
 	const recordWin = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
+
+		setShowPulse(true);
+		setTimeout(() => setShowPulse(false), 250);
 	};
 
 	const evaluateNotePlayed = async (noteInfo: NoteInfo) => {
+		if (!gameStarted) return;
 		const notePlayed = noteInfo.noteName;
 		const selected = withArpeggios
 			? questionArpeggio[arpeggioPlayed.length]
@@ -160,9 +178,15 @@ const InversionsGame = () => {
 			if (!isPracticeMode) {
 				addEvent(event);
 			}
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-			isMatch ? recordWin() : recordLoss();
-			if (isMatch) init();
+			if (isMatch) {
+				recordWin();
+				if (withTimer) startTimer();
+				init();
+			} else {
+				recordLoss();
+			}
 		}
 
 		if (withArpeggios && questionArpeggio) {
@@ -185,49 +209,43 @@ const InversionsGame = () => {
 	}, [arpeggioPlayed]);
 
 	const startGame = async () => {
-		init();
-		const params: any = {
-			scaleType: questionQuality,
-			key: selectedNote,
-			bpm: 80,
-			withTimer,
-			duration,
-		};
-
-		if (!sessionId) {
-			await startSession("note-match");
-		}
+		await init(); // move await here to ensure question is ready
+		if (!sessionId) await startSession("note-match");
 
 		setGameStarted(true);
 
 		if (withTimer) {
-			let start = Date.now();
-
-			const step = () => {
-				const elapsed = Date.now() - start;
-				const percent = Math.min((elapsed / duration) * 100, 100);
-				setProgress(percent);
-
-				if (elapsed < duration) {
-					rafRef.current = requestAnimationFrame(step);
-				}
-			};
-
-			step();
-
-			timeoutRef.current = setInterval(() => {
-				recordLoss();
-				init();
-				start = Date.now();
-				setProgress(0);
-				step();
-			}, duration);
+			startTimer();
 		}
+	};
+	const startTimer = () => {
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+		let start = Date.now();
+
+		const step = () => {
+			const elapsed = Date.now() - start;
+			const percent = Math.min((elapsed / duration) * 100, 100);
+			setProgress(percent);
+
+			if (elapsed < duration) {
+				rafRef.current = requestAnimationFrame(step);
+			}
+		};
+
+		step();
+
+		timeoutRef.current = setTimeout(() => {
+			recordLoss();
+			init();
+			startTimer(); // Restart the timer for the next round
+		}, duration);
 	};
 
 	const stopGame = () => {
-		if (timeoutRef.current) clearInterval(timeoutRef.current);
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		setGameStarted(false);
 		finishSession();
 	};
@@ -321,7 +339,18 @@ const InversionsGame = () => {
 				</TooltipTrigger>
 				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
 			</Tooltip>
-
+			<Tooltip>
+				<TooltipTrigger asChild={true}>
+					<label htmlFor="withInversions" className="flex items-center gap-2">
+						<ArrowUpDown />
+						<Switch
+							checked={withInversions}
+							onCheckChange={setWithInversions}
+						/>
+					</label>
+				</TooltipTrigger>
+				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
+			</Tooltip>
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
 					<label htmlFor="withTimer" className="flex items-center gap-2">
@@ -342,7 +371,10 @@ const InversionsGame = () => {
 					onMouseUp={() => setDuration(displayedDuration)}
 				/>
 
-				<div className="clock-face">
+				<div className="clock-face relative">
+					{showPulse && <div className="pulse-ripple" />}
+					{showPulse && <div className="pulse-ripple delay" />}
+
 					<svg viewBox="0 0 100 100" className="clock-svg">
 						<circle
 							className="clock-bg"
@@ -361,14 +393,21 @@ const InversionsGame = () => {
 							/>
 						)}
 					</svg>
-					<div className="game_question inversions">
+					<div className={`game_question inversions `}>
 						{isLoading ? (
 							<Spinner />
 						) : (
 							<>
-								<div className="note">{selectedNote}</div>
+								<div className={`note ${showShake ? "shake-error" : ""}`}>
+									{selectedNote}
+								</div>
 								{withArpeggios && (
 									<div className="quality">{questionQuality}</div>
+								)}
+								{withInversions && (
+									<div className="inversion text-red-600 w-full h-full text-2xl">
+										{questionInversion}
+									</div>
 								)}
 								{withArpeggios && (
 									<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
@@ -389,8 +428,7 @@ const InversionsGame = () => {
 			</div>
 
 			<div className="qualities_ctn flex">{renderFilters()}</div>
-
-			{gameStarted && <PitchyComponent onNoteDetection={evaluateRound} />}
+			<PitchyComponent onNoteDetection={evaluateRound} />
 		</div>
 	);
 };

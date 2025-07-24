@@ -39,6 +39,7 @@ const InversionsGame = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 	const [gameStarted, setGameStarted] = useState(false);
+	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -47,7 +48,7 @@ const InversionsGame = () => {
 
 	const { addEvent, sessionId, startSession, finishSession } =
 		usePracticeSession();
-	const COOLDOWN_MS = 500;
+	const COOLDOWN_MS = 250;
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -71,6 +72,10 @@ const InversionsGame = () => {
 			if (rafRef.current) cancelAnimationFrame(rafRef.current);
 		};
 	}, []);
+
+	useEffect(() => {
+		setScore({ wins: 0, losses: 0 });
+	}, [isPracticeMode]);
 
 	const init = async () => {
 		const notePoolLimit = 3;
@@ -150,7 +155,11 @@ const InversionsGame = () => {
 				metronomeOffsetMs: 0,
 				playedAt: new Date(),
 			};
-			addEvent(event);
+
+			// Only save to DB if not in practice mode?
+			if (!isPracticeMode) {
+				addEvent(event);
+			}
 
 			isMatch ? recordWin() : recordLoss();
 			if (isMatch) init();
@@ -223,6 +232,10 @@ const InversionsGame = () => {
 		finishSession();
 	};
 
+	const handlePracticeMode = () => {
+		setIsPracticeMode(!isPracticeMode);
+	};
+
 	const renderFilters = () =>
 		QUALITY.map((filter, index) => (
 			<button
@@ -252,22 +265,36 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn">
-			{!gameStarted ? (
-				<button onClick={startGame} className="start-game-btn">
-					Start Game
-				</button>
-			) : (
-				<button onClick={stopGame} className="stop-game-btn">
-					Stop Game
-				</button>
-			)}
-
 			<p className="game_instructions w-50">
 				Change <span className="highlight-white">note</span> and{" "}
 				<span className="highlight-white">quality</span> by pressing the{" "}
 				<span className="highlight">spacebar</span> or start the{" "}
 				<span className="highlight">timer</span>!
 			</p>
+			<div className="game_header flex flex-col justify-center gap-2 w-full">
+				<label
+					htmlFor="isPracticeMode"
+					className="flex justify-center gap-2 m-auto"
+				>
+					<Switch checked={isPracticeMode} onCheckChange={setIsPracticeMode} />
+					<p
+						style={{
+							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
+						}}
+					>
+						Practice mode
+					</p>
+				</label>
+				{!gameStarted ? (
+					<button onClick={startGame} className="game_btn start-game_btn">
+						Start Game
+					</button>
+				) : (
+					<button onClick={stopGame} className="game_btn stop-game_btn">
+						Stop Game
+					</button>
+				)}
+			</div>
 
 			<div className="scoreboard text-2xl font-mono">
 				<AnimatedNumber number={score.losses} />:

@@ -18,6 +18,20 @@
 	border-radius: 5px;
 	cursor: pointer;
 	transition: 150ms all ease-in-out;
+	padding: 0.5em;
+	width: 100%;
+
+	&:hover {
+		outline: 1px solid var(--clr-cta-primary);
+		background-color: transparent;
+		color: var(--clr-cta-primary);
+	}
+
+	&.dark {
+		background-color: transparent;
+		color: var(--clr-cta-primary);
+		outline: 1px solid var(--clr-cta-primary);
+	}
 
 	&.quality {
 		width: 6em;
@@ -28,9 +42,6 @@
 		background-color: var(--clr-cta-primary);
 		color: black;
 	}
-}
-.game_btn:hover {
-	outline: 1px solid var(--clr-cta-primary);
 }
 
 .game_instructions {

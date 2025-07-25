@@ -5,7 +5,6 @@ import "./GameStyles.css";
 import { buildScale, selectRandomNote } from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
-	INVERSIONS,
 	QUALITY,
 	ScaleQuality,
 	selectRandomInversion,
@@ -18,10 +17,10 @@ import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
-import { ButtonThemeOption } from "@stripe/stripe-js";
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
+const COOLDOWN_MS = 250;
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -52,10 +51,10 @@ const InversionsGame = () => {
 	const rafRef = useRef<number | null>(null);
 	const evaluateCooldownRef = useRef(false);
 	const noteShownAtRef = useRef<number | null>(null);
+	const selectedNoteRef = useRef<string>("");
 
-	const { addEvent, sessionId, startSession, finishSession } =
+	const { events, addEvent, sessionId, startSession, finishSession } =
 		usePracticeSession();
-	const COOLDOWN_MS = 250;
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -106,11 +105,13 @@ const InversionsGame = () => {
 					: [...prev, note];
 
 			setSelectedNote(note);
+			selectedNoteRef.current = note;
 			const scale = buildScale(note, quality);
 			let arpeggio = [scale[0], scale[2], scale[4]];
 			if (withInversions) {
-				setQuestionInversion(selectRandomInversion(arpeggio));
-				setQuestionArpeggio(arpeggio);
+				const { inversion, invertedArpeggio } = selectRandomInversion(arpeggio);
+				setQuestionInversion(inversion);
+				setQuestionArpeggio(invertedArpeggio);
 			} else {
 				setQuestionArpeggio(arpeggio);
 			}
@@ -123,17 +124,17 @@ const InversionsGame = () => {
 	const recordLoss = () => {
 		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
 		setShowShake(true);
-		setTimeout(() => setShowShake(false), 300);
+		setTimeout(() => setShowShake(false), COOLDOWN_MS);
 	};
 	const recordWin = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
-
 		setShowPulse(true);
-		setTimeout(() => setShowPulse(false), 250);
+		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
 	};
 
 	const evaluateNotePlayed = async (noteInfo: NoteInfo) => {
 		if (!gameStarted) return;
+
 		const notePlayed = noteInfo.noteName;
 		const selected = withArpeggios
 			? questionArpeggio[arpeggioPlayed.length]
@@ -166,7 +167,7 @@ const InversionsGame = () => {
 				: 0;
 
 			const event: NoteEvent = {
-				expectedNote: selectedNote,
+				expectedNote: selectedNoteRef.current,
 				playedNote: note.noteName,
 				isCorrect: isMatch,
 				timeToHitMs,
@@ -210,13 +211,12 @@ const InversionsGame = () => {
 
 	const startGame = async () => {
 		await init(); // move await here to ensure question is ready
-		if (!sessionId) await startSession("note-match");
-
 		setGameStarted(true);
 
 		if (withTimer) {
 			startTimer();
 		}
+		if (!sessionId) await startSession("note-match");
 	};
 	const startTimer = () => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -237,21 +237,30 @@ const InversionsGame = () => {
 		step();
 
 		timeoutRef.current = setTimeout(() => {
+			const event: NoteEvent = {
+				expectedNote: selectedNoteRef.current,
+				playedNote: "",
+				isCorrect: false,
+				timeToHitMs: 9999,
+				metronomeOffsetMs: 0,
+				playedAt: new Date(),
+			};
 			recordLoss();
+			addEvent(event);
 			init();
-			startTimer(); // Restart the timer for the next round
+			startTimer();
 		}, duration);
 	};
 
 	const stopGame = () => {
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		setProgress(0);
 		setGameStarted(false);
-		finishSession();
-	};
-
-	const handlePracticeMode = () => {
-		setIsPracticeMode(!isPracticeMode);
+		if (events) {
+			console.log(events, events.length);
+			finishSession();
+		}
 	};
 
 	const renderFilters = () =>
@@ -283,13 +292,22 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn">
-			<p className="game_instructions w-50">
+			{/* <p className="game_instructions w-50">
 				Change <span className="highlight-white">note</span> and{" "}
 				<span className="highlight-white">quality</span> by pressing the{" "}
 				<span className="highlight">spacebar</span> or start the{" "}
 				<span className="highlight">timer</span>!
-			</p>
+			</p> */}
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
+				{!gameStarted ? (
+					<button onClick={startGame} className="game_btn start-game_btn">
+						Start Game
+					</button>
+				) : (
+					<button onClick={stopGame} className="game_btn stop-game_btn">
+						Stop Game
+					</button>
+				)}
 				<label
 					htmlFor="isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
@@ -303,15 +321,6 @@ const InversionsGame = () => {
 						Practice mode
 					</p>
 				</label>
-				{!gameStarted ? (
-					<button onClick={startGame} className="game_btn start-game_btn">
-						Start Game
-					</button>
-				) : (
-					<button onClick={stopGame} className="game_btn stop-game_btn">
-						Stop Game
-					</button>
-				)}
 			</div>
 
 			<div className="scoreboard text-2xl font-mono">

@@ -329,6 +329,7 @@ input[type="range"]:focus::-ms-fill-upper {
 
 	&.checked {
 		background-color: var(--clr-cta-primary);
+		animation: ripple 250ms ease-in-out linear;
 	}
 }
 

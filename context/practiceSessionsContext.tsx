@@ -34,8 +34,6 @@ export const PracticeSessionProvider = ({
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
 
-	console.log("SESSION ID: ", sessionId);
-
 	const addEvent = useCallback((event: NoteEvent) => {
 		setEvents((prev) => {
 			// Should start practice session on first event being logged?

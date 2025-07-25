@@ -34,20 +34,33 @@ export const NOTE_LETTER_ORDER = ["C", "D", "E", "F", "G", "A", "B"];
 
 export const INVERSIONS = ["root", "first", "second"];
 
-export const rootInversion = (arpeggio: Note[]) => {
-	return arpeggio;
-};
-
-export const firstInversion = (arpeggio: Note[]) => {
+export const firstInversion = (arpeggio: Note[]): Note[] => {
 	const [root, third, fifth] = arpeggio;
-	return [third, root, fifth];
+	return [third, fifth, root];
 };
 
-export const secondInversion = (arpeggio: Note[]) => {
+export const secondInversion = (arpeggio: Note[]): Note[] => {
 	const [root, third, fifth] = arpeggio;
-	return [fifth, third, root];
+	return [fifth, root, third];
 };
 
-export const selectRandomInversion = (arpeggio: Note[]) => {
-	return INVERSIONS[Math.round(Math.random()) * INVERSIONS.length];
+export const selectRandomInversion = (
+	arpeggio: Note[]
+): { inversion: string; invertedArpeggio: Note[] } => {
+	const inversion = INVERSIONS[Math.floor(Math.random() * INVERSIONS.length)];
+	let invertedArpeggio;
+	switch (inversion) {
+		case "root":
+			invertedArpeggio = arpeggio;
+			break;
+		case "first":
+			invertedArpeggio = firstInversion(arpeggio);
+			break;
+		case "second":
+			invertedArpeggio = secondInversion(arpeggio);
+			break;
+		default:
+			invertedArpeggio = arpeggio;
+	}
+	return { inversion, invertedArpeggio };
 };

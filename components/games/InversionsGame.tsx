@@ -292,12 +292,6 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn">
-			{/* <p className="game_instructions w-50">
-				Change <span className="highlight-white">note</span> and{" "}
-				<span className="highlight-white">quality</span> by pressing the{" "}
-				<span className="highlight">spacebar</span> or start the{" "}
-				<span className="highlight">timer</span>!
-			</p> */}
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				{!gameStarted ? (
 					<button onClick={startGame} className="game_btn start-game_btn">
@@ -312,7 +306,11 @@ const InversionsGame = () => {
 					htmlFor="isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
 				>
-					<Switch checked={isPracticeMode} onCheckChange={setIsPracticeMode} />
+					<Switch
+						disabled={gameStarted}
+						checked={isPracticeMode}
+						onCheckChange={setIsPracticeMode}
+					/>
 					<p
 						style={{
 							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
@@ -333,7 +331,11 @@ const InversionsGame = () => {
 				<TooltipTrigger asChild={true}>
 					<label htmlFor="withMetronome" className="flex items-center gap-2">
 						<Drum />
-						<Switch checked={withMetronome} onCheckChange={setWithMetronome} />
+						<Switch
+							disabled={gameStarted}
+							checked={withMetronome}
+							onCheckChange={setWithMetronome}
+						/>
 					</label>
 				</TooltipTrigger>
 				<TooltipContent>[coming soon] Practice with a metronome</TooltipContent>
@@ -343,7 +345,11 @@ const InversionsGame = () => {
 				<TooltipTrigger asChild={true}>
 					<label htmlFor="withArpeggios" className="flex items-center gap-2">
 						<Piano />
-						<Switch checked={withArpeggios} onCheckChange={setWithArpeggios} />
+						<Switch
+							disabled={gameStarted}
+							checked={withArpeggios}
+							onCheckChange={setWithArpeggios}
+						/>
 					</label>
 				</TooltipTrigger>
 				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
@@ -353,6 +359,7 @@ const InversionsGame = () => {
 					<label htmlFor="withInversions" className="flex items-center gap-2">
 						<ArrowUpDown />
 						<Switch
+							disabled={gameStarted}
 							checked={withInversions}
 							onCheckChange={setWithInversions}
 						/>
@@ -364,7 +371,11 @@ const InversionsGame = () => {
 				<TooltipTrigger asChild={true}>
 					<label htmlFor="withTimer" className="flex items-center gap-2">
 						<Timer />
-						<Switch checked={withTimer} onCheckChange={setWithTimer} />
+						<Switch
+							disabled={gameStarted}
+							checked={withTimer}
+							onCheckChange={setWithTimer}
+						/>
 					</label>
 				</TooltipTrigger>
 				<TooltipContent>Practice with a time limit</TooltipContent>

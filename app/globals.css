@@ -7,14 +7,12 @@
 :root {
 	/* My vars */
 	--clr-cta-primary: #00fffb;
-	--secondary-o2: #00fffb38; /* placeholder */
-	--secondary: #00fffb; /* placeholder */
-	--section-clamp: clamp(320px, 80%, 1200px); /* placeholder */
-	--test-border: 1px solid black;
-	--primary: #81a1bc;
-	--secondary: #abc0d2;
-	--ternary: #d5e0e9;
-	--primary-overlay: rgba(129, 161, 188, 0.75);
+	--clr-cta-accent: #eaff00;
+	--clr-bg-box: #1e1e1e;
+	--clr-border-box: #313131;
+	--secondary-o2: #00fffb38;
+	--secondary: #00fffb;
+	--section-clamp: clamp(320px, 80%, 1200px);
 
 	/* shadcn vars */
 	--radius: 0.625rem;

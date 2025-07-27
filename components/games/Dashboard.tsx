@@ -1,65 +1,68 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { PracticeEvent } from "@/lib/generated/prisma";
-import Spinner from "../Spinner";
+
+import "./DashboardStyles.css";
+import React, { useState } from "react";
+import { toolCards } from "@/constants/games";
+import UserStats from "./dashboard/UserStats";
+import { GameCard } from "./dashboard/Card";
+import ActivityFeed from "./ActivityFeed";
 
 const Dashboard = (props: any) => {
-	const [userData, setUserData] = useState<PracticeEvent[]>([]);
+	const { userData } = props;
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	useEffect(() => {
-		setIsLoading(true);
-		(async () => {
-			const res = await fetch(`/api/practice`);
-			const data = await res.json();
-			setUserData(data);
-		})();
-		setIsLoading(false);
-	}, []);
-
-	useEffect(() => {
-		if (userData) {
-		}
-	}, [userData]);
+	const renderGameCards = () => {
+		return toolCards.map((tool, index) => {
+			return <GameCard {...tool} key={tool.title + index} />;
+		});
+	};
 
 	return (
-		<div className="flex w-full justify-center gap-2">
-			<Card className="w-50 h-50 bg-transparent flex flex-col text-center border-gray-600">
-				<CardHeader>
-					<CardTitle>Correct</CardTitle>
-				</CardHeader>
-				<CardContent>
-					{isLoading && <Spinner />}
-					<h2 className="text-8xl">
-						{userData
-							? userData.filter((i: PracticeEvent) => i.isCorrect).length
-							: "No data"}
-					</h2>
-				</CardContent>
-			</Card>
-			<Card className="w-50 bg-transparent  flex text-center border-gray-600">
-				<CardHeader>
-					<CardTitle>Incorrect</CardTitle>
-				</CardHeader>
-				<CardContent>
-					{isLoading && <Spinner />}
-					<h2 className="text-8xl">
-						{userData
-							? userData.filter((i: PracticeEvent) => !i.isCorrect).length
-							: "No data yet"}
-					</h2>
-				</CardContent>
-			</Card>
+		<div className="w-full justify-center gap-2">
+			<div className="welcome_banner">
+				<AnnouncementBanner
+					title={"Join the conversation"}
+					callToActionText="Discord invite"
+				>
+					<p>
+						The PhilPlaysBass community would love for you to join the forum and
+						start exchanging with other members!
+					</p>
+				</AnnouncementBanner>
+				<AnnouncementBanner title={"Announcements"} callToActionText="">
+					<p>
+						The PhilPlaysBass community would love for you to join the forum and
+						start exchanging with other members!
+					</p>
+				</AnnouncementBanner>
+			</div>
+			<div className="dashboard_section">
+				<h1 className="section_title">Challenges</h1>
+				{renderGameCards()}
+			</div>
+			<div className="dashboard_section">
+				<UserStats />
+			</div>
+			<div className="dashboard_section">
+				<ActivityFeed userData={userData} />
+			</div>
 		</div>
 	);
 };
 
 export default Dashboard;
+
+export const AnnouncementBanner = (props: {
+	title: string;
+	callToActionText: string;
+	children: any;
+}) => {
+	const { children, title, callToActionText } = props;
+	return (
+		<div className="announcement_box">
+			<h1>{title}</h1>
+			{children}
+			{callToActionText && <button>{callToActionText}</button>}
+		</div>
+	);
+};

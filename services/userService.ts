@@ -31,3 +31,20 @@ export async function getCurrentUserId(): Promise<string | null> {
 	const user = await getUser();
 	return user?.id || null;
 }
+
+export async function recalculateAverageScore(
+	userId: string,
+	newScore: number
+) {
+	const stats = await prisma.userStats.findUnique({
+		where: { userId },
+	});
+
+	if (!stats) return newScore;
+
+	const total = stats.totalSessions;
+	const previousAvg = stats.avgScore;
+	const newAvg = (previousAvg * total + newScore) / (total + 1);
+
+	return newAvg;
+}

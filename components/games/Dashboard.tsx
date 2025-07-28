@@ -9,7 +9,6 @@ import ActivityFeed from "./ActivityFeed";
 
 const Dashboard = (props: any) => {
 	const { userData } = props;
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const renderGameCards = () => {
 		return toolCards.map((tool, index) => {
@@ -18,32 +17,38 @@ const Dashboard = (props: any) => {
 	};
 
 	return (
-		<div className="w-full justify-center gap-2">
-			<div className="welcome_banner">
-				<AnnouncementBanner
-					title={"Join the conversation"}
-					callToActionText="Discord invite"
-				>
-					<p>
-						The PhilPlaysBass community would love for you to join the forum and
-						start exchanging with other members!
-					</p>
-				</AnnouncementBanner>
-				<AnnouncementBanner title={"Announcements"} callToActionText="">
-					<p>
-						The PhilPlaysBass community would love for you to join the forum and
-						start exchanging with other members!
-					</p>
-				</AnnouncementBanner>
+		<div className="dashboard_ctn w-full">
+			<div className="welcome_banner flex flex-col items-center">
+				<h1>Welcome back, {userData.name}</h1>
+				<div className="banner_ctn flex gap-2 justify-center w-full">
+					<AnnouncementBanner
+						title={"Join the conversation"}
+						callToActionText="Discord invite"
+					>
+						<p>
+							The PhilPlaysBass community would love for you to join the forum
+							and start exchanging with other members!
+						</p>
+					</AnnouncementBanner>
+					<AnnouncementBanner title={"Announcements"} callToActionText="">
+						<p>
+							The PhilPlaysBass community would love for you to join the forum
+							and start exchanging with other members!
+						</p>
+					</AnnouncementBanner>
+				</div>
 			</div>
-			<div className="dashboard_section">
+			<div className="dashboard_section flex justify-center">
+				<UserStats userData={userData} />
+			</div>
+			<div className="dashboard_section w-full">
 				<h1 className="section_title">Challenges</h1>
-				{renderGameCards()}
+				<div className="dashboard-cards_ctn flex gap-2">
+					{renderGameCards()}
+				</div>
 			</div>
-			<div className="dashboard_section">
-				<UserStats />
-			</div>
-			<div className="dashboard_section">
+			<div className="dashboard_section ">
+				<h1 className="section_title">Activity</h1>
 				<ActivityFeed userData={userData} />
 			</div>
 		</div>
@@ -59,10 +64,14 @@ export const AnnouncementBanner = (props: {
 }) => {
 	const { children, title, callToActionText } = props;
 	return (
-		<div className="announcement_box">
+		<div className="dashboard_box announcement_box flex flex-col gap-2">
 			<h1>{title}</h1>
 			{children}
-			{callToActionText && <button>{callToActionText}</button>}
+			<span className="flex w-full justify-end">
+				{callToActionText && (
+					<button className="dashboard_btn cta">{callToActionText}</button>
+				)}
+			</span>
 		</div>
 	);
 };

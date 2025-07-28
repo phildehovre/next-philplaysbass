@@ -20,7 +20,7 @@ const Page = async () => {
 		where: { userId: user.id },
 	});
 
-	const usersWithResults = await prisma.user.findMany({
+	const userWithResults = await prisma.user.findUnique({
 		where: { id: user.id },
 		include: {
 			PracticeSession: {
@@ -31,10 +31,10 @@ const Page = async () => {
 		},
 	});
 
-	console.log(usersWithResults);
+	console.log(userWithResults);
 	return (
-		<div className="flex w-full h-full">
-			<Dashboard />
+		<div className="flex w-full h-full justify-center">
+			<Dashboard userData={userWithResults} />
 		</div>
 	);
 };

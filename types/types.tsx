@@ -158,3 +158,21 @@ export type ArpeggioMatchParams = {
 	withTimer: boolean;
 	duration: number;
 };
+
+export type PracticeSession = {
+	id: string;
+	userId: string;
+	createdAt: string; // ISO date string
+	gameType: string; // You could replace with a union like "note-match" | "interval-match" if known
+	duration: number;
+	resultId: string | null;
+	result: any | null; // You can refine this type if you know the shape of `result`
+};
+
+export type UserWithPracticeSessions = {
+	id: string;
+	email: string;
+	name: string;
+	kindeId: string;
+	PracticeSession: PracticeSession[];
+};

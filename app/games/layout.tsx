@@ -5,10 +5,7 @@ import React from "react";
 const layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="w-full h-full flex flex-col justify-center items-center">
-			<PracticeSessionProvider>
-				<GameSelection />
-				{children}
-			</PracticeSessionProvider>
+			<PracticeSessionProvider>{children}</PracticeSessionProvider>
 		</div>
 	);
 };

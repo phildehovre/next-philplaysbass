@@ -51,7 +51,7 @@ export const links = [
 	},
 	{
 		name: "App",
-		hash: "/metronome",
+		hash: "/dashboard",
 	},
 	{
 		name: "Lessons",

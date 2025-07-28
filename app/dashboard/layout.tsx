@@ -6,7 +6,6 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="w-full h-full flex flex-col justify-center items-center">
 			<PracticeSessionProvider>{children}</PracticeSessionProvider>
-			<GameSelection />
 		</div>
 	);
 };

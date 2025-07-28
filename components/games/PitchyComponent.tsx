@@ -176,6 +176,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			}
 		};
 	}, [selectedDeviceId]);
+	console.log(pitch);
 
 	return (
 		<div className="p-4 space-y-4">

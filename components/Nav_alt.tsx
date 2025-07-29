@@ -77,7 +77,7 @@ function Header() {
 							<UserMenu user={user} />
 						) : (
 							<button className="auth_btn desktop">
-								<LoginLink postLoginRedirectURL="/api/user">Sign in</LoginLink>
+								<LoginLink>Sign in</LoginLink>
 							</button>
 						)}
 					</li>

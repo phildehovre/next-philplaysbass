@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
 	try {
 		const user = await ensureUserInDb();
 		if (user) {
-			return NextResponse.redirect(new URL("/", req.url));
+			return NextResponse.redirect(new URL("/dashboard", req.url));
 		}
 	} catch (error) {
 		return NextResponse.json(

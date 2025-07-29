@@ -25,6 +25,6 @@ export const toolCards = [
 		description:
 			"Practice to real music at your target tempo. Choose from curated playlists or search by BPM.",
 		btnText: "Browse Tracks",
-		href: "/tuner",
+		href: "/metronome",
 	},
 ];

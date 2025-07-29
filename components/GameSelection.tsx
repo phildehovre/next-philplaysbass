@@ -10,7 +10,7 @@ const GameSelection = (props: any) => {
 				<ChevronsLeft color="gray" />
 				Dashboard
 			</Link>
-			{/* <ul className="tabs flex gap-1 w-full justify-evenly text-2xl ">
+			<ul className="tabs flex gap-1 w-full justify-evenly text-2xl ">
 				<li className="tab ">
 					<Link href="/games/arpeggio">Arpeggio</Link>
 				</li>
@@ -20,7 +20,7 @@ const GameSelection = (props: any) => {
 				<li className="tab">
 					<Link href="/games/inversions">Inversions</Link>
 				</li>
-			</ul> */}
+			</ul>
 		</div>
 	);
 };

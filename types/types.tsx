@@ -98,12 +98,15 @@ export interface SpotifyPlayer {
 
 export type Note =
 	| "C"
+	| "B#"
 	| "C#"
 	| "Db"
 	| "D"
 	| "D#"
 	| "Eb"
 	| "E"
+	| "E#"
+	| "Fb"
 	| "F"
 	| "F#"
 	| "Gb"

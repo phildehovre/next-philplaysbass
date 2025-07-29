@@ -6,6 +6,7 @@ import { toolCards } from "@/constants/games";
 import UserStats from "./dashboard/UserStats";
 import { GameCard } from "./dashboard/Card";
 import ActivityFeed from "./ActivityFeed";
+import Tuner from "./tuner/Tuner";
 
 const Dashboard = (props: any) => {
 	const { userData } = props;
@@ -51,6 +52,7 @@ const Dashboard = (props: any) => {
 				<h1 className="section_title">Activity</h1>
 				<ActivityFeed userData={userData} />
 			</div>
+			<Tuner />
 		</div>
 	);
 };

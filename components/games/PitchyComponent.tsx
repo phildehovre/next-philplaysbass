@@ -83,6 +83,11 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
 		onNoteDetection(evaluatedPitch);
+		console.log(
+			"%ccomponents/games/PitchyComponent.tsx:92 evaluatedPitch",
+			"color: #007acc;",
+			evaluatedPitch
+		);
 
 		// Set timeout to reset cooldown
 		timeoutIdRef.current = window.setTimeout(() => {
@@ -180,7 +185,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 	return (
 		<div className="p-4 space-y-4">
-			<div>
+			<div className="flex flex-col">
 				<label htmlFor="device" className="mr-2 font-semibold">
 					Input device:
 				</label>

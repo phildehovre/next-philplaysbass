@@ -1,4 +1,5 @@
-import GameSelection from "@/components/GameSelection";
+import GameSelection from "@/components/games/dashboard/GameSelection";
+import NavbarBuffer from "@/components/NavbarBuffer";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import React from "react";
 

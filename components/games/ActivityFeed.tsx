@@ -24,7 +24,6 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 		});
 	};
 
-	console.log(activity);
 	const renderActivity = () => {
 		return activity?.map((a, i) => {
 			return (

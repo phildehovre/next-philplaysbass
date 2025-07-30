@@ -143,8 +143,6 @@ export interface NoteEvent {
 	playedAt: Date;
 }
 
-export type GameTypes = "note-match" | "arpeggio-match" | "note-match-tempo";
-
 export type NoteMatchEvent = {
 	scaleType: ScaleQuality;
 	key: string;
@@ -179,3 +177,5 @@ export type UserWithPracticeSessions = {
 	kindeId: string;
 	PracticeSession: PracticeSession[];
 };
+
+export type GameTypes = "note-match" | "name-triad" | "tempo-match";

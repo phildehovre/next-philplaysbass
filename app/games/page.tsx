@@ -1,4 +1,4 @@
-import GameSelection from "@/components/GameSelection";
+import GameSelection from "@/components/games/dashboard/GameSelection";
 import React from "react";
 
 const page = () => {

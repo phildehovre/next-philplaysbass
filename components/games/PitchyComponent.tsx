@@ -83,11 +83,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
 		onNoteDetection(evaluatedPitch);
-		console.log(
-			"%ccomponents/games/PitchyComponent.tsx:92 evaluatedPitch",
-			"color: #007acc;",
-			evaluatedPitch
-		);
 
 		// Set timeout to reset cooldown
 		timeoutIdRef.current = window.setTimeout(() => {
@@ -181,7 +176,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			}
 		};
 	}, [selectedDeviceId]);
-	console.log(pitch);
 
 	return (
 		<div className="p-4 space-y-4">

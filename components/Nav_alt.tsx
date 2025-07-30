@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import UserMenu from "./UserMenu";
+import NavbarBuffer from "./NavbarBuffer";
 
 function Header() {
 	const { activeSection, setActiveSection, setTimeOfLastClick } =
@@ -60,6 +61,7 @@ function Header() {
 	};
 	return (
 		<header>
+			<NavbarBuffer />
 			<nav className="navbar">
 				<div
 					className={`hamburger ${isShowing ? "showing" : ""}`}

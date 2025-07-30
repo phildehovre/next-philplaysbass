@@ -20,6 +20,11 @@ export async function POST(req: NextRequest) {
 		const events = await prisma.practiceEvent.findMany({
 			where: { sessionId },
 		});
+		console.log(
+			"%capp/api/practice/[sessionId]/end/route.ts:40 session.duration",
+			"color: #007acc;",
+			session?.duration
+		);
 
 		if (!session) {
 			return new Response(JSON.stringify({ error: "Session not found" }), {

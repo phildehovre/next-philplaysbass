@@ -1,20 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sticker from "./Sticker";
 import { EllipsisVertical } from "lucide-react";
 import Link from "next/link";
+import {
+	GameTypes,
+	PracticeSession,
+	UserWithPracticeSessions,
+} from "@/types/types";
 
-export const GameCard = (props: {
+type CardPropsType = {
 	title: string;
 	description: string;
+	gameType?: GameTypes;
 	btnText: string;
 	href: string;
-}) => {
-	const { title, description, btnText, href } = props;
+	sticker: boolean;
+	userData?: UserWithPracticeSessions;
+};
+
+export const GameCard = (props: CardPropsType) => {
+	const {
+		title,
+		sticker: stickerDisplay,
+		description,
+		btnText,
+		href,
+		userData,
+		gameType,
+	} = props;
+
+	const [stickerContent, setStickerContent] = useState<string>("");
+
+	useEffect(() => {
+		setStickerContent("not complete");
+		if (userData) {
+			if (
+				userData.PracticeSession.some(
+					(s: PracticeSession) => s.gameType === gameType
+				)
+			) {
+				setStickerContent("completed");
+			}
+		}
+	}, [userData]);
 
 	return (
 		<div className="dashboard_box dashboard_card">
 			<div className="dashboard-card_header flex justify-between">
-				<Sticker content="NOT COMPLETED" />
+				{stickerDisplay ? (
+					<Sticker content={stickerContent} />
+				) : (
+					<div className="sticker_placeholder"></div>
+				)}
 				<EllipsisVertical />
 			</div>
 			<div className="dashboard-card_body">

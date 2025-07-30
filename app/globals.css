@@ -69,6 +69,15 @@ body {
 	color: white;
 }
 
+.navbar_buffer {
+	height: 80px;
+}
+
+.discord {
+	background-color: #7289da !important;
+	color: white !important;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;

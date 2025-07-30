@@ -2,18 +2,32 @@
 
 import "./DashboardStyles.css";
 import React, { useState } from "react";
-import { toolCards } from "@/constants/games";
+import { gameCards, toolCards } from "@/constants/games";
 import UserStats from "./dashboard/UserStats";
 import { GameCard } from "./dashboard/Card";
 import ActivityFeed from "./ActivityFeed";
 import Tuner from "./tuner/Tuner";
+import Link from "next/link";
+import { LinkIcon } from "lucide-react";
 
 const Dashboard = (props: any) => {
 	const { userData } = props;
 
-	const renderGameCards = () => {
+	const renderToolCards = () => {
 		return toolCards.map((tool, index) => {
-			return <GameCard {...tool} key={tool.title + index} />;
+			return (
+				<GameCard
+					{...tool}
+					userData={userData}
+					sticker={false}
+					key={tool.title + index}
+				/>
+			);
+		});
+	};
+	const renderGameCards = () => {
+		return gameCards.map((tool, index) => {
+			return <GameCard {...tool} sticker={true} key={tool.title + index} />;
 		});
 	};
 
@@ -44,8 +58,14 @@ const Dashboard = (props: any) => {
 			</div>
 			<div className="dashboard_section w-full">
 				<h1 className="section_title">Challenges</h1>
-				<div className="dashboard-cards_ctn flex gap-2">
+				<div className="dashboard-cards_ctn flex gap-2 justify-center">
 					{renderGameCards()}
+				</div>
+			</div>
+			<div className="dashboard_section w-full">
+				<h1 className="section_title">Tools</h1>
+				<div className="dashboard-cards_ctn flex gap-2">
+					{renderToolCards()}
 				</div>
 			</div>
 			<div className="dashboard_section ">
@@ -71,7 +91,13 @@ export const AnnouncementBanner = (props: {
 			{children}
 			<span className="flex w-full justify-end">
 				{callToActionText && (
-					<button className="dashboard_btn cta">{callToActionText}</button>
+					<Link
+						href="https://discord.gg/7p7Tx9X6"
+						className="dashboard_btn cta discord"
+					>
+						<LinkIcon size={"12"} />
+						{callToActionText}
+					</Link>
 				)}
 			</span>
 		</div>

@@ -28,14 +28,7 @@ const Dashboard = (props: any) => {
 	};
 	const renderGameCards = () => {
 		return gameCards.map((game, index) => {
-			return (
-				<GameCard
-					{...game}
-					gameType={game.gameType as GameTypes}
-					sticker={true}
-					key={game.title + index}
-				/>
-			);
+			return <GameCard {...game} sticker={true} key={game.title + index} />;
 		});
 	};
 

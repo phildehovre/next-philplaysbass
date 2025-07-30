@@ -1,3 +1,5 @@
+import { GameTypes } from "@/types/types";
+
 export const toolCards = [
 	{
 		title: "Metronome",
@@ -22,7 +24,13 @@ export const toolCards = [
 	},
 ];
 
-export const gameCards = [
+export const gameCards: {
+	title: string;
+	gameType: GameTypes;
+	description: string;
+	btnText: string;
+	href: string;
+}[] = [
 	{
 		title: "Note Match",
 		gameType: "note-match",

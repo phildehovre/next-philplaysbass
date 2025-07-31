@@ -48,7 +48,7 @@ const InversionsGame = () => {
 	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
-	const [tempo, setTempo] = useState<number>(80);
+	const [bpm, setBpm] = useState<number>(80);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -421,7 +421,13 @@ const InversionsGame = () => {
 					<TooltipContent>Practice with inversions</TooltipContent>
 				</Tooltip>
 			</div>
-			{withMetronome && <MetroWidget tempo={tempo} setTempo={setTempo} />}
+			{withMetronome && (
+				<MetroWidget
+					play={countdown || gameStarted}
+					bpm={bpm}
+					setBpm={setBpm}
+				/>
+			)}
 			{withTimer && (
 				<div className="flex w-full">
 					<h1 className="scoreboard timer w-12 text-xs flex items-center">
@@ -448,7 +454,11 @@ const InversionsGame = () => {
 					) : (
 						<>
 							{countdown && (
-								<Countdown value={4} onCountdownFinished={startGame} />
+								<Countdown
+									value={4}
+									bpm={bpm}
+									onCountdownFinished={startGame}
+								/>
 							)}
 							<div className={`note ${showShake ? "shake-error" : ""}`}>
 								{selectedNote}
@@ -481,7 +491,7 @@ const InversionsGame = () => {
 			{withArpeggios && (
 				<div className="qualities_ctn flex">{renderFilters()}</div>
 			)}
-			<PitchyComponent onNoteDetection={evaluateRound} />
+			<PitchyComponent showDevices={true} onNoteDetection={evaluateRound} />
 		</div>
 	);
 };

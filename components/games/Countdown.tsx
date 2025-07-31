@@ -3,26 +3,31 @@ import React, { useEffect, useState } from "react";
 export default function Countdown(props: {
 	value?: number;
 	onCountdownFinished: () => void;
+	bpm: number;
 }) {
-	const { value, onCountdownFinished } = props;
+	const { value = 3, onCountdownFinished, bpm } = props;
 	const [countdown, setCountdown] = useState<number | null>(null);
 
 	useEffect(() => {
 		startCountdown(value);
 	}, []);
 
-	const startCountdown = (value = 3) => {
-		setCountdown(value);
+	const startCountdown = (initialValue: number) => {
+		setCountdown(initialValue);
+
+		const intervalDuration = 60000 / bpm; // in ms
+
+		let currentValue = initialValue;
 
 		const interval = setInterval(() => {
-			value -= 1;
-			setCountdown(value);
+			currentValue -= 1;
+			setCountdown(currentValue);
 
-			if (value === 0) {
+			if (currentValue === 0) {
 				clearInterval(interval);
 				onCountdownFinished();
 			}
-		}, 1000);
+		}, intervalDuration);
 	};
 
 	return (

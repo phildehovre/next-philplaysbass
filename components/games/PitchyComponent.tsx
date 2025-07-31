@@ -8,10 +8,11 @@ import useCookies from "@/hooks/useCookies";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
+	showDevices?: boolean;
 };
 
 export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
-	const { onNoteDetection } = props;
+	const { onNoteDetection, showDevices } = props;
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
@@ -180,21 +181,25 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	return (
 		<div className="p-4 space-y-4">
 			<div className="flex flex-col">
-				<label htmlFor="device" className="mr-2 font-semibold">
-					Input device:
-				</label>
-				<select
-					id="device"
-					value={selectedDeviceId ?? ""}
-					onChange={(e) => setSelectedDeviceId(e.target.value)}
-					className="border px-2 py-1 rounded"
-				>
-					{devices.map((device) => (
-						<option key={device.deviceId} value={device.deviceId}>
-							{device.label || `Input ${device.deviceId.slice(0, 5)}`}
-						</option>
-					))}
-				</select>
+				{showDevices && (
+					<>
+						<label htmlFor="device" className="mr-2 font-semibold">
+							Input device:
+						</label>
+						<select
+							id="device"
+							value={selectedDeviceId ?? ""}
+							onChange={(e) => setSelectedDeviceId(e.target.value)}
+							className="border px-2 py-1 rounded"
+						>
+							{devices.map((device) => (
+								<option key={device.deviceId} value={device.deviceId}>
+									{device.label || `Input ${device.deviceId.slice(0, 5)}`}
+								</option>
+							))}
+						</select>
+					</>
+				)}
 			</div>
 		</div>
 	);

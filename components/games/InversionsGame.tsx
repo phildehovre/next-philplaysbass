@@ -19,6 +19,7 @@ import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
+import MetroWidget from "./MetroWidget";
 
 const COOLDOWN_MS = 250;
 
@@ -47,6 +48,7 @@ const InversionsGame = () => {
 	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
+	const [tempo, setTempo] = useState<number>(80);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -419,28 +421,27 @@ const InversionsGame = () => {
 					<TooltipContent>Practice with inversions</TooltipContent>
 				</Tooltip>
 			</div>
+			{withMetronome && <MetroWidget tempo={tempo} setTempo={setTempo} />}
+			{withTimer && (
+				<div className="flex w-full">
+					<h1 className="scoreboard timer w-12 text-xs flex items-center">
+						{displayedDuration / 1000} s
+					</h1>
+					<input
+						className="w-full"
+						type="range"
+						min="10"
+						max="100"
+						onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
+						onMouseUp={() => setDuration(displayedDuration)}
+					/>
+				</div>
+			)}
 			<Clockface
 				showPulse={showPulse}
 				withTimer={withTimer}
 				progress={progress}
 			>
-				{withTimer && (
-					<div className="flex w-full">
-						<h1 className="scoreboard timer w-12 text-xs flex items-center">
-							{displayedDuration / 1000} s
-						</h1>
-						<input
-							className="w-full"
-							type="range"
-							min="10"
-							max="100"
-							onChange={(e) =>
-								setDisplayedDuration(e.target.valueAsNumber * 100)
-							}
-							onMouseUp={() => setDuration(displayedDuration)}
-						/>
-					</div>
-				)}
 				<div className={`game_question inversions `}>
 					{isLoading ? (
 						<Spinner />

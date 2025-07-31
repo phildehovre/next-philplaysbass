@@ -9,7 +9,6 @@ import ActivityFeed from "./ActivityFeed";
 import Tuner from "./tuner/Tuner";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
-import { GameTypes } from "@/types/types";
 
 const Dashboard = (props: any) => {
 	const { userData } = props;

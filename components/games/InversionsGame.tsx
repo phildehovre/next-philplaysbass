@@ -17,9 +17,9 @@ import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
+import Clockface from "./Clockface";
+import Countdown from "./Countdown";
 
-const CIRCLE_RADIUS = "45";
-const CIRCLE_CANVAS = "50";
 const COOLDOWN_MS = 250;
 
 const InversionsGame = () => {
@@ -44,8 +44,9 @@ const InversionsGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 	const [gameStarted, setGameStarted] = useState(false);
 	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
-	const [showPulse, setShowPulse] = useState<Boolean>(false);
+	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [showShake, setShowShake] = useState(false);
+	const [countdown, setCountdown] = useState<boolean>(false);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -79,9 +80,30 @@ const InversionsGame = () => {
 		};
 	}, []);
 
+	// Practice mode switch
 	useEffect(() => {
 		setScore({ wins: 0, losses: 0 });
 	}, [isPracticeMode]);
+
+	const resetGame = () => {
+		// clear timers
+		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+		// reset state
+		setGameStarted(false);
+		setCountdown(false);
+		setProgress(0);
+		setSelectedNote("");
+		setQuestionQuality(undefined);
+		setQuestionArpeggio([]);
+		setQuestionInversion("");
+		setScore({ wins: 0, losses: 0 });
+		setArpeggioPlayed([]);
+		setPreviousNotes([]);
+		setShowPulse(false);
+		setShowShake(false);
+	};
 
 	const init = async () => {
 		const notePoolLimit = 3;
@@ -192,7 +214,11 @@ const InversionsGame = () => {
 
 		if (withArpeggios && questionArpeggio) {
 			const isMatch = await evaluateNotePlayed(note);
-			isMatch ? setArpeggioPlayed((prev) => [...prev, note]) : recordLoss();
+			if (isMatch) {
+				setArpeggioPlayed((prev) => [...prev, note]);
+			} else {
+				recordLoss();
+			}
 		}
 
 		evaluateCooldownRef.current = true;
@@ -205,12 +231,18 @@ const InversionsGame = () => {
 		if (arpeggioPlayed.length === 3) {
 			recordWin();
 			setArpeggioPlayed([]);
+			evaluateCooldownRef.current = true;
 			init();
+
+			if (withTimer) {
+				startTimer();
+			}
 		}
 	}, [arpeggioPlayed]);
 
 	const startGame = async () => {
-		await init(); // move await here to ensure question is ready
+		resetGame();
+		await init(); // ensure new question is ready
 		setGameStarted(true);
 
 		if (withTimer) {
@@ -218,6 +250,7 @@ const InversionsGame = () => {
 		}
 		if (!sessionId) await startSession("note-match");
 	};
+
 	const startTimer = () => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -247,20 +280,17 @@ const InversionsGame = () => {
 			};
 			recordLoss();
 			addEvent(event);
+			if (withArpeggios) {
+				setArpeggioPlayed([]);
+			}
 			init();
 			startTimer();
 		}, duration);
 	};
 
 	const stopGame = () => {
-		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-		setProgress(0);
-		setGameStarted(false);
-		if (events) {
-			console.log(events, events.length);
-			finishSession();
-		}
+		resetGame();
+		if (events) finishSession();
 	};
 
 	const renderFilters = () =>
@@ -291,10 +321,13 @@ const InversionsGame = () => {
 		));
 
 	return (
-		<div className="game_ctn">
+		<div className="game_ctn max-w-[24em]">
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				{!gameStarted ? (
-					<button onClick={startGame} className="game_btn start-game_btn">
+					<button
+						onClick={() => setCountdown(true)}
+						className="game_btn start-game_btn"
+					>
 						Start Game
 					</button>
 				) : (
@@ -327,127 +360,126 @@ const InversionsGame = () => {
 			</div>
 
 			{/* FILTER CONTROLS */}
-			<Tooltip>
-				<TooltipTrigger asChild={true}>
-					<label htmlFor="withMetronome" className="flex items-center gap-2">
-						<Drum />
-						<Switch
-							disabled={gameStarted}
-							checked={withMetronome}
-							onCheckChange={setWithMetronome}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent>[coming soon] Practice with a metronome</TooltipContent>
-			</Tooltip>
-
-			<Tooltip>
-				<TooltipTrigger asChild={true}>
-					<label htmlFor="withArpeggios" className="flex items-center gap-2">
-						<Piano />
-						<Switch
-							disabled={gameStarted}
-							checked={withArpeggios}
-							onCheckChange={setWithArpeggios}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
-			</Tooltip>
-			<Tooltip>
-				<TooltipTrigger asChild={true}>
-					<label htmlFor="withInversions" className="flex items-center gap-2">
-						<ArrowUpDown />
-						<Switch
-							disabled={gameStarted}
-							checked={withInversions}
-							onCheckChange={setWithInversions}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
-			</Tooltip>
-			<Tooltip>
-				<TooltipTrigger asChild={true}>
-					<label htmlFor="withTimer" className="flex items-center gap-2">
-						<Timer />
-						<Switch
-							disabled={gameStarted}
-							checked={withTimer}
-							onCheckChange={setWithTimer}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent>Practice with a time limit</TooltipContent>
-			</Tooltip>
-
-			<div>
-				<h1 className="scoreboard timer">{displayedDuration / 1000} sec</h1>
-				<input
-					type="range"
-					min="10"
-					max="100"
-					onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
-					onMouseUp={() => setDuration(displayedDuration)}
-				/>
-
-				<div className="clock-face relative">
-					{showPulse && <div className="pulse-ripple" />}
-					{showPulse && <div className="pulse-ripple delay" />}
-
-					<svg viewBox="0 0 100 100" className="clock-svg">
-						<circle
-							className="clock-bg"
-							cx={CIRCLE_CANVAS}
-							cy={CIRCLE_CANVAS}
-							r={CIRCLE_RADIUS}
-						/>
-						{withTimer && (
-							<circle
-								className="clock-progress"
-								cx={CIRCLE_CANVAS}
-								cy={CIRCLE_CANVAS}
-								r={CIRCLE_RADIUS}
-								strokeDasharray={2 * Math.PI * 45}
-								strokeDashoffset={(1 - progress / 100) * 2 * Math.PI * 45}
+			<div className="switch_ctn grid grid-cols-2 gap-7">
+				<Tooltip>
+					<TooltipTrigger asChild={true}>
+						<label htmlFor="withMetronome" className="flex items-center gap-2">
+							<Drum />
+							<Switch
+								disabled={gameStarted || withTimer}
+								checked={withMetronome}
+								onCheckChange={setWithMetronome}
 							/>
-						)}
-					</svg>
-					<div className={`game_question inversions `}>
-						{isLoading ? (
-							<Spinner />
-						) : (
-							<>
-								<div className={`note ${showShake ? "shake-error" : ""}`}>
-									{selectedNote}
-								</div>
-								{withArpeggios && (
-									<div className="quality">{questionQuality}</div>
-								)}
-								{withInversions && (
-									<div className="inversion text-red-600 w-full h-full text-2xl">
-										{questionInversion}
-									</div>
-								)}
-								{withArpeggios && (
-									<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
-										{[0, 1, 2].map((i) => (
-											<div
-												key={i}
-												className={`dot ${
-													arpeggioPlayed.length > i ? "checked" : ""
-												}`}
-											></div>
-										))}
-									</div>
-								)}
-							</>
-						)}
-					</div>
-				</div>
-			</div>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent>
+						[coming soon] Practice with a metronome
+					</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger asChild={true}>
+						<label htmlFor="withTimer" className="flex items-center gap-2">
+							<Timer />
+							<Switch
+								disabled={gameStarted || withMetronome}
+								checked={withTimer}
+								onCheckChange={setWithTimer}
+							/>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent>Practice with a time limit</TooltipContent>
+				</Tooltip>
 
-			<div className="qualities_ctn flex">{renderFilters()}</div>
+				<Tooltip>
+					<TooltipTrigger asChild={true}>
+						<label htmlFor="withArpeggios" className="flex items-center gap-2">
+							<Piano />
+							<Switch
+								disabled={gameStarted}
+								checked={withArpeggios}
+								onCheckChange={setWithArpeggios}
+							/>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent>
+						Practice with single notes or arpeggios
+					</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger asChild={true}>
+						<label htmlFor="withInversions" className="flex items-center gap-2">
+							<ArrowUpDown />
+							<Switch
+								disabled={gameStarted}
+								checked={withInversions}
+								onCheckChange={setWithInversions}
+							/>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent>Practice with inversions</TooltipContent>
+				</Tooltip>
+			</div>
+			<Clockface
+				showPulse={showPulse}
+				withTimer={withTimer}
+				progress={progress}
+			>
+				{withTimer && (
+					<div className="flex w-full">
+						<h1 className="scoreboard timer w-12 text-xs flex items-center">
+							{displayedDuration / 1000} s
+						</h1>
+						<input
+							className="w-full"
+							type="range"
+							min="10"
+							max="100"
+							onChange={(e) =>
+								setDisplayedDuration(e.target.valueAsNumber * 100)
+							}
+							onMouseUp={() => setDuration(displayedDuration)}
+						/>
+					</div>
+				)}
+				<div className={`game_question inversions `}>
+					{isLoading ? (
+						<Spinner />
+					) : (
+						<>
+							{countdown && (
+								<Countdown value={4} onCountdownFinished={startGame} />
+							)}
+							<div className={`note ${showShake ? "shake-error" : ""}`}>
+								{selectedNote}
+							</div>
+							{withArpeggios && (
+								<div className="quality">{questionQuality}</div>
+							)}
+							{withInversions && (
+								<div className="inversion text-red-600 w-full h-full text-2xl">
+									{questionInversion}
+								</div>
+							)}
+							{withArpeggios && (
+								<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
+									{[0, 1, 2].map((i) => (
+										<div
+											key={i}
+											className={`dot ${
+												arpeggioPlayed.length > i ? "checked" : ""
+											}`}
+										></div>
+									))}
+								</div>
+							)}
+						</>
+					)}
+				</div>
+			</Clockface>
+
+			{withArpeggios && (
+				<div className="qualities_ctn flex">{renderFilters()}</div>
+			)}
 			<PitchyComponent onNoteDetection={evaluateRound} />
 		</div>
 	);

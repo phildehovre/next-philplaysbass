@@ -72,10 +72,10 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		}
 	}, [bpm]);
 
-	const TOLERANCE = 50; // in ms
+	const TOLERANCE = 40; // in ms
 
 	const onNoteDetection = (note: NoteInfo) => {
-		const noteTime = performance.now() - 200;
+		const noteTime = performance.now() - 236;
 
 		if (lastTickTime && tempoInterval) {
 			const diff = noteTime - lastTickTime;
@@ -103,20 +103,13 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		}
 	};
 
-	const increment = () => {
-		setBpm(bpm + 1);
-	};
-	const decrement = () => {
-		setBpm(bpm - 1);
-	};
-
 	return (
 		<div className="w-full h-full">
 			<div className="scoreboard">{displayedBpm}</div>
 			<div className="controls flex gap-1">
-				<button onClick={() => decrement()}>
+				{/* <button onClick={decrement}>
 					<MinusCircle />
-				</button>
+				</button> */}
 				<input
 					className="w-full"
 					type="range"
@@ -125,9 +118,9 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 					onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
 					onMouseUp={() => setBpm(displayedBpm)}
 				/>
-				<button onClick={() => increment()}>
+				{/* <button onClick={increment}>
 					<PlusCircle />
-				</button>
+				</button> */}
 			</div>
 			<div className="scoreboard">{timingStatus || "..."}</div>
 			<PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} />

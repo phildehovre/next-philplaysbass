@@ -6,6 +6,7 @@ type ClockfacePropsType = {
 	withTimer: boolean;
 	children: React.ReactNode;
 };
+
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
 

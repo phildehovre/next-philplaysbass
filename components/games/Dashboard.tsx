@@ -53,7 +53,8 @@ const Dashboard = (props: any) => {
 					</AnnouncementBanner>
 				</div>
 			</div>
-			<div className="dashboard_section flex justify-center">
+			<div className="dashboard_section justify-center">
+				<h1 className="section_title">Your progress</h1>
 				<UserStats userData={userData} />
 			</div>
 			<div className="dashboard_section w-full">

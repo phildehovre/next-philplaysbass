@@ -1,9 +1,7 @@
 "use client";
-import { Prisma } from "@/lib/generated/prisma";
-import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
+import { UserWithPracticeSessions } from "@/types/types";
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { format, isToday, parseISO, subDays } from "date-fns";
 import Spinner from "@/components/Spinner";
 import {
 	formatDuration,

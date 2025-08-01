@@ -12,20 +12,29 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 
 	useEffect(() => {
 		if (!userData) return;
-		const slice = userData.PracticeSession.slice(
-			userData.PracticeSession.length - activityLength
+		const filtered = userData.PracticeSession.filter(
+			(s) => Number(s.duration) > 0
 		);
+		const sortedByDate = filtered.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
+		const slice =
+			sortedByDate.length < 10
+				? sortedByDate
+				: sortedByDate.slice(0, activityLength);
 		setActivity(slice);
-	}, [activityLength]);
+	}, [activityLength, userData]);
 
-	const formatSessionDate = (date: any) => {
-		return formatDistance(subDays(new Date(), 3), date, {
+	const formatSessionDate = (date: Date) => {
+		return formatDistance(date, new Date(), {
 			addSuffix: true,
 		});
 	};
 
 	const renderActivity = () => {
 		return activity?.map((a, i) => {
+			if (a.duration == 0) return;
 			return (
 				<div className="dashboard_box activity" key={a.id}>
 					<label className="activity_label">
@@ -33,12 +42,16 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 					</label>
 					<div className="">{formatDuration(a.duration)}</div>
 					<label className="activity_label">
-						<div>{formatSessionDate(a.createdAt)}</div>
+						<div>{formatSessionDate(new Date(a.createdAt))}</div>
 					</label>
 
 					<>
 						<span className={`${a.result ? "" : "no-data"}`}>
-							{a.result?.score ? a.result.score : "No score data"}
+							{/* {a.result?.score ? a.result.score : "No score data"} */}
+							{((a.result?.correctNotes / a.result?.totalNotes) * 100).toFixed(
+								1
+							)}
+							%
 						</span>
 						<span>
 							{a.result?.correctNotes}/{a.result?.totalNotes}

@@ -1,9 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PitchyComponent from "./PitchyComponent";
 import { NoteInfo } from "@/types/types";
-import { MinusCircle, PlusCircle } from "lucide-react";
 import PulseVisualisation from "./PulseVisualisation";
-import GameSelection from "./dashboard/GameSelection";
+import {
+	MAX_TEMPO_AS_NUM,
+	MAX_TEMPO_AS_STR,
+	MIN_TEMPO_AS_NUM,
+	MIN_TEMPO_AS_STR,
+	TOLERANCE,
+} from "./GameConstants";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -67,15 +72,13 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 
 	useEffect(() => {
 		setTempoInterval((60 / bpm) * 1000);
-		if (bpm <= 40) {
-			setBpm(40);
+		if (bpm <= MIN_TEMPO_AS_NUM) {
+			setBpm(MIN_TEMPO_AS_NUM);
 		}
-		if (bpm >= 220) {
-			setBpm(220);
+		if (bpm >= MAX_TEMPO_AS_NUM) {
+			setBpm(MAX_TEMPO_AS_NUM);
 		}
 	}, [bpm]);
-
-	const TOLERANCE = 40; // in ms
 
 	const onNoteDetection = (note: NoteInfo) => {
 		const noteTime = performance.now() - 236;
@@ -87,8 +90,8 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 			const timeFromBeat = diff % tempoInterval;
 			const msFromClick =
 				timeFromBeat > tempoInterval / 2
-					? timeFromBeat - tempoInterval // negative offset (early)
-					: timeFromBeat; // positive offset (late)
+					? timeFromBeat - tempoInterval
+					: timeFromBeat;
 
 			if (Math.abs(msFromClick) <= TOLERANCE) {
 				setTimingStatus("on-time");
@@ -113,8 +116,8 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 				<input
 					className="w-full"
 					type="range"
-					min="30"
-					max="220"
+					min={MIN_TEMPO_AS_STR}
+					max={MAX_TEMPO_AS_STR}
 					onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
 					onMouseUp={() => setBpm(displayedBpm)}
 				/>

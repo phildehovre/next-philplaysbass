@@ -16,6 +16,11 @@ import { SongListProvider } from "@/context/songListContext";
 import useCookies from "@/hooks/useCookies";
 import Modal from "../Modal";
 import SongSearch from "./SongSearch";
+import {
+	MAX_TEMPO_AS_NUM,
+	MAX_TEMPO_AS_STR,
+	MIN_TEMPO_AS_STR,
+} from "../games/GameConstants";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;
@@ -26,7 +31,7 @@ type SoundObject = {
 const Metronome = ({ playlists }: { playlists: any }) => {
 	const [showSongs, setShowSongs] = useState(false);
 	const [play, setPlay] = useState(false);
-	const [bpm, setBpm] = useState(120);
+	const [bpm, setBpm] = useState(MAX_TEMPO_AS_NUM / 2);
 	const [tempoInterval, setTempoInterval] = useState<number>(0);
 	const [tapped, setTapped] = useState<number>();
 	const [soundEffect, setSoundEffect] = useState("sidestick");
@@ -158,8 +163,8 @@ const Metronome = ({ playlists }: { playlists: any }) => {
 					</div>
 					<input
 						type="range"
-						min="40"
-						max="220"
+						min={MIN_TEMPO_AS_STR}
+						max={MAX_TEMPO_AS_STR}
 						value={bpm}
 						onChange={(e) => setBpm(Number(e.target.value))}
 					/>

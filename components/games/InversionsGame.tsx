@@ -20,6 +20,7 @@ import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
 import MetroWidget from "./MetroWidget";
+import { MAX_TEMPO_AS_NUM } from "./GameConstants";
 
 const COOLDOWN_MS = 250;
 
@@ -48,7 +49,7 @@ const InversionsGame = () => {
 	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
-	const [bpm, setBpm] = useState<number>(80);
+	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);

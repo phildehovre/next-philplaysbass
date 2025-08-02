@@ -2,7 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
-import { buildScale, selectRandomNote } from "@/lib/utils/gameUtils";
+import {
+	buildScale,
+	calculateMsOffset,
+	selectRandomNote,
+} from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
 	QUALITY,
@@ -20,9 +24,7 @@ import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
 import MetroWidget from "./MetroWidget";
-import { MAX_TEMPO_AS_NUM } from "./GameConstants";
-
-const COOLDOWN_MS = 250;
+import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -50,6 +52,7 @@ const InversionsGame = () => {
 	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
+	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
@@ -196,13 +199,13 @@ const InversionsGame = () => {
 				playedNote: note.noteName,
 				isCorrect: isMatch,
 				timeToHitMs,
-				metronomeOffsetMs: 0,
+				metronomeOffsetMs: calculateMsOffset(bpm, lastTickTime),
 				playedAt: new Date(),
 			};
 
 			// Only save to DB if not in practice mode?
 			if (!isPracticeMode) {
-				addEvent(event);
+				addEvent(event, { bpm });
 			}
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -428,6 +431,8 @@ const InversionsGame = () => {
 					play={countdown || gameStarted}
 					bpm={bpm}
 					setBpm={setBpm}
+					lastTickTime={lastTickTime}
+					setLastTickTime={setLastTickTime}
 				/>
 			)}
 			{withTimer && (

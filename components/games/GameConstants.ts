@@ -5,3 +5,5 @@ export const MAX_TEMPO_AS_NUM = Number(MAX_TEMPO_AS_STR);
 export const MIN_TEMPO_AS_NUM = Number(MIN_TEMPO_AS_STR);
 
 export const TOLERANCE = 40; // in millisecs
+
+export const COOLDOWN_MS = 250;

@@ -1,15 +1,15 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { GameTypes, NoteEvent } from "@/types/types";
-import { toast } from "sonner";
+import { GameTypes, Note, NoteEvent } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
+import { processEventScore } from "@/lib/utils/gameUtils";
 
 interface PracticeSessionContextType {
 	sessionId: string | null;
 	startTime: Date | null;
 	events: NoteEvent[];
-	addEvent: (event: NoteEvent) => void;
+	addEvent: (event: NoteEvent, options?: any) => void;
 	finishSession: () => Promise<void>;
 	resetSession: () => void;
 	startSession: (gameType: GameTypes) => Promise<void>;
@@ -27,9 +27,11 @@ export const PracticeSessionProvider = ({
 	const [sessionId, setSessionId] = useState<string | null>(null);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
+	const [score, setScore] = useState<number>(0);
 
 	const addEvent = useCallback(
-		(event: NoteEvent) => {
+		(event: NoteEvent, options?: any) => {
+			processEventScore(event, options);
 			setEvents((prev) => {
 				if (prev.length === 0 && !startTime) {
 					// Automatically set startTime on first event if not already set

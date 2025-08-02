@@ -1,13 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import PitchyComponent from "./PitchyComponent";
-import { NoteInfo } from "@/types/types";
 import PulseVisualisation from "./PulseVisualisation";
 import {
 	MAX_TEMPO_AS_NUM,
 	MAX_TEMPO_AS_STR,
 	MIN_TEMPO_AS_NUM,
 	MIN_TEMPO_AS_STR,
-	TOLERANCE,
 } from "./GameConstants";
 
 type MetroWidgetPropsType = {
@@ -15,19 +12,18 @@ type MetroWidgetPropsType = {
 	setBpm: (val: number) => void;
 	play: boolean;
 	gameStarted: boolean;
+	lastTickTime: number | null;
+	setLastTickTime: (t: number) => void;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
-	const { bpm, setBpm, play, gameStarted } = props;
+	const { bpm, setBpm, play, gameStarted, lastTickTime, setLastTickTime } =
+		props;
 
 	const [tempoInterval, setTempoInterval] = useState<number | undefined>();
 	const [soundEffect, setSoundEffect] = useState<any>("sidestick");
 	const [sounds, setSounds] = useState<any>();
 	const [displayedBpm, setDisplayedBpm] = useState<number>(bpm);
-	const [timingStatus, setTimingStatus] = useState<
-		"on-time" | "late" | "early" | null
-	>(null);
-	const [lastTickTime, setLastTickTime] = useState<number | null>(null);
 
 	useEffect(() => {
 		const woodblock = new Audio("/sounds/Woodblock.mp3");
@@ -80,35 +76,6 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		}
 	}, [bpm]);
 
-	const onNoteDetection = (note: NoteInfo) => {
-		const noteTime = performance.now() - 236;
-
-		if (lastTickTime && tempoInterval) {
-			const diff = noteTime - lastTickTime;
-
-			// Use modulo to handle notes slightly after or before the beat
-			const timeFromBeat = diff % tempoInterval;
-			const msFromClick =
-				timeFromBeat > tempoInterval / 2
-					? timeFromBeat - tempoInterval
-					: timeFromBeat;
-
-			if (Math.abs(msFromClick) <= TOLERANCE) {
-				setTimingStatus("on-time");
-			} else if (msFromClick < 0) {
-				setTimingStatus("early");
-			} else {
-				setTimingStatus("late");
-			}
-
-			console.log(
-				`Note played ${msFromClick.toFixed(
-					1
-				)}ms from the click — ${timingStatus}`
-			);
-		}
-	};
-
 	return (
 		<div className="w-full h-full">
 			<div className="scoreboard">{displayedBpm}</div>
@@ -128,7 +95,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 				tempoInterval={tempoInterval}
 				gameStarted={gameStarted}
 			/>
-			<PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} />
+			{/* <PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} /> */}
 		</div>
 	);
 };

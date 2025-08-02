@@ -4,7 +4,7 @@ import {
 	NOTE_LETTER_ORDER,
 	ScaleQuality,
 } from "@/constants/chromaticScale";
-import { Note } from "@/types/types";
+import { Note, NoteEvent } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -124,3 +124,82 @@ export function getNoteFromPitch(frequency: number) {
 		display: `${noteName}${octave}`,
 	};
 }
+
+export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
+	const noteTime = performance.now() - 236;
+	const tempoInterval = (60 / bpm) * 1000;
+
+	if (lastTickTime && tempoInterval) {
+		const diff = noteTime - lastTickTime;
+
+		// Use modulo to handle notes slightly after or before the beat
+		const timeFromBeat = diff % tempoInterval;
+		const msFromClick =
+			timeFromBeat > tempoInterval / 2
+				? timeFromBeat - tempoInterval
+				: timeFromBeat;
+		return msFromClick;
+	}
+};
+const processRhythmicalAccuracy = (offsetMs: number | undefined): number => {
+	if (offsetMs) {
+		const absOffset = Math.abs(offsetMs);
+
+		if (absOffset <= 10) return 1.0; // Bullseye
+		if (absOffset <= 50) return 0.75; // very good
+		if (absOffset <= 100) return 0.5; // good
+		if (absOffset <= 150) return 0.25; // acceptable
+	}
+	return 0.0;
+};
+
+const processPitchAccuracy = (
+	played: string | undefined,
+	expected: string | undefined
+): number => {
+	if (played && expected) {
+		if (played === expected) return 1.0;
+	} else {
+		const error = `missing arguments 'played' or 'expected'`;
+		console.log(
+			"%cerror lib/utils/gameUtils.ts: line:161 ",
+			"color: red; display: block; width: 100%;",
+			error
+		);
+	}
+	return 0.0;
+};
+
+const processComboBonus = (
+	rhythmScore: number,
+	pitchScore: number,
+	tempo: number
+): number => {
+	if (rhythmScore === 1 && pitchScore === 1) {
+		const bonusMultiplier = Math.min(tempo / 120, 2); // scale up to 2x
+		return 1.0 * bonusMultiplier;
+	}
+	return 0;
+};
+
+export const processEventScore = (
+	event: NoteEvent | undefined,
+	options: any
+) => {
+	const { bpm } = options;
+	if (!event) return null;
+	const rhythmScore = processRhythmicalAccuracy(event.metronomeOffsetMs);
+	const pitchScore = processPitchAccuracy(event.playedNote, event.expectedNote);
+	const comboBonus = processComboBonus(rhythmScore, pitchScore, bpm);
+
+	const totalScore = (rhythmScore + pitchScore) * 50 + comboBonus * 100;
+
+	console.log("🎯 Scoring Event:", {
+		rhythmScore,
+		pitchScore,
+		comboBonus,
+		totalScore,
+	});
+
+	return totalScore;
+};

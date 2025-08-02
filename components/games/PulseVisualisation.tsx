@@ -18,16 +18,20 @@ const PulseVisualisation = ({
 	const [msOffset, setMsOffset] = useState<number>();
 	const [showMarker, setShowMarker] = useState<boolean>(false);
 	const lastDetectionTimeRef = useRef<number>(0);
-	const cooldown = tempoInterval; // ms
+
+	const cooldown = tempoInterval;
 
 	useEffect(() => {
 		if (!gameStarted || !play || !tempoInterval) return;
 
 		const interval = setInterval(() => {
 			setPulse(true);
-			setAnimationKey((prev) => prev + 1); // force re-render of animated line
 
-			setTimeout(() => setPulse(false), tempoInterval * 0.8); // hide center blip after short time
+			// force re-render of animated line
+			setAnimationKey((prev) => prev + 1);
+
+			// hide center blip after short time
+			setTimeout(() => setPulse(false), tempoInterval * 0.8);
 		}, tempoInterval);
 
 		return () => clearInterval(interval);
@@ -36,7 +40,8 @@ const PulseVisualisation = ({
 	useEffect(() => {
 		if (msOffset === null) return;
 		setShowMarker(true);
-		const timer = setTimeout(() => setShowMarker(false), 300); // bar disappears after 300ms
+		// bar disappears after 300ms
+		const timer = setTimeout(() => setShowMarker(false), 300);
 		return () => clearTimeout(timer);
 	}, [msOffset]);
 
@@ -88,7 +93,7 @@ const PulseVisualisation = ({
 				)}
 				{showMarker && typeof msOffset === "number" && tempoInterval && (
 					<div
-						key={`offset-marker-${animationKey}`} // ensure it resets properly
+						key={`offset-marker-${animationKey}`}
 						className="msoffset_marker absolute top-0 h-full w-[1px] bg-red-500"
 						style={{
 							left: `calc(50% + ${(msOffset / tempoInterval) * 50}%)`,

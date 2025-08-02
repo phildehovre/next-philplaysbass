@@ -2,15 +2,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import PitchyComponent from "./PitchyComponent";
 import { NoteInfo } from "@/types/types";
 import { MinusCircle, PlusCircle } from "lucide-react";
+import PulseVisualisation from "./PulseVisualisation";
+import GameSelection from "./dashboard/GameSelection";
 
 type MetroWidgetPropsType = {
 	bpm: number;
 	setBpm: (val: number) => void;
 	play: boolean;
+	gameStarted: boolean;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
-	const { bpm, setBpm, play } = props;
+	const { bpm, setBpm, play, gameStarted } = props;
 
 	const [tempoInterval, setTempoInterval] = useState<number | undefined>();
 	const [soundEffect, setSoundEffect] = useState<any>("sidestick");
@@ -107,9 +110,6 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		<div className="w-full h-full">
 			<div className="scoreboard">{displayedBpm}</div>
 			<div className="controls flex gap-1">
-				{/* <button onClick={decrement}>
-					<MinusCircle />
-				</button> */}
 				<input
 					className="w-full"
 					type="range"
@@ -118,11 +118,13 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 					onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
 					onMouseUp={() => setBpm(displayedBpm)}
 				/>
-				{/* <button onClick={increment}>
-					<PlusCircle />
-				</button> */}
 			</div>
-			<div className="scoreboard">{timingStatus || "..."}</div>
+			<PulseVisualisation
+				lastTickTime={lastTickTime}
+				play={play}
+				tempoInterval={tempoInterval}
+				gameStarted={gameStarted}
+			/>
 			<PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} />
 		</div>
 	);

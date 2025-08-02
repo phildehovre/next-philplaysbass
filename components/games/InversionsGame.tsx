@@ -423,6 +423,7 @@ const InversionsGame = () => {
 			</div>
 			{withMetronome && (
 				<MetroWidget
+					gameStarted={gameStarted}
 					play={countdown || gameStarted}
 					bpm={bpm}
 					setBpm={setBpm}

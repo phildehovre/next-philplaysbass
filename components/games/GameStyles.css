@@ -388,3 +388,62 @@ input[type="range"]:focus::-ms-fill-upper {
 	animation: shake 250ms ease-in-out;
 	color: rgb(58, 58, 58) !important;
 }
+.pulse-bar {
+	position: absolute;
+	height: 100%;
+	width: 1px;
+	background-color: var(--clr-cta-primary);
+	box-shadow: 0px 0px 2px 2px var(--clr-cta-primary);
+	animation-fill-mode: none;
+}
+
+@keyframes moveRight {
+	from {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	to {
+		left: 100%;
+		transform: translateX(-50%);
+	}
+}
+
+@keyframes moveCenter {
+	from {
+		left: 0%;
+		transform: translateX(-50%);
+	}
+	to {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+
+.centerline {
+	height: 110%;
+	margin-top: -4px;
+	opacity: 0.2;
+}
+
+.center-blip {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 110%;
+	width: 2px;
+	background-color: transparent;
+	opacity: 1;
+	box-shadow: 0px 0px 5px 5px var(--clr-cta-primary);
+	animation: fadeOut 300ms ease-out forwards;
+}
+
+@keyframes fadeOut {
+	to {
+		opacity: 0;
+	}
+}
+
+.msoffset_marker {
+	box-shadow: 0px 0px 2px 2px red;
+}

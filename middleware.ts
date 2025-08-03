@@ -7,14 +7,9 @@ type KindeReqType = {
 	kindeAuth: unknown;
 };
 
-export default withAuth(
-	async function middleware(req: KindeReqType) {
-		// console.log("look at me", req.kindeAuth);
-	},
-	{
-		publicPaths: ["/", "/lessons", "/about"], // Add any other public paths as needed
-	}
-);
+export default withAuth(async function middleware(req: KindeReqType) {}, {
+	publicPaths: ["/", "/lessons", "/about"],
+});
 
 export const config = {
 	matcher: [

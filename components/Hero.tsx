@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
 						<div className="links_ctn">
 							<ul>
 								<li className="link_item">
-									<Link href="/metronome">
+									<Link href="/dashboard">
 										{textObject.nav.buttons.app.labels[language]}
 									</Link>
 								</li>

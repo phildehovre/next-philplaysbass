@@ -1,3 +1,4 @@
+import { MS_LATENCY_OFFSET } from "@/components/games/GameConstants";
 import {
 	arrayChromaticScale,
 	formulae,
@@ -126,7 +127,7 @@ export function getNoteFromPitch(frequency: number) {
 }
 
 export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
-	const noteTime = performance.now() - 236;
+	const noteTime = performance.now() - MS_LATENCY_OFFSET;
 	const tempoInterval = (60 / bpm) * 1000;
 
 	if (lastTickTime && tempoInterval) {
@@ -141,16 +142,21 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 		return msFromClick;
 	}
 };
-const processRhythmicalAccuracy = (offsetMs: number | undefined): number => {
-	if (offsetMs) {
-		const absOffset = Math.abs(offsetMs);
 
-		if (absOffset <= 10) return 1.0; // Bullseye
-		if (absOffset <= 50) return 0.75; // very good
-		if (absOffset <= 100) return 0.5; // good
-		if (absOffset <= 150) return 0.25; // acceptable
-	}
-	return 0.0;
+const processRhythmicalAccuracy = (offsetMs: number | undefined): number => {
+	if (offsetMs === undefined) return 0;
+
+	const absOffset = Math.abs(offsetMs);
+	const maxOffset = 150;
+	const softEdge = maxOffset / 2;
+
+	const x = absOffset - softEdge;
+	const steepness = 0.03; // Softer curve
+
+	const sigmoid = 1 / (1 + Math.exp(steepness * x));
+	const score = 2 * (sigmoid - 0.5); // Normalize 0 to 1
+
+	return Number(score.toFixed(3));
 };
 
 const processPitchAccuracy = (
@@ -187,19 +193,30 @@ export const processEventScore = (
 	options: any
 ) => {
 	const { bpm } = options;
-	if (!event) return null;
-	const rhythmScore = processRhythmicalAccuracy(event.metronomeOffsetMs);
-	const pitchScore = processPitchAccuracy(event.playedNote, event.expectedNote);
-	const comboBonus = processComboBonus(rhythmScore, pitchScore, bpm);
+	if (!event) return 0;
+	const rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs);
+	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
+	const bonus = processComboBonus(rhythm, pitch, bpm);
 
-	const totalScore = (rhythmScore + pitchScore) * 50 + comboBonus * 100;
+	const total = (rhythm + pitch) * 50 + bonus * 100;
 
-	console.log("🎯 Scoring Event:", {
-		rhythmScore,
-		pitchScore,
-		comboBonus,
-		totalScore,
-	});
+	const scoreObject = {
+		rhythm,
+		pitch,
+		bonus,
+	};
 
-	return totalScore;
+	return scoreObject;
+};
+
+export const processTotalScore = (
+	scores: { rhythm: number; pitch: number }[]
+) => {
+	return scores.reduce(
+		(acc, curr) => ({
+			rhythm: acc.rhythm + curr.rhythm,
+			pitch: acc.pitch + curr.pitch,
+		}),
+		{ rhythm: 0, pitch: 0 }
+	);
 };

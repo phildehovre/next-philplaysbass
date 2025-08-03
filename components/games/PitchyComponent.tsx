@@ -5,14 +5,21 @@ import { PitchDetector } from "pitchy";
 import { getNoteFromPitch } from "@/lib/utils/gameUtils";
 import { NoteInfo } from "@/types/types";
 import useCookies from "@/hooks/useCookies";
+import {
+	MAX_PITCH_HZ,
+	MIN_CLARITY,
+	MIN_PITCH_HZ,
+	MIN_VOLUME_DB,
+} from "./GameConstants";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
 	showDevices?: boolean;
+	cooldown?: number;
 };
 
 export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
-	const { onNoteDetection, showDevices } = props;
+	const { onNoteDetection, showDevices, cooldown } = props;
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
@@ -68,13 +75,17 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		}
 	};
 
-	const COOLDOWN_MS = 100;
+	const COOLDOWN_MS = cooldown;
 
 	const cooldownRef = useRef(false);
 	const timeoutIdRef = useRef<number | null>(null);
+	const stableNoteRef = useRef<{ pitch: number; count: number } | null>(null);
+	const STABILITY_THRESHOLD = 2;
 
 	useEffect(() => {
-		if (!pitch) return;
+		if (!pitch) {
+			return;
+		}
 
 		if (cooldownRef.current) {
 			// Still cooling down, ignore new pitches
@@ -125,7 +136,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			source.connect(analyser);
 
 			const detector = PitchDetector.forFloat32Array(analyser.fftSize);
-			detector.minVolumeDecibels = -15;
+			detector.minVolumeDecibels = MIN_VOLUME_DB;
 			const input = new Float32Array(
 				new ArrayBuffer(detector.inputLength * Float32Array.BYTES_PER_ELEMENT)
 			) as Float32Array & { buffer: ArrayBuffer };
@@ -151,15 +162,32 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					audioContext.sampleRate
 				);
 
-				if (detectedPitch > 0 && detectedClarity > 0.9) {
-					setPitch(detectedPitch);
-					setClarity(detectedClarity);
+				if (
+					detectedPitch > MIN_PITCH_HZ &&
+					detectedPitch < MAX_PITCH_HZ &&
+					detectedClarity > MIN_CLARITY
+				) {
+					const prev = stableNoteRef.current;
+					if (prev && Math.abs(prev.pitch - detectedPitch) < 1) {
+						stableNoteRef.current = {
+							pitch: detectedPitch,
+							count: prev.count + 1,
+						};
+					} else {
+						stableNoteRef.current = { pitch: detectedPitch, count: 1 };
+					}
+
+					if (stableNoteRef.current.count >= STABILITY_THRESHOLD) {
+						setPitch(detectedPitch);
+						setClarity(detectedClarity);
+					}
 				} else {
+					stableNoteRef.current = null;
 					setPitch(null);
 					setClarity(null);
 				}
 
-				timeoutRef.current = window.setTimeout(update, 100);
+				timeoutRef.current = window.setTimeout(update, COOLDOWN_MS);
 			};
 
 			update();

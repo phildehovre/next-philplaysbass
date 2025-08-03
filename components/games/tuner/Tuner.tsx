@@ -49,7 +49,6 @@ const Tuner = () => {
 				</div>
 			)}
 
-			{/* Pitchy microphone input + selector */}
 			<PitchyComponent onNoteDetection={setNote} />
 		</div>
 	);

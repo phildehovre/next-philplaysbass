@@ -38,12 +38,6 @@ export async function POST(req: NextRequest) {
 			return new Response(null, { status: 204 }); // No Content
 		}
 
-		if (session.duration) {
-			return new Response(JSON.stringify({ error: "No duration" }), {
-				status: 204,
-			});
-		}
-
 		// Process events:
 		const totalNotes = events.length;
 		const correctNotes = events.filter((e) => e.isCorrect).length;
@@ -99,8 +93,6 @@ export async function POST(req: NextRequest) {
 				lastPracticed: new Date(),
 			},
 		});
-
-		console.log("updated Session: ", updatedSession);
 
 		return new Response(
 			JSON.stringify({ sessionId: updatedSession.id, duration }),

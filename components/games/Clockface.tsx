@@ -1,25 +1,30 @@
+import { usePracticeSession } from "@/context/practiceSessionsContext";
 import React from "react";
+import { ScoreBurstManager } from "./ScoreBurstManager";
 
 type ClockfacePropsType = {
 	showPulse: boolean;
 	progress: number;
-	withTimer: boolean;
+	withTimer?: boolean;
 	children: React.ReactNode;
+	size?: number;
 };
 
 const CIRCLE_RADIUS = "45";
 const CIRCLE_CANVAS = "50";
 
 const Clockface: React.FC<ClockfacePropsType> = ({
-	withTimer,
+	withTimer = false,
 	showPulse,
 	progress,
 	children,
+	size,
 }) => {
 	return (
 		<div className="clock-face relative">
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}
+			<ScoreBurstManager />
 
 			<svg viewBox="0 0 100 100" className="clock-svg">
 				<circle
@@ -27,6 +32,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					cx={CIRCLE_CANVAS}
 					cy={CIRCLE_CANVAS}
 					r={CIRCLE_RADIUS}
+					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
 				{withTimer && (
 					<circle

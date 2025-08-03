@@ -26,12 +26,12 @@ const Page = async () => {
 			PracticeSession: {
 				include: {
 					result: true,
+					events: true,
 				},
 			},
 		},
 	});
 
-	console.log(userWithResults);
 	return (
 		<div className="flex w-full h-full justify-center">
 			<Dashboard userData={userWithResults} />

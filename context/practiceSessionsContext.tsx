@@ -13,7 +13,17 @@ interface PracticeSessionContextType {
 	finishSession: () => Promise<void>;
 	resetSession: () => void;
 	startSession: (gameType: GameTypes) => Promise<void>;
+	score: Score;
+	scoreEvents: Score[];
+	showScore: boolean;
+	setShowScore: (bool: boolean) => void;
 }
+
+export type Score = {
+	rhythm: number;
+	pitch: number;
+	bonus: number;
+};
 
 const PracticeSessionContext = createContext<
 	PracticeSessionContextType | undefined
@@ -27,11 +37,25 @@ export const PracticeSessionProvider = ({
 	const [sessionId, setSessionId] = useState<string | null>(null);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
-	const [score, setScore] = useState<number>(0);
+	const [score, setScore] = useState<Score>({
+		rhythm: 0,
+		pitch: 0,
+		bonus: 0,
+	});
+	const [scoreEvents, setScoreEvents] = useState<Score[]>([]);
+	const [showScore, setShowScore] = useState<boolean>(false);
 
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
-			processEventScore(event, options);
+			const newScore = processEventScore(event, options);
+			if (newScore) {
+				setScore((prev) => ({
+					rhythm: prev.rhythm + newScore.rhythm,
+					pitch: prev.pitch + newScore.pitch,
+					bonus: prev.bonus + newScore.bonus,
+				}));
+				setScoreEvents((prev) => [...prev, newScore]);
+			}
 			setEvents((prev) => {
 				if (prev.length === 0 && !startTime) {
 					// Automatically set startTime on first event if not already set
@@ -39,18 +63,21 @@ export const PracticeSessionProvider = ({
 				}
 				return [...prev, event];
 			});
+			// TODO: setScore will have to be wrapped in a function
+			// that slowly digests the content of scoreEvents
+			// in order to display events first and update the score progressively
+			// this should make for a better experience.
 		},
 		[startTime]
 	);
 
 	const finishSession = useCallback(async () => {
-		console.log("Finishing session!");
+		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;
 
 		const endTime = new Date();
 		const durationMs = differenceInMilliseconds(endTime, startTime);
-
-		console.log("Session duration (ms):", durationMs);
+		if (durationMs < 1000) return;
 
 		await fetch(`/api/practice/${sessionId}/events`, {
 			method: "POST",
@@ -70,6 +97,7 @@ export const PracticeSessionProvider = ({
 		setSessionId(null);
 		setStartTime(null);
 		setEvents([]);
+		setScoreEvents([]);
 	};
 
 	const startSession = async (gameType: GameTypes) => {
@@ -97,6 +125,10 @@ export const PracticeSessionProvider = ({
 		finishSession,
 		startSession,
 		resetSession,
+		score,
+		scoreEvents,
+		showScore,
+		setShowScore,
 	};
 
 	return (

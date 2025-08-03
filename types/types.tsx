@@ -178,4 +178,8 @@ export type UserWithPracticeSessions = {
 	PracticeSession: PracticeSession[];
 };
 
-export type GameTypes = "note-match" | "name-triad" | "tempo-match";
+export type GameTypes =
+	| "note-match"
+	| "name-triad"
+	| "tempo-match"
+	| "rhythm-accuracy";

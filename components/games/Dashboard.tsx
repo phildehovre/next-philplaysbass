@@ -93,7 +93,7 @@ export const AnnouncementBanner = (props: {
 			<span className="flex w-full justify-end">
 				{callToActionText && (
 					<Link
-						href="https://discord.gg/7p7Tx9X6"
+						href={process.env.NEXT_PUBLIC_DISCORD_LINK || "/dashboard"}
 						className="dashboard_btn cta discord"
 					>
 						<LinkIcon size={"12"} />

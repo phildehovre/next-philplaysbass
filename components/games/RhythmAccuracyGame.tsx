@@ -1,0 +1,249 @@
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import "./GameStyles.css";
+import { calculateMsOffset } from "@/lib/utils/gameUtils";
+import PitchyComponent from "./PitchyComponent";
+import { GameTypes, NoteEvent, NoteInfo } from "@/types/types";
+import AnimatedNumber from "./AnimatedNumber";
+import Switch from "../Switch";
+import { Score, usePracticeSession } from "@/context/practiceSessionsContext";
+import Spinner from "../Spinner";
+import Clockface from "./Clockface";
+import Countdown from "./Countdown";
+import MetroWidget from "./MetroWidget";
+import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
+import ScoreModal from "./ScoreModal";
+
+const RhythmAccuracyGame = () => {
+	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
+	const [gameType, setGameType] = useState<GameTypes>("rhythm-accuracy");
+	const [duration, setDuration] = useState<number>(displayedDuration);
+	const [withMetronome, setWithMetronome] = useState(false);
+	const [score, setScore] = useState({ wins: 0, losses: 0 });
+	const [progress, setProgress] = useState(0);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
+	const [gameStarted, setGameStarted] = useState(false);
+	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
+	const [showPulse, setShowPulse] = useState<boolean>(false);
+	const [showShake, setShowShake] = useState(false);
+	const [countdown, setCountdown] = useState<boolean>(false);
+	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
+	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
+	const [finalScore, setFinalScore] = useState<{
+		wins: number;
+		losses: number;
+	}>();
+
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const rafRef = useRef<number | null>(null);
+	const evaluateCooldownRef = useRef(false);
+	const noteShownAtRef = useRef<number | null>(null);
+	const selectedNoteRef = useRef<string>("");
+
+	const {
+		events,
+		showScore,
+		addEvent,
+		sessionId,
+		startSession,
+		finishSession,
+		scoreEvents,
+	} = usePracticeSession();
+
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			setIsTabVisible(!document.hidden);
+			if (document.hidden) finishSession();
+		};
+		const handleBeforeUnload = () => {
+			finishSession();
+		};
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		window.addEventListener("beforeunload", handleBeforeUnload);
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+		};
+	}, []);
+
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) clearInterval(timeoutRef.current);
+			if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		};
+	}, []);
+
+	// Practice mode switch
+	useEffect(() => {
+		setScore({ wins: 0, losses: 0 });
+	}, [isPracticeMode]);
+
+	const resetGame = () => {
+		// clear timers
+		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+		// reset state
+		setGameStarted(false);
+		setCountdown(false);
+		setProgress(0);
+		setScore({ wins: 0, losses: 0 });
+		setShowPulse(false);
+		setShowShake(false);
+	};
+
+	const recordLoss = () => {
+		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
+		setShowShake(true);
+		setTimeout(() => setShowShake(false), COOLDOWN_MS);
+	};
+	const recordWin = () => {
+		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
+		setShowPulse(true);
+		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
+	};
+
+	const evaluateRound = async (note: NoteInfo) => {
+		if (!isTabVisible) return;
+		if (!gameStarted) return;
+
+		if (!sessionId) {
+			await startSession(gameType);
+		}
+
+		if (evaluateCooldownRef.current) return;
+
+		const now = Date.now();
+		const timeToHitMs = noteShownAtRef.current
+			? now - noteShownAtRef.current
+			: 0;
+
+		const offset = calculateMsOffset(bpm, lastTickTime) as number;
+		console.log(offset);
+
+		const event: NoteEvent = {
+			expectedNote: "",
+			playedNote: note.noteName,
+			isCorrect: offset < 150,
+			timeToHitMs,
+			metronomeOffsetMs: offset,
+			playedAt: new Date(),
+		};
+
+		// Only save to DB if not in practice mode?
+		if (!isPracticeMode && !evaluateCooldownRef.current) {
+			addEvent(event, { bpm });
+			if (Math.abs(offset) < 85) {
+				recordWin();
+			} else {
+				recordLoss();
+			}
+		}
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+		evaluateCooldownRef.current = true;
+		setTimeout(() => {
+			evaluateCooldownRef.current = false;
+		}, COOLDOWN_MS);
+	};
+
+	const startGame = async () => {
+		resetGame();
+		setGameStarted(true);
+
+		if (!sessionId) await startSession(gameType);
+	};
+
+	const stopGame = async () => {
+		setFinalScore(score);
+		resetGame();
+		setGameStarted(false);
+		if (events) await finishSession();
+	};
+
+	const handleNoteDetection = (note: NoteInfo) => {
+		if (!gameStarted) return;
+		evaluateRound(note);
+	};
+
+	return (
+		<div className="game_ctn max-w-[24em]">
+			<div className="game_header flex flex-col justify-center gap-2 w-full">
+				{!gameStarted ? (
+					<button
+						onClick={() => setCountdown(true)}
+						className="game_btn start-game_btn"
+					>
+						Start Game
+					</button>
+				) : (
+					<button onClick={stopGame} className="game_btn stop-game_btn">
+						Stop Game
+					</button>
+				)}
+				<label
+					htmlFor="isPracticeMode"
+					className="flex justify-center gap-2 m-auto"
+				>
+					<Switch
+						disabled={gameStarted}
+						checked={isPracticeMode}
+						onCheckChange={setIsPracticeMode}
+					/>
+					<p
+						style={{
+							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
+						}}
+					>
+						Practice mode
+					</p>
+				</label>
+			</div>
+
+			<div className="scoreboard text-2xl font-mono">
+				<AnimatedNumber number={score.losses} />:
+				<AnimatedNumber number={score.wins} />
+			</div>
+
+			{/* FILTER CONTROLS */}
+			<div className="switch_ctn grid grid-cols-2 gap-7"></div>
+			<Clockface size={10} showPulse={showPulse} progress={progress}>
+				<div className={`game_question inversions `}>
+					{isLoading ? (
+						<Spinner />
+					) : (
+						<>
+							{countdown && (
+								<Countdown
+									value={4}
+									bpm={bpm}
+									onCountdownFinished={startGame}
+								/>
+							)}
+						</>
+					)}
+				</div>
+			</Clockface>
+			<MetroWidget
+				gameStarted={gameStarted}
+				play={countdown || gameStarted}
+				bpm={bpm}
+				setBpm={setBpm}
+				lastTickTime={lastTickTime}
+				setLastTickTime={setLastTickTime}
+			/>
+
+			<PitchyComponent
+				showDevices={true}
+				onNoteDetection={handleNoteDetection}
+			/>
+			{showScore && (
+				<ScoreModal scoreData={finalScore} scoreEvents={scoreEvents} />
+			)}
+		</div>
+	);
+};
+
+export default RhythmAccuracyGame;

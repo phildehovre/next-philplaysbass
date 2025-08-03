@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma"; // update to your actual prisma path
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
 	try {
@@ -28,9 +28,8 @@ export async function POST(req: NextRequest) {
 
 		const res = await prisma.practiceEvent.createMany({
 			data: formattedEvents,
-			skipDuplicates: true, // optional, avoids crashing on duplicate UUIDs
+			skipDuplicates: true,
 		});
-		console.log("RESULT: ", res);
 
 		return NextResponse.json({ success: true }, { status: 201 });
 	} catch (err) {

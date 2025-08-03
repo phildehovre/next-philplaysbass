@@ -35,7 +35,7 @@ export const gameCards: {
 		title: "Note Match",
 		gameType: "note-match",
 		description:
-			"Random notes will appear as soon as the game begins — your goal? Play them on your instrument as quickly and accurately as possible to score points. It’s a fast-paced test of fretboard knowledge, reflexes, and instrumental control. Can you keep up?",
+			"Random notes will appear as soon as the game begins. Your goal? Play them on your instrument as quickly and accurately as possible to score points. It’s a fast-paced test of fretboard knowledge, reflexes, and instrumental control. Can you keep up?",
 		btnText: "Play!",
 		href: "/games/inversions",
 	},
@@ -43,8 +43,17 @@ export const gameCards: {
 		title: "Name the triad",
 		gameType: "name-triad",
 		description:
-			"Put your ears and eyes to the test as you race to recognize arpeggios and their qualities — major, minor, diminished, augmented...  all at a glance. Whether you're sharpening your theory skills or training for the bandstand, this fast-paced challenge will push your pattern recognition and chord knowledge to the limit.",
+			"Put your ears and eyes to the test as you race to recognize arpeggios and their qualities: major, minor, diminished, augmented...  all at a glance. Whether you're sharpening your theory skills or training for the bandstand, this fast-paced challenge will push your pattern recognition and chord knowledge to the limit.",
 		btnText: "Play!",
-		href: "/games/arpeggios",
+		href: "/games/arpeggio",
+	},
+	{
+		title: "Rhythm Accuracy",
+		gameType: "rhythm-accuracy",
+
+		description:
+			"Challenge your sense of timing in this rhythm accuracy game! Your goal is to hit each beat as precisely as possible, the closer you are to perfect timing, the more points you earn. Speed matters too: faster reactions mean higher scores. Rhythm patterns coming soon for an even greater challenge!",
+		btnText: "Play!",
+		href: "/games/rhythm",
 	},
 ];

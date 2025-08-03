@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import PulseVisualisation from "./PulseVisualisation";
 import {
@@ -77,17 +78,19 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	}, [bpm]);
 
 	return (
-		<div className="w-full h-full">
-			<div className="scoreboard">{displayedBpm}</div>
-			<div className="controls flex gap-1">
-				<input
-					className="w-full"
-					type="range"
-					min={MIN_TEMPO_AS_STR}
-					max={MAX_TEMPO_AS_STR}
-					onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
-					onMouseUp={() => setBpm(displayedBpm)}
-				/>
+		<div className="w-full h-full flex flex-col gap-2">
+			<div className="scoreboard flex flex-col items-center font-bold">
+				{displayedBpm} bpm
+				<div className="controls flex gap-1 w-full">
+					<input
+						className="w-full"
+						type="range"
+						min={MIN_TEMPO_AS_STR}
+						max={MAX_TEMPO_AS_STR}
+						onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
+						onMouseUp={() => setBpm(displayedBpm)}
+					/>
+				</div>
 			</div>
 			<PulseVisualisation
 				lastTickTime={lastTickTime}
@@ -95,7 +98,6 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 				tempoInterval={tempoInterval}
 				gameStarted={gameStarted}
 			/>
-			{/* <PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} /> */}
 		</div>
 	);
 };

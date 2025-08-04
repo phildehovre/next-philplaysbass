@@ -4,22 +4,19 @@ import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import { calculateMsOffset } from "@/lib/utils/gameUtils";
 import PitchyComponent from "./PitchyComponent";
-import { GameTypes, NoteEvent, NoteInfo } from "@/types/types";
+import { Score, GameTypes, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
 import Switch from "../Switch";
-import { Score, usePracticeSession } from "@/context/practiceSessionsContext";
+import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
 import MetroWidget from "./MetroWidget";
-import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
+import { COOLDOWN_MS, MAX_TEMPO_AS_NUM, TOLERANCE } from "./GameConstants";
 import ScoreModal from "./ScoreModal";
 
 const RhythmAccuracyGame = () => {
-	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [gameType, setGameType] = useState<GameTypes>("rhythm-accuracy");
-	const [duration, setDuration] = useState<number>(displayedDuration);
-	const [withMetronome, setWithMetronome] = useState(false);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [progress, setProgress] = useState(0);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,7 +26,6 @@ const RhythmAccuracyGame = () => {
 	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
-	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 	const [finalScore, setFinalScore] = useState<{
 		wins: number;
@@ -50,6 +46,8 @@ const RhythmAccuracyGame = () => {
 		startSession,
 		finishSession,
 		scoreEvents,
+		bpm,
+		setBpm,
 	} = usePracticeSession();
 
 	useEffect(() => {
@@ -105,7 +103,7 @@ const RhythmAccuracyGame = () => {
 		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
 	};
 
-	const evaluateRound = async (note: NoteInfo) => {
+	const onNoteDetection = async (note: NoteInfo) => {
 		if (!isTabVisible) return;
 		if (!gameStarted) return;
 
@@ -121,7 +119,6 @@ const RhythmAccuracyGame = () => {
 			: 0;
 
 		const offset = calculateMsOffset(bpm, lastTickTime) as number;
-		console.log(offset);
 
 		const event: NoteEvent = {
 			expectedNote: "",
@@ -161,11 +158,6 @@ const RhythmAccuracyGame = () => {
 		resetGame();
 		setGameStarted(false);
 		if (events) await finishSession();
-	};
-
-	const handleNoteDetection = (note: NoteInfo) => {
-		if (!gameStarted) return;
-		evaluateRound(note);
 	};
 
 	return (
@@ -235,11 +227,8 @@ const RhythmAccuracyGame = () => {
 				setLastTickTime={setLastTickTime}
 			/>
 
-			<PitchyComponent
-				showDevices={true}
-				onNoteDetection={handleNoteDetection}
-			/>
-			{showScore && (
+			<PitchyComponent showDevices={true} onNoteDetection={onNoteDetection} />
+			{!gameStarted && showScore && events.length && (
 				<ScoreModal scoreData={finalScore} scoreEvents={scoreEvents} />
 			)}
 		</div>

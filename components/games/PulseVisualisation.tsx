@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import PitchyComponent from "./PitchyComponent";
 import { NoteInfo } from "@/types/types";
+import { MS_LATENCY_OFFSET } from "./GameConstants";
 
 const PulseVisualisation = ({
 	play,
@@ -15,7 +16,10 @@ const PulseVisualisation = ({
 }) => {
 	const [pulse, setPulse] = useState(false);
 	const [animationKey, setAnimationKey] = useState(0);
-	const [msOffset, setMsOffset] = useState<number>();
+	const [markers, setMarkers] = useState<{ id: number; msOffset: number }[]>(
+		[]
+	);
+
 	const [showMarker, setShowMarker] = useState<boolean>(false);
 	const lastDetectionTimeRef = useRef<number>(0);
 
@@ -37,22 +41,13 @@ const PulseVisualisation = ({
 		return () => clearInterval(interval);
 	}, [play, tempoInterval, gameStarted]);
 
-	useEffect(() => {
-		if (msOffset === null) return;
-		setShowMarker(true);
-		// bar disappears after 300ms
-		const timer = setTimeout(() => setShowMarker(false), 300);
-		return () => clearTimeout(timer);
-	}, [msOffset]);
-
 	const onNoteDetection = (note: NoteInfo) => {
 		const now = performance.now();
 
 		if (!cooldown || now - lastDetectionTimeRef.current < cooldown) return;
-
 		lastDetectionTimeRef.current = now;
 
-		const noteTime = now - 236;
+		const noteTime = now - MS_LATENCY_OFFSET;
 
 		if (lastTickTime && tempoInterval) {
 			const diff = noteTime - lastTickTime;
@@ -63,7 +58,14 @@ const PulseVisualisation = ({
 					? timeFromBeat - tempoInterval
 					: timeFromBeat;
 
-			setMsOffset(msFromClick);
+			const id = now; // could also use a UUID or incrementing counter
+
+			setMarkers((prev) => [...prev, { id, msOffset: msFromClick }]);
+
+			// Auto-remove after e.g. 400ms
+			setTimeout(() => {
+				setMarkers((prev) => prev.filter((marker) => marker.id !== id));
+			}, 400);
 		}
 	};
 
@@ -92,19 +94,19 @@ const PulseVisualisation = ({
 					</>
 				)}
 				{gameStarted &&
-					showMarker &&
-					typeof msOffset === "number" &&
-					tempoInterval && (
+					tempoInterval &&
+					markers.map((marker) => (
 						<div
-							key={`offset-marker-${animationKey}`}
+							key={marker.id}
 							className="msoffset_marker absolute top-0 h-full w-[1px] bg-red-500"
 							style={{
-								left: `calc(50% + ${(msOffset / tempoInterval) * 50}%)`,
+								left: `calc(50% + ${(marker.msOffset / tempoInterval) * 50}%)`,
 								transform: "translateX(-50%)",
 								animation: `fadeOut ${tempoInterval}ms ease-out forwards`,
 							}}
 						/>
-					)}
+					))}
+
 				<div className="centerline  bg-white w-[2px] absolute left-1/2 transform -translate-x-1/2"></div>
 			</div>
 			<PitchyComponent showDevices={false} onNoteDetection={onNoteDetection} />

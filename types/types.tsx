@@ -183,3 +183,9 @@ export type GameTypes =
 	| "name-triad"
 	| "tempo-match"
 	| "rhythm-accuracy";
+
+export type Score = {
+	rhythm: number;
+	pitch: number;
+	bonus: number;
+};

@@ -5,7 +5,7 @@ import {
 	NOTE_LETTER_ORDER,
 	ScaleQuality,
 } from "@/constants/chromaticScale";
-import { Note, NoteEvent } from "@/types/types";
+import { Note, NoteEvent, Score } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -143,80 +143,84 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 	}
 };
 
-const processRhythmicalAccuracy = (offsetMs: number | undefined): number => {
+export const processRhythmicalAccuracy = (
+	offsetMs: number | undefined
+): number => {
 	if (offsetMs === undefined) return 0;
 
 	const absOffset = Math.abs(offsetMs);
-	const maxOffset = 150;
+	const maxOffset = 150; // ms
 	const softEdge = maxOffset / 2;
-
 	const x = absOffset - softEdge;
-	const steepness = 0.03; // Softer curve
 
+	const steepness = 0.05;
 	const sigmoid = 1 / (1 + Math.exp(steepness * x));
-	const score = 2 * (sigmoid - 0.5); // Normalize 0 to 1
 
-	return Number(score.toFixed(3));
+	// Normalize and scale to 0–100
+	const score = 100 * (2 * (sigmoid - 0.5));
+
+	return Math.round(score);
 };
 
-const processPitchAccuracy = (
+export const processPitchAccuracy = (
 	played: string | undefined,
 	expected: string | undefined
 ): number => {
-	if (played && expected) {
-		if (played === expected) return 1.0;
-	} else {
-		const error = `missing arguments 'played' or 'expected'`;
-		console.log(
-			"%cerror lib/utils/gameUtils.ts: line:161 ",
-			"color: red; display: block; width: 100%;",
-			error
-		);
+	if (played && expected && played === expected) {
+		return 100;
 	}
-	return 0.0;
+	return 0;
 };
 
-const processComboBonus = (
+export const processComboBonus = (
 	rhythmScore: number,
 	pitchScore: number,
 	tempo: number
 ): number => {
-	if (rhythmScore === 1 && pitchScore === 1) {
-		const bonusMultiplier = Math.min(tempo / 120, 2); // scale up to 2x
-		return 1.0 * bonusMultiplier;
+	if (rhythmScore === 100 && pitchScore === 100) {
+		const bonusMultiplier = Math.min(tempo / 120, 2); // up to 2x
+		return 100 * bonusMultiplier;
 	}
 	return 0;
 };
 
 export const processEventScore = (
 	event: NoteEvent | undefined,
-	options: any
-) => {
+	options: { bpm: number }
+): Score => {
 	const { bpm } = options;
-	if (!event) return 0;
+	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
+
 	const rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs);
 	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
 	const bonus = processComboBonus(rhythm, pitch, bpm);
 
-	const total = (rhythm + pitch) * 50 + bonus * 100;
+	return { rhythm, pitch, bonus };
+};
+export const processNormalizedScore = (
+	events: NoteEvent[],
+	options: { bpm: number }
+) => {
+	if (events.length === 0) {
+		return { rhythm: 0, pitch: 0, bonus: 0 };
+	}
 
-	const scoreObject = {
-		rhythm,
-		pitch,
-		bonus,
+	const total = { rhythm: 0, pitch: 0, bonus: 0 };
+
+	events.forEach((event) => {
+		const result = processEventScore(event, options);
+		total.rhythm += result.rhythm;
+		total.pitch += result.pitch;
+		total.bonus += result.bonus;
+	});
+
+	const count = events.length;
+
+	const normalized = {
+		rhythm: Math.round(total.rhythm / count),
+		pitch: Math.round(total.pitch / count),
+		bonus: Math.round(total.bonus / count), // optional
 	};
 
-	return scoreObject;
-};
-
-export const processTotalScore = (
-	scores: { rhythm: number; pitch: number }[]
-) => {
-	return scores.reduce(
-		(acc, curr) => ({
-			rhythm: acc.rhythm + curr.rhythm,
-			pitch: acc.pitch + curr.pitch,
-		}),
-		{ rhythm: 0, pitch: 0 }
-	);
+	return normalized;
 };

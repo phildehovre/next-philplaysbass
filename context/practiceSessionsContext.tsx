@@ -1,9 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { GameTypes, Note, NoteEvent } from "@/types/types";
+import { GameTypes, Note, NoteEvent, Score } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
-import { processEventScore } from "@/lib/utils/gameUtils";
+import {
+	processNormalizedScore,
+	processEventScore,
+} from "@/lib/utils/gameUtils";
+import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
 interface PracticeSessionContextType {
 	sessionId: string | null;
@@ -17,13 +21,10 @@ interface PracticeSessionContextType {
 	scoreEvents: Score[];
 	showScore: boolean;
 	setShowScore: (bool: boolean) => void;
+	aggregateScore: Score;
+	bpm: number;
+	setBpm: (t: number) => void;
 }
-
-export type Score = {
-	rhythm: number;
-	pitch: number;
-	bonus: number;
-};
 
 const PracticeSessionContext = createContext<
 	PracticeSessionContextType | undefined
@@ -35,6 +36,7 @@ export const PracticeSessionProvider = ({
 	children: React.ReactNode;
 }) => {
 	const [sessionId, setSessionId] = useState<string | null>(null);
+	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
 	const [score, setScore] = useState<Score>({
@@ -44,6 +46,11 @@ export const PracticeSessionProvider = ({
 	});
 	const [scoreEvents, setScoreEvents] = useState<Score[]>([]);
 	const [showScore, setShowScore] = useState<boolean>(false);
+	const [aggregateScore, setAggregateScore] = useState<Score>({
+		rhythm: 0,
+		pitch: 0,
+		bonus: 0,
+	});
 
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
@@ -72,6 +79,8 @@ export const PracticeSessionProvider = ({
 	);
 
 	const finishSession = useCallback(async () => {
+		const aggregateScore = processNormalizedScore(events, { bpm });
+		setAggregateScore(aggregateScore);
 		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;
 
@@ -129,6 +138,9 @@ export const PracticeSessionProvider = ({
 		scoreEvents,
 		showScore,
 		setShowScore,
+		aggregateScore,
+		bpm,
+		setBpm,
 	};
 
 	return (

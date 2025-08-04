@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Score, usePracticeSession } from "@/context/practiceSessionsContext";
+import { usePracticeSession } from "@/context/practiceSessionsContext";
+import { Score } from "@/types/types";
 
 type ScoreCategory = "rhythm" | "pitch" | "bonus";
 
@@ -85,7 +86,12 @@ const ScoreBurst = ({ values }: Props) => {
 						}}
 						className={`score_burst ${colorMap[v.type]}`}
 					>
-						+{Math.round(v.value * 100)} {labelMap[v.type]}
+						<span
+							className={`${v.value > 0 ? "text-green-500" : "text-red-600"}`}
+						>
+							{v.value > 0 ? "+" : ""}
+						</span>
+						{Math.round(v.value * 100)} {labelMap[v.type]}
 					</motion.div>
 				))}
 			</AnimatePresence>

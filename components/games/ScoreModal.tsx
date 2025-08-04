@@ -7,8 +7,6 @@ const ScoreModal = (props: { scoreData: any; scoreEvents: any }) => {
 	const { scoreData, scoreEvents } = props;
 	const { setShowScore, aggregateScore } = usePracticeSession();
 
-	console.log(aggregateScore);
-
 	return (
 		<Modal excludeRefs={[]} onClose={() => setShowScore(false)}>
 			<div className="modal_ctn flex justify-center w-full">

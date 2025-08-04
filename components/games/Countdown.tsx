@@ -31,9 +31,9 @@ export default function Countdown(props: {
 	};
 
 	return (
-		<div className="flex flex-col items-center gap-4">
+		<div className="flex flex-col items-center gap-4 text-black">
 			{countdown !== null && (
-				<div className="text-4xl font-bold">
+				<div className="countdown text-4xl font-bold">
 					{countdown === 0 ? "Go!" : countdown}
 				</div>
 			)}

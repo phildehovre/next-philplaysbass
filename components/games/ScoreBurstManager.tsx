@@ -46,7 +46,7 @@ export const ScoreBurstManager = () => {
 	};
 
 	return (
-		<div className="score-burst_ctn absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+		<div className="score-burst_ctn inset-0 absolute flex items-center justify-center pointer-events-none z-50 my-auto">
 			{bursts.map((burst) => (
 				<ScoreBurst key={burst.id} values={burst.values} />
 			))}
@@ -72,7 +72,7 @@ const colorMap = {
 
 const ScoreBurst = ({ values }: Props) => {
 	return (
-		<div className="relative flex flex-col items-center gap-1">
+		<div className="relative flex flex-col justify-center items-center gap-1 font-bold text-2xl">
 			<AnimatePresence>
 				{values.map((v, index) => (
 					<motion.div
@@ -86,12 +86,7 @@ const ScoreBurst = ({ values }: Props) => {
 						}}
 						className={`score_burst ${colorMap[v.type]}`}
 					>
-						<span
-							className={`${v.value > 0 ? "text-green-500" : "text-red-600"}`}
-						>
-							{v.value > 0 ? "+" : ""}
-						</span>
-						{Math.round(v.value * 100)} {labelMap[v.type]}
+						{Math.round(v.value)}%
 					</motion.div>
 				))}
 			</AnimatePresence>

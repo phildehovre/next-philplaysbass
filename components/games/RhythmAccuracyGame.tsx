@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
+import "../metronome/metronome.scss";
 import { calculateMsOffset } from "@/lib/utils/gameUtils";
 import PitchyComponent from "./PitchyComponent";
 import { Score, GameTypes, NoteEvent, NoteInfo } from "@/types/types";
@@ -14,6 +15,7 @@ import Countdown from "./Countdown";
 import MetroWidget from "./MetroWidget";
 import { COOLDOWN_MS, MAX_TEMPO_AS_NUM, TOLERANCE } from "./GameConstants";
 import ScoreModal from "./ScoreModal";
+import { ScoreBurstManager } from "./ScoreBurstManager";
 
 const RhythmAccuracyGame = () => {
 	const [gameType, setGameType] = useState<GameTypes>("rhythm-accuracy");
@@ -163,18 +165,6 @@ const RhythmAccuracyGame = () => {
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
-				{!gameStarted ? (
-					<button
-						onClick={() => setCountdown(true)}
-						className="game_btn start-game_btn"
-					>
-						Start Game
-					</button>
-				) : (
-					<button onClick={stopGame} className="game_btn stop-game_btn">
-						Stop Game
-					</button>
-				)}
 				<label
 					htmlFor="isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
@@ -199,22 +189,27 @@ const RhythmAccuracyGame = () => {
 				<AnimatedNumber number={score.wins} />
 			</div>
 
-			{/* FILTER CONTROLS */}
-			<div className="switch_ctn grid grid-cols-2 gap-7"></div>
-			<Clockface size={10} showPulse={showPulse} progress={progress}>
+			<Clockface showPulse={showPulse} progress={progress}>
 				<div className={`game_question inversions `}>
-					{isLoading ? (
-						<Spinner />
-					) : (
-						<>
-							{countdown && (
+					{!gameStarted ? (
+						<button
+							onClick={() => setCountdown(true)}
+							className="game_btn start-game_btn metro-btn "
+						>
+							{!countdown ? (
+								"Start"
+							) : (
 								<Countdown
 									value={4}
 									bpm={bpm}
 									onCountdownFinished={startGame}
 								/>
 							)}
-						</>
+						</button>
+					) : (
+						<button onClick={stopGame} className="game_btn stop-game_btn">
+							Stop
+						</button>
 					)}
 				</div>
 			</Clockface>

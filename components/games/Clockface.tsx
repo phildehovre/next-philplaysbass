@@ -21,7 +21,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	size,
 }) => {
 	return (
-		<div className="clock-face relative">
+		<div className="clock-face relative flex items-center justify-center">
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}
 			<ScoreBurstManager />

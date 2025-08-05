@@ -1,5 +1,5 @@
 import React from "react";
-import ArpeggioGame from "../../../components/games/ArpeggioGame";
+import ArpeggioGame from "../../../../components/games/ArpeggioGame";
 
 const page = () => {
 	return <ArpeggioGame />;

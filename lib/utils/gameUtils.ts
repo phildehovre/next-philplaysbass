@@ -175,8 +175,9 @@ export const processPitchAccuracy = (
 export const processComboBonus = (
 	rhythmScore: number,
 	pitchScore: number,
-	tempo: number
+	options: any
 ): number => {
+	const { bpm: tempo } = options;
 	if (rhythmScore === 100 && pitchScore === 100) {
 		const bonusMultiplier = Math.min(tempo / 120, 2); // up to 2x
 		return 100 * bonusMultiplier;
@@ -188,12 +189,14 @@ export const processEventScore = (
 	event: NoteEvent | undefined,
 	options: { bpm: number }
 ): Score => {
-	const { bpm } = options;
 	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
 
 	const rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs);
 	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
-	const bonus = processComboBonus(rhythm, pitch, bpm);
+	let bonus = 0;
+	if (options) {
+		bonus = processComboBonus(rhythm, pitch, options);
+	}
 
 	return { rhythm, pitch, bonus };
 };

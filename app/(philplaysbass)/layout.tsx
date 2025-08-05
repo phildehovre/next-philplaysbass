@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/AuthProvider";
 import Footer from "@/components/Footer";
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 	description: "Copyright Phil De Hovre 2025",
 };
 
-export default async function RootLayout({
+export default async function WebsiteLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

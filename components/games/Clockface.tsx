@@ -1,4 +1,3 @@
-import { usePracticeSession } from "@/context/practiceSessionsContext";
 import React from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
 

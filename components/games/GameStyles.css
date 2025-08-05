@@ -24,6 +24,7 @@
 	line-height: 25px;
 	text-transform: uppercase;
 	font-weight: bold;
+	position: relative;
 
 	&:hover {
 		background-color: transparent;
@@ -52,6 +53,10 @@
 
 		&:hover {
 			background-color: red;
+		}
+		&.inversions {
+			position: absolute;
+			transform: translate(250%, 20%);
 		}
 	}
 

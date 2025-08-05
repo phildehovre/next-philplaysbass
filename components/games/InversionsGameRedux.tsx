@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import "./GameStyles.css";
+import "./GameStylesRedux.css";
 import {
 	buildScale,
 	calculateMsOffset,
@@ -33,10 +33,9 @@ const InversionsGame = () => {
 	const [questionInversion, setQuestionInversion] = useState<string | "">("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
-	const [withTimer, setWithTimer] = useState(false);
-	const [withMetronome, setWithMetronome] = useState(false);
-	const [withArpeggios, setWithArpeggios] = useState(false);
-	const [withInversions, setWithInversions] = useState(false);
+	const [withTimer, setWithTimer] = useState(true);
+	const [withArpeggios, setWithArpeggios] = useState(true);
+	const [withInversions, setWithInversions] = useState(true);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
@@ -328,103 +327,13 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn max-w-[24em]">
-			<div className="game_header flex flex-col justify-center gap-2 w-full">
-				<label
-					htmlFor="isPracticeMode"
-					className="flex justify-center gap-2 m-auto"
-				>
-					<Switch
-						disabled={gameStarted}
-						checked={isPracticeMode}
-						onCheckChange={setIsPracticeMode}
-					/>
-					<p
-						style={{
-							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
-						}}
-					>
-						Practice mode
-					</p>
-				</label>
-			</div>
-
 			<div className="scoreboard text-2xl font-mono">
 				<AnimatedNumber number={score.losses} />:
 				<AnimatedNumber number={score.wins} />
 			</div>
 
-			{/* FILTER CONTROLS */}
-			<div className="switch_ctn grid grid-cols-2 gap-7">
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withMetronome" className="flex items-center gap-2">
-							<Drum />
-							<Switch
-								disabled={gameStarted || withTimer}
-								checked={withMetronome}
-								onCheckChange={setWithMetronome}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						[coming soon] Practice with a metronome
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withTimer" className="flex items-center gap-2">
-							<Timer />
-							<Switch
-								disabled={gameStarted || withMetronome}
-								checked={withTimer}
-								onCheckChange={setWithTimer}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with a time limit</TooltipContent>
-				</Tooltip>
-
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withArpeggios" className="flex items-center gap-2">
-							<Piano />
-							<Switch
-								disabled={gameStarted}
-								checked={withArpeggios}
-								onCheckChange={setWithArpeggios}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						Practice with single notes or arpeggios
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withInversions" className="flex items-center gap-2">
-							<ArrowUpDown />
-							<Switch
-								disabled={gameStarted}
-								checked={withInversions}
-								onCheckChange={setWithInversions}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with inversions</TooltipContent>
-				</Tooltip>
-			</div>
-			{withMetronome && (
-				<MetroWidget
-					gameStarted={gameStarted}
-					play={countdown || gameStarted}
-					bpm={bpm}
-					setBpm={setBpm}
-					lastTickTime={lastTickTime}
-					setLastTickTime={setLastTickTime}
-				/>
-			)}
 			{withTimer && (
-				<div className="flex w-full">
+				<div className="flex w-full flex-col">
 					<h1 className="scoreboard timer w-12 text-xs flex items-center">
 						{displayedDuration / 1000} s
 					</h1>

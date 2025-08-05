@@ -13,25 +13,14 @@ import {
 	ScaleQuality,
 	selectRandomInversion,
 } from "@/constants/chromaticScale";
-import {
-	ArrowUpDown,
-	Drum,
-	Piano,
-	PlusIcon,
-	Square,
-	StopCircle,
-	Timer,
-} from "lucide-react";
+import { PlusIcon, Square } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
-import Switch from "../Switch";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
-import MetroWidget from "./MetroWidget";
 import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
 
 const InversionsGame = () => {

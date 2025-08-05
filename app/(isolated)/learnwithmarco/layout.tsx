@@ -1,4 +1,5 @@
 import React from "react";
+import "../../globals.css";
 
 function layout({
 	children,
@@ -7,7 +8,7 @@ function layout({
 }>) {
 	return (
 		<html>
-			<body>{children}</body>
+			<body style={{ color: "black !important" }}>{children}</body>
 		</html>
 	);
 }

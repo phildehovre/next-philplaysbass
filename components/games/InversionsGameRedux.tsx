@@ -13,7 +13,15 @@ import {
 	ScaleQuality,
 	selectRandomInversion,
 } from "@/constants/chromaticScale";
-import { ArrowUpDown, Drum, Piano, PlusIcon, Timer } from "lucide-react";
+import {
+	ArrowUpDown,
+	Drum,
+	Piano,
+	PlusIcon,
+	Square,
+	StopCircle,
+	Timer,
+} from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
@@ -284,7 +292,7 @@ const InversionsGame = () => {
 				playedAt: new Date(),
 			};
 			recordLoss();
-			addEvent(event);
+			// addEvent(event);
 			if (withArpeggios) {
 				setArpeggioPlayed([]);
 			}
@@ -327,9 +335,14 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn max-w-[24em]">
-			<div className="scoreboard text-2xl font-mono">
+			<div className="scoreboard text-2xl font-mono relative">
 				<AnimatedNumber number={score.losses} />:
 				<AnimatedNumber number={score.wins} />
+				{gameStarted && (
+					<button onClick={stopGame} className="stop-game_btn">
+						<Square />
+					</button>
+				)}
 			</div>
 
 			{withTimer && (
@@ -357,7 +370,7 @@ const InversionsGame = () => {
 						<Spinner />
 					) : (
 						<>
-							{!gameStarted ? (
+							{!gameStarted && (
 								<button
 									onClick={() => setCountdown(true)}
 									className="game_btn start-game_btn metro-btn "
@@ -371,13 +384,6 @@ const InversionsGame = () => {
 											onCountdownFinished={startGame}
 										/>
 									)}
-								</button>
-							) : (
-								<button
-									onClick={stopGame}
-									className="game_btn stop-game_btn inversions"
-								>
-									Stop
 								</button>
 							)}
 							<div className={`note ${showShake ? "shake-error" : ""}`}>

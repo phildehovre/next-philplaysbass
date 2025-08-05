@@ -1,5 +1,10 @@
 .game_ctn {
-	outline: 1px solid red;
+	max-width: 24em;
+	margin: 0 auto;
+	padding: 1em;
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
 }
 
 .scoreboard {
@@ -17,13 +22,24 @@
 }
 .clock-svg {
 	fill: none;
+	transform: rotate(-90deg);
 }
 .clock-bg {
 	fill: none;
+	stroke: #e6e6e691;
+	stroke-width: 10;
 }
 
 .clock-progress {
 	stroke: var(--clr-cta-primary);
+	stroke-width: 10px;
+}
+
+.game_question {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .game_btn {
@@ -36,11 +52,126 @@
 	height: 150px;
 	width: 150px;
 	border-radius: 100%;
+	text-transform: uppercase;
+	font-weight: bold;
+	letter-spacing: -2px;
+	font-size: 0.75em;
 
 	&.start-game_btn {
+		height: 240px;
+		width: 240px;
+		color: black;
+	}
+}
+.stop-game_btn {
+	background-color: red;
+	position: absolute;
+	right: 0;
+	width: 50px;
+	height: 50px;
+	font-size: 1rem;
+	color: white;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.question_ctn {
+	width: 100%;
+	display: flex;
+	gap: 0.25em;
+	justify-content: center;
+}
+.game_question {
+	color: var(--clr-cta-primary);
+	font-weight: bold;
+	font-size: 5em;
+	display: flex;
+	justify-content: center;
+	padding: 0.25em;
+	border-radius: 10px;
+	transition: background-color 250ms ease;
+
+	&.root {
+		text-decoration: underline;
 	}
 
-	&.stop-game_btn {
-		background-color: transparent;
+	&.inversions {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		> .note {
+			line-height: 1;
+			color: var(--clr-cta-primary);
+		}
+		> .quality {
+			font-size: 0.5em;
+			margin: 0;
+			padding: 0;
+			color: var(--clr-cta-primary);
+		}
+	}
+}
+.dot {
+	border: 1px solid var(--clr-cta-primary);
+	border-radius: 100%;
+	height: 0.33em;
+	width: 0.33em;
+	transition: 250ms ease-in-out background-color;
+
+	&.checked {
+		background-color: var(--clr-cta-primary);
+		animation: ripple 250ms ease-in-out linear;
+	}
+}
+
+.pulse-ripple {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 120px;
+	height: 120px;
+	background: rgba(0, 191, 255, 0.3); /* or any cool aqua tone */
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	animation: ripple 250ms ease-out;
+	pointer-events: none;
+	z-index: 0;
+}
+
+.filter_icon {
+	transition: 150ms ease-in-out transform;
+	&.active {
+		transform: rotate(-45deg);
+	}
+}
+
+.notes_ctn {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 0.25em;
+}
+
+.qualities_ctn {
+	gap: 0.5em;
+	display: flex;
+	justify-content: center;
+
+	.filter_btn {
+		outline: 1px solid rgba(0, 0, 0, 0.249);
+		width: 100%;
+		border-radius: 6px;
+		padding: 0.25em;
+		transition: 150ms ease-in-out transform;
+
+		&.active {
+			outline: 2px solid var(--clr-cta-primary);
+			background-color: var(--clr-cta-primary);
+		}
 	}
 }

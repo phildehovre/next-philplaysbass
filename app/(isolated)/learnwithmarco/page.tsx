@@ -4,7 +4,7 @@ import React from "react";
 
 const page = () => {
 	return (
-		<div className="bg-white text-gray-800 flex justify-center items-center">
+		<div className="bg-white flex justify-center items-center w-full h-[100svh]">
 			<PracticeSessionProvider>
 				<InversionsGameRedux />
 			</PracticeSessionProvider>

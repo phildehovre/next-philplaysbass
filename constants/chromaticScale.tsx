@@ -88,3 +88,99 @@ export const NOTE_FREQUENCIES: Record<Note, number> = {
 	B: 493.88,
 	Cb: 493.88, // enharmonic of B
 };
+
+type UkuleleShape = [number, number, number, number];
+
+type UkeNote =
+	| "C"
+	| "C#"
+	| "D"
+	| "Eb"
+	| "E"
+	| "F"
+	| "F#"
+	| "G"
+	| "Ab"
+	| "A"
+	| "Bb"
+	| "B";
+
+type ChordType = "major" | "minor" | "diminished" | "augmented";
+
+export const ukuleleChordShapes: Record<
+	UkeNote,
+	Record<ChordType, UkuleleShape>
+> = {
+	C: {
+		major: [0, 0, 0, 3],
+		minor: [0, 3, 3, 3],
+		diminished: [2, 3, 2, 3],
+		augmented: [1, 0, 0, 3],
+	},
+	"C#": {
+		major: [1, 1, 1, 4],
+		minor: [1, 4, 4, 4],
+		diminished: [3, 4, 3, 4],
+		augmented: [2, 1, 1, 4],
+	},
+	D: {
+		major: [2, 2, 2, 0],
+		minor: [2, 2, 1, 0],
+		diminished: [1, 2, 1, 2],
+		augmented: [3, 2, 2, 0],
+	},
+	Eb: {
+		major: [3, 3, 3, 1],
+		minor: [3, 3, 2, 1],
+		diminished: [2, 3, 2, 3],
+		augmented: [4, 3, 3, 1],
+	},
+	E: {
+		major: [1, 4, 0, 2],
+		minor: [0, 4, 3, 2],
+		diminished: [3, 4, 3, 4],
+		augmented: [2, 1, 1, 0],
+	},
+	F: {
+		major: [2, 0, 1, 0],
+		minor: [1, 0, 1, 3],
+		diminished: [0, 1, 0, 1],
+		augmented: [1, 0, 1, 4],
+	},
+	"F#": {
+		major: [3, 1, 2, 1],
+		minor: [2, 1, 2, 0],
+		diminished: [1, 2, 1, 2],
+		augmented: [2, 1, 2, 3],
+	},
+	G: {
+		major: [0, 2, 3, 2],
+		minor: [0, 2, 3, 1],
+		diminished: [0, 1, 0, 1],
+		augmented: [1, 2, 3, 2],
+	},
+	Ab: {
+		major: [1, 3, 4, 3],
+		minor: [1, 3, 4, 2],
+		diminished: [1, 2, 1, 2],
+		augmented: [2, 3, 4, 3],
+	},
+	A: {
+		major: [2, 1, 0, 0],
+		minor: [0, 0, 0, 3],
+		diminished: [2, 3, 2, 3],
+		augmented: [1, 0, 0, 3],
+	},
+	Bb: {
+		major: [3, 2, 1, 1],
+		minor: [1, 1, 1, 3],
+		diminished: [1, 2, 1, 2],
+		augmented: [2, 1, 1, 4],
+	},
+	B: {
+		major: [4, 3, 2, 2],
+		minor: [2, 2, 2, 4],
+		diminished: [2, 3, 2, 3],
+		augmented: [3, 2, 2, 5],
+	},
+};

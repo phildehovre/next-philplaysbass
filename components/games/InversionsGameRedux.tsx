@@ -59,6 +59,7 @@ const InversionsGame = () => {
 	const { events, addEvent, sessionId, startSession, finishSession } =
 		usePracticeSession();
 
+	console.log(selectedNote + questionQuality);
 	useEffect(() => {
 		const handleVisibilityChange = () => {
 			setIsTabVisible(!document.hidden);
@@ -115,6 +116,7 @@ const InversionsGame = () => {
 		setQuestionQuality(quality);
 
 		setPreviousNotes((prev) => {
+			// This function guarantees that notes rotate fairly evenly
 			let note = selectRandomNote();
 			let attempts = 0;
 
@@ -381,11 +383,11 @@ const InversionsGame = () => {
 							{withArpeggios && (
 								<div className="quality">{questionQuality}</div>
 							)}
-							{withInversions && (
+							{/* {withInversions && (
 								<div className="inversion text-red-600 w-full h-full text-2xl">
 									{questionInversion}
 								</div>
-							)}
+							)} */}
 							{withArpeggios && gameStarted && (
 								<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
 									{[0, 1, 2].map((i) => (

@@ -1,0 +1,27 @@
+:root {
+	/* Core Colors */
+	--color-cta-primary: #ff6b6b; /* Sunset Coral */
+	--color-cta-secondary: #ffc94a; /* Mango Yellow */
+
+	/* Background & Surfaces */
+	--color-bg: #fff8f0; /* Coconut Cream */
+	--color-surface: #ffffff; /* Optional surface (cards, modals) */
+
+	/* Accent & Highlights */
+	--color-accent: #4ecdc4; /* Ocean Teal */
+
+	/* Text */
+	--color-text-primary: #2e2e2e; /* Deep Charcoal */
+	--color-text-secondary: #7d7d7d; /* Warm Grey */
+
+	/* Borders / Lines */
+	--color-border: #e6dcd2; /* Sandstone Beige */
+
+	/* Status Colors */
+	--color-success: #a3d9a5; /* Leaf Green */
+	--color-error: #e63946; /* Hibiscus Red */
+}
+
+.isolated_page {
+	background-color: var(--color-bg);
+}

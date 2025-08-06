@@ -1,6 +1,6 @@
 import { Track } from "spotify-api.js";
 import { Song } from "@/lib/generated/prisma";
-import { ScaleQuality } from "@/constants/chromaticScale";
+import { ScaleQuality, ukuleleChords } from "@/constants/chromaticScale";
 
 export type LanguagesType = "en" | "fr" | "nl";
 
@@ -188,4 +188,28 @@ export type Score = {
 	rhythm: number;
 	pitch: number;
 	bonus: number;
+};
+
+export type ChordName =
+	| keyof (typeof ukuleleChords)["major"]
+	| keyof (typeof ukuleleChords)["minor"]
+	| keyof (typeof ukuleleChords)["seventh"]
+	| keyof (typeof ukuleleChords)["diminished"]
+	| keyof (typeof ukuleleChords)["augmented"]
+	| keyof (typeof ukuleleChords)["suspended"];
+
+export type ChordType =
+	| "major"
+	| "minor"
+	| "seventh"
+	| "diminished"
+	| "augmented"
+	| "suspended";
+
+export type ChordShape = (number | "x")[]; // "x" for muted strings, if needed
+
+export type UkuleleChords = {
+	[key in ChordType]: {
+		[chordName: string]: ChordShape;
+	};
 };

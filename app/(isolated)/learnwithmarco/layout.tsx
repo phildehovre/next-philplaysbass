@@ -1,5 +1,6 @@
 import React from "react";
 import "../../globals.css";
+import "../isolatedGlobals.css";
 
 function layout({
 	children,

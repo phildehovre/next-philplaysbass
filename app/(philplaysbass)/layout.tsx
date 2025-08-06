@@ -21,8 +21,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Bass lessons | PhilPlaysBass ",
+	title: "PhilPlaysBass | learn to learn ",
 	description: "Copyright Phil De Hovre 2025",
+	icons: {
+		icon: "/ppb_icon.png",
+	},
 };
 
 export default async function WebsiteLayout({
@@ -35,6 +38,9 @@ export default async function WebsiteLayout({
 
 	return (
 		<html lang="en">
+			<head>
+				<link rel="icon" href="/logo_unified.png" type="image/png" />
+			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<AuthProvider>
 					<LanguageProvider>

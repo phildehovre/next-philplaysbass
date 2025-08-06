@@ -89,9 +89,9 @@ export const NOTE_FREQUENCIES: Record<Note, number> = {
 	Cb: 493.88, // enharmonic of B
 };
 
-type UkuleleShape = [number, number, number, number];
+export type UkuleleShape = [number, number, number, number];
 
-type UkeNote =
+export type UkeNote =
 	| "C"
 	| "C#"
 	| "D"
@@ -105,7 +105,7 @@ type UkeNote =
 	| "Bb"
 	| "B";
 
-type ChordType = "major" | "minor" | "diminished" | "augmented";
+export type ChordType = "major" | "minor" | "diminished" | "augmented";
 
 export const ukuleleChordShapes: Record<
 	UkeNote,

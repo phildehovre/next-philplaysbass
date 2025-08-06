@@ -1,9 +1,12 @@
 import { MS_LATENCY_OFFSET } from "@/components/games/GameConstants";
 import {
 	arrayChromaticScale,
+	ChordType,
 	formulae,
 	NOTE_LETTER_ORDER,
 	ScaleQuality,
+	UkeNote,
+	ukuleleChordShapes,
 } from "@/constants/chromaticScale";
 import { Note, NoteEvent, Score } from "@/types/types";
 
@@ -226,4 +229,78 @@ export const processNormalizedScore = (
 	};
 
 	return normalized;
+};
+
+export const normalizeNote = (note: string): UkeNote => {
+	const enharmonics: Record<string, UkeNote> = {
+		C: "C",
+		"B#": "C",
+		"C#": "C#",
+		Db: "C#",
+		D: "D",
+		"D#": "Eb",
+		Eb: "Eb",
+		E: "E",
+		Fb: "E",
+		F: "F",
+		"E#": "F",
+		"F#": "F#",
+		Gb: "F#",
+		G: "G",
+		"G#": "Ab",
+		Ab: "Ab",
+		A: "A",
+		"A#": "Bb",
+		Bb: "Bb",
+		B: "B",
+		Cb: "B",
+	};
+
+	const normalized = enharmonics[note];
+	if (!normalized) {
+		throw new Error(`Invalid note: ${note}`);
+	}
+	return normalized;
+};
+
+export const generateUkeChord = (note: any, quality: any) => {
+	let normalizedQuality: ChordType;
+	let normalizedNote = normalizeNote(note);
+
+	switch (quality) {
+		case "min":
+			normalizedQuality = "minor";
+			break;
+		case "dim":
+			normalizedQuality = "diminished";
+			break;
+		case "aug":
+			normalizedQuality = "augmented";
+			break;
+
+		default:
+			normalizedQuality = "major";
+			break;
+	}
+
+	return ukuleleChordShapes[`${normalizedNote}`][normalizedQuality];
+};
+
+// G4 C4 E4 A4 tuning — string 4 to string 1
+const openStrings: UkeNote[] = ["G", "C", "E", "A"];
+/**
+ * Convert ukulele frets to notes.
+ * @param frets - Array of 4 fret numbers from string 4 to 1 (G C E A)
+ */
+export const fretsToNotes = (frets: number[]): UkeNote[] => {
+	if (frets.length !== 4) {
+		throw new Error("Input must be an array of 4 fret numbers.");
+	}
+
+	return frets.map((fret, stringIndex) => {
+		const openNote = openStrings[stringIndex];
+		const openNoteIndex = NOTE_NAMES.indexOf(openNote);
+		const noteIndex = (openNoteIndex + fret) % 12;
+		return NOTE_NAMES[noteIndex];
+	}) as UkeNote[];
 };

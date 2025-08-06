@@ -87,6 +87,7 @@ const ChordDetectionGame = () => {
 	const notesDetectedRef = useRef<Set<string>>(new Set());
 
 	const evaluateRound = async (note: NoteInfo) => {
+		console.log(note);
 		if (!gameStarted) return;
 
 		const normalizedNote = normalizeNote(note.noteName);

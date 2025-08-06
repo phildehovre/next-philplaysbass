@@ -86,29 +86,9 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		if (!pitch) {
 			return;
 		}
-
-		// if (cooldownRef.current) {
-		// 	// Still cooling down, ignore new pitches
-		// 	return;
-		// }
-
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
 		onNoteDetection(evaluatedPitch);
-
-		// Set timeout to reset cooldown
-		// timeoutIdRef.current = window.setTimeout(() => {
-		// 	cooldownRef.current = false;
-		// 	timeoutIdRef.current = null;
-		// }, COOLDOWN_MS);
-
-		// Cleanup timeout only on unmount
-		// return () => {
-		// 	if (timeoutIdRef.current !== null) {
-		// 		clearTimeout(timeoutIdRef.current);
-		// 		timeoutIdRef.current = null;
-		// 	}
-		// };
 	}, [pitch]);
 
 	// Initialize pitch detection when a device is selected

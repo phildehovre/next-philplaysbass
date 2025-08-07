@@ -247,3 +247,13 @@ export const fretsToNotesWithOctaves = (frets: number[]): string[] => {
 		return midiToNoteWithOctave(noteMidi);
 	});
 };
+
+type NoteCountMap = Record<string, number>;
+
+export const countNotes = (notes: string[]): NoteCountMap => {
+	const counts: NoteCountMap = {};
+	for (const note of notes) {
+		counts[note] = (counts[note] || 0) + 1;
+	}
+	return counts;
+};

@@ -1,13 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
 	generateUkeChord,
-	fretsToNotes,
 	selectRandomNote,
 	normalizeNote,
+	fretsToNotesWithOctaves,
+	parseNoteDisplay,
 } from "@/lib/utils/gameUtils";
-import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
+import {
+	QUALITY,
+	ScaleQuality,
+	UkuleleShape,
+} from "@/constants/chromaticScale";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { Note, NoteInfo } from "@/types/types";
 import Clockface from "./Clockface";
@@ -20,13 +25,14 @@ import "./GameStylesRedux.css";
 const ChordDetectionGame = () => {
 	const [selectedRoot, setSelectedRoot] = useState("");
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
-	const [questionChord, setQuestionChord] = useState<Note[]>([]);
+	const [questionChord, setQuestionChord] = useState<string[]>([]);
+	const [questionFormula, setQuestionFormula] = useState<UkuleleShape>();
 	const [score, setScore] = useState({ wins: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
 	const [progress, setProgress] = useState<number>(0);
-	const [displayedDuration, setDisplayedDuration] = useState<number>(10000);
+	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [notesDetected, setNotesDetected] = useState<Set<string>>(new Set());
 	const [gameStarted, setGameStarted] = useState(false);
@@ -58,20 +64,19 @@ const ChordDetectionGame = () => {
 		};
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log(notesDetected);
-	// }, [notesDetected]);
-
 	const init = async () => {
 		const quality =
 			selectedQualities[Math.floor(Math.random() * selectedQualities.length)];
 		setQuestionQuality(quality);
+
 		const rootNote = selectRandomNote();
 		setSelectedRoot(rootNote);
-		const chord = generateUkeChord(rootNote, quality);
-		console.log("CHEAT: ", chord);
 
-		const notes = fretsToNotes(chord);
+		const chord = generateUkeChord(rootNote, quality);
+		setQuestionFormula(chord);
+		const notes = fretsToNotesWithOctaves(chord);
+		console.log("NOTES:: ", notes);
+
 		setQuestionChord(Array.from(new Set(notes)));
 		setNotesDetected(new Set());
 		setElapsed(0);
@@ -87,20 +92,26 @@ const ChordDetectionGame = () => {
 	const notesDetectedRef = useRef<Set<string>>(new Set());
 
 	const evaluateRound = async (note: NoteInfo) => {
-		console.log(note);
 		if (!gameStarted) return;
 
-		const normalizedNote = normalizeNote(note.noteName);
+		// Parse and normalize the played note
+		const { note: parsedNote, octave } = parseNoteDisplay(note.display);
+		const normalizedNoteWithOctave = parsedNote + octave;
 
-		// Add note to ref set directly
-		notesDetectedRef.current.add(normalizedNote);
+		// Add to set
+		notesDetectedRef.current.add(normalizedNoteWithOctave);
+		setNotesDetected(new Set(notesDetectedRef.current)); // sync state
 
-		// Update React state from ref (to trigger render)
-		setNotesDetected(new Set(notesDetectedRef.current));
+		// Normalize the question chord too
+		const questionNoteSet = new Set(
+			questionChord.map((note) => {
+				const { note: n, octave: o } = parseNoteDisplay(note);
+				return n + o;
+			})
+		);
 
-		const chordNotesSet = new Set(questionChord.map(normalizeNote));
-
-		const allPresent = [...chordNotesSet].every((note) =>
+		// Check for success
+		const allPresent = [...questionNoteSet].every((note) =>
 			notesDetectedRef.current.has(note)
 		);
 
@@ -110,6 +121,7 @@ const ChordDetectionGame = () => {
 			startTimer();
 		}
 
+		// Reset if user stops playing
 		if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
 		silenceTimeout.current = setTimeout(() => {
 			notesDetectedRef.current.clear();
@@ -241,6 +253,8 @@ const ChordDetectionGame = () => {
 					<div className="quality">{questionQuality}</div>
 				</div>
 			</Clockface>
+			{questionFormula && <h1>{questionFormula}</h1>}
+			{questionFormula && <h1>{questionChord}</h1>}
 
 			<label htmlFor="scale_types">
 				Select qualities:

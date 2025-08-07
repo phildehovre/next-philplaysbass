@@ -146,91 +146,6 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 	}
 };
 
-export const processRhythmicalAccuracy = (
-	offsetMs: number | undefined
-): number => {
-	if (offsetMs === undefined) return 0;
-
-	const absOffset = Math.abs(offsetMs);
-	const maxOffset = 150; // ms
-	const softEdge = maxOffset / 2;
-	const x = absOffset - softEdge;
-
-	const steepness = 0.05;
-	const sigmoid = 1 / (1 + Math.exp(steepness * x));
-
-	// Normalize and scale to 0–100
-	const score = 100 * (2 * (sigmoid - 0.5));
-
-	return Math.round(score);
-};
-
-export const processPitchAccuracy = (
-	played: string | undefined,
-	expected: string | undefined
-): number => {
-	if (played && expected && played === expected) {
-		return 100;
-	}
-	return 0;
-};
-
-export const processComboBonus = (
-	rhythmScore: number,
-	pitchScore: number,
-	options: any
-): number => {
-	const { bpm: tempo } = options;
-	if (rhythmScore === 100 && pitchScore === 100) {
-		const bonusMultiplier = Math.min(tempo / 120, 2); // up to 2x
-		return 100 * bonusMultiplier;
-	}
-	return 0;
-};
-
-export const processEventScore = (
-	event: NoteEvent | undefined,
-	options: { bpm: number }
-): Score => {
-	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
-
-	const rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs);
-	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
-	let bonus = 0;
-	if (options) {
-		bonus = processComboBonus(rhythm, pitch, options);
-	}
-
-	return { rhythm, pitch, bonus };
-};
-export const processNormalizedScore = (
-	events: NoteEvent[],
-	options: { bpm: number }
-) => {
-	if (events.length === 0) {
-		return { rhythm: 0, pitch: 0, bonus: 0 };
-	}
-
-	const total = { rhythm: 0, pitch: 0, bonus: 0 };
-
-	events.forEach((event) => {
-		const result = processEventScore(event, options);
-		total.rhythm += result.rhythm;
-		total.pitch += result.pitch;
-		total.bonus += result.bonus;
-	});
-
-	const count = events.length;
-
-	const normalized = {
-		rhythm: Math.round(total.rhythm / count),
-		pitch: Math.round(total.pitch / count),
-		bonus: Math.round(total.bonus / count), // optional
-	};
-
-	return normalized;
-};
-
 export const normalizeNote = (note: string): UkeNote => {
 	const enharmonics: Record<string, UkeNote> = {
 		C: "C",
@@ -263,6 +178,18 @@ export const normalizeNote = (note: string): UkeNote => {
 	return normalized;
 };
 
+export const parseNoteDisplay = (
+	display: string
+): { note: string; octave: string } => {
+	const match = display.match(/^([A-Ga-g]{1}[#b]?)(\d)$/);
+	if (!match) throw new Error(`Invalid display note: ${display}`);
+	const [, rawNote, octave] = match;
+	return {
+		note: normalizeNote(rawNote),
+		octave,
+	};
+};
+
 export const generateUkeChord = (note: any, quality: any) => {
 	let normalizedQuality: ChordType;
 	let normalizedNote = normalizeNote(note);
@@ -288,19 +215,35 @@ export const generateUkeChord = (note: any, quality: any) => {
 
 // G4 C4 E4 A4 tuning — string 4 to string 1
 const openStrings: UkeNote[] = ["G", "C", "E", "A"];
+
+// Map each open string to its MIDI number
+const ukuleleTuningWithMidi = [
+	{ note: "G", midi: 67 }, // G4
+	{ note: "C", midi: 60 }, // C4
+	{ note: "E", midi: 64 }, // E4
+	{ note: "A", midi: 69 }, // A4
+];
+
 /**
- * Convert ukulele frets to notes.
- * @param frets - Array of 4 fret numbers from string 4 to 1 (G C E A)
+ * Convert MIDI number to note + octave (e.g., 60 → "C4")
  */
-export const fretsToNotes = (frets: number[]): UkeNote[] => {
+const midiToNoteWithOctave = (midi: number): string => {
+	const name = NOTE_NAMES[midi % 12];
+	const octave = Math.floor(midi / 12) - 1;
+	return `${name}${octave}`;
+};
+
+/**
+ * Converts ukulele frets to note names with octave (e.g., ['G4', 'C4', 'E4', 'C5'])
+ */
+export const fretsToNotesWithOctaves = (frets: number[]): string[] => {
 	if (frets.length !== 4) {
 		throw new Error("Input must be an array of 4 fret numbers.");
 	}
 
-	return frets.map((fret, stringIndex) => {
-		const openNote = openStrings[stringIndex];
-		const openNoteIndex = NOTE_NAMES.indexOf(openNote);
-		const noteIndex = (openNoteIndex + fret) % 12;
-		return NOTE_NAMES[noteIndex];
-	}) as UkeNote[];
+	return frets.map((fret, i) => {
+		const openMidi = ukuleleTuningWithMidi[i].midi;
+		const noteMidi = openMidi + fret;
+		return midiToNoteWithOctave(noteMidi);
+	});
 };

@@ -6,7 +6,7 @@ import { differenceInMilliseconds } from "date-fns";
 import {
 	processNormalizedScore,
 	processEventScore,
-} from "@/lib/utils/gameUtils";
+} from "@/lib/utils/scoringUtils";
 import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
 interface PracticeSessionContextType {

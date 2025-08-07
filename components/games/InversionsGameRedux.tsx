@@ -193,6 +193,10 @@ const ChordDetectionGame = () => {
 		resetGame();
 	};
 
+	const handleOnRangeChange = (e: any) => {
+		setDisplayedDuration(e.target.valueAsNumber * 100);
+	};
+
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="scoreboard text-2xl font-mono relative">
@@ -203,16 +207,19 @@ const ChordDetectionGame = () => {
 					</button>
 				)}
 			</div>
-			<div className="flex w-full">
-				<h1 className="scoreboard timer w-12 text-xs flex items-center">
+			<div className="flex flex-col w-full relative">
+				<h1
+					className={`range_thumb w-full text-xs flex items-center `}
+					style={{ left: `${displayedDuration / 110}%` }}
+				>
 					{displayedDuration / 1000} s
 				</h1>
 				<input
 					className="w-full"
 					type="range"
 					min="1"
-					max="10"
-					onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
+					max="100"
+					onChange={(e) => handleOnRangeChange(e)}
 					onMouseUp={() => setDuration(displayedDuration)}
 				/>
 			</div>

@@ -247,3 +247,14 @@ export const fretsToNotesWithOctaves = (frets: number[]): string[] => {
 		return midiToNoteWithOctave(noteMidi);
 	});
 };
+
+export function uniqueUnlessConsecutive<T>(arr: T[]): T[] {
+	const result: T[] = [];
+	for (const item of arr) {
+		if (result.length === 0 || result[result.length - 1] !== item) {
+			result.push(item);
+		}
+		// else skip because it would be a consecutive duplicate
+	}
+	return result;
+}

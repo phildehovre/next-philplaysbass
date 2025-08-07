@@ -21,6 +21,7 @@ import PitchyComponentRedux from "./PitchyComponentRedux";
 import { Square } from "lucide-react";
 import AnimatedNumber from "./AnimatedNumber";
 import "./GameStylesRedux.css";
+import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
 
 const ChordDetectionGame = () => {
 	const [selectedRoot, setSelectedRoot] = useState("");
@@ -32,9 +33,9 @@ const ChordDetectionGame = () => {
 		"major",
 	]);
 	const [progress, setProgress] = useState<number>(0);
-	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
+	const [displayedDuration, setDisplayedDuration] = useState<number>(15000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
-	const [notesDetected, setNotesDetected] = useState<Set<string>>(new Set());
+	const [notesDetected, setNotesDetected] = useState<string[]>([]);
 	const [gameStarted, setGameStarted] = useState(false);
 	const [countdown, setCountdown] = useState(false);
 	const [showPulse, setShowPulse] = useState(false);
@@ -42,10 +43,12 @@ const ChordDetectionGame = () => {
 	const [elapsed, setElapsed] = useState(0);
 	const timerInterval = useRef<NodeJS.Timeout | null>(null);
 	const silenceTimeout = useRef<NodeJS.Timeout | null>(null);
+	const [isVictoryMessageVisible, setIsVictoryMessageVisible] =
+		useState<boolean>(false);
 
 	const { sessionId, startSession, finishSession } = usePracticeSession();
 
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
 
 	useEffect(() => {
@@ -57,9 +60,10 @@ const ChordDetectionGame = () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
 	}, []);
+
 	useEffect(() => {
 		return () => {
-			if (timeoutRef.current) clearInterval(timeoutRef.current);
+			if (timerRef.current) clearInterval(timerRef.current);
 			if (rafRef.current) cancelAnimationFrame(rafRef.current);
 		};
 	}, []);
@@ -77,62 +81,79 @@ const ChordDetectionGame = () => {
 		const notes = fretsToNotesWithOctaves(chord);
 		console.log("NOTES:: ", notes);
 
-		setQuestionChord(Array.from(new Set(notes)));
-		setNotesDetected(new Set());
-		setElapsed(0);
+		setQuestionChord(notes);
+		setNotesDetected([]);
+		notesDetectedRef.current = [];
 	};
 
 	const recordWin = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
 		setShowPulse(true);
-		setTimeout(() => setShowPulse(false), 1000);
-		init();
+		setGameStarted(false);
+
+		setTimeout(() => {
+			setIsVictoryMessageVisible(false); // Hide win screen
+			setGameStarted(true); // Re-enable detection
+			init(); // Prepare next round
+			startTimer(); // Restart timer
+		}, 2000);
 	};
-
-	const notesDetectedRef = useRef<Set<string>>(new Set());
-
+	const notesDetectedRef = useRef<string[]>([]);
 	const evaluateRound = async (note: NoteInfo) => {
-		if (!gameStarted) return;
+		if (!gameStarted || isVictoryMessageVisible) return;
 
-		// Parse and normalize the played note
 		const { note: parsedNote, octave } = parseNoteDisplay(note.display);
 		const normalizedNoteWithOctave = parsedNote + octave;
 
-		// Add to set
-		notesDetectedRef.current.add(normalizedNoteWithOctave);
-		setNotesDetected(new Set(notesDetectedRef.current)); // sync state
+		// Add to array (do not deduplicate)
+		notesDetectedRef.current.push(normalizedNoteWithOctave);
+		setNotesDetected([...notesDetectedRef.current]); // trigger re-render
 
-		// Normalize the question chord too
-		const questionNoteSet = new Set(
-			questionChord.map((note) => {
-				const { note: n, octave: o } = parseNoteDisplay(note);
-				return n + o;
-			})
-		);
+		// Normalize target chord
+		const target = questionChord.map((note) => {
+			const { note: n, octave: o } = parseNoteDisplay(note);
+			return n + o;
+		});
 
-		// Check for success
-		const allPresent = [...questionNoteSet].every((note) =>
-			notesDetectedRef.current.has(note)
-		);
+		// Match logic: Check if all target notes (including duplicates) exist in detected list
+		const isValidMatch = (() => {
+			const required = [...target]; // mutable copy
+			const detected = [...notesDetectedRef.current];
 
-		if (allPresent) {
+			for (let i = 0; i < required.length; i++) {
+				const targetNote = required[i];
+
+				// Find index in detected with at least 1 non-consecutive note between same ones
+				const firstIndex = detected.findIndex((n) => n === targetNote);
+				if (firstIndex === -1) return false;
+
+				// Remove that index
+				detected.splice(firstIndex, 1);
+
+				// Remove from required
+				required.splice(i, 1);
+				i = -1; // reset loop
+			}
+			return true;
+		})();
+
+		if (isValidMatch) {
 			recordWin();
-			notesDetectedRef.current.clear();
+			notesDetectedRef.current = [];
 			startTimer();
 		}
 
-		// Reset if user stops playing
 		if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
 		silenceTimeout.current = setTimeout(() => {
-			notesDetectedRef.current.clear();
-			setNotesDetected(new Set());
+			notesDetectedRef.current = [];
+			setNotesDetected([]);
 		}, 3000);
 	};
 
 	const resetGame = () => {
 		// clear timers
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		if (timerRef.current) clearTimeout(timerRef.current);
 
 		// reset state
 		setGameStarted(false);
@@ -146,7 +167,7 @@ const ChordDetectionGame = () => {
 
 	const startTimer = () => {
 		if (timerInterval.current) clearInterval(timerInterval.current);
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		if (timerRef.current) clearTimeout(timerRef.current);
 
 		let start = Date.now();
 
@@ -174,7 +195,7 @@ const ChordDetectionGame = () => {
 		}, 1000);
 
 		// When timer ends, reset game and start next chord
-		timeoutRef.current = setTimeout(() => {
+		timerRef.current = setTimeout(() => {
 			init(); // pick next chord/reset detected notes
 			startTimer(); // restart timer for next round
 		}, duration);
@@ -194,9 +215,9 @@ const ChordDetectionGame = () => {
 			clearInterval(timerInterval.current);
 			timerInterval.current = null;
 		}
-		if (timeoutRef.current) {
-			clearTimeout(timeoutRef.current);
-			timeoutRef.current = null;
+		if (timerRef.current) {
+			clearTimeout(timerRef.current);
+			timerRef.current = null;
 		}
 		if (rafRef.current) {
 			cancelAnimationFrame(rafRef.current);
@@ -230,14 +251,16 @@ const ChordDetectionGame = () => {
 					className="w-full"
 					type="range"
 					min="1"
-					max="100"
+					max="150"
 					onChange={(e) => handleOnRangeChange(e)}
 					onMouseUp={() => setDuration(displayedDuration)}
 				/>
 			</div>
 			<Clockface showPulse={showPulse} withTimer={true} progress={progress}>
 				<div className="game_question inversions">
-					{!gameStarted && (
+					{isVictoryMessageVisible ? (
+						<div className="text-green-600 text-xl font-bold">You win! 🎉</div>
+					) : !gameStarted ? (
 						<button
 							onClick={() => setCountdown(true)}
 							className="game_btn start-game_btn metro-btn"
@@ -248,13 +271,19 @@ const ChordDetectionGame = () => {
 								<Countdown value={4} bpm={60} onCountdownFinished={startGame} />
 							)}
 						</button>
+					) : (
+						<>
+							<div className="note">{selectedRoot}</div>
+							<div className="quality">{questionQuality}</div>
+						</>
 					)}
-					<div className="note">{selectedRoot}</div>
-					<div className="quality">{questionQuality}</div>
 				</div>
 			</Clockface>
-			{questionFormula && <h1>{questionFormula}</h1>}
-			{questionFormula && <h1>{questionChord}</h1>}
+			<DetectedNotesDisplay
+				questionNotes={questionChord}
+				detectedNotes={notesDetected}
+				fretNumbers={questionFormula}
+			/>
 
 			<label htmlFor="scale_types">
 				Select qualities:

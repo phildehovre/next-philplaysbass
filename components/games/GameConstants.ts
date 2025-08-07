@@ -15,4 +15,4 @@ export const COOLDOWN_MS = 250;
 export const MIN_VOLUME_DB = -15;
 export const MIN_CLARITY = 0.8;
 export const MIN_PITCH_HZ = 40;
-export const MAX_PITCH_HZ = 8000;
+export const MAX_PITCH_HZ = 1500;

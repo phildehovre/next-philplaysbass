@@ -79,7 +79,7 @@ const ChordDetectionGame = () => {
 		const chord = generateUkeChord(rootNote, quality);
 		setQuestionFormula(chord);
 		const notes = fretsToNotesWithOctaves(chord);
-		console.log("NOTES:: ", notes);
+		console.log("Question NOTES:: ", notes);
 
 		setQuestionChord(notes);
 		setNotesDetected([]);
@@ -165,14 +165,18 @@ const ChordDetectionGame = () => {
 		setShowPulse(false);
 	};
 
+	const timerActive = useRef(false);
+
 	const startTimer = () => {
+		timerActive.current = true; // mark timer as active
 		if (timerInterval.current) clearInterval(timerInterval.current);
 		if (timerRef.current) clearTimeout(timerRef.current);
 
 		let start = Date.now();
 
-		// Progress animation
 		const step = () => {
+			if (!timerActive.current) return; // exit if stopped
+
 			const elapsedMs = Date.now() - start;
 			const percent = Math.min((elapsedMs / duration) * 100, 100);
 			setProgress(percent);
@@ -183,7 +187,6 @@ const ChordDetectionGame = () => {
 		};
 		step();
 
-		// Timer interval to track seconds elapsed (optional)
 		timerInterval.current = setInterval(() => {
 			setElapsed((prev) => {
 				if (prev >= timerValue) {
@@ -194,22 +197,15 @@ const ChordDetectionGame = () => {
 			});
 		}, 1000);
 
-		// When timer ends, reset game and start next chord
 		timerRef.current = setTimeout(() => {
-			init(); // pick next chord/reset detected notes
-			startTimer(); // restart timer for next round
+			if (!timerActive.current) return;
+			init();
+			startTimer();
 		}, duration);
 	};
 
-	const startGame = async () => {
-		await init();
-		setGameStarted(true);
-		startTimer();
-		if (!sessionId) await startSession("chord-match");
-	};
-
 	const stopGame = () => {
-		setGameStarted(false);
+		timerActive.current = false; // tell step() to stop
 
 		if (timerInterval.current) {
 			clearInterval(timerInterval.current);
@@ -224,6 +220,13 @@ const ChordDetectionGame = () => {
 			rafRef.current = null;
 		}
 		resetGame();
+	};
+
+	const startGame = async () => {
+		await init();
+		setGameStarted(true);
+		startTimer();
+		if (!sessionId) await startSession("chord-match");
 	};
 
 	const handleOnRangeChange = (e: any) => {

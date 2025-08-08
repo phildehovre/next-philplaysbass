@@ -1,80 +1,77 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseGameTimerOptions {
-	duration: number; // total ms for one round
-	onComplete?: () => void; // called when timer finishes
+interface UseTimerOptions {
+	duration: number;
+	onComplete?: () => void;
+	idleDelay?: number;
 }
 
-export function useGameTimer({ duration, onComplete }: UseGameTimerOptions) {
-	const [elapsed, setElapsed] = useState(0); // seconds elapsed
-	const [progress, setProgress] = useState(0); // 0–100
+export function useGameTimer({
+	duration,
+	onComplete,
+	idleDelay = 2000,
+}: UseTimerOptions) {
+	const [progress, setProgress] = useState(0);
+	const [isRunning, setIsRunning] = useState(false);
+	const [isIdle, setIsIdle] = useState(false);
 
-	const timerActive = useRef(false);
 	const rafRef = useRef<number | null>(null);
-	const timerInterval = useRef<NodeJS.Timeout | null>(null);
-	const timerTimeout = useRef<NodeJS.Timeout | null>(null);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+	const idleRef = useRef<NodeJS.Timeout | null>(null);
+	const startTimestamp = useRef<number>(0);
 
-	const clearAll = useCallback(() => {
-		if (rafRef.current) {
-			cancelAnimationFrame(rafRef.current);
-			rafRef.current = null;
+	const step = useCallback(() => {
+		const elapsed = Date.now() - startTimestamp.current;
+		const percent = Math.min((elapsed / duration) * 100, 100);
+		setProgress(percent);
+
+		if (elapsed < duration) {
+			rafRef.current = requestAnimationFrame(step);
+		} else {
+			setIsRunning(false);
+			if (onComplete) {
+				setIsIdle(true);
+				idleRef.current = setTimeout(() => {
+					setIsIdle(false);
+					onComplete();
+				}, idleDelay);
+			}
 		}
-		if (timerInterval.current) {
-			clearInterval(timerInterval.current);
-			timerInterval.current = null;
-		}
-		if (timerTimeout.current) {
-			clearTimeout(timerTimeout.current);
-			timerTimeout.current = null;
-		}
-	}, []);
+	}, [duration, onComplete, idleDelay]);
 
 	const start = useCallback(() => {
-		timerActive.current = true;
-		setElapsed(0);
+		console.log("Start being called");
+		clearTimeouts();
+		setIsIdle(false);
 		setProgress(0);
-		clearAll();
-
-		const startTime = Date.now();
-
-		const step = () => {
-			if (!timerActive.current) return;
-			const elapsedMs = Date.now() - startTime;
-			const percent = Math.min((elapsedMs / duration) * 100, 100);
-			setProgress(percent);
-			if (elapsedMs < duration) {
-				rafRef.current = requestAnimationFrame(step);
-			}
-		};
+		setIsRunning(true);
+		startTimestamp.current = Date.now();
 		step();
-
-		timerInterval.current = setInterval(() => {
-			setElapsed((prev) => {
-				const next = prev + 1;
-				if (next * 1000 >= duration) {
-					clearInterval(timerInterval.current!);
-				}
-				return next;
-			});
-		}, 1000);
-
-		timerTimeout.current = setTimeout(() => {
-			if (!timerActive.current) return;
-			stop();
-			onComplete?.();
-		}, duration);
-	}, [clearAll, duration, onComplete]);
+	}, [step]);
 
 	const stop = useCallback(() => {
-		timerActive.current = false;
-		clearAll();
-	}, [clearAll]);
+		clearTimeouts();
+		setIsRunning(false);
+		setIsIdle(false);
+		setProgress(0);
+	}, []);
+
+	const clearTimeouts = () => {
+		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		if (timerRef.current) clearTimeout(timerRef.current);
+		if (idleRef.current) clearTimeout(idleRef.current);
+	};
+
+	useEffect(() => {
+		return () => clearTimeouts();
+	}, []);
 
 	return {
-		elapsed,
 		progress,
+		isRunning,
+		isIdle,
 		start,
 		stop,
-		isActive: timerActive.current,
+		setIdle: setIsIdle,
 	};
 }

@@ -22,6 +22,7 @@ import { Square } from "lucide-react";
 import AnimatedNumber from "./AnimatedNumber";
 import "./GameStylesRedux.css";
 import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
+import { useGameTimer } from "../Timer";
 
 const ChordDetectionGame = () => {
 	const [selectedRoot, setSelectedRoot] = useState("");
@@ -32,7 +33,6 @@ const ChordDetectionGame = () => {
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
-	const [progress, setProgress] = useState<number>(0);
 	const [displayedDuration, setDisplayedDuration] = useState<number>(15000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [notesDetected, setNotesDetected] = useState<string[]>([]);
@@ -40,15 +40,20 @@ const ChordDetectionGame = () => {
 	const [countdown, setCountdown] = useState(false);
 	const [showPulse, setShowPulse] = useState(false);
 	const [timerValue, setTimerValue] = useState(10); // seconds
-	const [elapsed, setElapsed] = useState(0);
 	const timerInterval = useRef<NodeJS.Timeout | null>(null);
 	const silenceTimeout = useRef<NodeJS.Timeout | null>(null);
 	const [isVictoryMessageVisible, setIsVictoryMessageVisible] =
 		useState<boolean>(false);
 
 	const { sessionId, startSession, finishSession } = usePracticeSession();
+	const { elapsed, progress, start, stop, isActive } = useGameTimer({
+		duration: timerValue * 1000, // convert seconds → ms
+		onComplete: () => {
+			init(); // your existing game reset/next-question logic
+			start(); // restart timer automatically
+		},
+	});
 
-	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
 
 	useEffect(() => {
@@ -58,13 +63,6 @@ const ChordDetectionGame = () => {
 		document.addEventListener("visibilitychange", handleVisibilityChange);
 		return () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
-		};
-	}, []);
-
-	useEffect(() => {
-		return () => {
-			if (timerRef.current) clearInterval(timerRef.current);
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
 		};
 	}, []);
 
@@ -95,7 +93,7 @@ const ChordDetectionGame = () => {
 			setIsVictoryMessageVisible(false); // Hide win screen
 			setGameStarted(true); // Re-enable detection
 			init(); // Prepare next round
-			startTimer(); // Restart timer
+			start(); // Restart timer
 		}, 2000);
 	};
 	const notesDetectedRef = useRef<string[]>([]);
@@ -140,7 +138,7 @@ const ChordDetectionGame = () => {
 		if (isValidMatch) {
 			recordWin();
 			notesDetectedRef.current = [];
-			startTimer();
+			start();
 		}
 
 		if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
@@ -153,12 +151,10 @@ const ChordDetectionGame = () => {
 	const resetGame = () => {
 		// clear timers
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		if (timerRef.current) clearTimeout(timerRef.current);
 
 		// reset state
 		setGameStarted(false);
 		setCountdown(false);
-		setProgress(0);
 		setSelectedRoot("");
 		setQuestionQuality(undefined);
 		setScore({ wins: 0 });
@@ -167,43 +163,6 @@ const ChordDetectionGame = () => {
 
 	const timerActive = useRef(false);
 
-	const startTimer = () => {
-		timerActive.current = true; // mark timer as active
-		if (timerInterval.current) clearInterval(timerInterval.current);
-		if (timerRef.current) clearTimeout(timerRef.current);
-
-		let start = Date.now();
-
-		const step = () => {
-			if (!timerActive.current) return; // exit if stopped
-
-			const elapsedMs = Date.now() - start;
-			const percent = Math.min((elapsedMs / duration) * 100, 100);
-			setProgress(percent);
-
-			if (elapsedMs < duration) {
-				rafRef.current = requestAnimationFrame(step);
-			}
-		};
-		step();
-
-		timerInterval.current = setInterval(() => {
-			setElapsed((prev) => {
-				if (prev >= timerValue) {
-					clearInterval(timerInterval.current!);
-					return 0;
-				}
-				return prev + 1;
-			});
-		}, 1000);
-
-		timerRef.current = setTimeout(() => {
-			if (!timerActive.current) return;
-			init();
-			startTimer();
-		}, duration);
-	};
-
 	const stopGame = () => {
 		timerActive.current = false; // tell step() to stop
 
@@ -211,21 +170,18 @@ const ChordDetectionGame = () => {
 			clearInterval(timerInterval.current);
 			timerInterval.current = null;
 		}
-		if (timerRef.current) {
-			clearTimeout(timerRef.current);
-			timerRef.current = null;
-		}
 		if (rafRef.current) {
 			cancelAnimationFrame(rafRef.current);
 			rafRef.current = null;
 		}
 		resetGame();
+		stop();
 	};
 
 	const startGame = async () => {
 		await init();
 		setGameStarted(true);
-		startTimer();
+		start();
 		if (!sessionId) await startSession("chord-match");
 	};
 

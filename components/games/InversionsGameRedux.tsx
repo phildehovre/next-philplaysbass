@@ -25,6 +25,7 @@ import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
 import { useGameTimer } from "../Timer";
 import UkuleleChordDiagram from "./UkuleleChordDiagram";
 import StartButton from "./StartButton";
+import UkulelePlayer from "./UkulelePlayer";
 
 const IDLE_DURATION = 2000;
 
@@ -49,8 +50,6 @@ const ChordDetectionGame = () => {
 	const [gameStarted, setGameStarted] = useState(false);
 	const [countdown, setCountdown] = useState(false);
 	const [showPulse, setShowPulse] = useState(false);
-	const timerInterval = useRef<NodeJS.Timeout | null>(null);
-	const silenceTimeout = useRef<NodeJS.Timeout | null>(null);
 	const [isVictoryMessageVisible, setIsVictoryMessageVisible] =
 		useState<boolean>(false);
 
@@ -65,7 +64,12 @@ const ChordDetectionGame = () => {
 		},
 	});
 
+	const timerInterval = useRef<NodeJS.Timeout | null>(null);
+	const silenceTimeout = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
+	const ukePlayerRef = useRef<{ playChord: (shape: UkuleleShape) => void }>(
+		null
+	);
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -76,6 +80,12 @@ const ChordDetectionGame = () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
 	}, []);
+
+	const onPlayChord = () => {
+		if (!ukePlayerRef.current || !questionFormula) return;
+
+		ukePlayerRef.current.playChord(questionFormula);
+	};
 
 	const init = async () => {
 		setIsVictoryMessageVisible(false);
@@ -101,6 +111,7 @@ const ChordDetectionGame = () => {
 		setShowPulse(true);
 		setGameStarted(false);
 		setIsVictoryMessageVisible(true);
+		onPlayChord();
 
 		stop();
 
@@ -288,16 +299,14 @@ const ChordDetectionGame = () => {
 					})()}
 				</div>
 			</Clockface>
-			<DetectedNotesDisplay
-				questionNotes={questionChord}
-				detectedNotes={notesDetected}
-				fretNumbers={questionFormula}
-			/>
 			<UkuleleChordDiagram
 				correctNotes={notesDetected}
 				chordFormula={gameStarted ? questionFormula : undefined}
 				stringNotes={["G4", "C4", "E4", "A4"]}
 			/>
+			{questionFormula && (
+				<UkulelePlayer shape={questionFormula} ref={ukePlayerRef} />
+			)}
 
 			<label htmlFor="scale_types">
 				Select qualities:

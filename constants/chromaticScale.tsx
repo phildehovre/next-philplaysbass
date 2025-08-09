@@ -107,6 +107,8 @@ export type UkeNote =
 
 export type ChordType = "major" | "minor" | "diminished" | "augmented";
 
+export const UKE_TUNING = ["G4", "C4", "E4", "A4"];
+
 export const ukuleleChordShapes: Record<
 	UkeNote,
 	Record<ChordType, UkuleleShape>

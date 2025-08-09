@@ -241,3 +241,11 @@ export function uniqueUnlessConsecutive<T>(arr: T[]): T[] {
 	}
 	return result;
 }
+
+export function countNotes(notes: string[]) {
+	const counts: Record<string, number> = {};
+	for (const note of notes) {
+		counts[note] = (counts[note] || 0) + 1;
+	}
+	return counts;
+}

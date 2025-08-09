@@ -21,10 +21,8 @@ import PitchyComponentRedux from "./PitchyComponentRedux";
 import { Square } from "lucide-react";
 import AnimatedNumber from "./AnimatedNumber";
 import "./GameStylesRedux.css";
-import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
 import { useGameTimer } from "../Timer";
 import UkuleleChordDiagram from "./UkuleleChordDiagram";
-import StartButton from "./StartButton";
 import UkulelePlayer from "./UkulelePlayer";
 
 const IDLE_DURATION = 2000;
@@ -109,6 +107,7 @@ const ChordDetectionGame = () => {
 	const recordWin = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
 		setShowPulse(true);
+		setTimeout(() => setShowPulse(false), 100);
 		setGameStarted(false);
 		setIsVictoryMessageVisible(true);
 		onPlayChord();

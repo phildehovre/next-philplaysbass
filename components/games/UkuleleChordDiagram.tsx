@@ -34,7 +34,7 @@ export default function UkuleleChordDiagram({
 			<svg
 				width={width}
 				height={height}
-				style={{ background: "#fafafa", borderRadius: "8px" }}
+				style={{ background: "transparent", borderRadius: "8px" }}
 			>
 				{[...Array(fretCount + 1)].map((_, i) => (
 					<line

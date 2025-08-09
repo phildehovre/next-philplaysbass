@@ -1,8 +1,13 @@
 "use client";
 
-import React from "react";
-import { normalizeNote, uniqueUnlessConsecutive } from "@/lib/utils/gameUtils";
+import React, { useEffect, useState } from "react";
+import {
+	normalizeNote,
+	parseNoteDisplay,
+	uniqueUnlessConsecutive,
+} from "@/lib/utils/gameUtils";
 import { UkuleleShape } from "@/constants/chromaticScale";
+import { Note } from "@/types/types";
 
 type DetectedNotesDisplayProps = {
 	questionNotes: string[];
@@ -15,12 +20,31 @@ export const DetectedNotesDisplay: React.FC<DetectedNotesDisplayProps> = ({
 	detectedNotes,
 	fretNumbers,
 }) => {
-	// console.log(questionNotes, uniqueUnlessConsecutive(detectedNotes));
+	const [normalizedDetected, setNormalizeDetected] = useState<string[]>();
+	const [normalizedQuestion, setNormalizeQuestion] = useState<string[]>();
+
+	useEffect(() => {
+		setNormalizeDetected(
+			detectedNotes.map((n) => {
+				const { note, octave } = parseNoteDisplay(n);
+				return note + octave;
+			})
+		);
+		setNormalizeQuestion(
+			questionNotes.map((n) => {
+				const { note, octave } = parseNoteDisplay(n);
+				return note + octave;
+			})
+		);
+	}, [detectedNotes]);
+
+	if (!normalizedQuestion) return;
+
 	return (
 		<div className="p-4 w-full">
 			<ul className="grid grid-cols-4 gap-2">
-				{questionNotes.map((note, index) => {
-					const isDetected = detectedNotes.includes(note);
+				{normalizedQuestion.map((note, index) => {
+					const isDetected = normalizedDetected?.includes(note);
 					return (
 						<li
 							key={index}

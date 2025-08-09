@@ -8,7 +8,7 @@ import {
 	UkeNote,
 	ukuleleChordShapes,
 } from "@/constants/chromaticScale";
-import { Note, NoteEvent, Score } from "@/types/types";
+import { ChordQuality, Note, NoteEvent, Score } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -190,27 +190,10 @@ export const parseNoteDisplay = (
 	};
 };
 
-export const generateUkeChord = (note: any, quality: any) => {
-	let normalizedQuality: ChordType;
+export const generateUkeChord = (note: any, quality: ChordQuality) => {
 	let normalizedNote = normalizeNote(note);
 
-	switch (quality) {
-		case "min":
-			normalizedQuality = "minor";
-			break;
-		case "dim":
-			normalizedQuality = "diminished";
-			break;
-		case "aug":
-			normalizedQuality = "augmented";
-			break;
-
-		default:
-			normalizedQuality = "major";
-			break;
-	}
-
-	return ukuleleChordShapes[`${normalizedNote}`][normalizedQuality];
+	return ukuleleChordShapes[`${normalizedNote}`][quality];
 };
 
 // G4 C4 E4 A4 tuning — string 4 to string 1

@@ -40,7 +40,6 @@ export function useGameTimer({
 	}, [duration, onComplete, idleDelay]);
 
 	const start = useCallback(() => {
-		console.log("Start being called");
 		clearTimeouts();
 		setIsIdle(false);
 		setProgress(0);

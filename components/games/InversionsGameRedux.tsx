@@ -23,9 +23,14 @@ import AnimatedNumber from "./AnimatedNumber";
 import "./GameStylesRedux.css";
 import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
 import { useGameTimer } from "../Timer";
+import UkuleleChordDiagram from "./UkuleleChordDiagram";
+import StartButton from "./StartButton";
 
 const IDLE_DURATION = 2000;
 
+type GameOptions = {
+	diagram: boolean;
+};
 const ChordDetectionGame = () => {
 	const [selectedRoot, setSelectedRoot] = useState("");
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
@@ -36,6 +41,9 @@ const ChordDetectionGame = () => {
 		"major",
 	]);
 	const [displayedDuration, setDisplayedDuration] = useState<number>(15000);
+	const [gameOptions, setGameOptions] = useState<GameOptions>({
+		diagram: true,
+	});
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [notesDetected, setNotesDetected] = useState<string[]>([]);
 	const [gameStarted, setGameStarted] = useState(false);
@@ -48,13 +56,10 @@ const ChordDetectionGame = () => {
 
 	const { finishSession } = usePracticeSession();
 
-	// Make timer the single driver for next-round progression.
-	// idleDelay must match how long you want the victory screen visible (2000ms).
-	const { setIdle, progress, start, stop } = useGameTimer({
+	const { setIdle, progress, start, stop, isIdle } = useGameTimer({
 		duration: duration,
-		idleDelay: IDLE_DURATION, // <-- ensure this equals the visible win time
+		idleDelay: IDLE_DURATION,
 		onComplete: () => {
-			// Timer controlled progression: init next round and restart timer
 			init();
 			start();
 		},
@@ -72,9 +77,7 @@ const ChordDetectionGame = () => {
 		};
 	}, []);
 
-	// init hides any victory message and prepares the next question
 	const init = async () => {
-		// hide the victory message when a new question actually appears
 		setIsVictoryMessageVisible(false);
 
 		const quality =
@@ -87,7 +90,6 @@ const ChordDetectionGame = () => {
 		const chord = generateUkeChord(rootNote, quality);
 		setQuestionFormula(chord);
 		const notes = fretsToNotesWithOctaves(chord);
-		console.log("Question NOTES:: ", notes);
 
 		setQuestionChord(notes);
 		setNotesDetected([]);
@@ -105,34 +107,40 @@ const ChordDetectionGame = () => {
 		setIdle(true);
 
 		setTimeout(() => {
-			setIsVictoryMessageVisible(false); // hide win screen
-			init(); // prepare next question
+			setIsVictoryMessageVisible(false);
+			init();
 			setGameStarted(true);
 			start();
-		}, IDLE_DURATION); // reuse same idleDelay value from useGameTimer config
+		}, IDLE_DURATION);
 	};
 
 	const notesDetectedRef = useRef<string[]>([]);
+	const lastNoteTimestampsRef = useRef<{ [note: string]: number }>({});
+
 	const evaluateRound = async (note: NoteInfo) => {
-		// block detection while victory message is visible or game not started
 		if (!gameStarted || isVictoryMessageVisible) return;
 
 		const { note: parsedNote, octave } = parseNoteDisplay(note.display);
 		const normalizedNoteWithOctave = parsedNote + octave;
 
-		// push detected note
-		notesDetectedRef.current.push(normalizedNoteWithOctave);
-		setNotesDetected([...notesDetectedRef.current]); // trigger re-render
+		const now = Date.now();
+		const lastTime =
+			lastNoteTimestampsRef.current[normalizedNoteWithOctave] || 0;
 
-		// build normalized target list
+		if (now - lastTime < 75) return;
+
+		lastNoteTimestampsRef.current[normalizedNoteWithOctave] = now;
+
+		notesDetectedRef.current.push(normalizedNoteWithOctave);
+		setNotesDetected([...notesDetectedRef.current]);
+
 		const target = questionChord.map((n) => {
 			const { note: nn, octave: o } = parseNoteDisplay(n);
 			return nn + o;
 		});
 
-		// matching (including duplicates)
 		const isValidMatch = (() => {
-			const required = [...target]; // mutable copy
+			const required = [...target];
 			const detected = [...notesDetectedRef.current];
 
 			for (let i = 0; i < required.length; i++) {
@@ -142,19 +150,17 @@ const ChordDetectionGame = () => {
 
 				detected.splice(firstIndex, 1);
 				required.splice(i, 1);
-				i = -1; // restart matching from beginning of required
+				i = -1;
 			}
 			return true;
 		})();
 
 		if (isValidMatch) {
-			// show victory and pause; don't call init/start here (timer will do that)
 			recordWin();
 			notesDetectedRef.current = [];
-			// NOTE: removed start() here to avoid duplicate starts
 		}
 
-		// reset on silence
+		// reset on user note playing (silence)
 		if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
 		silenceTimeout.current = setTimeout(() => {
 			notesDetectedRef.current = [];
@@ -163,10 +169,8 @@ const ChordDetectionGame = () => {
 	};
 
 	const resetGame = () => {
-		// clear any raf
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
-		// reset state (pure state reset only)
 		setGameStarted(false);
 		setCountdown(false);
 		setSelectedRoot("");
@@ -190,13 +194,11 @@ const ChordDetectionGame = () => {
 			rafRef.current = null;
 		}
 
-		// stop the hook timer as well
 		stop();
 
 		// full UI/state reset
 		resetGame();
 
-		// clear detections
 		notesDetectedRef.current = [];
 		setNotesDetected([]);
 	};
@@ -226,7 +228,7 @@ const ChordDetectionGame = () => {
 			<div className="flex flex-col w-full relative">
 				<h1
 					className={`range_thumb w-full text-xs flex items-center `}
-					style={{ left: `${displayedDuration / 110}%` }}
+					style={{ left: `${displayedDuration / 165}%` }}
 				>
 					{displayedDuration / 1000} s
 				</h1>
@@ -237,35 +239,64 @@ const ChordDetectionGame = () => {
 					max="150"
 					onChange={(e) => handleOnRangeChange(e)}
 					onMouseUp={() => setDuration(displayedDuration)}
+					defaultValue={displayedDuration}
 				/>
 			</div>
 			<Clockface showPulse={showPulse} withTimer={true} progress={progress}>
 				<div className="game_question inversions">
-					{isVictoryMessageVisible ? (
-						<div className="text-green-600 text-xl font-bold">Well done!</div>
-					) : !gameStarted ? (
-						<button
-							onClick={() => setCountdown(true)}
-							className="game_btn start-game_btn metro-btn"
-						>
-							{!countdown ? (
-								"Start"
-							) : (
-								<Countdown value={4} bpm={60} onCountdownFinished={startGame} />
-							)}
-						</button>
-					) : (
-						<>
-							<div className="note">{selectedRoot}</div>
-							<div className="quality">{questionQuality}</div>
-						</>
-					)}
+					{(() => {
+						if (isVictoryMessageVisible) {
+							return (
+								<div className="text-green-600 text-xl font-bold">
+									Well done!
+								</div>
+							);
+						}
+
+						if (!gameStarted) {
+							return (
+								<button
+									onClick={() => setCountdown(true)}
+									className="game_btn start-game_btn  text-yellow-600"
+								>
+									{!countdown ? (
+										"start"
+									) : (
+										<Countdown
+											value={4}
+											bpm={60}
+											onCountdownFinished={startGame}
+										/>
+									)}
+								</button>
+							);
+						}
+
+						// Game started, but may be between questions
+						return (
+							<>
+								{isIdle ? (
+									<div className="font-bold text-6xl">Ready?</div>
+								) : (
+									<>
+										<div className="note">{selectedRoot}</div>
+										<div className="quality">{questionQuality}</div>
+									</>
+								)}
+							</>
+						);
+					})()}
 				</div>
 			</Clockface>
 			<DetectedNotesDisplay
 				questionNotes={questionChord}
 				detectedNotes={notesDetected}
 				fretNumbers={questionFormula}
+			/>
+			<UkuleleChordDiagram
+				correctNotes={notesDetected}
+				chordFormula={gameStarted ? questionFormula : undefined}
+				stringNotes={["G4", "C4", "E4", "A4"]}
 			/>
 
 			<label htmlFor="scale_types">

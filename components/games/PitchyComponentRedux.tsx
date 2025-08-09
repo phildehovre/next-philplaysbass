@@ -24,6 +24,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
 	const [clarity, setClarity] = useState<number | null>(null);
+	const [amplitude, setAmplitude] = useState<number | null>(null);
 
 	const audioContextRef = useRef<AudioContext | null>(null);
 	const analyserRef = useRef<AnalyserNode | null>(null);
@@ -83,13 +84,17 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const STABILITY_THRESHOLD = 2;
 
 	useEffect(() => {
-		if (!pitch) {
-			return;
+		if (pitch && amplitude) {
+			const note = getNoteFromPitch(pitch);
+			const noteInfo = {
+				...note,
+				amplitude,
+				time: performance.now(),
+			};
+			console.log(noteInfo);
+			onNoteDetection(noteInfo);
 		}
-		// Process pitch immediately
-		const evaluatedPitch = getNoteFromPitch(pitch);
-		onNoteDetection(evaluatedPitch);
-	}, [pitch]);
+	}, [pitch, amplitude]);
 
 	// Initialize pitch detection when a device is selected
 	useEffect(() => {
@@ -137,6 +142,10 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 				// @ts-ignore
 				analyserRef.current.getFloatTimeDomainData(inputArrayRef.current);
+				const amplitude = Math.sqrt(
+					inputArrayRef.current.reduce((sum, val) => sum + val * val, 0) /
+						inputArrayRef.current.length
+				);
 				const [detectedPitch, detectedClarity] = detectorRef.current.findPitch(
 					inputArrayRef.current,
 					audioContext.sampleRate
@@ -160,6 +169,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					if (stableNoteRef.current.count >= STABILITY_THRESHOLD) {
 						setPitch(detectedPitch);
 						setClarity(detectedClarity);
+						setAmplitude(amplitude);
 					}
 				} else {
 					stableNoteRef.current = null;

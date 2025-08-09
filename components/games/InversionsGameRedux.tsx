@@ -24,6 +24,8 @@ import "./GameStylesRedux.css";
 import { useGameTimer } from "../Timer";
 import UkuleleChordDiagram from "./UkuleleChordDiagram";
 import UkulelePlayer from "./UkulelePlayer";
+import { useChordSnapshotDetector } from "@/hooks/useChordSnapshotDetector";
+import { NEXT_CACHE_TAG_MAX_LENGTH } from "next/dist/lib/constants";
 
 const IDLE_DURATION = 2000;
 
@@ -52,6 +54,11 @@ const ChordDetectionGame = () => {
 		useState<boolean>(false);
 
 	const { finishSession } = usePracticeSession();
+	const { registerDetection } = useChordSnapshotDetector(
+		questionChord,
+		() => onChordSnapshotSuccess,
+		() => console.log("Detection failed")
+	);
 
 	const { setIdle, progress, start, stop, isIdle } = useGameTimer({
 		duration: duration,
@@ -225,6 +232,14 @@ const ChordDetectionGame = () => {
 		setDuration(e.target.valueAsNumber * 100);
 	};
 
+	const onChordSnapshotSuccess = (noteObj: NoteInfo) => {
+		console.log(noteObj);
+		registerDetection({
+			note: noteObj.display, // your note name (with octave if needed)
+			amplitude: noteObj.amplitude, // RMS or similar
+			time: performance.now(), // or from noteObj if it exists
+		});
+	};
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="scoreboard text-2xl font-mono relative">

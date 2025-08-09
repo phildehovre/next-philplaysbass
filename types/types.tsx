@@ -132,6 +132,8 @@ export type NoteInfo = {
 	octave: number; // e.g., 2
 	centsOff: number; // e.g., 3.83 — how far off from the ideal frequency, in cents
 	display: string; // e.g., "G2"
+	amplitude: number;
+	time: number;
 };
 
 export interface NoteEvent {

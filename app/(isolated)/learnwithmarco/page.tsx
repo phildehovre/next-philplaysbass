@@ -1,4 +1,4 @@
-import InversionsGameRedux from "@/components/games/InversionsGameRedux";
+import InversionsGameRedux from "@/components/games/Ukulele/InversionsGameRedux";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import React from "react";
 import "../isolatedGlobals.css";

@@ -10,7 +10,7 @@ import {
 	MIN_CLARITY,
 	MIN_PITCH_HZ,
 	MIN_VOLUME_DB,
-} from "./GameConstants";
+} from "../GameConstants";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
@@ -31,6 +31,12 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const inputArrayRef = useRef<Float32Array | null>(null);
 	const streamRef = useRef<MediaStream | null>(null);
 	const timeoutRef = useRef<number>(null);
+
+	const stableNoteRef = useRef<{ pitch: number; count: number } | null>(null);
+	const STABILITY_THRESHOLD = 2;
+	const RMS_WINDOW = 15; // Number of frames to average over for RMS baseline
+	const RMS_SPIKE_FACTOR = 1.8; // How much louder than baseline to count as pluck
+	const historyRef = useRef<{ pitch: number; rms: number; t: number }[]>([]);
 
 	const { setCookie, getCookie } = useCookies();
 
@@ -77,11 +83,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 	const COOLDOWN_MS = cooldown;
 
-	const cooldownRef = useRef(false);
-	const timeoutIdRef = useRef<number | null>(null);
-	const stableNoteRef = useRef<{ pitch: number; count: number } | null>(null);
-	const STABILITY_THRESHOLD = 2;
-
 	useEffect(() => {
 		if (!pitch) {
 			return;
@@ -89,6 +90,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
 		onNoteDetection(evaluatedPitch);
+		// console.log(evaluatedPitch);
 	}, [pitch]);
 
 	// Initialize pitch detection when a device is selected
@@ -96,7 +98,10 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		if (!selectedDeviceId) return;
 
 		const startDetection = async () => {
-			// Stop old stream if needed
+			// Stop old detection loop
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+			// Stop old stream
 			if (streamRef.current) {
 				streamRef.current.getTracks().forEach((track) => track.stop());
 			}
@@ -116,16 +121,20 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			source.connect(analyser);
 
 			const detector = PitchDetector.forFloat32Array(analyser.fftSize);
-			detector.minVolumeDecibels = MIN_VOLUME_DB;
-			const input = new Float32Array(
-				new ArrayBuffer(detector.inputLength * Float32Array.BYTES_PER_ELEMENT)
-			) as Float32Array & { buffer: ArrayBuffer };
+			const input = new Float32Array(detector.inputLength);
 
+			// Store in refs
 			audioContextRef.current = audioContext;
 			analyserRef.current = analyser;
 			detectorRef.current = detector;
 			inputArrayRef.current = input;
 			streamRef.current = stream;
+
+			const getRMS = (buffer: Float32Array) => {
+				let sum = 0;
+				for (let i = 0; i < buffer.length; i++) sum += buffer[i] * buffer[i];
+				return Math.sqrt(sum / buffer.length);
+			};
 
 			const update = () => {
 				if (
@@ -135,13 +144,26 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 				)
 					return;
 
-				// @ts-ignore
 				analyserRef.current.getFloatTimeDomainData(inputArrayRef.current);
+
 				const [detectedPitch, detectedClarity] = detectorRef.current.findPitch(
 					inputArrayRef.current,
-					audioContext.sampleRate
+					audioContextRef.current.sampleRate
 				);
 
+				const rms = getRMS(inputArrayRef.current);
+				const now = performance.now();
+
+				// Update RMS history
+				historyRef.current.push({ pitch: detectedPitch, rms, t: now });
+				if (historyRef.current.length > RMS_WINDOW) historyRef.current.shift();
+
+				const avgRMS =
+					historyRef.current.reduce((a, b) => a + b.rms, 0) /
+					historyRef.current.length;
+				const isSpike = rms > avgRMS * RMS_SPIKE_FACTOR;
+
+				// 1️⃣ Always update stable note tracking (like original working code)
 				if (
 					detectedPitch > MIN_PITCH_HZ &&
 					detectedPitch < MAX_PITCH_HZ &&
@@ -156,15 +178,21 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					} else {
 						stableNoteRef.current = { pitch: detectedPitch, count: 1 };
 					}
-
-					if (stableNoteRef.current.count >= STABILITY_THRESHOLD) {
-						setPitch(detectedPitch);
-						setClarity(detectedClarity);
-					}
 				} else {
 					stableNoteRef.current = null;
-					setPitch(null);
-					setClarity(null);
+				}
+
+				if (
+					stableNoteRef.current &&
+					stableNoteRef.current.count >= STABILITY_THRESHOLD
+				) {
+					if (isSpike) {
+						const evaluatedPitch = getNoteFromPitch(
+							stableNoteRef.current.pitch
+						);
+						onNoteDetection(evaluatedPitch);
+						historyRef.current = [];
+					}
 				}
 
 				timeoutRef.current = window.setTimeout(update, COOLDOWN_MS);

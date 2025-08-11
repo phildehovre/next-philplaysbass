@@ -15,13 +15,13 @@ import {
 } from "@/constants/chromaticScale";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { Note, NoteInfo } from "@/types/types";
-import Clockface from "./Clockface";
-import Countdown from "./Countdown";
+import Clockface from "../Clockface";
+import Countdown from "../Countdown";
 import PitchyComponentRedux from "./PitchyComponentRedux";
 import { Square } from "lucide-react";
-import AnimatedNumber from "./AnimatedNumber";
+import AnimatedNumber from "../AnimatedNumber";
 import "./GameStylesRedux.css";
-import { useGameTimer } from "../Timer";
+import { useGameTimer } from "../../Timer";
 import UkuleleChordDiagram from "./UkuleleChordDiagram";
 import UkulelePlayer from "./UkulelePlayer";
 
@@ -128,6 +128,7 @@ const ChordDetectionGame = () => {
 	const lastNoteTimestampsRef = useRef<{ [note: string]: number }>({});
 
 	const evaluateRound = async (note: NoteInfo) => {
+		console.log(note);
 		if (!gameStarted || isVictoryMessageVisible) return;
 
 		const { note: parsedNote, octave } = parseNoteDisplay(note.display);

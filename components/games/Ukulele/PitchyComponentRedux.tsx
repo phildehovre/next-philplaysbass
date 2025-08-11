@@ -90,7 +90,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
 		onNoteDetection(evaluatedPitch);
-		// console.log(evaluatedPitch);
 	}, [pitch]);
 
 	// Initialize pitch detection when a device is selected
@@ -121,7 +120,9 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			source.connect(analyser);
 
 			const detector = PitchDetector.forFloat32Array(analyser.fftSize);
-			const input = new Float32Array(detector.inputLength);
+			const input = new Float32Array(
+				new ArrayBuffer(detector.inputLength * Float32Array.BYTES_PER_ELEMENT)
+			) as Float32Array & { buffer: ArrayBuffer };
 
 			// Store in refs
 			audioContextRef.current = audioContext;
@@ -144,10 +145,12 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 				)
 					return;
 
+				// @ts-ignore
 				analyserRef.current.getFloatTimeDomainData(inputArrayRef.current);
 
 				const [detectedPitch, detectedClarity] = detectorRef.current.findPitch(
 					inputArrayRef.current,
+					// @ts-ignore
 					audioContextRef.current.sampleRate
 				);
 
@@ -187,10 +190,8 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					stableNoteRef.current.count >= STABILITY_THRESHOLD
 				) {
 					if (isSpike) {
-						const evaluatedPitch = getNoteFromPitch(
-							stableNoteRef.current.pitch
-						);
-						onNoteDetection(evaluatedPitch);
+						// setPitch is what triggers detection in the useEffect
+						setPitch(stableNoteRef.current.pitch);
 						historyRef.current = [];
 					}
 				}

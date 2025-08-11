@@ -24,6 +24,7 @@ import "./GameStylesRedux.css";
 import { useGameTimer } from "../../Timer";
 import UkuleleChordDiagram from "./UkuleleChordDiagram";
 import UkulelePlayer from "./UkulelePlayer";
+import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
 
 const IDLE_DURATION = 2000;
 
@@ -127,57 +128,62 @@ const ChordDetectionGame = () => {
 	const notesDetectedRef = useRef<string[]>([]);
 	const lastNoteTimestampsRef = useRef<{ [note: string]: number }>({});
 
-	const evaluateRound = async (note: NoteInfo) => {
-		console.log(note);
-		if (!gameStarted || isVictoryMessageVisible) return;
+	const evaluateRound = useCallback(
+		async (note: NoteInfo) => {
+			if (!gameStarted) return;
 
-		const { note: parsedNote, octave } = parseNoteDisplay(note.display);
-		const normalizedNoteWithOctave = parsedNote + octave;
+			const { note: parsedNote, octave } = parseNoteDisplay(note.display);
+			const normalizedNoteWithOctave = parsedNote + octave;
+			console.log(parsedNote, octave);
 
-		const now = Date.now();
-		const lastTime =
-			lastNoteTimestampsRef.current[normalizedNoteWithOctave] || 0;
+			const now = Date.now();
+			const lastTime =
+				lastNoteTimestampsRef.current[normalizedNoteWithOctave] || 0;
 
-		if (now - lastTime < 75) return;
+			if (now - lastTime < 75) return;
 
-		lastNoteTimestampsRef.current[normalizedNoteWithOctave] = now;
+			lastNoteTimestampsRef.current[normalizedNoteWithOctave] = now;
 
-		notesDetectedRef.current.push(normalizedNoteWithOctave);
-		setNotesDetected([...notesDetectedRef.current]);
+			notesDetectedRef.current.push(normalizedNoteWithOctave);
+			setNotesDetected([...notesDetectedRef.current]);
 
-		const target = questionChord.map((n) => {
-			const { note: nn, octave: o } = parseNoteDisplay(n);
-			return nn + o;
-		});
+			const target = questionChord.map((n) => {
+				console.log(n);
+				const { note: nn, octave: o } = parseNoteDisplay(n);
+				console.log("parseNote output:: ", note, octave);
+				return nn + o;
+			});
 
-		const isValidMatch = (() => {
-			const required = [...target];
-			const detected = [...notesDetectedRef.current];
+			const isValidMatch = (() => {
+				const required = [...target];
+				const detected = [...notesDetectedRef.current];
 
-			for (let i = 0; i < required.length; i++) {
-				const targetNote = required[i];
-				const firstIndex = detected.findIndex((d) => d === targetNote);
-				if (firstIndex === -1) return false;
+				for (let i = 0; i < required.length; i++) {
+					const targetNote = required[i];
+					const firstIndex = detected.findIndex((d) => d === targetNote);
+					if (firstIndex === -1) return false;
 
-				detected.splice(firstIndex, 1);
-				required.splice(i, 1);
-				i = -1;
+					detected.splice(firstIndex, 1);
+					required.splice(i, 1);
+					i = -1;
+				}
+				return true;
+			})();
+
+			if (isValidMatch) {
+				recordWin();
+				notesDetectedRef.current = [];
 			}
-			return true;
-		})();
 
-		if (isValidMatch) {
-			recordWin();
-			notesDetectedRef.current = [];
-		}
-
-		// reset on user note playing (silence)
-		if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
-		silenceTimeout.current = setTimeout(() => {
-			notesDetectedRef.current = [];
-			setNotesDetected([]);
-		}, 3000);
-	};
+			// reset on user note playing (silence)
+			if (silenceTimeout.current) clearTimeout(silenceTimeout.current);
+			silenceTimeout.current = setTimeout(() => {
+				notesDetectedRef.current = [];
+				setNotesDetected([]);
+			}, 3000);
+		},
+		[gameStarted, isVictoryMessageVisible]
+	);
 
 	const resetGame = () => {
 		if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -217,7 +223,7 @@ const ChordDetectionGame = () => {
 	const startGame = async () => {
 		await init();
 		setIsVictoryMessageVisible(false);
-		setGameStarted(true);
+		setGameStarted((prev) => (prev == false ? true : true));
 		start();
 	};
 
@@ -299,6 +305,10 @@ const ChordDetectionGame = () => {
 					})()}
 				</div>
 			</Clockface>
+			<DetectedNotesDisplay
+				detectedNotes={notesDetected}
+				questionNotes={questionChord}
+			/>
 			<UkuleleChordDiagram
 				correctNotes={notesDetected}
 				chordFormula={gameStarted ? questionFormula : undefined}

@@ -20,31 +20,54 @@ export const DetectedNotesDisplay: React.FC<DetectedNotesDisplayProps> = ({
 	detectedNotes,
 	fretNumbers,
 }) => {
-	const [normalizedDetected, setNormalizeDetected] = useState<string[]>();
-	const [normalizedQuestion, setNormalizeQuestion] = useState<string[]>();
+	const [normalizedDetected, setNormalizedDetected] = useState<string[]>([]);
+	const [normalizedQuestion, setNormalizedQuestion] = useState<string[]>([]);
+	const [detectedFlags, setDetectedFlags] = useState<boolean[]>([]);
 
+	// Normalize detected and question notes whenever they change
 	useEffect(() => {
-		setNormalizeDetected(
-			detectedNotes.map((n) => {
-				const { note, octave } = parseNoteDisplay(n);
-				return note + octave;
-			})
-		);
-		setNormalizeQuestion(
-			questionNotes.map((n) => {
-				const { note, octave } = parseNoteDisplay(n);
-				return note + octave;
-			})
-		);
-	}, [detectedNotes]);
+		const normDetected = detectedNotes.map((n) => {
+			const { note, octave } = parseNoteDisplay(n);
+			return note + octave;
+		});
+		setNormalizedDetected(normDetected);
 
-	if (!normalizedQuestion) return;
+		const normQuestion = questionNotes.map((n) => {
+			const { note, octave } = parseNoteDisplay(n);
+			return note + octave;
+		});
+		setNormalizedQuestion(normQuestion);
+	}, [detectedNotes, questionNotes]);
+
+	// Update detectedFlags to mark the correct strings detected in order
+	useEffect(() => {
+		if (!normalizedQuestion.length) {
+			setDetectedFlags([]);
+			return;
+		}
+
+		const flags = new Array(normalizedQuestion.length).fill(false);
+
+		// For each detected note, mark the first unmatched string with that note
+		for (const note of normalizedDetected) {
+			const idx = normalizedQuestion.findIndex(
+				(n, i) => n === note && flags[i] === false
+			);
+			if (idx !== -1) {
+				flags[idx] = true;
+			}
+		}
+
+		setDetectedFlags(flags);
+	}, [normalizedDetected, normalizedQuestion]);
+
+	if (!normalizedQuestion.length) return null;
 
 	return (
 		<div className="p-4 w-full">
 			<ul className="grid grid-cols-4 gap-2">
 				{normalizedQuestion.map((note, index) => {
-					const isDetected = normalizedDetected?.includes(note);
+					const isDetected = detectedFlags[index];
 					return (
 						<li
 							key={index}

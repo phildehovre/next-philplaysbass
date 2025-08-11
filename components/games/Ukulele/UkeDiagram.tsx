@@ -1,10 +1,12 @@
 type ChordFormula = (number | "x")[];
+
 type Props = {
 	chord: ChordFormula;
 	numFrets?: number;
+	detectedStrings?: number[]; // indexes of strings currently detected
 };
 
-const UkeDiagram = ({ chord, numFrets = 5 }: Props) => {
+const UkeDiagram = ({ chord, numFrets = 5, detectedStrings = [] }: Props) => {
 	const stringCount = 4;
 	const fretHeight = 30;
 	const stringSpacing = 30;
@@ -48,13 +50,16 @@ const UkeDiagram = ({ chord, numFrets = 5 }: Props) => {
 				if (typeof fret === "number" && fret > 0) {
 					const cx = startX + stringIndex * stringSpacing;
 					const cy = startY + fret * fretHeight - fretHeight / 2;
+					const isDetected = detectedStrings.includes(stringIndex);
 					return (
 						<circle
 							key={`dot-${stringIndex}`}
 							cx={cx}
 							cy={cy}
 							r={dotRadius}
-							fill="#000"
+							fill={isDetected ? "#38a169" /* green */ : "#000" /* black */}
+							stroke={isDetected ? "#2f855a" : "none"}
+							strokeWidth={isDetected ? 2 : 0}
 						/>
 					);
 				}

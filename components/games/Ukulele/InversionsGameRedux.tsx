@@ -228,8 +228,6 @@ const ChordDetectionGame = () => {
 		setDuration(e.target.valueAsNumber * 100);
 	};
 
-	console.log(notesDetected);
-
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="scoreboard text-2xl font-mono relative">

@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
 	generateUkeChord,
 	selectRandomNote,
-	normalizeNote,
 	fretsToNotesWithOctaves,
 	parseNoteDisplay,
 } from "@/lib/utils/gameUtils";
@@ -14,7 +13,7 @@ import {
 	UkuleleShape,
 } from "@/constants/chromaticScale";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
-import { Note, NoteInfo } from "@/types/types";
+import { NoteInfo } from "@/types/types";
 import Clockface from "../Clockface";
 import Countdown from "../Countdown";
 import PitchyComponentRedux from "./PitchyComponentRedux";
@@ -22,9 +21,8 @@ import { Square } from "lucide-react";
 import AnimatedNumber from "../AnimatedNumber";
 import "./GameStylesRedux.css";
 import { useGameTimer } from "../../Timer";
-import UkuleleChordDiagram from "./UkuleleChordDiagram";
 import UkulelePlayer from "./UkulelePlayer";
-import { DetectedNotesDisplay } from "./DetectedNotesDisplay";
+import UkeDiagramWithNotes from "./DetectedNotesDisplay";
 
 const IDLE_DURATION = 2000;
 
@@ -148,9 +146,7 @@ const ChordDetectionGame = () => {
 			setNotesDetected([...notesDetectedRef.current]);
 
 			const target = questionChord.map((n) => {
-				console.log(n);
 				const { note: nn, octave: o } = parseNoteDisplay(n);
-				console.log("parseNote output:: ", note, octave);
 				return nn + o;
 			});
 
@@ -232,6 +228,8 @@ const ChordDetectionGame = () => {
 		setDuration(e.target.valueAsNumber * 100);
 	};
 
+	console.log(notesDetected);
+
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="scoreboard text-2xl font-mono relative">
@@ -305,14 +303,10 @@ const ChordDetectionGame = () => {
 					})()}
 				</div>
 			</Clockface>
-			<DetectedNotesDisplay
-				detectedNotes={notesDetected}
+			<UkeDiagramWithNotes
 				questionNotes={questionChord}
-			/>
-			<UkuleleChordDiagram
-				correctNotes={notesDetected}
-				chordFormula={gameStarted ? questionFormula : undefined}
-				stringNotes={["G4", "C4", "E4", "A4"]}
+				chord={questionFormula}
+				detectedNotes={notesDetected}
 			/>
 			{questionFormula && (
 				<UkulelePlayer shape={questionFormula} ref={ukePlayerRef} />

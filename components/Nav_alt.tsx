@@ -10,6 +10,14 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import UserMenu from "./UserMenu";
 import NavbarBuffer from "./NavbarBuffer";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { Timer } from "lucide-react";
+import Switch from "./Switch";
+import { useTheme } from "next-themes";
 
 function Header() {
 	const { activeSection, setActiveSection, setTimeOfLastClick } =
@@ -17,6 +25,8 @@ function Header() {
 
 	const [isShowing, setIsShowing] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const theme = useTheme();
+	console.log(theme);
 
 	const { user } = useKindeBrowserClient();
 
@@ -84,6 +94,20 @@ function Header() {
 						)}
 					</li>
 				</ul>
+
+				{/* <Tooltip>
+					<TooltipTrigger asChild={true}>
+						<label htmlFor="withTimer" className="flex items-center gap-2">
+							<Timer />
+							<Switch
+								disabled={false}
+								checked={theme === "dark"}
+								onCheckChange={toggleTheme}
+							/>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent>Practice with a time limit</TooltipContent>
+				</Tooltip> */}
 			</nav>
 		</header>
 	);

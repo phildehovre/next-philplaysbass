@@ -6,13 +6,35 @@
 
 :root {
 	/* My vars */
-	--clr-cta-primary: #00fffb;
-	--clr-cta-accent: #eaff00;
-	--clr-bg-box: #1e1e1e;
-	--clr-border-box: #313131;
-	--secondary-o2: #00fffb38;
+
+	/* --clr-brand: #007172; */
+	/* --clr-brand: #00fffb48;
+	--clr-cta-accent: #ff0059b7;
+	--clr-bg: hsla(179, 100%, 83%, 0.063);
+	--clr-box-bg: rgba(0, 157, 154, 0.283);
+	--clr-text-title-brand: #005351;
+	/* --clr-box-bg: #1e1e1e15; */
+	/* --clr-box-border: #ffffff29;
+	--clr-text-primary: rgb(0, 88, 92);
+	--secondary-o2: #00fffb18;
 	--secondary: #00fffb;
 	--section-clamp: clamp(320px, 80%, 1200px);
+	--gradient-brand-h: var(--clr-box-bg);  */
+	--clr-brand: #4cd5ff;
+	--clr-cta-accent: #ff5a8d;
+	--clr-bg: #fdfcfb;
+	--clr-box-bg: #ffffffcc;
+	--clr-text-title-brand: #007a92;
+	--clr-box-border: #e0e6eb;
+	--clr-text-primary: #222f38;
+	--secondary-o2: #4cd5ff18;
+	--secondary: #4cd5ff;
+	--section-clamp: clamp(320px, 80%, 1200px);
+	--gradient-brand-h: linear-gradient(
+		180deg,
+		rgba(76, 213, 255, 0.4) 0%,
+		rgba(255, 90, 141, 0.2) 100%
+	);
 
 	--border-radius: 6px;
 	/* shadcn vars */
@@ -46,21 +68,35 @@
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
-	--background: oklch(1 0 0);
+	--background: oklch(62.793% 0.25768 29.223 / 0.433);
 	--foreground: oklch(0.145 0 0);
+}
+
+.dark {
+	--clr-brand: #00fffb;
+	--clr-bg: black;
+	--clr-box-bg: #1e1e1e;
+	--clr-box-border: #313131;
+	--clr-text-primary: white;
+	--clr-text-title-brand: var(--clr-brand);
+	--clr-cta-accent: #eaff00;
+	--gradient-brand-h: linear-gradient(
+		180deg,
+		rgba(0, 255, 251, 0.4) 0%,
+		rgba(115, 115, 115, 0) 40%
+	);
 }
 
 html,
 body {
 	max-width: 100vw;
 	overflow-x: hidden;
+	background-color: var(--clr-bg);
 }
 
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	background-color: black;
-	color: white; /* color is set here to separate it from (isolated) routes */
 }
 
 * {
@@ -84,7 +120,7 @@ a {
 }
 a:focus,
 a:focus-visible {
-	outline: 4px auto var(--clr-cta-primary);
+	outline: 4px auto var(--clr-brand);
 }
 
 button,

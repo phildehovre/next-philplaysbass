@@ -176,7 +176,7 @@ const RhythmAccuracyGame = () => {
 					/>
 					<p
 						style={{
-							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
+							color: isPracticeMode ? "var(--clr-brand)" : "gray",
 						}}
 					>
 						Practice mode

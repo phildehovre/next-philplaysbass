@@ -75,7 +75,7 @@
 .link_item:hover {
 	font-size: 4em;
 	transition: 350ms ease-in-out all;
-	color: var(--clr-cta-primary);
+	color: var(--clr-brand);
 	text-shadow: -1px 3px 1px white, -2px 3px 1px white, -3px 3px 1px white;
 }
 

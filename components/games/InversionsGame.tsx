@@ -327,7 +327,7 @@ const InversionsGame = () => {
 		));
 
 	return (
-		<div className="game_ctn max-w-[24em]">
+		<div className="game_ctn max-w-[24em] ">
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="isPracticeMode"
@@ -340,7 +340,7 @@ const InversionsGame = () => {
 					/>
 					<p
 						style={{
-							color: isPracticeMode ? "var(--clr-cta-primary)" : "gray",
+							color: isPracticeMode ? "var(--clr-brand)" : "gray",
 						}}
 					>
 						Practice mode

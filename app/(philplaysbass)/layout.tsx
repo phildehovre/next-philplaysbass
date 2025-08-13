@@ -9,6 +9,8 @@ import Nav_alt from "@/components/Nav_alt";
 import ActiveSectionContextProvider from "@/context/activeElementContext";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/context/userContext";
+import { ThemeProvider } from "next-themes";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -43,16 +45,25 @@ export default async function WebsiteLayout({
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<AuthProvider>
-					<LanguageProvider>
-						<UserProvider>
-							<ActiveSectionContextProvider>
-								<Nav_alt />
-							</ActiveSectionContextProvider>
-							{children}
-							<Footer />
-							<Toaster theme="dark" />
-						</UserProvider>
-					</LanguageProvider>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="dark"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<TooltipProvider>
+							<LanguageProvider>
+								<UserProvider>
+									<ActiveSectionContextProvider>
+										<Nav_alt />
+									</ActiveSectionContextProvider>
+									{children}
+									<Footer />
+									<Toaster />
+								</UserProvider>
+							</LanguageProvider>
+						</TooltipProvider>
+					</ThemeProvider>
 				</AuthProvider>
 				<script src="https://sdk.scdn.co/spotify-player.js"></script>
 			</body>

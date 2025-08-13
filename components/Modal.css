@@ -51,17 +51,17 @@
 			border-radius: 6px;
 			outline: none;
 			color: black;
-			background-color: var(--clr-cta-primary);
+			background-color: var(--clr-brand);
 			cursor: pointer;
 			transition: 150ms ease-in-out all;
 			&:hover {
-				outline: 1px solid var(--clr-cta-primary);
+				outline: 1px solid var(--clr-brand);
 				background-color: transparent;
-				color: var(--clr-cta-primary);
+				color: var(--clr-brand);
 			}
 			&:active {
 				color: black;
-				background-color: var(--clr-cta-primary);
+				background-color: var(--clr-brand);
 			}
 		}
 	}

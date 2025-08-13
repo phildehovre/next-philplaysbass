@@ -6,9 +6,9 @@
 	justify-content: center;
 
 	a {
-		color: var(--clr-cta-primary);
-		color: var(--clr-cta-primary);
-		background-color: var(--clr-cta-primary);
+		color: var(--clr-brand);
+		color: var(--clr-brand);
+		background-color: var(--clr-brand);
 		border-radius: 100%;
 		padding: 1em;
 		display: flex;

@@ -16,13 +16,13 @@ nav {
 
 	button:hover {
 		background-color: transparent;
-		color: var(--clr-cta-primary);
+		color: var(--clr-brand);
 		transform: scale(1.1);
 	}
 
 	button.auth_btn {
 		box-shadow: 1px 1px 1px pink;
-		color: var(--clr-cta-primary);
+		color: var(--clr-brand);
 		padding: 0.5em;
 	}
 

@@ -29,8 +29,6 @@ async function fetchLatestStream() {
 }
 
 export default async function Home() {
-	const { isAuthenticated } = getKindeServerSession();
-	const isLoggedIn = await isAuthenticated();
 	const latestStream = await fetchLatestStream();
 
 	return (

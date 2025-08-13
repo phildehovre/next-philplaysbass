@@ -19,7 +19,7 @@
 	}
 	.dropdown-menu_item:hover {
 		font-weight: bolder;
-		color: var(--clr-cta-primary);
+		color: var(--clr-brand);
 		background-color: transparent;
 	}
 }

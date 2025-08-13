@@ -29,7 +29,7 @@ header {
 	list-style: none;
 	margin-top: -35px;
 	font-family: Anton;
-	border-bottom: 4px solid var(--clr-cta-primary);
+	border-bottom: 4px solid var(--clr-brand);
 }
 
 .navbar .links.showing {

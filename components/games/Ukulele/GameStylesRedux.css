@@ -60,6 +60,7 @@
 	font-weight: bold;
 	letter-spacing: -2px;
 	font-size: 0.75em;
+	animation-delay: 300ms;
 
 	&.start-game_btn {
 		height: 240px;

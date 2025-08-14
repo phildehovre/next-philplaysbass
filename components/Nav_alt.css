@@ -16,6 +16,7 @@ header {
 	backdrop-filter: blur(0px);
 	z-index: 1;
 	width: 100svw;
+	padding: 0 0.5em;
 }
 
 .navbar .links {
@@ -40,7 +41,6 @@ header {
 }
 
 .navbar .links > li {
-	color: var(--accent);
 	font-weight: 400;
 	font-size: 1.1rem;
 	width: 100%;
@@ -51,13 +51,12 @@ header {
 
 .navbar .links > li > a {
 	text-decoration: none;
-	color: inherit;
 	transition: 150ms ease-in-out all;
-	font-size: 1.8em;
+	color: var(--foreground);
 }
 
 .navbar .links > li > a:hover {
-	color: var(--accent);
+	color: var(--clr-brand);
 }
 
 .navbar .hamburger {

@@ -7,7 +7,8 @@
 	gap: 1em;
 	align-items: center;
 	justify-content: center;
-	margin-top: 5em;
+	box-shadow: var(--box-shadow);
+	margin-top: 1em;
 }
 
 .game_btn {

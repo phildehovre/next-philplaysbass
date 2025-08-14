@@ -15,7 +15,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Timer } from "lucide-react";
+import { Moon, MoonIcon, Timer } from "lucide-react";
 import Switch from "./Switch";
 import { useTheme } from "next-themes";
 
@@ -25,8 +25,7 @@ function Header() {
 
 	const [isShowing, setIsShowing] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const theme = useTheme();
-	console.log(theme);
+	const { setTheme, theme } = useTheme();
 
 	const { user } = useKindeBrowserClient();
 
@@ -52,6 +51,17 @@ function Header() {
 
 		return () => ctx.revert();
 	});
+
+	const toggleTheme = () => {
+		setTheme((prev) => {
+			if (theme == "light") {
+				return "dark";
+			} else {
+				return "light";
+			}
+		});
+	};
+
 	const renderLinks = () => {
 		return links.map((link) => {
 			return (
@@ -93,21 +103,20 @@ function Header() {
 							</button>
 						)}
 					</li>
+					<Tooltip>
+						<TooltipTrigger asChild={true}>
+							<label htmlFor="darkMode" className="flex items-center gap-2">
+								<MoonIcon />
+								<Switch
+									disabled={false}
+									checked={theme === "light"}
+									onCheckChange={toggleTheme}
+								/>
+							</label>
+						</TooltipTrigger>
+						<TooltipContent>Toggle dark/light mode</TooltipContent>
+					</Tooltip>
 				</ul>
-
-				{/* <Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withTimer" className="flex items-center gap-2">
-							<Timer />
-							<Switch
-								disabled={false}
-								checked={theme === "dark"}
-								onCheckChange={toggleTheme}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with a time limit</TooltipContent>
-				</Tooltip> */}
 			</nav>
 		</header>
 	);

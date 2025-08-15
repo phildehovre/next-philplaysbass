@@ -1,3 +1,4 @@
+import { useOscillatorGen } from "@/context/oscillatorGenContext";
 import React, { useEffect, useState } from "react";
 
 export default function Countdown(props: {
@@ -7,6 +8,8 @@ export default function Countdown(props: {
 }) {
 	const { value = 3, onCountdownFinished, bpm } = props;
 	const [countdown, setCountdown] = useState<number | null>(null);
+
+	const { playNote } = useOscillatorGen();
 
 	useEffect(() => {
 		startCountdown(value);
@@ -24,9 +27,12 @@ export default function Countdown(props: {
 			setCountdown(currentValue);
 
 			if (currentValue === 0) {
+				playNote("C6");
 				clearInterval(interval);
 				onCountdownFinished();
+				return;
 			}
+			playNote("C5");
 		}, intervalDuration);
 	};
 

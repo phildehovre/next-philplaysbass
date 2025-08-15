@@ -1,17 +1,24 @@
 "use client";
 
-import React, {
-	useRef,
-	useEffect,
-	forwardRef,
-	useImperativeHandle,
-} from "react";
+import React, { createContext, useContext, useEffect, useRef } from "react";
 import { UKE_TUNING, UkuleleShape } from "@/constants/chromaticScale";
 
-const UkulelePlayer = forwardRef((props: { shape: UkuleleShape }, ref) => {
-	const audioCtxRef = useRef<AudioContext | null>(null);
-	const { shape } = props;
+// Context shape
+type OscillatorGenContext = {
+	playNote: (noteName: string) => void;
+	playChord: (shape: UkuleleShape) => void;
+};
 
+const UkulelePlayerContext = createContext<OscillatorGenContext | null>(null);
+
+export const OscillatorGenProvider = ({
+	children,
+}: {
+	children: React.ReactNode;
+}) => {
+	const audioCtxRef = useRef<AudioContext | null>(null);
+
+	// Initialize AudioContext once
 	useEffect(() => {
 		if (typeof window !== "undefined" && !audioCtxRef.current) {
 			const AudioContextClass =
@@ -20,6 +27,7 @@ const UkulelePlayer = forwardRef((props: { shape: UkuleleShape }, ref) => {
 		}
 	}, []);
 
+	// Build note frequency map
 	const noteFreqMap = (() => {
 		const A4 = 440;
 		const notes = [
@@ -120,7 +128,7 @@ const UkulelePlayer = forwardRef((props: { shape: UkuleleShape }, ref) => {
 		});
 	};
 
-	const playUkuleleChord = (shape: UkuleleShape) => {
+	const playChord = (shape: UkuleleShape) => {
 		const freqs = chordShapeToFrequencies(shape);
 		playFrequencies(freqs);
 	};
@@ -133,13 +141,20 @@ const UkulelePlayer = forwardRef((props: { shape: UkuleleShape }, ref) => {
 		playFrequencies([freq]);
 	};
 
-	// Expose functions to parent via ref
-	useImperativeHandle(ref, () => ({
-		playChord: playUkuleleChord,
-		playNote,
-	}));
+	return (
+		<UkulelePlayerContext.Provider value={{ playNote, playChord }}>
+			{children}
+		</UkulelePlayerContext.Provider>
+	);
+};
 
-	return null;
-});
-
-export default UkulelePlayer;
+// Hook to use in components
+export const useOscillatorGen = () => {
+	const ctx = useContext(UkulelePlayerContext);
+	if (!ctx) {
+		throw new Error(
+			"useUkulelePlayer must be used within OscillatorGenProvider"
+		);
+	}
+	return ctx;
+};

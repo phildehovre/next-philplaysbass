@@ -23,6 +23,7 @@ import "./GameStylesRedux.css";
 import { useGameTimer } from "../../Timer";
 import UkulelePlayer from "./UkulelePlayer";
 import UkeDiagramWithNotes from "./DetectedNotesDisplay";
+import { useOscillatorGen } from "@/context/oscillatorGenContext";
 
 const IDLE_DURATION = 2000;
 
@@ -60,13 +61,15 @@ const ChordDetectionGame = () => {
 			start();
 		},
 	});
+	const { playNote, playChord } = useOscillatorGen();
 
 	const timerInterval = useRef<NodeJS.Timeout | null>(null);
 	const silenceTimeout = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);
-	const ukePlayerRef = useRef<{ playChord: (shape: UkuleleShape) => void }>(
-		null
-	);
+	const ukePlayerRef = useRef<{
+		playNote(note: string): unknown;
+		playChord: (shape: UkuleleShape) => void;
+	}>(null);
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -77,12 +80,6 @@ const ChordDetectionGame = () => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
 	}, []);
-
-	const onPlayChord = () => {
-		if (!ukePlayerRef.current || !questionFormula) return;
-
-		ukePlayerRef.current.playChord(questionFormula);
-	};
 
 	const init = async () => {
 		setIsVictoryMessageVisible(false);
@@ -109,7 +106,7 @@ const ChordDetectionGame = () => {
 		setTimeout(() => setShowPulse(false), 100);
 		setGameStarted(false);
 		setIsVictoryMessageVisible(true);
-		onPlayChord();
+		playChord(questionFormula as UkuleleShape);
 
 		stop();
 
@@ -132,7 +129,6 @@ const ChordDetectionGame = () => {
 
 			const { note: parsedNote, octave } = parseNoteDisplay(note.display);
 			const normalizedNoteWithOctave = parsedNote + octave;
-			console.log(parsedNote, octave);
 
 			const now = Date.now();
 			const lastTime =
@@ -158,6 +154,8 @@ const ChordDetectionGame = () => {
 					const targetNote = required[i];
 					const firstIndex = detected.findIndex((d) => d === targetNote);
 					if (firstIndex === -1) return false;
+
+					playNote(targetNote);
 
 					detected.splice(firstIndex, 1);
 					required.splice(i, 1);
@@ -306,9 +304,6 @@ const ChordDetectionGame = () => {
 				chord={questionFormula}
 				detectedNotes={notesDetected}
 			/>
-			{questionFormula && (
-				<UkulelePlayer shape={questionFormula} ref={ukePlayerRef} />
-			)}
 
 			<label htmlFor="scale_types">
 				Select qualities:

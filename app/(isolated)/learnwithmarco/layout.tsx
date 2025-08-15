@@ -1,6 +1,7 @@
 import React from "react";
 import "../../globals.css";
 import "../isolatedGlobals.css";
+import { OscillatorGenProvider } from "@/context/oscillatorGenContext";
 
 function layout({
 	children,
@@ -9,7 +10,9 @@ function layout({
 }>) {
 	return (
 		<html>
-			<body style={{ color: "black !important" }}>{children}</body>
+			<OscillatorGenProvider>
+				<body style={{ color: "black !important" }}>{children}</body>
+			</OscillatorGenProvider>
 		</html>
 	);
 }

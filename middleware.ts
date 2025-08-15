@@ -8,7 +8,7 @@ type KindeReqType = {
 };
 
 export default withAuth(async function middleware(req: KindeReqType) {}, {
-	publicPaths: ["/", "/lessons", "/about"],
+	publicPaths: ["/", "/lessons", "/about", "/learnwithmarco"],
 });
 
 export const config = {

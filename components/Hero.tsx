@@ -7,7 +7,6 @@ import { textObject } from "../constants/textFile";
 import { useLanguage } from "../context/LanguageContext";
 import Link from "next/link";
 import Logo from "./metronome/Logo";
-import { useTheme } from "@/context/themeContext";
 
 const Hero: React.FC = () => {
 	const { language } = useLanguage();

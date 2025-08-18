@@ -15,8 +15,10 @@ import MetroWidget from "./MetroWidget";
 import { COOLDOWN_MS } from "./GameConstants";
 import ScoreModal from "./ScoreModal";
 
+const GAME_TYPE = "rhythm-accuracy";
+
 const RhythmAccuracyGame = () => {
-	const [gameType, setGameType] = useState<GameTypes>("rhythm-accuracy");
+	const [gameType, setGameType] = useState<GameTypes>(GAME_TYPE);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [progress, setProgress] = useState(0);
 	const [isLoading, setIsLoading] = useState<boolean>(false);

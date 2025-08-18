@@ -1,20 +1,37 @@
 import { NoteEvent, Score } from "@/types/types";
 
 export const processRhythmicalAccuracy = (
-	offsetMs: number | undefined
+	offsetMs: number | undefined,
+	bpm: number
 ): number => {
 	if (offsetMs === undefined) return 0;
 
 	const absOffset = Math.abs(offsetMs);
-	const maxOffset = 150; // ms
-	const softEdge = maxOffset / 2;
-	const x = absOffset - softEdge;
 
-	const steepness = 0.05;
-	const sigmoid = 1 / (1 + Math.exp(steepness * x));
+	// Wider tolerance at slower BPM (optional)
+	const beatWindow = 60000 / bpm / 2; // half-beat duration
+	const maxOffset = Math.min(200, beatWindow); // cap at 200ms
 
-	// Normalize and scale to 0–100
-	const score = 100 * (2 * (sigmoid - 0.5));
+	// Perfect / Great / Good thresholds
+	const perfect = 30;
+	const great = 70;
+	const good = 120;
+
+	let score;
+	if (absOffset <= perfect) {
+		score = 100; // perfect timing
+	} else if (absOffset <= great) {
+		// decay from 100 → 80
+		score = 80 + ((great - absOffset) / (great - perfect)) * 20;
+	} else if (absOffset <= good) {
+		// decay from 80 → 50
+		score = 50 + ((good - absOffset) / (good - great)) * 30;
+	} else if (absOffset <= maxOffset) {
+		// decay from 50 → 10
+		score = 10 + ((maxOffset - absOffset) / (maxOffset - good)) * 40;
+	} else {
+		score = 0; // too far off
+	}
 
 	return Math.round(score);
 };
@@ -48,7 +65,10 @@ export const processEventScore = (
 ): Score => {
 	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
 
-	const rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs);
+	const rhythm = processRhythmicalAccuracy(
+		event.metronomeOffsetMs,
+		options.bpm
+	);
 	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
 	let bonus = 0;
 	if (options) {

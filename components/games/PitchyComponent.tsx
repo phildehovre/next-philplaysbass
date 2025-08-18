@@ -76,7 +76,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	useEffect(() => {
 		if (!pitch) return;
 		const evaluatedPitch = getNoteFromPitch(pitch);
-		console.log("↗️ Sending to parent:", evaluatedPitch);
+		// console.log("↗️ Sending to parent:", evaluatedPitch);
 		onNoteDetection(evaluatedPitch);
 	}, [pitch]);
 
@@ -179,10 +179,10 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					now - lastDetectionTime.current > REFRACTORY_MS
 				) {
 					setPitch(stableNoteRef.current.pitch);
-					console.log(
-						"✅ Passing all gates, emitting note:",
-						stableNoteRef.current
-					);
+					// console.log(
+					// 	"✅ Passing all gates, emitting note:",
+					// 	stableNoteRef.current
+					// );
 					historyRef.current = [];
 					lastDetectionTime.current = now;
 				}

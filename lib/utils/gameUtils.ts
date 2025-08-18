@@ -107,7 +107,7 @@ const NOTE_NAMES = [
 
 // A4 = 440 Hz, MIDI number 69
 export function getNoteFromPitch(frequency: number) {
-	console.log("freq to note:: ", frequency);
+	// console.log("freq to note:: ", frequency);
 	const A4 = 440;
 	const SEMITONES_PER_OCTAVE = 12;
 
@@ -143,6 +143,7 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 			timeFromBeat > tempoInterval / 2
 				? timeFromBeat - tempoInterval
 				: timeFromBeat;
+		console.log(msFromClick);
 		return msFromClick;
 	}
 };

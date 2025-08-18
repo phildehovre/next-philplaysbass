@@ -36,7 +36,7 @@ export const PracticeSessionProvider = ({
 	children: React.ReactNode;
 }) => {
 	const [sessionId, setSessionId] = useState<string | null>(null);
-	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
+	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2 - 30);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
 	const [score, setScore] = useState<Score>({
@@ -55,6 +55,7 @@ export const PracticeSessionProvider = ({
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
 			const newScore = processEventScore(event, options);
+			console.log("score::", newScore);
 			if (newScore) {
 				setScore((prev) => ({
 					rhythm: prev.rhythm + newScore.rhythm,

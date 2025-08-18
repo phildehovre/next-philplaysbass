@@ -3,7 +3,7 @@ import PitchyComponent from "./PitchyComponent";
 import { NoteInfo } from "@/types/types";
 import { MS_LATENCY_OFFSET } from "./GameConstants";
 
-const PulseVisualisation = ({
+const HorizontalPulseVisualisation = ({
 	play,
 	tempoInterval,
 	lastTickTime,
@@ -34,7 +34,7 @@ const PulseVisualisation = ({
 			// force re-render of animated line
 			setAnimationKey((prev) => prev + 1);
 
-			// hide center blip after short time
+			// Timer to hide center blip
 			setTimeout(() => setPulse(false), tempoInterval * 0.8);
 		}, tempoInterval);
 
@@ -58,11 +58,10 @@ const PulseVisualisation = ({
 					? timeFromBeat - tempoInterval
 					: timeFromBeat;
 
-			const id = now; // could also use a UUID or incrementing counter
+			const id = now;
 
 			setMarkers((prev) => [...prev, { id, msOffset: msFromClick }]);
 
-			// Auto-remove after e.g. 400ms
 			setTimeout(() => {
 				setMarkers((prev) => prev.filter((marker) => marker.id !== id));
 			}, 400);
@@ -114,4 +113,4 @@ const PulseVisualisation = ({
 	);
 };
 
-export default PulseVisualisation;
+export default HorizontalPulseVisualisation;

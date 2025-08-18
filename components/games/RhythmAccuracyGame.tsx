@@ -192,7 +192,11 @@ const RhythmAccuracyGame = () => {
 				<AnimatedNumber number={score.wins} />
 			</div>
 
-			<Clockface showPulse={showPulse} progress={progress}>
+			<Clockface
+				showPulse={showPulse}
+				progress={progress}
+				gameStarted={gameStarted}
+			>
 				<div className={`game_question inversions `}>
 					{!gameStarted ? (
 						<button

@@ -39,7 +39,7 @@ export default async function WebsiteLayout({
 	const isLoggedIn = await isAuthenticated();
 
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
 				<link rel="icon" href="/logo_unified.png" type="image/png" />
 			</head>

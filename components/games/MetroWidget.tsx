@@ -1,12 +1,12 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import PulseVisualisation from "./PulseVisualisation";
 import {
 	MAX_TEMPO_AS_NUM,
 	MAX_TEMPO_AS_STR,
 	MIN_TEMPO_AS_NUM,
 	MIN_TEMPO_AS_STR,
 } from "./GameConstants";
+import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -44,7 +44,6 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	}, [soundEffect, sounds]);
 
 	// Sound and Visual:
-
 	const trigger = useCallback(() => {
 		if (play) {
 			setLastTickTime(performance.now());
@@ -67,6 +66,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		}
 	}, [play, tempoInterval, soundEffect, trigger]);
 
+	// Prevent out of bound tempo setting
 	useEffect(() => {
 		setTempoInterval((60 / bpm) * 1000);
 		if (bpm <= MIN_TEMPO_AS_NUM) {
@@ -92,7 +92,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 					/>
 				</div>
 			</div>
-			<PulseVisualisation
+			<HorizontalPulseVisualisation
 				lastTickTime={lastTickTime}
 				play={play}
 				tempoInterval={tempoInterval}

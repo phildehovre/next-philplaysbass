@@ -24,6 +24,7 @@ interface PracticeSessionContextType {
 	aggregateScore: Score;
 	bpm: number;
 	setBpm: (t: number) => void;
+	gameType: GameTypes | undefined;
 }
 
 const PracticeSessionContext = createContext<
@@ -36,6 +37,7 @@ export const PracticeSessionProvider = ({
 	children: React.ReactNode;
 }) => {
 	const [sessionId, setSessionId] = useState<string | null>(null);
+	const [gameType, setGameType] = useState<GameTypes>();
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2 - 30);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [events, setEvents] = useState<NoteEvent[]>([]);
@@ -112,6 +114,7 @@ export const PracticeSessionProvider = ({
 
 	const startSession = async (gameType: GameTypes) => {
 		console.log("Starting session");
+		setGameType(gameType);
 		try {
 			const res = await fetch("/api/practice/start", {
 				method: "POST",
@@ -142,6 +145,7 @@ export const PracticeSessionProvider = ({
 		aggregateScore,
 		bpm,
 		setBpm,
+		gameType,
 	};
 
 	return (

@@ -1,21 +1,19 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import "../metronome/metronome.scss";
 import { calculateMsOffset } from "@/lib/utils/gameUtils";
 import PitchyComponent from "./PitchyComponent";
-import { Score, GameTypes, NoteEvent, NoteInfo } from "@/types/types";
+import { GameTypes, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./AnimatedNumber";
 import Switch from "../Switch";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
-import Spinner from "../Spinner";
 import Clockface from "./Clockface";
 import Countdown from "./Countdown";
 import MetroWidget from "./MetroWidget";
-import { COOLDOWN_MS, MAX_TEMPO_AS_NUM, TOLERANCE } from "./GameConstants";
+import { COOLDOWN_MS } from "./GameConstants";
 import ScoreModal from "./ScoreModal";
-import { ScoreBurstManager } from "./ScoreBurstManager";
 
 const RhythmAccuracyGame = () => {
 	const [gameType, setGameType] = useState<GameTypes>("rhythm-accuracy");
@@ -105,48 +103,51 @@ const RhythmAccuracyGame = () => {
 		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
 	};
 
-	const onNoteDetection = async (note: NoteInfo) => {
-		if (!isTabVisible) return;
-		if (!gameStarted) return;
+	const onNoteDetection = useCallback(
+		async (note: NoteInfo) => {
+			if (!isTabVisible) return;
+			if (!gameStarted) return;
 
-		if (!sessionId) {
-			await startSession(gameType);
-		}
-
-		if (evaluateCooldownRef.current) return;
-
-		const now = Date.now();
-		const timeToHitMs = noteShownAtRef.current
-			? now - noteShownAtRef.current
-			: 0;
-
-		const offset = calculateMsOffset(bpm, lastTickTime) as number;
-
-		const event: NoteEvent = {
-			expectedNote: "",
-			playedNote: note.noteName,
-			isCorrect: offset < 150,
-			timeToHitMs,
-			metronomeOffsetMs: offset,
-			playedAt: new Date(),
-		};
-
-		// Only save to DB if not in practice mode?
-		if (!isPracticeMode && !evaluateCooldownRef.current) {
-			addEvent(event, { bpm });
-			if (Math.abs(offset) < 85) {
-				recordWin();
-			} else {
-				recordLoss();
+			if (!sessionId) {
+				await startSession(gameType);
 			}
-		}
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-		evaluateCooldownRef.current = true;
-		setTimeout(() => {
-			evaluateCooldownRef.current = false;
-		}, COOLDOWN_MS);
-	};
+			if (evaluateCooldownRef.current) return;
+
+			const now = Date.now();
+			const timeToHitMs = noteShownAtRef.current
+				? now - noteShownAtRef.current
+				: 0;
+
+			const offset = calculateMsOffset(bpm, lastTickTime) as number;
+
+			const event: NoteEvent = {
+				expectedNote: "",
+				playedNote: note.noteName,
+				isCorrect: offset < 150,
+				timeToHitMs,
+				metronomeOffsetMs: offset,
+				playedAt: new Date(),
+			};
+
+			// Only save to DB if not in practice mode?
+			if (!isPracticeMode && !evaluateCooldownRef.current) {
+				addEvent(event, { bpm });
+				if (Math.abs(offset) < 85) {
+					recordWin();
+				} else {
+					recordLoss();
+				}
+			}
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+			evaluateCooldownRef.current = true;
+			setTimeout(() => {
+				evaluateCooldownRef.current = false;
+			}, COOLDOWN_MS);
+		},
+		[gameStarted]
+	);
 
 	const startGame = async () => {
 		resetGame();

@@ -107,6 +107,7 @@ const NOTE_NAMES = [
 
 // A4 = 440 Hz, MIDI number 69
 export function getNoteFromPitch(frequency: number) {
+	console.log("freq to note:: ", frequency);
 	const A4 = 440;
 	const SEMITONES_PER_OCTAVE = 12;
 

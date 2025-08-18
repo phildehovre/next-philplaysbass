@@ -153,7 +153,7 @@ export const useOscillatorGen = () => {
 	const ctx = useContext(UkulelePlayerContext);
 	if (!ctx) {
 		throw new Error(
-			"useUkulelePlayer must be used within OscillatorGenProvider"
+			"useOscillatorGen must be used within OscillatorGenProvider"
 		);
 	}
 	return ctx;

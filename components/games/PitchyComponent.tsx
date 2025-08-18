@@ -5,12 +5,7 @@ import { PitchDetector } from "pitchy";
 import { getNoteFromPitch } from "@/lib/utils/gameUtils";
 import { NoteInfo } from "@/types/types";
 import useCookies from "@/hooks/useCookies";
-import {
-	MAX_PITCH_HZ,
-	MIN_CLARITY,
-	MIN_PITCH_HZ,
-	MIN_VOLUME_DB,
-} from "./GameConstants";
+import { MAX_PITCH_HZ, MIN_CLARITY, MIN_PITCH_HZ } from "./GameConstants";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
@@ -23,7 +18,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
-	const [clarity, setClarity] = useState<number | null>(null);
 
 	const audioContextRef = useRef<AudioContext | null>(null);
 	const analyserRef = useRef<AnalyserNode | null>(null);
@@ -32,29 +26,37 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const streamRef = useRef<MediaStream | null>(null);
 	const timeoutRef = useRef<number>(null);
 
+	const stableNoteRef = useRef<{ pitch: number; count: number } | null>(null);
+	const historyRef = useRef<{ pitch: number; rms: number; t: number }[]>([]);
+	const lastDetectionTime = useRef<number>(0);
+
+	// Detection tuning constants
+	const RMS_WINDOW = 15; // for baseline
+	const REFRACTORY_MS = 200; // cooldown after detection
+	const STABILITY_THRESHOLD = 2; // was 4
+	const RMS_SPIKE_FACTOR = 1.5; // was 1.8
+	const MIN_RMS_ABS = 0.01; // was 0.02
+	const TRANSIENT_FACTOR = 1.15; // was 1.3
+
 	const { setCookie, getCookie } = useCookies();
+	const COOLDOWN_MS = cooldown;
 
 	useEffect(() => {
 		if (!selectedDeviceId) {
 			const deviceId = getCookie("device-id");
-			if (deviceId) {
-				setSelectedDeviceId(deviceId);
-			}
+			if (deviceId) setSelectedDeviceId(deviceId);
 		}
 	}, []);
+
 	useEffect(() => {
-		if (selectedDeviceId) {
-			setCookie("device-id", selectedDeviceId);
-		}
+		if (selectedDeviceId) setCookie("device-id", selectedDeviceId);
 	}, [selectedDeviceId]);
 
 	useEffect(() => {
 		(async () => {
 			try {
 				const inputs = await getAudioInputs();
-				if (inputs) {
-					setDevices(inputs);
-				}
+				if (inputs) setDevices(inputs);
 			} catch (err) {
 				console.log(err);
 			}
@@ -63,62 +65,29 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 	const getAudioInputs = async () => {
 		try {
-			// Ask for permission first
 			await navigator.mediaDevices.getUserMedia({ audio: true });
-
-			// Then enumerate devices
 			const devices = await navigator.mediaDevices.enumerateDevices();
-			const inputs = devices.filter((d) => d.kind === "audioinput");
-			return inputs;
+			return devices.filter((d) => d.kind === "audioinput");
 		} catch (err) {
 			console.error("Error accessing audio devices:", err);
 		}
 	};
 
-	const COOLDOWN_MS = cooldown;
-
-	const cooldownRef = useRef(false);
-	const timeoutIdRef = useRef<number | null>(null);
-	const stableNoteRef = useRef<{ pitch: number; count: number } | null>(null);
-	const STABILITY_THRESHOLD = 2;
-
 	useEffect(() => {
-		if (!pitch) {
-			return;
-		}
-
-		if (cooldownRef.current) {
-			// Still cooling down, ignore new pitches
-			return;
-		}
-
-		// Process pitch immediately
+		if (!pitch) return;
 		const evaluatedPitch = getNoteFromPitch(pitch);
+		console.log("↗️ Sending to parent:", evaluatedPitch);
 		onNoteDetection(evaluatedPitch);
-
-		// Set timeout to reset cooldown
-		timeoutIdRef.current = window.setTimeout(() => {
-			cooldownRef.current = false;
-			timeoutIdRef.current = null;
-		}, COOLDOWN_MS);
-
-		// Cleanup timeout only on unmount
-		return () => {
-			if (timeoutIdRef.current !== null) {
-				clearTimeout(timeoutIdRef.current);
-				timeoutIdRef.current = null;
-			}
-		};
 	}, [pitch]);
 
-	// Initialize pitch detection when a device is selected
 	useEffect(() => {
 		if (!selectedDeviceId) return;
 
 		const startDetection = async () => {
-			// Stop old stream if needed
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
 			if (streamRef.current) {
-				streamRef.current.getTracks().forEach((track) => track.stop());
+				streamRef.current.getTracks().forEach((t) => t.stop());
 			}
 			if (audioContextRef.current) {
 				audioContextRef.current.close();
@@ -136,16 +105,19 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			source.connect(analyser);
 
 			const detector = PitchDetector.forFloat32Array(analyser.fftSize);
-			detector.minVolumeDecibels = MIN_VOLUME_DB;
-			const input = new Float32Array(
-				new ArrayBuffer(detector.inputLength * Float32Array.BYTES_PER_ELEMENT)
-			) as Float32Array & { buffer: ArrayBuffer };
+			const input = new Float32Array(detector.inputLength);
 
 			audioContextRef.current = audioContext;
 			analyserRef.current = analyser;
 			detectorRef.current = detector;
 			inputArrayRef.current = input;
 			streamRef.current = stream;
+
+			const getRMS = (buffer: Float32Array) => {
+				let sum = 0;
+				for (let i = 0; i < buffer.length; i++) sum += buffer[i] * buffer[i];
+				return Math.sqrt(sum / buffer.length);
+			};
 
 			const update = () => {
 				if (
@@ -157,11 +129,30 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 				// @ts-ignore
 				analyserRef.current.getFloatTimeDomainData(inputArrayRef.current);
+
 				const [detectedPitch, detectedClarity] = detectorRef.current.findPitch(
 					inputArrayRef.current,
-					audioContext.sampleRate
+					audioContextRef.current!.sampleRate
 				);
 
+				const rms = getRMS(inputArrayRef.current);
+				const now = performance.now();
+
+				// update RMS history
+				historyRef.current.push({ pitch: detectedPitch, rms, t: now });
+				if (historyRef.current.length > RMS_WINDOW) historyRef.current.shift();
+
+				const avgRMS =
+					historyRef.current.reduce((a, b) => a + b.rms, 0) /
+					historyRef.current.length;
+				const lastRMS = historyRef.current.length
+					? historyRef.current[historyRef.current.length - 1].rms
+					: 0;
+
+				const isSpike = rms > avgRMS * RMS_SPIKE_FACTOR && rms > MIN_RMS_ABS;
+				const isTransient = rms > lastRMS * TRANSIENT_FACTOR;
+
+				// stability tracking
 				if (
 					detectedPitch > MIN_PITCH_HZ &&
 					detectedPitch < MAX_PITCH_HZ &&
@@ -176,15 +167,24 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					} else {
 						stableNoteRef.current = { pitch: detectedPitch, count: 1 };
 					}
-
-					if (stableNoteRef.current.count >= STABILITY_THRESHOLD) {
-						setPitch(detectedPitch);
-						setClarity(detectedClarity);
-					}
 				} else {
 					stableNoteRef.current = null;
-					setPitch(null);
-					setClarity(null);
+				}
+
+				if (
+					stableNoteRef.current &&
+					stableNoteRef.current.count >= STABILITY_THRESHOLD &&
+					isSpike &&
+					!isTransient &&
+					now - lastDetectionTime.current > REFRACTORY_MS
+				) {
+					setPitch(stableNoteRef.current.pitch);
+					console.log(
+						"✅ Passing all gates, emitting note:",
+						stableNoteRef.current
+					);
+					historyRef.current = [];
+					lastDetectionTime.current = now;
 				}
 
 				timeoutRef.current = window.setTimeout(update, COOLDOWN_MS);
@@ -197,38 +197,33 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 		return () => {
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
-			if (streamRef.current) {
-				streamRef.current.getTracks().forEach((track) => track.stop());
-			}
-			if (audioContextRef.current) {
-				audioContextRef.current.close();
-			}
+			if (streamRef.current)
+				streamRef.current.getTracks().forEach((t) => t.stop());
+			if (audioContextRef.current) audioContextRef.current.close();
 		};
 	}, [selectedDeviceId]);
 
 	return (
 		<div className="p-4 space-y-4">
-			<div className="flex flex-col">
-				{showDevices && (
-					<>
-						<label htmlFor="device" className="mr-2 font-semibold">
-							Input device:
-						</label>
-						<select
-							id="device"
-							value={selectedDeviceId ?? ""}
-							onChange={(e) => setSelectedDeviceId(e.target.value)}
-							className="border px-2 py-1 rounded"
-						>
-							{devices.map((device) => (
-								<option key={device.deviceId} value={device.deviceId}>
-									{device.label || `Input ${device.deviceId.slice(0, 5)}`}
-								</option>
-							))}
-						</select>
-					</>
-				)}
-			</div>
+			{showDevices && (
+				<div className="flex flex-col">
+					<label htmlFor="device" className="mr-2 font-semibold">
+						Input device:
+					</label>
+					<select
+						id="device"
+						value={selectedDeviceId ?? ""}
+						onChange={(e) => setSelectedDeviceId(e.target.value)}
+						className="border px-2 py-1 rounded"
+					>
+						{devices.map((device) => (
+							<option key={device.deviceId} value={device.deviceId}>
+								{device.label || `Input ${device.deviceId.slice(0, 5)}`}
+							</option>
+						))}
+					</select>
+				</div>
+			)}
 		</div>
 	);
 }

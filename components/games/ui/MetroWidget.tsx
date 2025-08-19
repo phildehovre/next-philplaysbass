@@ -5,7 +5,7 @@ import {
 	MAX_TEMPO_AS_STR,
 	MIN_TEMPO_AS_NUM,
 	MIN_TEMPO_AS_STR,
-} from "./GameConstants";
+} from "../GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 
 type MetroWidgetPropsType = {

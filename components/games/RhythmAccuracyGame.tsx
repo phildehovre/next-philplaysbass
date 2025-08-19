@@ -6,14 +6,14 @@ import "../metronome/metronome.scss";
 import { calculateMsOffset } from "@/lib/utils/gameUtils";
 import PitchyComponent from "./PitchyComponent";
 import { GameTypes, NoteEvent, NoteInfo } from "@/types/types";
-import AnimatedNumber from "./AnimatedNumber";
+import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
-import Clockface from "./Clockface";
-import Countdown from "./Countdown";
-import MetroWidget from "./MetroWidget";
+import Clockface from "./ui/Clockface";
+import Countdown from "./ui/Countdown";
+import MetroWidget from "./ui/MetroWidget";
 import { COOLDOWN_MS } from "./GameConstants";
-import ScoreModal from "./ScoreModal";
+import ScoreModal from "./ui/ScoreModal";
 
 const GAME_TYPE = "rhythm-accuracy";
 

@@ -1,0 +1,30 @@
+.blip {
+	opacity: 1;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: -4px;
+	height: 15px;
+	width: 2px;
+	margin-top: 5px;
+	background: var(--clr-brand);
+	box-shadow: 0px 0px 10px 4px var(--clr-brand);
+	animation: fadeOut var(--blip-lifetime) linear infinite;
+}
+.blip-wrapper {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(1.5);
+	}
+}

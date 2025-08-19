@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
+import Blip from "./Blip";
 
 type ClockfacePropsType = {
 	showPulse: boolean;
@@ -14,7 +15,10 @@ type ClockfacePropsType = {
 
 const CIRCLE_RADIUS = 45;
 const CIRCLE_CANVAS = 50;
-const TAIL_LENGTH = 50;
+const TAIL_LENGTH = 25;
+const radius = CIRCLE_RADIUS;
+const cx = CIRCLE_CANVAS;
+const cy = CIRCLE_CANVAS;
 
 const Clockface: React.FC<ClockfacePropsType> = ({
 	withTimer = false,
@@ -25,79 +29,46 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	gameStarted,
 }) => {
 	const [angle, setAngle] = useState(0);
-	const [blips, setBlips] = useState<{ id: number }[]>([]);
+	const [blipVisible, setBlipVisible] = useState(false);
 	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
 
 	const { bpm, gameType } = usePracticeSession();
 	const lastAngleRef = useRef(0);
 
+	const [blipActive, setBlipActive] = useState(false);
+
 	useEffect(() => {
-		if (!bpm) return;
+		if (!bpm || !gameStarted) return;
 
 		const beatDuration = (60 / bpm) * 1000;
 		let raf: number;
-		let lastTime = performance.now();
+		const startTime = performance.now();
 
 		const animate = (time: number) => {
-			const delta = time - lastTime;
-			lastTime = time;
+			const elapsed = (time - startTime) % beatDuration;
+			const progress = elapsed / beatDuration;
+			const newAngle = progress * 360;
 
-			setAngle((prev) => {
-				const newAngle = (prev + (delta / beatDuration) * 360) % 360;
+			// Trigger blip at top of each beat
+			if (progress < 0.05 && lastAngleRef.current > 350) {
+				setBlipActive(true);
+				requestAnimationFrame(() => setBlipActive(false));
+			}
 
-				// Leave a blip if we cross the top
-				if (lastAngleRef.current < 360 && newAngle >= 0 && newAngle < 5) {
-					const id = performance.now();
-					setBlips((prev) => [...prev, { id }]);
-					setTimeout(
-						() => setBlips((prev) => prev.filter((b) => b.id !== id)),
-						400
-					);
-				}
-
-				lastAngleRef.current = newAngle;
-				return newAngle;
-			});
+			lastAngleRef.current = newAngle;
+			setAngle(newAngle);
 
 			raf = requestAnimationFrame(animate);
 		};
 
 		raf = requestAnimationFrame(animate);
 		return () => cancelAnimationFrame(raf);
-	}, [bpm]);
+	}, [bpm, gameStarted]);
 
 	// Marker coordinates
-	const radius = CIRCLE_RADIUS;
-	const cx = CIRCLE_CANVAS;
-	const cy = CIRCLE_CANVAS;
-
 	const markerX = cx + radius * Math.cos(angle * (Math.PI / 180));
 	const markerY = cy + radius * Math.sin(angle * (Math.PI / 180));
 
-	const renderBlips = () => {
-		return blips.map((blip, i) => (
-			<circle
-				key={blip.id + i}
-				cx={cx + 45}
-				cy={cy - radius + 45}
-				r={4}
-				fill="var(--clr-brand)"
-				style={{ opacity: 0.7 }}
-			/>
-		));
-	};
-	const renderTail = () => {
-		return tail.map((pos, i) => (
-			<circle
-				key={i}
-				cx={pos.x}
-				cy={pos.y}
-				r={2}
-				fill="var(--clr-brand)"
-				style={{ opacity: (i + 1) / tail.length / 2 }} // fading effect
-			/>
-		));
-	};
 	// Update tail
 	useEffect(() => {
 		if (gameStarted && gameType === "rhythm-accuracy") {
@@ -111,6 +82,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 
 	return (
 		<div className="clock-face relative flex items-center justify-center">
+			{gameStarted && <Blip bpm={bpm} />}
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}
 			<ScoreBurstManager />
@@ -137,21 +109,25 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					/>
 				)}
 
-				{/* Blips at top */}
-
-				{/* Tail */}
-
-				{/* Rotating marker */}
+				{/* Tail + marker */}
 				{gameStarted && gameType === "rhythm-accuracy" && (
 					<>
 						<circle cx={markerX} cy={markerY} r={3} fill="var(--clr-brand)" />
-						{renderBlips()}
-						{renderTail()}
+						{tail.map((pos, i) => (
+							<circle
+								key={i}
+								cx={pos.x}
+								cy={pos.y}
+								r={2}
+								fill="var(--clr-brand)"
+								style={{ opacity: (i + 1) / tail.length / 1.5 }}
+							/>
+						))}
 					</>
 				)}
 			</svg>
 
-			{/* Render children on top */}
+			{/* Children */}
 			{children}
 		</div>
 	);

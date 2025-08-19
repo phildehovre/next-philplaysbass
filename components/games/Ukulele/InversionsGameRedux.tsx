@@ -14,11 +14,11 @@ import {
 } from "@/constants/chromaticScale";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { NoteInfo } from "@/types/types";
-import Clockface from "../Clockface";
-import Countdown from "../Countdown";
+import Clockface from "../ui/Clockface";
+import Countdown from "../ui/Countdown";
 import PitchyComponentRedux from "./PitchyComponentRedux";
 import { Square } from "lucide-react";
-import AnimatedNumber from "../AnimatedNumber";
+import AnimatedNumber from "../ui/AnimatedNumber";
 import "./GameStylesRedux.css";
 import { useGameTimer } from "../../Timer";
 import UkulelePlayer from "./UkulelePlayer";

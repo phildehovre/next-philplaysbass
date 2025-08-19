@@ -16,14 +16,14 @@ import {
 import { ArrowUpDown, Drum, Piano, PlusIcon, Timer } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
-import AnimatedNumber from "./AnimatedNumber";
+import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
-import Clockface from "./Clockface";
-import Countdown from "./Countdown";
-import MetroWidget from "./MetroWidget";
+import Clockface from "./ui/Clockface";
+import Countdown from "./ui/Countdown";
+import MetroWidget from "./ui/MetroWidget";
 import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
 
 const InversionsGame = () => {

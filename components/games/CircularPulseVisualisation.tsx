@@ -52,7 +52,7 @@ export default function MetronomeCircle({ children }: MetronomeCircleProps) {
 				fill="none"
 			/>
 			{/* Marker */}
-			<circle cx={markerX} cy={markerY} r={8} fill="red" />
+			<circle className="pulser" cx={markerX} cy={markerY} r={8} fill="red" />
 		</svg>
 	);
 }

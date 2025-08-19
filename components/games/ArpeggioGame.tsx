@@ -9,7 +9,7 @@ import {
 } from "@/lib/utils/gameUtils";
 import "./GameStyles.css";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
-import AnimatedNumber from "./AnimatedNumber";
+import AnimatedNumber from "./ui/AnimatedNumber";
 
 type GameOptionstype = {
 	highlightRoot: boolean;

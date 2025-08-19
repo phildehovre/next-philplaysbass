@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Modal from "../Modal";
+import Modal from "../../Modal";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 
 const ScoreModal = (props: { scoreData: any; scoreEvents: any }) => {

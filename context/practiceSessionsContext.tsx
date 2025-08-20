@@ -1,11 +1,18 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	useCallback,
+	useEffect,
+} from "react";
 import { GameTypes, Note, NoteEvent, Score } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
 import {
 	processNormalizedScore,
 	processEventScore,
+	GameScoringOptions,
 } from "@/lib/utils/scoringUtils";
 import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
@@ -53,6 +60,17 @@ export const PracticeSessionProvider = ({
 		pitch: 0,
 		bonus: 0,
 	});
+	const [streak, setStreak] = useState<number>(0);
+
+	useEffect(() => {
+		const lastEvent = events.pop();
+		if (lastEvent?.isCorrect) {
+			setStreak((prev) => (prev += 1));
+		}
+		if (!lastEvent?.isCorrect) {
+			setStreak(0);
+		}
+	}, [events]);
 
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
@@ -82,7 +100,10 @@ export const PracticeSessionProvider = ({
 	);
 
 	const finishSession = useCallback(async () => {
-		const aggregateScore = processNormalizedScore(events, { bpm });
+		const aggregateScore = processNormalizedScore(events, {
+			bpm,
+			gameType,
+		} as GameScoringOptions);
 		setAggregateScore(aggregateScore);
 		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;

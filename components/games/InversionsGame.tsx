@@ -24,7 +24,11 @@ import Spinner from "../Spinner";
 import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
-import { COOLDOWN_MS, MAX_TEMPO_AS_NUM } from "./GameConstants";
+import {
+	COOLDOWN_MS,
+	MAX_TEMPO_AS_NUM,
+	NOTE_MATCH_TYPE,
+} from "./GameConstants";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -180,7 +184,7 @@ const InversionsGame = () => {
 		if (!isTabVisible) return;
 
 		if (!sessionId) {
-			await startSession("note-match");
+			await startSession(NOTE_MATCH_TYPE);
 		}
 
 		if (evaluateCooldownRef.current) return;
@@ -205,7 +209,7 @@ const InversionsGame = () => {
 
 			// Only save to DB if not in practice mode?
 			if (!isPracticeMode) {
-				addEvent(event, { bpm });
+				addEvent(event, { bpm, gameType: NOTE_MATCH_TYPE });
 			}
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -254,7 +258,7 @@ const InversionsGame = () => {
 		if (withTimer) {
 			startTimer();
 		}
-		if (!sessionId) await startSession("note-match");
+		if (!sessionId) await startSession(NOTE_MATCH_TYPE);
 	};
 
 	const startTimer = () => {
@@ -442,6 +446,7 @@ const InversionsGame = () => {
 				showPulse={showPulse}
 				withTimer={withTimer}
 				progress={progress}
+				gameStarted={gameStarted}
 			>
 				<div className={`game_question inversions `}>
 					{isLoading ? (

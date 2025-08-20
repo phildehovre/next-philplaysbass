@@ -1,10 +1,25 @@
-import { NoteEvent, Score } from "@/types/types";
+import {
+	NOTE_MATCH_TYPE,
+	RHYTHM_ACCURACY_TYPE,
+} from "@/components/games/GameConstants";
+import { GameTypes, NoteEvent, Score } from "@/types/types";
+
+export interface GameScoringOptions {
+	bpm: number;
+	gameType: GameTypes;
+}
+
+interface NoteMatchOptions extends GameScoringOptions {
+	withTimer: boolean;
+	withMetronome: boolean;
+}
+interface RhythmAccuracyOptions extends GameScoringOptions {}
 
 export const processRhythmicalAccuracy = (
 	offsetMs: number | undefined,
 	bpm: number
 ): number => {
-	if (offsetMs === undefined) return 0;
+	if (offsetMs === undefined || !bpm) return 0;
 
 	const absOffset = Math.abs(offsetMs);
 
@@ -61,26 +76,68 @@ export const processComboBonus = (
 
 export const processEventScore = (
 	event: NoteEvent | undefined,
-	options: { bpm: number }
+	options: GameScoringOptions
 ): Score => {
 	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
+	switch (options.gameType) {
+		case NOTE_MATCH_TYPE:
+			return processNoteMatchEventScore(event, options as NoteMatchOptions);
+		case RHYTHM_ACCURACY_TYPE:
+			return processRhythmAccuracyEventScore(
+				event,
+				options as RhythmAccuracyOptions
+			);
+		default:
+			return { rhythm: 0, pitch: 0, bonus: 0 };
+	}
+};
 
-	const rhythm = processRhythmicalAccuracy(
-		event.metronomeOffsetMs,
-		options.bpm
-	);
-	const pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
-	let bonus = 0;
-	if (options) {
-		bonus = processComboBonus(rhythm, pitch, options);
+const processNoteMatchEventScore = (
+	event: NoteEvent,
+	options: NoteMatchOptions
+): Score => {
+	const { withTimer, withMetronome, bpm } = options;
+	let rhythm = 0,
+		pitch = 0,
+		bonus = 0;
+
+	pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
+
+	if (withMetronome) {
+		rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
+	}
+	if (withTimer && event.timeToHitMs) {
+		bonus = processAnswerSpeed(event.timeToHitMs);
 	}
 
-	return { rhythm, pitch, bonus };
+	return { rhythm, bonus, pitch };
 };
+
+const processRhythmAccuracyEventScore = (
+	event: NoteEvent,
+	options: RhythmAccuracyOptions
+): Score => {
+	const { bpm } = options;
+	let rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
+	return { rhythm, pitch: 0, bonus: 0 };
+};
+
+const processAnswerSpeed = (timeToHit: number) => {
+	if (timeToHit <= 100) {
+		return 200;
+	} else if (timeToHit <= 500) {
+		return 100;
+	} else if (timeToHit <= 1000) {
+		return 50;
+	} else {
+		return 0;
+	}
+};
+
 export const processNormalizedScore = (
 	events: NoteEvent[],
-	options: { bpm: number }
-) => {
+	options: GameScoringOptions
+): Score => {
 	if (events.length === 0) {
 		return { rhythm: 0, pitch: 0, bonus: 0 };
 	}

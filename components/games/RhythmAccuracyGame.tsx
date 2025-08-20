@@ -12,13 +12,10 @@ import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
-import { COOLDOWN_MS } from "./GameConstants";
+import { COOLDOWN_MS, RHYTHM_ACCURACY_TYPE } from "./GameConstants";
 import ScoreModal from "./ui/ScoreModal";
 
-const GAME_TYPE = "rhythm-accuracy";
-
 const RhythmAccuracyGame = () => {
-	const [gameType, setGameType] = useState<GameTypes>(GAME_TYPE);
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [progress, setProgress] = useState(0);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -111,7 +108,7 @@ const RhythmAccuracyGame = () => {
 			if (!gameStarted) return;
 
 			if (!sessionId) {
-				await startSession(gameType);
+				await startSession(RHYTHM_ACCURACY_TYPE);
 			}
 
 			if (evaluateCooldownRef.current) return;
@@ -155,7 +152,7 @@ const RhythmAccuracyGame = () => {
 		resetGame();
 		setGameStarted(true);
 
-		if (!sessionId) await startSession(gameType);
+		if (!sessionId) await startSession(RHYTHM_ACCURACY_TYPE);
 	};
 
 	const stopGame = async () => {

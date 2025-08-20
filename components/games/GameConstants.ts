@@ -1,3 +1,7 @@
+// Game types
+export const NOTE_MATCH_TYPE = "note-match";
+export const RHYTHM_ACCURACY_TYPE = "rhythm-accuracy";
+
 // Metronome vars
 export const MIN_TEMPO_AS_STR = "10";
 export const MAX_TEMPO_AS_STR = "220";

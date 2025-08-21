@@ -29,6 +29,7 @@ import {
 	MAX_TEMPO_AS_NUM,
 	NOTE_MATCH_TYPE,
 } from "./GameConstants";
+import StreakManager from "./ui/StreakManager";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -456,6 +457,7 @@ const InversionsGame = () => {
 				progress={progress}
 				gameStarted={gameStarted}
 			>
+				<StreakManager />
 				<div className={`game_question inversions `}>
 					{isLoading ? (
 						<Spinner />

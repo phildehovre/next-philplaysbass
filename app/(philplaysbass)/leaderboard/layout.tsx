@@ -1,6 +1,4 @@
 import Footer from "@/components/Footer";
-import "./lessons.css";
-import Nav from "@/components/Nav";
 
 export default function Layout({
 	children,
@@ -9,8 +7,7 @@ export default function Layout({
 }>) {
 	return (
 		<>
-			<div className="lessons_ctn">{children}</div>
-			<Footer />
+			<div className="leaderboard_ctn">{children}</div>
 		</>
 	);
 }

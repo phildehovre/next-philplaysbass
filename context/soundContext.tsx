@@ -76,6 +76,10 @@ export const SoundFXProvider: React.FC<SoundFXProviderProps> = ({
 			src: ["/sounds/alert.mp3"],
 			volume,
 		});
+		sounds.current["streak"] = new Howl({
+			src: ["/sounds/notification.wav"],
+			volume,
+		});
 	}, [volume]);
 
 	const playSoundFX = useCallback((name: string) => {

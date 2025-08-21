@@ -97,8 +97,7 @@ export const processEventScore = (
 			break;
 	}
 
-	let streakBonus = 1 + Math.floor(options.streak / 5);
-	console.log("Streak bonus::", streakBonus);
+	let streakBonus = Math.floor(options.streak / 5) || 1;
 	score = {
 		rhythm: score.rhythm * streakBonus,
 		pitch: score.pitch * streakBonus,

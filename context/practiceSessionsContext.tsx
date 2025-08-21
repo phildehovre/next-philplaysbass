@@ -9,11 +9,7 @@ import React, {
 } from "react";
 import { GameTypes, Note, NoteEvent, Score } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
-import {
-	processEventScore,
-	GameScoringOptions,
-	processNormalizedScore,
-} from "@/lib/utils/scoringUtils";
+import { processEventScore } from "@/lib/utils/scoringUtils";
 import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
 interface PracticeSessionContextType {
@@ -32,6 +28,7 @@ interface PracticeSessionContextType {
 	bpm: number;
 	setBpm: (t: number) => void;
 	gameType: GameTypes | undefined;
+	streak: number;
 }
 
 const PracticeSessionContext = createContext<
@@ -161,6 +158,7 @@ export const PracticeSessionProvider = ({
 		bpm,
 		setBpm,
 		gameType,
+		streak,
 	};
 
 	return (

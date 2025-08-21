@@ -158,6 +158,7 @@ const InversionsGame = () => {
 		setShowShake(true);
 		setTimeout(() => setShowShake(false), COOLDOWN_MS);
 	};
+
 	const recordWin = () => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
 		setShowPulse(true);
@@ -211,7 +212,6 @@ const InversionsGame = () => {
 			if (!isPracticeMode) {
 				addEvent(event, {
 					bpm,
-					gameType: NOTE_MATCH_TYPE,
 					withTimer,
 					withMetronome,
 				});
@@ -294,7 +294,10 @@ const InversionsGame = () => {
 				playedAt: new Date(),
 			};
 			recordLoss();
-			addEvent(event, { gameType: NOTE_MATCH_TYPE, withMetronome, withTimer });
+			addEvent(event, {
+				withMetronome,
+				withTimer,
+			});
 			if (withArpeggios) {
 				setArpeggioPlayed([]);
 			}

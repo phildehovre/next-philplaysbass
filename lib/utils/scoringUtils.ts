@@ -7,6 +7,7 @@ import { GameTypes, NoteEvent, Score } from "@/types/types";
 export interface GameScoringOptions {
 	bpm: number;
 	gameType: GameTypes;
+	streak: number;
 }
 
 interface NoteMatchOptions extends GameScoringOptions {
@@ -21,7 +22,6 @@ export const processRhythmicalAccuracy = (
 ): number => {
 	if (offsetMs === undefined || !bpm) return 0;
 
-	console.log("FX OFFSET:: ", offsetMs);
 	const absOffset = Math.abs(offsetMs);
 
 	// Wider tolerance at slower BPM (optional)
@@ -57,6 +57,7 @@ export const processPitchAccuracy = (
 	expected: string | undefined
 ): number => {
 	if (played && expected && played === expected) {
+		console.log(played, expected);
 		return 100;
 	}
 	return 0;
@@ -77,24 +78,27 @@ export const processComboBonus = (
 
 export const processEventScore = (
 	event: NoteEvent | undefined,
-	options: GameScoringOptions,
-	streak: number
+	options: GameScoringOptions
 ): Score => {
 	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
 	let score;
 	switch (options.gameType) {
 		case NOTE_MATCH_TYPE:
 			score = processNoteMatchEventScore(event, options as NoteMatchOptions);
+			break;
 		case RHYTHM_ACCURACY_TYPE:
 			score = processRhythmAccuracyEventScore(
 				event,
 				options as RhythmAccuracyOptions
 			);
+			break;
 		default:
 			score = { rhythm: 0, pitch: 0, bonus: 0 };
+			break;
 	}
 
-	let streakBonus = 1 + (streak - (streak % 5) / 5);
+	let streakBonus = 1 + Math.floor(options.streak / 5);
+	console.log("Streak bonus::", streakBonus);
 	score = {
 		rhythm: score.rhythm * streakBonus,
 		pitch: score.pitch * streakBonus,
@@ -113,11 +117,11 @@ const processNoteMatchEventScore = (
 		pitch = 0,
 		bonus = 0;
 
-	pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
-
-	console.log(withMetronome);
+	pitch = event.isCorrect ? 100 : 0;
+	if (pitch == 0) {
+		return { rhythm: 0, bonus: 0, pitch: 0 };
+	}
 	if (withMetronome) {
-		console.log("Firing function");
 		rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
 	}
 	if (withTimer && event.timeToHitMs) {
@@ -148,30 +152,30 @@ const processAnswerSpeed = (timeToHit: number) => {
 	}
 };
 
-// export const processNormalizedScore = (
-// 	events: NoteEvent[],
-// 	options: GameScoringOptions
-// ): Score => {
-// 	if (events.length === 0) {
-// 		return { rhythm: 0, pitch: 0, bonus: 0 };
-// 	}
+export const processNormalizedScore = (
+	events: NoteEvent[],
+	options: GameScoringOptions
+): Score => {
+	if (events.length === 0) {
+		return { rhythm: 0, pitch: 0, bonus: 0 };
+	}
 
-// 	const total = { rhythm: 0, pitch: 0, bonus: 0 };
+	const total = { rhythm: 0, pitch: 0, bonus: 0 };
 
-// 	events.forEach((event) => {
-// 		const result = processEventScore(event, options);
-// 		total.rhythm += result.rhythm;
-// 		total.pitch += result.pitch;
-// 		total.bonus += result.bonus;
-// 	});
+	events.forEach((event) => {
+		const result = processEventScore(event, options);
+		total.rhythm += result.rhythm;
+		total.pitch += result.pitch;
+		total.bonus += result.bonus;
+	});
 
-// 	const count = events.length;
+	const count = events.length;
 
-// 	const normalized = {
-// 		rhythm: Math.round(total.rhythm / count),
-// 		pitch: Math.round(total.pitch / count),
-// 		bonus: Math.round(total.bonus / count), // optional
-// 	};
+	const normalized = {
+		rhythm: Math.round(total.rhythm / count),
+		pitch: Math.round(total.pitch / count),
+		bonus: Math.round(total.bonus / count), // optional
+	};
 
-// 	return normalized;
-// };
+	return normalized;
+};

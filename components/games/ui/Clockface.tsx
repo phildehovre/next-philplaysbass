@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
+import { RHYTHM_ACCURACY_TYPE } from "../GameConstants";
 
 type ClockfacePropsType = {
 	showPulse: boolean;
@@ -71,7 +72,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 
 	// Update tail
 	useEffect(() => {
-		if (gameStarted && gameType === "rhythm-accuracy") {
+		if (gameStarted) {
 			setTail((prev) => {
 				const newTail = [...prev, { x: markerX, y: markerY }];
 				if (newTail.length > TAIL_LENGTH) newTail.shift();

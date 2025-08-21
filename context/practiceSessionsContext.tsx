@@ -12,6 +12,7 @@ import { differenceInMilliseconds } from "date-fns";
 import {
 	processEventScore,
 	GameScoringOptions,
+	processNormalizedScore,
 } from "@/lib/utils/scoringUtils";
 import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
@@ -71,11 +72,14 @@ export const PracticeSessionProvider = ({
 		}
 	}, [events]);
 
-	console.log(score, streak);
-
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
-			let newScore = processEventScore(event, options, streak);
+			let newScore = processEventScore(event, {
+				...options,
+				streak,
+				gameType,
+			});
+
 			if (newScore) {
 				setScore((prev) => ({
 					rhythm: prev.rhythm + newScore.rhythm,
@@ -91,15 +95,10 @@ export const PracticeSessionProvider = ({
 				return [...prev, event];
 			});
 		},
-		[startTime]
+		[startTime, streak]
 	);
 
 	const finishSession = useCallback(async () => {
-		// const aggregateScore = processNormalizedScore(events, {
-		// 	bpm,
-		// 	gameType,
-		// } as GameScoringOptions);
-		// setAggregateScore(aggregateScore);
 		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;
 

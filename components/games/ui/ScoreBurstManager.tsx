@@ -84,9 +84,9 @@ const ScoreBurst = ({ values }: Props) => {
 							delay: index * 0.15,
 							duration: 0.6,
 						}}
-						className={`score_burst ${colorMap[v.type]}`}
+						className={`score_burst ${colorMap[v.type]} flex`}
 					>
-						{Math.round(v.value)}%
+						+{Math.round(v.value)}
 					</motion.div>
 				))}
 			</AnimatePresence>

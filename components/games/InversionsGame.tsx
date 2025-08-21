@@ -209,7 +209,12 @@ const InversionsGame = () => {
 
 			// Only save to DB if not in practice mode?
 			if (!isPracticeMode) {
-				addEvent(event, { bpm, gameType: NOTE_MATCH_TYPE });
+				addEvent(event, {
+					bpm,
+					gameType: NOTE_MATCH_TYPE,
+					withTimer,
+					withMetronome,
+				});
 			}
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -289,7 +294,7 @@ const InversionsGame = () => {
 				playedAt: new Date(),
 			};
 			recordLoss();
-			addEvent(event);
+			addEvent(event, { gameType: NOTE_MATCH_TYPE, withMetronome, withTimer });
 			if (withArpeggios) {
 				setArpeggioPlayed([]);
 			}

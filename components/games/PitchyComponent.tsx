@@ -76,7 +76,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	useEffect(() => {
 		if (!pitch) return;
 		const evaluatedPitch = getNoteFromPitch(pitch);
-		console.log("↗️ Sending to parent:", evaluatedPitch);
 		onNoteDetection(evaluatedPitch);
 	}, [pitch]);
 

@@ -21,6 +21,7 @@ export const processRhythmicalAccuracy = (
 ): number => {
 	if (offsetMs === undefined || !bpm) return 0;
 
+	console.log("FX OFFSET:: ", offsetMs);
 	const absOffset = Math.abs(offsetMs);
 
 	// Wider tolerance at slower BPM (optional)
@@ -103,7 +104,9 @@ const processNoteMatchEventScore = (
 
 	pitch = processPitchAccuracy(event.playedNote, event.expectedNote);
 
+	console.log(withMetronome);
 	if (withMetronome) {
+		console.log("Firing function");
 		rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
 	}
 	if (withTimer && event.timeToHitMs) {

@@ -10,7 +10,6 @@ import React, {
 import { GameTypes, Note, NoteEvent, Score } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
 import {
-	processNormalizedScore,
 	processEventScore,
 	GameScoringOptions,
 } from "@/lib/utils/scoringUtils";
@@ -72,10 +71,11 @@ export const PracticeSessionProvider = ({
 		}
 	}, [events]);
 
+	console.log(score, streak);
+
 	const addEvent = useCallback(
 		(event: NoteEvent, options?: any) => {
-			const newScore = processEventScore(event, options);
-			console.log("score::", newScore);
+			let newScore = processEventScore(event, options, streak);
 			if (newScore) {
 				setScore((prev) => ({
 					rhythm: prev.rhythm + newScore.rhythm,
@@ -86,25 +86,20 @@ export const PracticeSessionProvider = ({
 			}
 			setEvents((prev) => {
 				if (prev.length === 0 && !startTime) {
-					// Automatically set startTime on first event if not already set
 					setStartTime(new Date());
 				}
 				return [...prev, event];
 			});
-			// TODO: setScore will have to be wrapped in a function
-			// that slowly digests the content of scoreEvents
-			// in order to display events first and update the score progressively
-			// this should make for a better experience.
 		},
 		[startTime]
 	);
 
 	const finishSession = useCallback(async () => {
-		const aggregateScore = processNormalizedScore(events, {
-			bpm,
-			gameType,
-		} as GameScoringOptions);
-		setAggregateScore(aggregateScore);
+		// const aggregateScore = processNormalizedScore(events, {
+		// 	bpm,
+		// 	gameType,
+		// } as GameScoringOptions);
+		// setAggregateScore(aggregateScore);
 		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;
 
@@ -144,7 +139,7 @@ export const PracticeSessionProvider = ({
 			});
 			const { sessionId } = await res.json();
 			setSessionId(sessionId);
-			setStartTime(new Date()); // Set start time immediately
+			setStartTime(new Date());
 			return sessionId;
 		} catch (error) {
 			console.error("Error starting session:", error);

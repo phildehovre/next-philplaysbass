@@ -143,7 +143,6 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 			timeFromBeat > tempoInterval / 2
 				? timeFromBeat - tempoInterval
 				: timeFromBeat;
-		console.log(msFromClick);
 		return msFromClick;
 	}
 };

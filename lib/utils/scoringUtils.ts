@@ -77,20 +77,31 @@ export const processComboBonus = (
 
 export const processEventScore = (
 	event: NoteEvent | undefined,
-	options: GameScoringOptions
+	options: GameScoringOptions,
+	streak: number
 ): Score => {
 	if (!event) return { rhythm: 0, pitch: 0, bonus: 0 };
+	let score;
 	switch (options.gameType) {
 		case NOTE_MATCH_TYPE:
-			return processNoteMatchEventScore(event, options as NoteMatchOptions);
+			score = processNoteMatchEventScore(event, options as NoteMatchOptions);
 		case RHYTHM_ACCURACY_TYPE:
-			return processRhythmAccuracyEventScore(
+			score = processRhythmAccuracyEventScore(
 				event,
 				options as RhythmAccuracyOptions
 			);
 		default:
-			return { rhythm: 0, pitch: 0, bonus: 0 };
+			score = { rhythm: 0, pitch: 0, bonus: 0 };
 	}
+
+	let streakBonus = 1 + (streak - (streak % 5) / 5);
+	score = {
+		rhythm: score.rhythm * streakBonus,
+		pitch: score.pitch * streakBonus,
+		bonus: score.bonus * streakBonus,
+	};
+
+	return score;
 };
 
 const processNoteMatchEventScore = (
@@ -137,30 +148,30 @@ const processAnswerSpeed = (timeToHit: number) => {
 	}
 };
 
-export const processNormalizedScore = (
-	events: NoteEvent[],
-	options: GameScoringOptions
-): Score => {
-	if (events.length === 0) {
-		return { rhythm: 0, pitch: 0, bonus: 0 };
-	}
+// export const processNormalizedScore = (
+// 	events: NoteEvent[],
+// 	options: GameScoringOptions
+// ): Score => {
+// 	if (events.length === 0) {
+// 		return { rhythm: 0, pitch: 0, bonus: 0 };
+// 	}
 
-	const total = { rhythm: 0, pitch: 0, bonus: 0 };
+// 	const total = { rhythm: 0, pitch: 0, bonus: 0 };
 
-	events.forEach((event) => {
-		const result = processEventScore(event, options);
-		total.rhythm += result.rhythm;
-		total.pitch += result.pitch;
-		total.bonus += result.bonus;
-	});
+// 	events.forEach((event) => {
+// 		const result = processEventScore(event, options);
+// 		total.rhythm += result.rhythm;
+// 		total.pitch += result.pitch;
+// 		total.bonus += result.bonus;
+// 	});
 
-	const count = events.length;
+// 	const count = events.length;
 
-	const normalized = {
-		rhythm: Math.round(total.rhythm / count),
-		pitch: Math.round(total.pitch / count),
-		bonus: Math.round(total.bonus / count), // optional
-	};
+// 	const normalized = {
+// 		rhythm: Math.round(total.rhythm / count),
+// 		pitch: Math.round(total.pitch / count),
+// 		bonus: Math.round(total.bonus / count), // optional
+// 	};
 
-	return normalized;
-};
+// 	return normalized;
+// };

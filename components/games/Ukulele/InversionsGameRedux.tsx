@@ -253,7 +253,12 @@ const ChordDetectionGame = () => {
 					defaultValue={displayedDuration}
 				/>
 			</div>
-			<Clockface showPulse={showPulse} withTimer={true} progress={progress}>
+			<Clockface
+				gameStarted={gameStarted}
+				showPulse={showPulse}
+				withTimer={true}
+				progress={progress}
+			>
 				<div className="game_question inversions">
 					{(() => {
 						if (isVictoryMessageVisible) {

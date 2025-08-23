@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
 		if (!sessionId) {
 			return NextResponse.json({ error: "Missing sessionId" }, { status: 400 });
 		}
+		console.log("EVENTS ROUTE::", body);
 
 		if (!Array.isArray(body.events)) {
 			return NextResponse.json(

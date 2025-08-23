@@ -80,6 +80,10 @@ export const SoundFXProvider: React.FC<SoundFXProviderProps> = ({
 			src: ["/sounds/notification.wav"],
 			volume,
 		});
+		sounds.current["lost_streak"] = new Howl({
+			src: ["/sounds/zip.wav"],
+			volume,
+		});
 	}, [volume]);
 
 	const playSoundFX = useCallback((name: string) => {

@@ -9,7 +9,10 @@ import React, {
 } from "react";
 import { GameTypes, Note, NoteEvent, Score } from "@/types/types";
 import { differenceInMilliseconds } from "date-fns";
-import { processEventScore } from "@/lib/utils/scoringUtils";
+import {
+	processEventScore,
+	processNormalizedScore,
+} from "@/lib/utils/scoringUtils";
 import { MAX_TEMPO_AS_NUM } from "@/components/games/GameConstants";
 
 interface PracticeSessionContextType {
@@ -25,6 +28,7 @@ interface PracticeSessionContextType {
 	showScore: boolean;
 	setShowScore: (bool: boolean) => void;
 	aggregateScore: Score;
+	totalScore: number;
 	bpm: number;
 	setBpm: (t: number) => void;
 	gameType: GameTypes | undefined;
@@ -52,6 +56,7 @@ export const PracticeSessionProvider = ({
 	});
 	const [scoreEvents, setScoreEvents] = useState<Score[]>([]);
 	const [showScore, setShowScore] = useState<boolean>(false);
+	const [totalScore, setTotalScore] = useState<number>(0);
 	const [aggregateScore, setAggregateScore] = useState<Score>({
 		rhythm: 0,
 		pitch: 0,
@@ -60,7 +65,7 @@ export const PracticeSessionProvider = ({
 	const [streak, setStreak] = useState<number>(0);
 
 	useEffect(() => {
-		const lastEvent = events.pop();
+		const lastEvent = events[events.length - 1];
 		if (lastEvent?.isCorrect) {
 			setStreak((prev) => (prev += 1));
 		}
@@ -78,6 +83,7 @@ export const PracticeSessionProvider = ({
 			});
 
 			if (newScore) {
+				console.log(newScore);
 				setScore((prev) => ({
 					rhythm: prev.rhythm + newScore.rhythm,
 					pitch: prev.pitch + newScore.pitch,
@@ -86,7 +92,9 @@ export const PracticeSessionProvider = ({
 				setScoreEvents((prev) => [...prev, newScore]);
 			}
 			setEvents((prev) => {
+				console.log("prev events::", prev);
 				if (prev.length === 0 && !startTime) {
+					console.log("new conditions::", prev.length, !startTime);
 					setStartTime(new Date());
 				}
 				return [...prev, event];
@@ -95,7 +103,15 @@ export const PracticeSessionProvider = ({
 		[startTime, streak]
 	);
 
+	console.log("Context Events", events);
 	const finishSession = useCallback(async () => {
+		const [totalScore, aggregateScore] = processNormalizedScore(events, {
+			bpm,
+			gameType,
+			streak,
+		});
+		setAggregateScore(aggregateScore);
+		setTotalScore(totalScore);
 		setShowScore(true);
 		if (!sessionId || events.length === 0 || !startTime) return;
 
@@ -111,7 +127,12 @@ export const PracticeSessionProvider = ({
 
 		await fetch(`/api/practice/${sessionId}/end`, {
 			method: "POST",
-			body: JSON.stringify({ sessionId, duration: durationMs }),
+			body: JSON.stringify({
+				sessionId,
+				duration: durationMs,
+				totalScore,
+				aggregateScore,
+			}),
 		});
 
 		resetSession();
@@ -122,10 +143,11 @@ export const PracticeSessionProvider = ({
 		setStartTime(null);
 		setEvents([]);
 		setScoreEvents([]);
+		setScore({ rhythm: 0, pitch: 0, bonus: 0 });
+		setTotalScore(0);
 	};
 
 	const startSession = async (gameType: GameTypes) => {
-		console.log("Starting session");
 		setGameType(gameType);
 		try {
 			const res = await fetch("/api/practice/start", {
@@ -159,6 +181,7 @@ export const PracticeSessionProvider = ({
 		setBpm,
 		gameType,
 		streak,
+		totalScore,
 	};
 
 	return (

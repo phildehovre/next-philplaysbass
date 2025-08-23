@@ -1,0 +1,23 @@
+.score-burst {
+	display: flex;
+	flex-direction: row;
+}
+
+.burst-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.burst-item.rhythm {
+	color: greenyellow;
+}
+.burst-item.pitch {
+	color: dodgerblue;
+}
+.burst-item.bonus {
+	color: rgb(213, 0, 213);
+}
+
+.burst-item > .burst-label {
+	font-size: 0.5em;
+}

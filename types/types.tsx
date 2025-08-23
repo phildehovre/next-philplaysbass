@@ -168,6 +168,7 @@ export type PracticeSession = {
 	duration: number;
 	resultId: string | null;
 	result: any | null; // You can refine this type if you know the shape of `result`
+	totalScore: number;
 };
 
 export type UserWithPracticeSessions = {

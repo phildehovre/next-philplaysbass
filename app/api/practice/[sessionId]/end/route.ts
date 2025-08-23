@@ -12,8 +12,9 @@ export async function POST(req: NextRequest) {
 		const body = await req.json();
 		const user = await ensureUserInDb();
 
-		const { sessionId } = body;
+		const { sessionId, totalScore, aggregateScore } = body;
 
+		console.log("END ROUTE::", body);
 		const session = await prisma.practiceSession.findUnique({
 			where: { id: sessionId },
 		});
@@ -38,22 +39,19 @@ export async function POST(req: NextRequest) {
 			return new Response(null, { status: 204 }); // No Content
 		}
 
-		// Process events:
-		const totalNotes = events.length;
-		const correctNotes = events.filter((e) => e.isCorrect).length;
-		const averageHitTimeMs = Math.round(
-			events.reduce((acc, e) => acc + (e.timeToHitMs || 0), 0) / totalNotes
-		);
-		const rhythmAccuracy = Math.round(
-			events.reduce((acc, e) => acc + Math.abs(e.metronomeOffsetMs || 0), 0) /
-				totalNotes
-		);
-		const score = Math.round((correctNotes / totalNotes) * 100); // basic example
+		const averageHitTimeMs =
+			// @ts-ignore
+			events.reduce((acc, e) => acc + e.timeToHitMs, 0) / events.length;
+
+		// PLACEHOLDER VALUES
+		let rhythmAccuracy,
+			score = 0;
+		// const rhythmAccuracy = events.reduce((acc, e) => processRhythmicalAccuracy(e.metronomeOffsetMs, session.config.bpm))
 
 		const result = await prisma.practiceResult.create({
 			data: {
-				totalNotes,
-				correctNotes,
+				totalNotes: events.length,
+				correctNotes: events.filter((e) => e.isCorrect).length,
 				averageHitTimeMs,
 				rhythmAccuracy,
 				score,
@@ -76,12 +74,12 @@ export async function POST(req: NextRequest) {
 		const sessionDuration = session.duration;
 		const newScore = result.score;
 
-		// Update or create UserStats
 		await prisma.userStats.upsert({
 			where: { userId },
 			update: {
 				totalSessions: { increment: 1 },
 				totalTime: { increment: sessionDuration },
+				totalScore: { increment: totalScore },
 				avgScore: await recalculateAverageScore(userId, newScore),
 				lastPracticed: new Date(),
 			},
@@ -89,6 +87,7 @@ export async function POST(req: NextRequest) {
 				userId,
 				totalSessions: 1,
 				totalTime: sessionDuration,
+				totalScore: totalScore,
 				avgScore: newScore,
 				lastPracticed: new Date(),
 			},

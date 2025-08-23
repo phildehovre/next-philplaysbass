@@ -65,8 +65,14 @@ const InversionsGame = () => {
 	const noteShownAtRef = useRef<number | null>(null);
 	const selectedNoteRef = useRef<string>("");
 
-	const { events, addEvent, sessionId, startSession, finishSession } =
-		usePracticeSession();
+	const {
+		score: totalScore,
+		events,
+		addEvent,
+		sessionId,
+		startSession,
+		finishSession,
+	} = usePracticeSession();
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -361,9 +367,18 @@ const InversionsGame = () => {
 				</label>
 			</div>
 
-			<div className="scoreboard text-2xl font-mono">
-				<AnimatedNumber number={score.losses} />:
-				<AnimatedNumber number={score.wins} />
+			<div className="scoreboard_ctn flex w-full ">
+				<div className="scoreboard text-2xl font-mono w-full">
+					<label className="scoreboard_label">Session score</label>
+					<AnimatedNumber
+						number={totalScore.bonus + totalScore.pitch + totalScore.rhythm}
+					/>
+				</div>
+				<div className="scoreboard text-2xl font-mono w-full">
+					<label className="scoreboard_label">Tally</label>
+					<AnimatedNumber number={score.losses} />:
+					<AnimatedNumber number={score.wins} />
+				</div>
 			</div>
 
 			{/* FILTER CONTROLS */}

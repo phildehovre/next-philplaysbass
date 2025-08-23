@@ -6,7 +6,7 @@ import { GameTypes, NoteEvent, Score } from "@/types/types";
 
 export interface GameScoringOptions {
 	bpm: number;
-	gameType: GameTypes;
+	gameType: GameTypes | undefined;
 	streak: number;
 }
 
@@ -19,8 +19,8 @@ interface RhythmAccuracyOptions extends GameScoringOptions {}
 export const processRhythmicalAccuracy = (
 	offsetMs: number | undefined,
 	bpm: number
-): number => {
-	if (offsetMs === undefined || !bpm) return 0;
+): { accuracyPct: number; score: number } => {
+	if (offsetMs === undefined || !bpm) return { accuracyPct: 0, score: 0 };
 
 	const absOffset = Math.abs(offsetMs);
 
@@ -28,28 +28,22 @@ export const processRhythmicalAccuracy = (
 	const beatWindow = 60000 / bpm / 2; // half-beat duration
 	const maxOffset = Math.min(200, beatWindow); // cap at 200ms
 
-	// Perfect / Great / Good thresholds
-	const perfect = 30;
-	const great = 70;
-	const good = 120;
+	// Accuracy percentage: 100% on-time → 0% at edge of window
+	const accuracyPct = Math.max(
+		0,
+		Math.min(100, (1 - absOffset / maxOffset) * 100)
+	);
 
-	let score;
-	if (absOffset <= perfect) {
-		score = 100; // perfect timing
-	} else if (absOffset <= great) {
-		// decay from 100 → 80
-		score = 80 + ((great - absOffset) / (great - perfect)) * 20;
-	} else if (absOffset <= good) {
-		// decay from 80 → 50
-		score = 50 + ((good - absOffset) / (good - great)) * 30;
-	} else if (absOffset <= maxOffset) {
-		// decay from 50 → 10
-		score = 10 + ((maxOffset - absOffset) / (maxOffset - good)) * 40;
-	} else {
-		score = 0; // too far off
-	}
+	// Score = proportional to accuracy (0 → 100)
+	const score = Math.round(accuracyPct);
 
-	return Math.round(score);
+	console.log(
+		`scoringUtils: offset = ${offsetMs}ms, raw accuracy = ${accuracyPct.toFixed(
+			1
+		)}%, allocated score = ${score}`
+	);
+
+	return { accuracyPct, score };
 };
 
 export const processPitchAccuracy = (
@@ -70,7 +64,7 @@ export const processComboBonus = (
 ): number => {
 	const { bpm: tempo } = options;
 	if (rhythmScore === 100 && pitchScore === 100) {
-		const bonusMultiplier = Math.min(tempo / 120, 2); // up to 2x
+		const bonusMultiplier = Math.min(tempo / 120, 2);
 		return 100 * bonusMultiplier;
 	}
 	return 0;
@@ -97,14 +91,24 @@ export const processEventScore = (
 			break;
 	}
 
-	let streakBonus = Math.floor(options.streak / 5) || 1;
+	const streakFactor = calculateStreakFactor(options.streak);
+
 	score = {
-		rhythm: score.rhythm * streakBonus,
-		pitch: score.pitch * streakBonus,
-		bonus: score.bonus * streakBonus,
+		rhythm: score.rhythm * streakFactor,
+		pitch: score.pitch * streakFactor,
+		bonus: score.bonus * streakFactor,
 	};
 
 	return score;
+};
+
+export const calculateStreakFactor = (streak: number) => {
+	let factor = Math.floor(streak / 5);
+	if (factor == 0) return 1;
+	if (factor > 0) {
+		factor += 1;
+	}
+	return factor;
 };
 
 const processNoteMatchEventScore = (
@@ -120,8 +124,9 @@ const processNoteMatchEventScore = (
 	if (pitch == 0) {
 		return { rhythm: 0, bonus: 0, pitch: 0 };
 	}
-	if (withMetronome) {
-		rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
+	if (withMetronome && event.timeToHitMs) {
+		const { score } = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
+		rhythm = score;
 	}
 	if (withTimer && event.timeToHitMs) {
 		bonus = processAnswerSpeed(event.timeToHitMs);
@@ -135,7 +140,10 @@ const processRhythmAccuracyEventScore = (
 	options: RhythmAccuracyOptions
 ): Score => {
 	const { bpm } = options;
-	let rhythm = processRhythmicalAccuracy(event.metronomeOffsetMs, bpm);
+	const { score: rhythm } = processRhythmicalAccuracy(
+		event.metronomeOffsetMs,
+		bpm
+	);
 	return { rhythm, pitch: 0, bonus: 0 };
 };
 
@@ -154,9 +162,9 @@ const processAnswerSpeed = (timeToHit: number) => {
 export const processNormalizedScore = (
 	events: NoteEvent[],
 	options: GameScoringOptions
-): Score => {
+): [number, Score] => {
 	if (events.length === 0) {
-		return { rhythm: 0, pitch: 0, bonus: 0 };
+		return [0, { rhythm: 0, pitch: 0, bonus: 0 }];
 	}
 
 	const total = { rhythm: 0, pitch: 0, bonus: 0 };
@@ -173,8 +181,9 @@ export const processNormalizedScore = (
 	const normalized = {
 		rhythm: Math.round(total.rhythm / count),
 		pitch: Math.round(total.pitch / count),
-		bonus: Math.round(total.bonus / count), // optional
+		bonus: Math.round(total.bonus / count),
 	};
+	const totalScore = total.rhythm + total.pitch + total.bonus;
 
-	return normalized;
+	return [totalScore, normalized];
 };

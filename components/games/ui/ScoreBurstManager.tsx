@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { Score } from "@/types/types";
+import "./ScoreBurstStyles.css";
 
 type ScoreCategory = "rhythm" | "pitch" | "bonus";
 
@@ -72,21 +73,25 @@ const colorMap = {
 
 const ScoreBurst = ({ values }: Props) => {
 	return (
-		<div className="relative flex flex-col justify-center items-center gap-1 font-bold text-2xl">
+		<div className="score-burst relative flex flex-col justify-center items-center gap-1 font-bold text-2xl">
 			<AnimatePresence>
 				{values.map((v, index) => (
 					<motion.div
+						className={`burst-item ${v.type}`}
 						key={v.type}
 						initial={{ opacity: 0, y: 10 }}
-						animate={{ opacity: 1, y: -30 }}
-						exit={{ opacity: 0, y: -50 }}
+						animate={{ opacity: 1, y: -100 }}
+						exit={{ opacity: 0, y: -150 }}
 						transition={{
 							delay: index * 0.15,
 							duration: 0.6,
 						}}
-						className={`score_burst ${colorMap[v.type]} flex`}
+						id="burst-item"
 					>
 						+{Math.round(v.value)}
+						<label htmlFor="burst-item" className="burst-label">
+							{v.type}!
+						</label>
 					</motion.div>
 				))}
 			</AnimatePresence>

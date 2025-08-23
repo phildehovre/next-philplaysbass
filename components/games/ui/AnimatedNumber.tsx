@@ -9,7 +9,7 @@ const AnimatedNumber = ({ number }: { number: number }) => {
 	}, [number]);
 
 	return (
-		<div className="relative h-8 overflow-hidden flex justify-center w-6 text-center">
+		<div className="relative h-8 overflow-hidden flex justify-center w-full text-center">
 			<AnimatePresence initial={false}>
 				<motion.span
 					key={number}

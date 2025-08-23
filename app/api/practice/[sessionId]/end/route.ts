@@ -1,11 +1,10 @@
 import { PrismaClient } from "@/lib/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import {
 	ensureUserInDb,
 	recalculateAverageScore,
 } from "@/services/userService";
 import { NextRequest } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
 	try {
@@ -76,14 +75,13 @@ export async function POST(req: NextRequest) {
 		});
 
 		const userId = session.userId;
-		const sessionDuration = session.duration;
 		const newScore = result.score;
 
 		await prisma.userStats.upsert({
 			where: { userId },
 			update: {
 				totalSessions: { increment: 1 },
-				totalTime: { increment: sessionDuration },
+				totalTime: { increment: durationMs },
 				totalScore: { increment: totalScore },
 				avgScore: await recalculateAverageScore(userId, newScore),
 				lastPracticed: new Date(),
@@ -91,7 +89,7 @@ export async function POST(req: NextRequest) {
 			create: {
 				userId,
 				totalSessions: 1,
-				totalTime: sessionDuration,
+				totalTime: durationMs,
 				totalScore: totalScore,
 				avgScore: newScore,
 				lastPracticed: new Date(),

@@ -83,7 +83,6 @@ export const PracticeSessionProvider = ({
 			});
 
 			if (newScore) {
-				console.log(newScore);
 				setScore((prev) => ({
 					rhythm: prev.rhythm + newScore.rhythm,
 					pitch: prev.pitch + newScore.pitch,
@@ -92,9 +91,7 @@ export const PracticeSessionProvider = ({
 				setScoreEvents((prev) => [...prev, newScore]);
 			}
 			setEvents((prev) => {
-				console.log("prev events::", prev);
 				if (prev.length === 0 && !startTime) {
-					console.log("new conditions::", prev.length, !startTime);
 					setStartTime(new Date());
 				}
 				return [...prev, event];
@@ -103,7 +100,6 @@ export const PracticeSessionProvider = ({
 		[startTime, streak]
 	);
 
-	console.log("Context Events", events);
 	const finishSession = useCallback(async () => {
 		const [totalScore, aggregateScore] = processNormalizedScore(events, {
 			bpm,
@@ -116,12 +112,14 @@ export const PracticeSessionProvider = ({
 		if (!sessionId || events.length === 0 || !startTime) return;
 
 		const endTime = new Date();
-		const durationMs = differenceInMilliseconds(endTime, startTime);
-		if (durationMs < 1000) return;
 
+		const durationMs = differenceInMilliseconds(endTime, startTime);
+		console.log(durationMs, endTime, startTime);
+
+		if (durationMs < 1000) return;
 		await fetch(`/api/practice/${sessionId}/events`, {
 			method: "POST",
-			body: JSON.stringify({ sessionId, events }),
+			body: JSON.stringify({ sessionId, events, durationMs }),
 			headers: { "Content-Type": "application/json" },
 		});
 
@@ -129,7 +127,7 @@ export const PracticeSessionProvider = ({
 			method: "POST",
 			body: JSON.stringify({
 				sessionId,
-				duration: durationMs,
+				durationMs,
 				totalScore,
 				aggregateScore,
 			}),

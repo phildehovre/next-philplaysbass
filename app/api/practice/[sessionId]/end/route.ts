@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
 		const body = await req.json();
 		const user = await ensureUserInDb();
 
-		const { sessionId, totalScore, aggregateScore } = body;
+		const { sessionId, totalScore, aggregateScore, durationMs } = body;
+		console.log("BODY::", body);
 
-		console.log("END ROUTE::", body);
 		const session = await prisma.practiceSession.findUnique({
 			where: { id: sessionId },
 		});
@@ -32,6 +32,11 @@ export async function POST(req: NextRequest) {
 			return new Response(JSON.stringify({ error: "Unauthorized" }), {
 				status: 403,
 			});
+		}
+
+		console.log("SESSION DURATION:::", durationMs);
+		if (durationMs > 1000 && events.length >= 1) {
+			console.log("duration check");
 		}
 
 		// Already handled on the front-end, safeguard measure.

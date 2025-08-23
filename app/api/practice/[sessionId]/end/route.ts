@@ -34,9 +34,13 @@ export async function POST(req: NextRequest) {
 			});
 		}
 
-		console.log("SESSION DURATION:::", durationMs);
-		if (durationMs > 1000 && events.length >= 1) {
-			console.log("duration check");
+		if (durationMs < 1000 && events.length < 1) {
+			return new Response(
+				JSON.stringify({ error: "Session deemed too short" }),
+				{
+					status: 404,
+				}
+			);
 		}
 
 		// Already handled on the front-end, safeguard measure.
@@ -63,14 +67,10 @@ export async function POST(req: NextRequest) {
 			},
 		});
 
-		const now = new Date();
-		const createdAt = new Date(session.createdAt);
-		const duration = Math.floor((now.getTime() - createdAt.getTime()) / 1000); // in seconds
-
 		const updatedSession = await prisma.practiceSession.update({
 			where: { id: sessionId },
 			data: {
-				duration,
+				duration: durationMs,
 				resultId: result.id,
 			},
 		});
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		return new Response(
-			JSON.stringify({ sessionId: updatedSession.id, duration }),
+			JSON.stringify({ sessionId: updatedSession.id, durationMs }),
 			{
 				status: 200,
 				headers: { "Content-Type": "application/json" },

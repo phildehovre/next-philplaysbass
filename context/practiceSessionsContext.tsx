@@ -114,7 +114,6 @@ export const PracticeSessionProvider = ({
 		const endTime = new Date();
 
 		const durationMs = differenceInMilliseconds(endTime, startTime);
-		console.log(durationMs, endTime, startTime);
 
 		if (durationMs < 1000) return;
 		await fetch(`/api/practice/${sessionId}/events`, {

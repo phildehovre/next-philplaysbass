@@ -30,6 +30,7 @@ import {
 	NOTE_MATCH_TYPE,
 } from "./GameConstants";
 import StreakManager from "./ui/StreakManager";
+import { BIZ_UDPMincho } from "next/font/google";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -188,7 +189,8 @@ const InversionsGame = () => {
 		return isMatch;
 	};
 
-	const evaluateRound = async (note: NoteInfo) => {
+	const onNoteDetection = async (note: NoteInfo) => {
+		const offset = calculateMsOffset(bpm, lastTickTime);
 		if (!isTabVisible) return;
 
 		if (!sessionId) {
@@ -211,7 +213,7 @@ const InversionsGame = () => {
 				playedNote: note.noteName,
 				isCorrect: isMatch,
 				timeToHitMs,
-				metronomeOffsetMs: calculateMsOffset(bpm, lastTickTime),
+				metronomeOffsetMs: offset,
 				playedAt: new Date(),
 			};
 
@@ -539,7 +541,7 @@ const InversionsGame = () => {
 					</label>
 				</>
 			)}
-			<PitchyComponent showDevices={true} onNoteDetection={evaluateRound} />
+			<PitchyComponent showDevices={true} onNoteDetection={onNoteDetection} />
 		</div>
 	);
 };

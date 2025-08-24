@@ -1,5 +1,4 @@
 import {
-	MS_LATENCY_OFFSET,
 	NOTE_MATCH_TYPE,
 	RHYTHM_ACCURACY_TYPE,
 } from "@/components/games/GameConstants";

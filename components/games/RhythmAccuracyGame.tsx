@@ -102,51 +102,47 @@ const RhythmAccuracyGame = () => {
 		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
 	};
 
-	const onNoteDetection = useCallback(
-		async (note: NoteInfo) => {
-			if (!isTabVisible) return;
-			if (!gameStarted) return;
+	const onNoteDetection = async (note: NoteInfo) => {
+		const offset = calculateMsOffset(bpm, lastTickTime) as number;
+		if (!isTabVisible) return;
+		if (!gameStarted) return;
 
-			if (!sessionId) {
-				await startSession(RHYTHM_ACCURACY_TYPE);
+		if (!sessionId) {
+			await startSession(RHYTHM_ACCURACY_TYPE);
+		}
+
+		if (evaluateCooldownRef.current) return;
+
+		const now = Date.now();
+		const timeToHitMs = noteShownAtRef.current
+			? now - noteShownAtRef.current
+			: 0;
+
+		const event: NoteEvent = {
+			expectedNote: "",
+			playedNote: note.noteName,
+			isCorrect: offset < 85,
+			timeToHitMs,
+			metronomeOffsetMs: offset,
+			playedAt: new Date(),
+		};
+
+		// Only save to DB if not in practice mode?
+		if (!isPracticeMode && !evaluateCooldownRef.current) {
+			addEvent(event, { bpm });
+			if (Math.abs(offset) < 85) {
+				recordWin();
+			} else {
+				recordLoss();
 			}
+		}
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-			if (evaluateCooldownRef.current) return;
-
-			const now = Date.now();
-			const timeToHitMs = noteShownAtRef.current
-				? now - noteShownAtRef.current
-				: 0;
-
-			const offset = calculateMsOffset(bpm, lastTickTime) as number;
-
-			const event: NoteEvent = {
-				expectedNote: "",
-				playedNote: note.noteName,
-				isCorrect: offset < 85,
-				timeToHitMs,
-				metronomeOffsetMs: offset,
-				playedAt: new Date(),
-			};
-
-			// Only save to DB if not in practice mode?
-			if (!isPracticeMode && !evaluateCooldownRef.current) {
-				addEvent(event, { bpm });
-				if (Math.abs(offset) < 85) {
-					recordWin();
-				} else {
-					recordLoss();
-				}
-			}
-			if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-			evaluateCooldownRef.current = true;
-			setTimeout(() => {
-				evaluateCooldownRef.current = false;
-			}, COOLDOWN_MS);
-		},
-		[gameStarted]
-	);
+		evaluateCooldownRef.current = true;
+		setTimeout(() => {
+			evaluateCooldownRef.current = false;
+		}, COOLDOWN_MS);
+	};
 
 	const startGame = async () => {
 		resetGame();

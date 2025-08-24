@@ -33,7 +33,7 @@ const Page = async () => {
 	});
 
 	return (
-		<div className="page_ctn flex justify-center w-full">
+		<div className="page_ctn flex justify-center w-full h-full min-h-[50svh]">
 			{!results && <Spinner />}
 			{results && results.length !== 0 && (
 				<div className="table_ctn flex justify-center w-full max-w-[768px]">
@@ -41,6 +41,7 @@ const Page = async () => {
 						<TableCaption>User leaderboard</TableCaption>
 						<TableHeader>
 							<TableRow>
+								<TableHead className="w-[50px]">Rank</TableHead>
 								<TableHead className="w-[100px]">User</TableHead>
 								<TableHead>Time practiced</TableHead>
 								<TableHead>Total sessions</TableHead>
@@ -50,6 +51,7 @@ const Page = async () => {
 						<TableBody>
 							{results.map((result, index) => (
 								<TableRow key={result.user.name + index}>
+									<TableCell>#{index + 1}</TableCell>
 									<TableCell>{result.user.name}</TableCell>
 									<TableCell>{formatTime(result.totalTime)}</TableCell>
 									<TableCell>{result.totalSessions}</TableCell>

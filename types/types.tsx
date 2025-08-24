@@ -61,6 +61,10 @@ export const links = [
 		name: "About",
 		hash: "/about",
 	},
+	{
+		name: "Leaderboard",
+		hash: "/leaderboard",
+	},
 ] as const;
 
 export type SectionName = (typeof links)[number]["name"];

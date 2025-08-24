@@ -30,6 +30,9 @@ const Page = async () => {
 				},
 			},
 		},
+		orderBy: {
+			totalScore: "desc",
+		},
 	});
 
 	return (

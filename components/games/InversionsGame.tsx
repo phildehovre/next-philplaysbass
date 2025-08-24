@@ -31,6 +31,7 @@ import {
 } from "./GameConstants";
 import StreakManager from "./ui/StreakManager";
 import { BIZ_UDPMincho } from "next/font/google";
+import BackToButton from "./ui/BackToButton";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
@@ -349,6 +350,7 @@ const InversionsGame = () => {
 
 	return (
 		<div className="game_ctn max-w-[24em] ">
+			<BackToButton label="To dashboard" url={"/dashboard"} />
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="isPracticeMode"

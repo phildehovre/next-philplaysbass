@@ -1,8 +1,8 @@
-import GameSelection from "@/components/games/dashboard/GameSelection";
-import NavbarBuffer from "@/components/NavbarBuffer";
 import { OscillatorGenProvider } from "@/context/oscillatorGenContext";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import { SoundFXProvider } from "@/context/soundContext";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {

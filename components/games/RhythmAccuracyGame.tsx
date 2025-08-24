@@ -14,6 +14,7 @@ import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
 import { COOLDOWN_MS, RHYTHM_ACCURACY_TYPE } from "./GameConstants";
 import ScoreModal from "./ui/ScoreModal";
+import BackToButton from "./ui/BackToButton";
 
 const RhythmAccuracyGame = () => {
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
@@ -160,6 +161,7 @@ const RhythmAccuracyGame = () => {
 
 	return (
 		<div className="game_ctn max-w-[24em]">
+			<BackToButton url="/dashboard" label="To dashboard" />
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="isPracticeMode"

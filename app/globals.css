@@ -109,6 +109,16 @@ button:hover,
 	color: black;
 }
 
+.btn_backto {
+	padding: 0.5em;
+	color: var(--clr-brand-o5);
+	width: 10em;
+	transition: 150ms all ease-in-out;
+	&:hover {
+		color: var(--clr-brand);
+	}
+}
+
 button:focus-visible,
 .button:focus-visible {
 }
@@ -183,6 +193,7 @@ button:focus-visible,
 	/* Custom vars */
 
 	--clr-brand: #00fffb;
+	--clr-brand-o5: #00fffb7e;
 	--clr-bg: black;
 	--clr-box-bg: #1e1e1e;
 	--clr-box-border: #313131;

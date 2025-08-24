@@ -10,6 +10,7 @@ import {
 	getTotalPracticeTime,
 	getTotalPracticeTimeToday,
 } from "@/lib/utils/dashboardUtils";
+import { formatTime } from "@/utils/helpers";
 
 type UserStatsProps = {
 	userData: UserWithPracticeSessions;

@@ -1,6 +1,7 @@
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
+import { formatTime } from "@/utils/helpers";
 import { formatDistance, subDays } from "date-fns";
 import React, { act, useEffect, useState } from "react";
 
@@ -40,7 +41,7 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 					<label className="activity_label">
 						<div>{a.gameType}</div>
 					</label>
-					<div className="">{formatDuration(a.duration)}</div>
+					<div className="">{formatTime(a.duration)}</div>
 					<label className="activity_label">
 						<div>{formatSessionDate(new Date(a.createdAt))}</div>
 					</label>

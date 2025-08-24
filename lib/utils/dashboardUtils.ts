@@ -30,17 +30,22 @@ export const getAveragePracticeTime = (data: UserWithPracticeSessions) => {
 };
 
 export const formatDuration = (totalSeconds: number): string => {
-	const hours = Math.floor(totalSeconds / 3600);
+	const days = Math.floor(totalSeconds / 86400); // 24 * 3600
+	const hours = Math.floor((totalSeconds % 86400) / 3600);
 	const minutes = Math.floor((totalSeconds % 3600) / 60);
 	const seconds = totalSeconds % 60;
 
 	const parts = [];
+	if (days) parts.push(`${days}d`);
 	if (hours) parts.push(`${hours}h`);
 	if (minutes) parts.push(`${minutes}m`);
 	if (seconds || parts.length === 0) parts.push(`${seconds}s`);
 
 	return parts.join(" ");
 };
+
+// Example
+console.log(formatDuration(886029)); // "10d 5h 27m 9s"
 
 export const getCurrentStreak = (sessions: { createdAt: string }[]): number => {
 	const dateSet = new Set(

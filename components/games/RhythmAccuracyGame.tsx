@@ -123,7 +123,7 @@ const RhythmAccuracyGame = () => {
 			const event: NoteEvent = {
 				expectedNote: "",
 				playedNote: note.noteName,
-				isCorrect: offset < 150,
+				isCorrect: offset < 85,
 				timeToHitMs,
 				metronomeOffsetMs: offset,
 				playedAt: new Date(),
@@ -184,7 +184,7 @@ const RhythmAccuracyGame = () => {
 				</label>
 			</div>
 
-			<div className="scoreboard text-2xl font-mono">
+			<div className="scoreboard text-2xl font-mono w-full">
 				<AnimatedNumber number={score.losses} />:
 				<AnimatedNumber number={score.wins} />
 			</div>

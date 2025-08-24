@@ -131,7 +131,7 @@ export function getNoteFromPitch(frequency: number) {
 }
 
 export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
-	const noteTime = performance.now() - MS_LATENCY_OFFSET;
+	const noteTime = performance.now() + MS_LATENCY_OFFSET;
 	const tempoInterval = (60 / bpm) * 1000;
 
 	if (lastTickTime && tempoInterval) {

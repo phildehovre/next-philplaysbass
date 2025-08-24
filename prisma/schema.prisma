@@ -94,7 +94,7 @@ model UserStats {
   user          User     @relation(fields: [userId], references: [id])
   userId        String   @unique
   totalSessions Int
-  totalTime     Int 
+  totalTime     Int // seconds
   avgScore      Float
   totalScore    Int
   lastPracticed DateTime

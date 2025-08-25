@@ -7,6 +7,7 @@ import {
 	MIN_TEMPO_AS_STR,
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
+import { useGameOptions } from "@/hooks/game-hooks/useGameOptions";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -15,11 +16,19 @@ type MetroWidgetPropsType = {
 	gameStarted: boolean;
 	lastTickTime: number | null;
 	setLastTickTime: (t: number) => void;
+	display: boolean;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
-	const { bpm, setBpm, play, gameStarted, lastTickTime, setLastTickTime } =
-		props;
+	const {
+		bpm,
+		setBpm,
+		play,
+		gameStarted,
+		lastTickTime,
+		setLastTickTime,
+		display,
+	} = props;
 
 	const [tempoInterval, setTempoInterval] = useState<number | undefined>();
 	const [soundEffect, setSoundEffect] = useState<any>("sidestick");
@@ -78,7 +87,9 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	}, [bpm]);
 
 	return (
-		<div className="w-full h-full flex flex-col gap-2">
+		<div
+			className={`${display ? "" : "hidden"}w-full h-full flex flex-col gap-2`}
+		>
 			<div className="scoreboard flex flex-col items-center font-bold">
 				{displayedBpm} bpm
 				<div className="controls flex gap-1 w-full">

@@ -30,31 +30,22 @@ import {
 	NOTE_MATCH_TYPE,
 } from "../../constants/GameConstants";
 import StreakManager from "./ui/StreakManager";
-import { BIZ_UDPMincho } from "next/font/google";
 import BackToButton from "./ui/BackToButton";
+import { useGameOptions } from "@/hooks/game-hooks/useGameOptions";
+import { useScoring } from "@/hooks/game-hooks/useScoring";
+import NoteMatchOptions from "./ui/NoteMatchOptions";
 
-const InversionsGame = () => {
+const NoteMatchGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
 	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
 	const [questionInversion, setQuestionInversion] = useState<string | "">("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
-	const [withTimer, setWithTimer] = useState(false);
-	const [withMetronome, setWithMetronome] = useState(false);
-	const [withArpeggios, setWithArpeggios] = useState(false);
-	const [withInversions, setWithInversions] = useState(false);
-	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
-		"major",
-	]);
-	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 
-	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [duration, setDuration] = useState<number>(displayedDuration);
-	const [showShake, setShowShake] = useState(false);
 	const [progress, setProgress] = useState(0);
-	const [showPulse, setShowPulse] = useState<boolean>(false);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 
 	const [gameStarted, setGameStarted] = useState(false);
@@ -78,6 +69,18 @@ const InversionsGame = () => {
 		finishSession,
 	} = usePracticeSession();
 
+	const {
+		options,
+		setWithTimer,
+		setWithMetronome,
+		setWithArpeggios,
+		setWithInversions,
+		setSelectedQualities,
+		setIsPracticeMode,
+	} = useGameOptions();
+
+	const { score, recordWin, recordLoss, resetScore, showShake, showPulse } =
+		useScoring();
 	useEffect(() => {
 		const handleVisibilityChange = () => {
 			setIsTabVisible(!document.hidden);
@@ -103,8 +106,8 @@ const InversionsGame = () => {
 
 	// Practice mode switch
 	useEffect(() => {
-		setScore({ wins: 0, losses: 0 });
-	}, [isPracticeMode]);
+		resetScore();
+	}, [options.isPracticeMode]);
 
 	const resetGame = () => {
 		// clear timers
@@ -119,18 +122,17 @@ const InversionsGame = () => {
 		setQuestionQuality(undefined);
 		setQuestionArpeggio([]);
 		setQuestionInversion("");
-		setScore({ wins: 0, losses: 0 });
 		setArpeggioPlayed([]);
 		setPreviousNotes([]);
-		setShowPulse(false);
-		setShowShake(false);
 	};
 
 	const init = async () => {
 		const notePoolLimit = 3;
 
 		const quality =
-			selectedQualities[Math.floor(Math.random() * selectedQualities.length)];
+			options.selectedQualities[
+				Math.floor(Math.random() * options.selectedQualities.length)
+			];
 		setQuestionQuality(quality);
 
 		setPreviousNotes((prev) => {
@@ -151,7 +153,7 @@ const InversionsGame = () => {
 			selectedNoteRef.current = note;
 			const scale = buildScale(note, quality);
 			let arpeggio = [scale[0], scale[2], scale[4]];
-			if (withInversions) {
+			if (options.withInversions) {
 				const { inversion, invertedArpeggio } = selectRandomInversion(arpeggio);
 				setQuestionInversion(inversion);
 				setQuestionArpeggio(invertedArpeggio);
@@ -164,23 +166,11 @@ const InversionsGame = () => {
 		});
 	};
 
-	const recordLoss = () => {
-		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
-		setShowShake(true);
-		setTimeout(() => setShowShake(false), COOLDOWN_MS);
-	};
-
-	const recordWin = () => {
-		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
-		setShowPulse(true);
-		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
-	};
-
 	const evaluateNotePlayed = async (noteInfo: NoteInfo) => {
 		if (!gameStarted) return;
 
 		const notePlayed = noteInfo.noteName;
-		const selected = withArpeggios
+		const selected = options.withArpeggios
 			? questionArpeggio[arpeggioPlayed.length]
 			: selectedNote;
 
@@ -202,7 +192,7 @@ const InversionsGame = () => {
 
 		if (evaluateCooldownRef.current) return;
 
-		if (!withArpeggios) {
+		if (!options.withArpeggios) {
 			const isMatch = await evaluateNotePlayed(note);
 			if (isMatch == undefined) return;
 
@@ -221,25 +211,25 @@ const InversionsGame = () => {
 			};
 
 			// Only save to DB if not in practice mode?
-			if (!isPracticeMode) {
+			if (!options.isPracticeMode) {
 				addEvent(event, {
 					bpm,
-					withTimer,
-					withMetronome,
+					withTimer: options.withTimer,
+					withMetronome: options.withMetronome,
 				});
 			}
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
 			if (isMatch) {
 				recordWin();
-				if (withTimer) startTimer();
+				if (options.withTimer) startTimer();
 				init();
 			} else {
 				recordLoss();
 			}
 		}
 
-		if (withArpeggios && questionArpeggio) {
+		if (options.withArpeggios && questionArpeggio) {
 			const isMatch = await evaluateNotePlayed(note);
 			if (isMatch) {
 				setArpeggioPlayed((prev) => [...prev, note]);
@@ -261,7 +251,7 @@ const InversionsGame = () => {
 			evaluateCooldownRef.current = true;
 			init();
 
-			if (withTimer) {
+			if (options.withTimer) {
 				startTimer();
 			}
 		}
@@ -272,7 +262,7 @@ const InversionsGame = () => {
 		await init(); // ensure new question is ready
 		setGameStarted(true);
 
-		if (withTimer) {
+		if (options.withTimer) {
 			startTimer();
 		}
 		if (!sessionId) await startSession(NOTE_MATCH_TYPE);
@@ -307,10 +297,10 @@ const InversionsGame = () => {
 			};
 			recordLoss();
 			addEvent(event, {
-				withMetronome,
-				withTimer,
+				withMetronome: options.withMetronome,
+				withTimer: options.withTimer,
 			});
-			if (withArpeggios) {
+			if (options.withArpeggios) {
 				setArpeggioPlayed([]);
 			}
 			init();
@@ -327,13 +317,15 @@ const InversionsGame = () => {
 		QUALITY.map((filter, index) => (
 			<button
 				className={`filter_btn ${
-					selectedQualities.indexOf(filter) !== -1 ? "active" : ""
+					options.selectedQualities.indexOf(filter) !== -1 ? "active" : ""
 				}`}
 				key={filter + index}
 				onClick={() =>
-					setSelectedQualities((prev) =>
-						selectedQualities.includes(filter)
-							? selectedQualities.filter((f) => f !== filter)
+					setSelectedQualities((prev: ScaleQuality[]) =>
+						options.selectedQualities.includes(filter)
+							? options.selectedQualities.filter(
+									(f: ScaleQuality) => f !== filter
+							  )
 							: [...prev, filter]
 					)
 				}
@@ -342,7 +334,7 @@ const InversionsGame = () => {
 					<PlusIcon
 						size={16}
 						className={`filter_icon ${
-							selectedQualities.includes(filter) ? "active" : ""
+							options.selectedQualities.includes(filter) ? "active" : ""
 						}`}
 					/>
 					{filter.slice(0, 3)}
@@ -353,25 +345,6 @@ const InversionsGame = () => {
 	return (
 		<div className="game_ctn max-w-[24em] ">
 			<BackToButton label="To dashboard" url={"/dashboard"} />
-			<div className="game_header flex flex-col justify-center gap-2 w-full">
-				<label
-					htmlFor="isPracticeMode"
-					className="flex justify-center gap-2 m-auto"
-				>
-					<Switch
-						disabled={gameStarted}
-						checked={isPracticeMode}
-						onCheckChange={setIsPracticeMode}
-					/>
-					<p
-						style={{
-							color: isPracticeMode ? "var(--clr-brand)" : "gray",
-						}}
-					>
-						Practice mode
-					</p>
-				</label>
-			</div>
 
 			<div className="scoreboard_ctn flex w-full ">
 				<div className="scoreboard text-2xl font-mono w-full">
@@ -387,77 +360,26 @@ const InversionsGame = () => {
 				</div>
 			</div>
 
-			{/* FILTER CONTROLS */}
-			<div className="switch_ctn grid grid-cols-2 gap-7">
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withMetronome" className="flex items-center gap-2">
-							<Drum />
-							<Switch
-								disabled={gameStarted || withTimer}
-								checked={withMetronome}
-								onCheckChange={setWithMetronome}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						[coming soon] Practice with a metronome
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withTimer" className="flex items-center gap-2">
-							<Timer />
-							<Switch
-								disabled={gameStarted || withMetronome}
-								checked={withTimer}
-								onCheckChange={setWithTimer}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with a time limit</TooltipContent>
-				</Tooltip>
+			<NoteMatchOptions
+				gameStarted={gameStarted}
+				options={options}
+				setIsPracticeMode={setIsPracticeMode}
+				setWithArpeggios={setWithArpeggios}
+				setWithInversions={setWithInversions}
+				setWithMetronome={setWithMetronome}
+				setWithTimer={setWithTimer}
+			/>
 
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withArpeggios" className="flex items-center gap-2">
-							<Piano />
-							<Switch
-								disabled={gameStarted}
-								checked={withArpeggios}
-								onCheckChange={setWithArpeggios}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						Practice with single notes or arpeggios
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withInversions" className="flex items-center gap-2">
-							<ArrowUpDown />
-							<Switch
-								disabled={gameStarted}
-								checked={withInversions}
-								onCheckChange={setWithInversions}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with inversions</TooltipContent>
-				</Tooltip>
-			</div>
-			{withMetronome && (
-				<MetroWidget
-					gameStarted={gameStarted}
-					play={countdown || gameStarted}
-					bpm={bpm}
-					setBpm={setBpm}
-					lastTickTime={lastTickTime}
-					setLastTickTime={setLastTickTime}
-				/>
-			)}
-			{withTimer && (
+			<MetroWidget
+				gameStarted={gameStarted}
+				play={countdown || gameStarted}
+				bpm={bpm}
+				setBpm={setBpm}
+				lastTickTime={lastTickTime}
+				setLastTickTime={setLastTickTime}
+				display={options.withMetronome}
+			/>
+			{options.withTimer && (
 				<div className="flex w-full">
 					<h1 className="scoreboard timer w-12 text-xs flex items-center">
 						{displayedDuration / 1000} s
@@ -474,7 +396,7 @@ const InversionsGame = () => {
 			)}
 			<Clockface
 				showPulse={showPulse}
-				withTimer={withTimer}
+				withTimer={options.withTimer}
 				progress={progress}
 				gameStarted={gameStarted}
 			>
@@ -510,15 +432,15 @@ const InversionsGame = () => {
 							<div className={`note ${showShake ? "shake-error" : ""}`}>
 								{selectedNote}
 							</div>
-							{withArpeggios && (
+							{options.withArpeggios && (
 								<div className="quality">{questionQuality}</div>
 							)}
-							{withInversions && (
+							{options.withInversions && (
 								<div className="inversion text-red-600 w-full h-full text-2xl">
 									{questionInversion}
 								</div>
 							)}
-							{withArpeggios && gameStarted && (
+							{options.withArpeggios && gameStarted && (
 								<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
 									{[0, 1, 2].map((i) => (
 										<div
@@ -535,7 +457,7 @@ const InversionsGame = () => {
 				</div>
 			</Clockface>
 
-			{withArpeggios && (
+			{options.withArpeggios && (
 				<>
 					<label htmlFor="scale_types">
 						Select scales:
@@ -550,4 +472,4 @@ const InversionsGame = () => {
 	);
 };
 
-export default InversionsGame;
+export default NoteMatchGame;

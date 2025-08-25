@@ -45,6 +45,8 @@ export const useNoteMatchGame = () => {
 	const [countdown, setCountdown] = useState(false);
 	const [bpm, setBpm] = useState(MAX_TEMPO_AS_NUM / 2);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
+	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
+	const [duration, setDuration] = useState<number>(displayedDuration);
 
 	// --- Refs ---
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,6 +81,49 @@ export const useNoteMatchGame = () => {
 		setPreviousNotes([]);
 		setShowPulse(false);
 		setShowShake(false);
+	}, []);
+
+	// ======== TIMER LOGIC ========
+	const startTimer = () => {
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+		const start = Date.now();
+
+		const step = () => {
+			const elapsed = Date.now() - start;
+			const percent = Math.min((elapsed / duration) * 100, 100);
+			setProgress(percent);
+			if (elapsed < duration) rafRef.current = requestAnimationFrame(step);
+		};
+
+		step();
+
+		timeoutRef.current = setTimeout(() => {
+			const event: NoteEvent = {
+				expectedNote: selectedNoteRef.current,
+				playedNote: "",
+				isCorrect: false,
+				timeToHitMs: 9999,
+				metronomeOffsetMs: 0,
+				playedAt: new Date(),
+			};
+
+			recordLoss();
+			addEvent(event, { withTimer });
+
+			if (withArpeggios) setArpeggioPlayed([]);
+
+			init();
+			startTimer();
+		}, duration);
+	};
+
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+			if (rafRef.current) cancelAnimationFrame(rafRef.current);
+		};
 	}, []);
 
 	const init = useCallback(async () => {
@@ -155,21 +200,32 @@ export const useNoteMatchGame = () => {
 			const isMatch = await evaluateNotePlayed(note);
 			if (isMatch === undefined) return;
 
-			const event: NoteEvent = {
-				expectedNote: selectedNoteRef.current,
-				playedNote: note.noteName,
-				isCorrect: isMatch,
-				timeToHitMs: noteShownAtRef.current
-					? Date.now() - noteShownAtRef.current
-					: 0,
-				metronomeOffsetMs: offset,
-				playedAt: new Date(),
-			};
+			if (!withArpeggios) {
+				const event: NoteEvent = {
+					expectedNote: selectedNoteRef.current,
+					playedNote: note.noteName,
+					isCorrect: isMatch,
+					timeToHitMs: noteShownAtRef.current
+						? Date.now() - noteShownAtRef.current
+						: 0,
+					metronomeOffsetMs: offset,
+					playedAt: new Date(),
+				};
 
-			if (!isPracticeMode) addEvent(event, { bpm, withTimer, withMetronome });
+				if (!isPracticeMode) addEvent(event, { bpm, withTimer, withMetronome });
 
-			if (isMatch) recordWin();
-			else recordLoss();
+				if (isMatch) {
+					recordWin();
+					if (withTimer) startTimer();
+					init();
+				} else recordLoss();
+			}
+
+			if (withArpeggios && questionArpeggio) {
+				const isMatch = await evaluateNotePlayed(note);
+				if (isMatch) setArpeggioPlayed((prev) => [...prev, note]);
+				else recordLoss();
+			}
 
 			evaluateCooldownRef.current = true;
 			setTimeout(() => {
@@ -189,8 +245,20 @@ export const useNoteMatchGame = () => {
 			isPracticeMode,
 			recordWin,
 			recordLoss,
+			arpeggioPlayed,
+			withArpeggios,
 		]
 	);
+
+	useEffect(() => {
+		if (arpeggioPlayed.length === 3) {
+			recordWin();
+			setArpeggioPlayed([]);
+			evaluateCooldownRef.current = true;
+			init();
+			if (withTimer) startTimer();
+		}
+	}, [arpeggioPlayed]);
 
 	const startGame = useCallback(async () => {
 		resetGame();
@@ -226,12 +294,16 @@ export const useNoteMatchGame = () => {
 			bpm,
 			lastTickTime,
 		},
+
 		setters: {
 			setWithTimer,
 			setWithMetronome,
 			setWithArpeggios,
 			setWithInversions,
 			setSelectedQualities,
+			setIsPracticeMode,
+			setCountdown,
+			setLastTickTime,
 			setBpm,
 		},
 		actions: {

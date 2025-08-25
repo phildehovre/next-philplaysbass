@@ -2,78 +2,31 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
-import {
-	buildScale,
-	calculateMsOffset,
-	selectRandomNote,
-} from "@/lib/utils/gameUtils";
-import {
-	arrayChromaticScale,
-	QUALITY,
-	ScaleQuality,
-	selectRandomInversion,
-} from "@/constants/chromaticScale";
-import { ArrowUpDown, Drum, Piano, PlusIcon, Timer } from "lucide-react";
+import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
+import { PlusIcon } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
-import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Spinner from "../Spinner";
 import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
-import {
-	COOLDOWN_MS,
-	MAX_TEMPO_AS_NUM,
-	NOTE_MATCH_TYPE,
-} from "../../constants/GameConstants";
 import StreakManager from "./ui/StreakManager";
 import BackToButton from "./ui/BackToButton";
+import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
+import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 
 const NoteMatchGame = () => {
-	const [selectedNote, setSelectedNote] = useState("");
-	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
-	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
-	const [questionInversion, setQuestionInversion] = useState<string | "">("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
-	const [withTimer, setWithTimer] = useState(false);
-	const [withMetronome, setWithMetronome] = useState(false);
-	const [withArpeggios, setWithArpeggios] = useState(false);
-	const [withInversions, setWithInversions] = useState(false);
-	const [score, setScore] = useState({ wins: 0, losses: 0 });
-	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
-		"major",
-	]);
-	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
-	const [progress, setProgress] = useState(0);
-	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
-	const [gameStarted, setGameStarted] = useState(false);
-	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
-	const [showPulse, setShowPulse] = useState<boolean>(false);
-	const [showShake, setShowShake] = useState(false);
-	const [countdown, setCountdown] = useState<boolean>(false);
-	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
-	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const rafRef = useRef<number | null>(null);
-	const evaluateCooldownRef = useRef(false);
-	const noteShownAtRef = useRef<number | null>(null);
-	const selectedNoteRef = useRef<string>("");
+	const { score: totalScore, finishSession } = usePracticeSession();
 
-	const {
-		score: totalScore,
-		events,
-		addEvent,
-		sessionId,
-		startSession,
-		finishSession,
-	} = usePracticeSession();
+	const game = useNoteMatchGameContext();
+	const { state, setters, actions } = game;
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -91,246 +44,19 @@ const NoteMatchGame = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		return () => {
-			if (timeoutRef.current) clearInterval(timeoutRef.current);
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		};
-	}, []);
-
-	// Practice mode switch
-	useEffect(() => {
-		setScore({ wins: 0, losses: 0 });
-	}, [isPracticeMode]);
-
-	const resetGame = () => {
-		// clear timers
-		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-		// reset state
-		setGameStarted(false);
-		setCountdown(false);
-		setProgress(0);
-		setSelectedNote("");
-		setQuestionQuality(undefined);
-		setQuestionArpeggio([]);
-		setQuestionInversion("");
-		setScore({ wins: 0, losses: 0 });
-		setArpeggioPlayed([]);
-		setPreviousNotes([]);
-		setShowPulse(false);
-		setShowShake(false);
-	};
-
-	const init = async () => {
-		const notePoolLimit = 3;
-
-		const quality =
-			selectedQualities[Math.floor(Math.random() * selectedQualities.length)];
-		setQuestionQuality(quality);
-
-		setPreviousNotes((prev) => {
-			let note = selectRandomNote();
-			let attempts = 0;
-
-			while (prev.includes(note) && attempts < 10) {
-				note = selectRandomNote();
-				attempts++;
-			}
-
-			const newHistory =
-				prev.length >= notePoolLimit
-					? [...prev.slice(1), note]
-					: [...prev, note];
-
-			setSelectedNote(note);
-			selectedNoteRef.current = note;
-			const scale = buildScale(note, quality);
-			let arpeggio = [scale[0], scale[2], scale[4]];
-			if (withInversions) {
-				const { inversion, invertedArpeggio } = selectRandomInversion(arpeggio);
-				setQuestionInversion(inversion);
-				setQuestionArpeggio(invertedArpeggio);
-			} else {
-				setQuestionArpeggio(arpeggio);
-			}
-			noteShownAtRef.current = Date.now();
-
-			return newHistory;
-		});
-	};
-
-	const recordLoss = () => {
-		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
-		setShowShake(true);
-		setTimeout(() => setShowShake(false), COOLDOWN_MS);
-	};
-
-	const recordWin = () => {
-		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
-		setShowPulse(true);
-		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
-	};
-
-	const evaluateNotePlayed = async (noteInfo: NoteInfo) => {
-		if (!gameStarted) return;
-
-		const notePlayed = noteInfo.noteName;
-		const selected = withArpeggios
-			? questionArpeggio[arpeggioPlayed.length]
-			: selectedNote;
-
-		const matchSet = arrayChromaticScale.find((group) =>
-			group.includes(notePlayed)
-		);
-
-		const isMatch = matchSet?.includes(selected);
-		return isMatch;
-	};
-
-	const onNoteDetection = async (note: NoteInfo) => {
-		const offset = calculateMsOffset(bpm, lastTickTime);
-		if (!isTabVisible) return;
-
-		if (!sessionId) {
-			await startSession(NOTE_MATCH_TYPE);
-		}
-
-		if (evaluateCooldownRef.current) return;
-
-		if (!withArpeggios) {
-			const isMatch = await evaluateNotePlayed(note);
-			if (isMatch == undefined) return;
-
-			const now = Date.now();
-			const timeToHitMs = noteShownAtRef.current
-				? now - noteShownAtRef.current
-				: 0;
-
-			const event: NoteEvent = {
-				expectedNote: selectedNoteRef.current,
-				playedNote: note.noteName,
-				isCorrect: isMatch,
-				timeToHitMs,
-				metronomeOffsetMs: offset,
-				playedAt: new Date(),
-			};
-
-			// Only save to DB if not in practice mode?
-			if (!isPracticeMode) {
-				addEvent(event, {
-					bpm,
-					withTimer,
-					withMetronome,
-				});
-			}
-			if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-			if (isMatch) {
-				recordWin();
-				if (withTimer) startTimer();
-				init();
-			} else {
-				recordLoss();
-			}
-		}
-
-		if (withArpeggios && questionArpeggio) {
-			const isMatch = await evaluateNotePlayed(note);
-			if (isMatch) {
-				setArpeggioPlayed((prev) => [...prev, note]);
-			} else {
-				recordLoss();
-			}
-		}
-
-		evaluateCooldownRef.current = true;
-		setTimeout(() => {
-			evaluateCooldownRef.current = false;
-		}, COOLDOWN_MS);
-	};
-
-	useEffect(() => {
-		if (arpeggioPlayed.length === 3) {
-			recordWin();
-			setArpeggioPlayed([]);
-			evaluateCooldownRef.current = true;
-			init();
-
-			if (withTimer) {
-				startTimer();
-			}
-		}
-	}, [arpeggioPlayed]);
-
-	const startGame = async () => {
-		resetGame();
-		await init(); // ensure new question is ready
-		setGameStarted(true);
-
-		if (withTimer) {
-			startTimer();
-		}
-		if (!sessionId) await startSession(NOTE_MATCH_TYPE);
-	};
-
-	const startTimer = () => {
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
-		let start = Date.now();
-
-		const step = () => {
-			const elapsed = Date.now() - start;
-			const percent = Math.min((elapsed / duration) * 100, 100);
-			setProgress(percent);
-
-			if (elapsed < duration) {
-				rafRef.current = requestAnimationFrame(step);
-			}
-		};
-
-		step();
-
-		timeoutRef.current = setTimeout(() => {
-			const event: NoteEvent = {
-				expectedNote: selectedNoteRef.current,
-				playedNote: "",
-				isCorrect: false,
-				timeToHitMs: 9999,
-				metronomeOffsetMs: 0,
-				playedAt: new Date(),
-			};
-			recordLoss();
-			addEvent(event, {
-				withMetronome,
-				withTimer,
-			});
-			if (withArpeggios) {
-				setArpeggioPlayed([]);
-			}
-			init();
-			startTimer();
-		}, duration);
-	};
-
-	const stopGame = () => {
-		resetGame();
-		if (events) finishSession();
-	};
-
 	const renderFilters = () =>
 		QUALITY.map((filter, index) => (
 			<button
 				className={`filter_btn ${
-					selectedQualities.indexOf(filter) !== -1 ? "active" : ""
+					state.selectedQualities.indexOf(filter) !== -1 ? "active" : ""
 				}`}
 				key={filter + index}
 				onClick={() =>
-					setSelectedQualities((prev) =>
-						selectedQualities.includes(filter)
-							? selectedQualities.filter((f) => f !== filter)
+					setters.setSelectedQualities((prev: ScaleQuality[]) =>
+						state.selectedQualities.includes(filter)
+							? state.selectedQualities.filter(
+									(f: ScaleQuality) => f !== filter
+							  )
 							: [...prev, filter]
 					)
 				}
@@ -339,7 +65,7 @@ const NoteMatchGame = () => {
 					<PlusIcon
 						size={16}
 						className={`filter_icon ${
-							selectedQualities.includes(filter) ? "active" : ""
+							state.selectedQualities.includes(filter) ? "active" : ""
 						}`}
 					/>
 					{filter.slice(0, 3)}
@@ -352,17 +78,17 @@ const NoteMatchGame = () => {
 			<BackToButton label="To dashboard" url={"/dashboard"} />
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
-					htmlFor="isPracticeMode"
+					htmlFor="state.isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
 				>
 					<Switch
-						disabled={gameStarted}
-						checked={isPracticeMode}
-						onCheckChange={setIsPracticeMode}
+						disabled={state.gameStarted}
+						checked={state.isPracticeMode}
+						onCheckChange={setters.setIsPracticeMode}
 					/>
 					<p
 						style={{
-							color: isPracticeMode ? "var(--clr-brand)" : "gray",
+							color: state.isPracticeMode ? "var(--clr-brand)" : "gray",
 						}}
 					>
 						Practice mode
@@ -379,82 +105,22 @@ const NoteMatchGame = () => {
 				</div>
 				<div className="scoreboard text-2xl font-mono w-full">
 					<label className="scoreboard_label">Tally</label>
-					<AnimatedNumber number={score.losses} />:
-					<AnimatedNumber number={score.wins} />
+					<AnimatedNumber number={state.score.losses} />:
+					<AnimatedNumber number={state.score.wins} />
 				</div>
 			</div>
-
-			{/* FILTER CONTROLS */}
-			<div className="switch_ctn grid grid-cols-2 gap-7">
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withMetronome" className="flex items-center gap-2">
-							<Drum />
-							<Switch
-								disabled={gameStarted || withTimer}
-								checked={withMetronome}
-								onCheckChange={setWithMetronome}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						[coming soon] Practice with a metronome
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withTimer" className="flex items-center gap-2">
-							<Timer />
-							<Switch
-								disabled={gameStarted || withMetronome}
-								checked={withTimer}
-								onCheckChange={setWithTimer}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with a time limit</TooltipContent>
-				</Tooltip>
-
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withArpeggios" className="flex items-center gap-2">
-							<Piano />
-							<Switch
-								disabled={gameStarted}
-								checked={withArpeggios}
-								onCheckChange={setWithArpeggios}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>
-						Practice with single notes or arpeggios
-					</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger asChild={true}>
-						<label htmlFor="withInversions" className="flex items-center gap-2">
-							<ArrowUpDown />
-							<Switch
-								disabled={gameStarted}
-								checked={withInversions}
-								onCheckChange={setWithInversions}
-							/>
-						</label>
-					</TooltipTrigger>
-					<TooltipContent>Practice with inversions</TooltipContent>
-				</Tooltip>
-			</div>
-			{withMetronome && (
+			<GameOptionsSwitches state={state} setters={setters} />
+			{state.withMetronome && (
 				<MetroWidget
-					gameStarted={gameStarted}
-					play={countdown || gameStarted}
-					bpm={bpm}
-					setBpm={setBpm}
-					lastTickTime={lastTickTime}
-					setLastTickTime={setLastTickTime}
+					gameStarted={state.gameStarted}
+					play={state.countdown || state.gameStarted}
+					bpm={state.bpm}
+					setBpm={setters.setBpm}
+					lastTickTime={state.lastTickTime}
+					setLastTickTime={setters.setLastTickTime}
 				/>
 			)}
-			{withTimer && (
+			{state.withTimer && (
 				<div className="flex w-full">
 					<h1 className="scoreboard timer w-12 text-xs flex items-center">
 						{displayedDuration / 1000} s
@@ -470,10 +136,10 @@ const NoteMatchGame = () => {
 				</div>
 			)}
 			<Clockface
-				showPulse={showPulse}
-				withTimer={withTimer}
-				progress={progress}
-				gameStarted={gameStarted}
+				showPulse={state.showPulse}
+				withTimer={state.withTimer}
+				progress={state.progress}
+				gameStarted={state.gameStarted}
 			>
 				<StreakManager />
 				<div className={`game_question inversions `}>
@@ -481,47 +147,47 @@ const NoteMatchGame = () => {
 						<Spinner />
 					) : (
 						<>
-							{!gameStarted ? (
+							{!state.gameStarted ? (
 								<button
-									onClick={() => setCountdown(true)}
+									onClick={() => setters.setCountdown(true)}
 									className="game_btn start-game_btn metro-btn "
 								>
-									{!countdown ? (
+									{!state.countdown ? (
 										"Start"
 									) : (
 										<Countdown
 											value={4}
-											bpm={bpm}
-											onCountdownFinished={startGame}
+											bpm={state.bpm}
+											onCountdownFinished={actions.startGame}
 										/>
 									)}
 								</button>
 							) : (
 								<button
-									onClick={stopGame}
+									onClick={actions.stopGame}
 									className="game_btn stop-game_btn inversions"
 								>
 									Stop
 								</button>
 							)}
-							<div className={`note ${showShake ? "shake-error" : ""}`}>
-								{selectedNote}
+							<div className={`note ${state.showShake ? "shake-error" : ""}`}>
+								{state.selectedNote}
 							</div>
-							{withArpeggios && (
-								<div className="quality">{questionQuality}</div>
+							{state.withArpeggios && (
+								<div className="quality">{state.questionQuality}</div>
 							)}
-							{withInversions && (
+							{state.withInversions && (
 								<div className="inversion text-red-600 w-full h-full text-2xl">
-									{questionInversion}
+									{state.questionInversion}
 								</div>
 							)}
-							{withArpeggios && gameStarted && (
+							{state.withArpeggios && state.gameStarted && (
 								<div className="arpeggio-progress_ctn flex gap-1 max-w-[50px] w-full justify-between">
 									{[0, 1, 2].map((i) => (
 										<div
 											key={i}
 											className={`dot ${
-												arpeggioPlayed.length > i ? "checked" : ""
+												state.arpeggioPlayed.length > i ? "checked" : ""
 											}`}
 										></div>
 									))}
@@ -532,7 +198,7 @@ const NoteMatchGame = () => {
 				</div>
 			</Clockface>
 
-			{withArpeggios && (
+			{state.withArpeggios && (
 				<>
 					<label htmlFor="scale_types">
 						Select scales:
@@ -542,7 +208,10 @@ const NoteMatchGame = () => {
 					</label>
 				</>
 			)}
-			<PitchyComponent showDevices={true} onNoteDetection={onNoteDetection} />
+			<PitchyComponent
+				showDevices={true}
+				onNoteDetection={actions.onNoteDetection}
+			/>
 		</div>
 	);
 };

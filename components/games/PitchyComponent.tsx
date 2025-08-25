@@ -5,7 +5,11 @@ import { PitchDetector } from "pitchy";
 import { getNoteFromPitch } from "@/lib/utils/gameUtils";
 import { NoteInfo } from "@/types/types";
 import useCookies from "@/hooks/useCookies";
-import { MAX_PITCH_HZ, MIN_CLARITY, MIN_PITCH_HZ } from "./GameConstants";
+import {
+	MAX_PITCH_HZ,
+	MIN_CLARITY,
+	MIN_PITCH_HZ,
+} from "../../constants/GameConstants";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;

@@ -28,12 +28,11 @@ import {
 	COOLDOWN_MS,
 	MAX_TEMPO_AS_NUM,
 	NOTE_MATCH_TYPE,
-} from "./GameConstants";
+} from "../../constants/GameConstants";
 import StreakManager from "./ui/StreakManager";
-import { BIZ_UDPMincho } from "next/font/google";
 import BackToButton from "./ui/BackToButton";
 
-const InversionsGame = () => {
+const NoteMatchGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
 	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
@@ -548,4 +547,4 @@ const InversionsGame = () => {
 	);
 };
 
-export default InversionsGame;
+export default NoteMatchGame;

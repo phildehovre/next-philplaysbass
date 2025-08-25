@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
-import { RHYTHM_ACCURACY_TYPE } from "../GameConstants";
+import { RHYTHM_ACCURACY_TYPE } from "../../../constants/GameConstants";
 
 type ClockfacePropsType = {
 	showPulse: boolean;

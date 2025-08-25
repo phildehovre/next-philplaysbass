@@ -12,7 +12,10 @@ import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
-import { COOLDOWN_MS, RHYTHM_ACCURACY_TYPE } from "./GameConstants";
+import {
+	COOLDOWN_MS,
+	RHYTHM_ACCURACY_TYPE,
+} from "../../constants/GameConstants";
 import ScoreModal from "./ui/ScoreModal";
 import BackToButton from "./ui/BackToButton";
 

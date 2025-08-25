@@ -28,38 +28,40 @@ import {
 	COOLDOWN_MS,
 	MAX_TEMPO_AS_NUM,
 	NOTE_MATCH_TYPE,
-} from "./GameConstants";
+} from "../../constants/GameConstants";
 import StreakManager from "./ui/StreakManager";
 import { BIZ_UDPMincho } from "next/font/google";
 import BackToButton from "./ui/BackToButton";
 
 const InversionsGame = () => {
 	const [selectedNote, setSelectedNote] = useState("");
+	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
 	const [questionQuality, setQuestionQuality] = useState<ScaleQuality>();
 	const [questionArpeggio, setQuestionArpeggio] = useState<Note[]>([]);
 	const [questionInversion, setQuestionInversion] = useState<string | "">("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
-	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [withTimer, setWithTimer] = useState(false);
 	const [withMetronome, setWithMetronome] = useState(false);
 	const [withArpeggios, setWithArpeggios] = useState(false);
 	const [withInversions, setWithInversions] = useState(false);
-	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
-	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
+	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
+	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
+
+	const [score, setScore] = useState({ wins: 0, losses: 0 });
+	const [duration, setDuration] = useState<number>(displayedDuration);
+	const [showShake, setShowShake] = useState(false);
 	const [progress, setProgress] = useState(0);
-	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
+	const [showPulse, setShowPulse] = useState<boolean>(false);
+	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
+
+	const [gameStarted, setGameStarted] = useState(false);
+	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
-	const [gameStarted, setGameStarted] = useState(false);
-	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
-	const [showPulse, setShowPulse] = useState<boolean>(false);
-	const [showShake, setShowShake] = useState(false);
 	const [countdown, setCountdown] = useState<boolean>(false);
-	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
-	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const rafRef = useRef<number | null>(null);

@@ -20,7 +20,7 @@ import {
 	MAX_TEMPO_AS_NUM,
 	MAX_TEMPO_AS_STR,
 	MIN_TEMPO_AS_STR,
-} from "../games/GameConstants";
+} from "../../constants/GameConstants";
 
 type SoundObject = {
 	woodblock: HTMLAudioElement | undefined;

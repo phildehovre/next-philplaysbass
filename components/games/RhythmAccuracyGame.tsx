@@ -14,10 +14,12 @@ import ScoreModal from "./ui/ScoreModal";
 import BackToButton from "./ui/BackToButton";
 import { useRhythmAccuracyGame } from "@/hooks/game-hooks/useRhythmAccuracyGame";
 import { NoteInfo } from "@/types/types";
+import gsap from "gsap";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 
+	const gameCtn = useRef<HTMLDivElement>(null);
 	const { events, showScore, finishSession, scoreEvents, bpm, setBpm } =
 		usePracticeSession();
 
@@ -44,12 +46,32 @@ const RhythmAccuracyGame = () => {
 		actions.onNoteDetection(note, bpm);
 	};
 
+	useEffect(() => {
+		if (gameCtn.current) {
+			// Select all children sections inside the dashboard
+			const sections = [
+				gameCtn.current,
+				...gameCtn.current.querySelectorAll("*"),
+			];
+			gsap.fromTo(
+				sections,
+				{ opacity: 0, y: 20 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.1,
+					duration: 0.2,
+					ease: "power2.out",
+				}
+			);
+		}
+	}, []);
 	return (
-		<div className="game_ctn max-w-[24em]">
+		<div ref={gameCtn} className="game_ctn max-w-[24em]">
 			<BackToButton url="/dashboard" label="To dashboard" />
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
-					htmlFor="state.isPracticeMode"
+					htmlFor="isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
 				>
 					<Switch

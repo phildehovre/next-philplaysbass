@@ -1,13 +1,13 @@
-import InversionsGame from "@/components/games/InversionsGame";
-import BackToButton from "@/components/games/ui/BackToButton";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+import NoteMatchGame from "@/components/games/NoteMatchGame";
+import { NoteMatchGameProvider } from "@/context/noteMatchGameContext";
 import React from "react";
 
 const page = async () => {
 	return (
 		<>
-			<InversionsGame />
+			<NoteMatchGameProvider>
+				<NoteMatchGame />
+			</NoteMatchGameProvider>
 		</>
 	);
 };

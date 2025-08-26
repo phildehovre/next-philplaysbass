@@ -10,7 +10,7 @@ import {
 	MIN_CLARITY,
 	MIN_PITCH_HZ,
 	MIN_VOLUME_DB,
-} from "../GameConstants";
+} from "../../../constants/GameConstants";
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;

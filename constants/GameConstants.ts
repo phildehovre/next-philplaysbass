@@ -9,7 +9,7 @@ export const MAX_TEMPO_AS_NUM = Number(MAX_TEMPO_AS_STR);
 export const MIN_TEMPO_AS_NUM = Number(MIN_TEMPO_AS_STR);
 
 export const TOLERANCE = 100; // in millisecs
-export const MS_LATENCY_OFFSET = 150;
+export const MS_LATENCY_OFFSET = 175;
 
 export const COOLDOWN_MS = 250;
 

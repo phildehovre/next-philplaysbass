@@ -3,55 +3,26 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import "../metronome/metronome.scss";
-import { calculateMsOffset } from "@/lib/utils/gameUtils";
 import PitchyComponent from "./PitchyComponent";
-import { GameTypes, NoteEvent, NoteInfo } from "@/types/types";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
-import {
-	COOLDOWN_MS,
-	RHYTHM_ACCURACY_TYPE,
-} from "../../constants/GameConstants";
 import ScoreModal from "./ui/ScoreModal";
 import BackToButton from "./ui/BackToButton";
+import { useRhythmAccuracyGame } from "@/hooks/game-hooks/useRhythmAccuracyGame";
+import { NoteInfo } from "@/types/types";
 
 const RhythmAccuracyGame = () => {
-	const [score, setScore] = useState({ wins: 0, losses: 0 });
-	const [progress, setProgress] = useState(0);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
-	const [gameStarted, setGameStarted] = useState(false);
-	const [isPracticeMode, setIsPracticeMode] = useState<boolean>(false);
-	const [showPulse, setShowPulse] = useState<boolean>(false);
-	const [showShake, setShowShake] = useState(false);
-	const [countdown, setCountdown] = useState<boolean>(false);
-	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
-	const [finalScore, setFinalScore] = useState<{
-		wins: number;
-		losses: number;
-	}>();
 
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const rafRef = useRef<number | null>(null);
-	const evaluateCooldownRef = useRef(false);
-	const noteShownAtRef = useRef<number | null>(null);
-	const selectedNoteRef = useRef<string>("");
+	const { events, showScore, finishSession, scoreEvents, bpm, setBpm } =
+		usePracticeSession();
 
-	const {
-		events,
-		showScore,
-		addEvent,
-		sessionId,
-		startSession,
-		finishSession,
-		scoreEvents,
-		bpm,
-		setBpm,
-	} = usePracticeSession();
+	const game = useRhythmAccuracyGame();
+	const { state, setters, actions } = game;
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
@@ -69,97 +40,8 @@ const RhythmAccuracyGame = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		return () => {
-			if (timeoutRef.current) clearInterval(timeoutRef.current);
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		};
-	}, []);
-
-	// Practice mode switch
-	useEffect(() => {
-		setScore({ wins: 0, losses: 0 });
-	}, [isPracticeMode]);
-
-	const resetGame = () => {
-		// clear timers
-		if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-		// reset state
-		setGameStarted(false);
-		setCountdown(false);
-		setProgress(0);
-		setScore({ wins: 0, losses: 0 });
-		setShowPulse(false);
-		setShowShake(false);
-	};
-
-	const recordLoss = () => {
-		setScore((prev) => ({ ...prev, losses: prev.losses + 1 }));
-		setShowShake(true);
-		setTimeout(() => setShowShake(false), COOLDOWN_MS);
-	};
-	const recordWin = () => {
-		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
-		setShowPulse(true);
-		setTimeout(() => setShowPulse(false), COOLDOWN_MS);
-	};
-
-	const onNoteDetection = async (note: NoteInfo) => {
-		const offset = calculateMsOffset(bpm, lastTickTime) as number;
-		if (!isTabVisible) return;
-		if (!gameStarted) return;
-
-		if (!sessionId) {
-			await startSession(RHYTHM_ACCURACY_TYPE);
-		}
-
-		if (evaluateCooldownRef.current) return;
-
-		const now = Date.now();
-		const timeToHitMs = noteShownAtRef.current
-			? now - noteShownAtRef.current
-			: 0;
-
-		const event: NoteEvent = {
-			expectedNote: "",
-			playedNote: note.noteName,
-			isCorrect: offset < 85,
-			timeToHitMs,
-			metronomeOffsetMs: offset,
-			playedAt: new Date(),
-		};
-
-		// Only save to DB if not in practice mode?
-		if (!isPracticeMode && !evaluateCooldownRef.current) {
-			addEvent(event, { bpm });
-			if (Math.abs(offset) < 85) {
-				recordWin();
-			} else {
-				recordLoss();
-			}
-		}
-		if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-		evaluateCooldownRef.current = true;
-		setTimeout(() => {
-			evaluateCooldownRef.current = false;
-		}, COOLDOWN_MS);
-	};
-
-	const startGame = async () => {
-		resetGame();
-		setGameStarted(true);
-
-		if (!sessionId) await startSession(RHYTHM_ACCURACY_TYPE);
-	};
-
-	const stopGame = async () => {
-		setFinalScore(score);
-		resetGame();
-		setGameStarted(false);
-		if (events) await finishSession();
+	const forwardNoteDetection = (note: NoteInfo) => {
+		actions.onNoteDetection(note, bpm);
 	};
 
 	return (
@@ -167,17 +49,17 @@ const RhythmAccuracyGame = () => {
 			<BackToButton url="/dashboard" label="To dashboard" />
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
-					htmlFor="isPracticeMode"
+					htmlFor="state.isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
 				>
 					<Switch
-						disabled={gameStarted}
-						checked={isPracticeMode}
-						onCheckChange={setIsPracticeMode}
+						disabled={state.gameStarted}
+						checked={state.isPracticeMode}
+						onCheckChange={setters.setIsPracticeMode}
 					/>
 					<p
 						style={{
-							color: isPracticeMode ? "var(--clr-brand)" : "gray",
+							color: state.isPracticeMode ? "var(--clr-brand)" : "gray",
 						}}
 					>
 						Practice mode
@@ -186,50 +68,56 @@ const RhythmAccuracyGame = () => {
 			</div>
 
 			<div className="scoreboard text-2xl font-mono w-full">
-				<AnimatedNumber number={score.losses} />:
-				<AnimatedNumber number={score.wins} />
+				<AnimatedNumber number={state.score.losses} />:
+				<AnimatedNumber number={state.score.wins} />
 			</div>
 
 			<Clockface
-				showPulse={showPulse}
-				progress={progress}
-				gameStarted={gameStarted}
+				showPulse={state.showPulse}
+				progress={state.progress}
+				gameStarted={state.gameStarted}
 			>
 				<div className={`game_question inversions `}>
-					{!gameStarted ? (
+					{!state.gameStarted ? (
 						<button
-							onClick={() => setCountdown(true)}
+							onClick={() => setters.setCountdown(true)}
 							className="game_btn start-game_btn metro-btn "
 						>
-							{!countdown ? (
+							{!state.countdown ? (
 								"Start"
 							) : (
 								<Countdown
 									value={4}
 									bpm={bpm}
-									onCountdownFinished={startGame}
+									onCountdownFinished={actions.startGame}
 								/>
 							)}
 						</button>
 					) : (
-						<button onClick={stopGame} className="game_btn stop-game_btn">
+						<button
+							onClick={actions.stopGame}
+							className="game_btn stop-game_btn"
+						>
 							Stop
 						</button>
 					)}
 				</div>
 			</Clockface>
 			<MetroWidget
-				gameStarted={gameStarted}
-				play={countdown || gameStarted}
+				gameStarted={state.gameStarted}
+				play={state.countdown || state.gameStarted}
 				bpm={bpm}
 				setBpm={setBpm}
-				lastTickTime={lastTickTime}
-				setLastTickTime={setLastTickTime}
+				lastTickTime={state.lastTickTime}
+				setLastTickTime={setters.setLastTickTime}
 			/>
 
-			<PitchyComponent showDevices={true} onNoteDetection={onNoteDetection} />
-			{!gameStarted && showScore && events.length && (
-				<ScoreModal scoreData={finalScore} scoreEvents={scoreEvents} />
+			<PitchyComponent
+				showDevices={true}
+				onNoteDetection={forwardNoteDetection}
+			/>
+			{!state.gameStarted && showScore && events.length && (
+				<ScoreModal scoreData={state.finalScore} scoreEvents={scoreEvents} />
 			)}
 		</div>
 	);

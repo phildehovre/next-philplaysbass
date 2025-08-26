@@ -111,7 +111,6 @@ export const useRhythmAccuracyGame = () => {
 			}, COOLDOWN_MS);
 		},
 		[
-			bpm,
 			lastTickTime,
 			gameStarted,
 			sessionId,

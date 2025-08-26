@@ -11,9 +11,9 @@ import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
 import ScoreModal from "./ui/ScoreModal";
-import { useRhythmAccuracyGame } from "@/hooks/game-hooks/useRhythmAccuracyGame";
 import { NoteInfo } from "@/types/types";
 import GameContainer from "./ui/GameContainer";
+import { useRhythmAccuracyGameContext } from "@/context/rhythmAccuracyGameContext";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
@@ -21,15 +21,17 @@ const RhythmAccuracyGame = () => {
 	const { events, showScore, finishSession, scoreEvents, bpm, setBpm } =
 		usePracticeSession();
 
-	const game = useRhythmAccuracyGame();
+	const game = useRhythmAccuracyGameContext();
 	const { state, setters, actions } = game;
 
 	useEffect(() => {
 		const handleVisibilityChange = () => {
 			setIsTabVisible(!document.hidden);
+			console.log("visibility change");
 			if (document.hidden) finishSession();
 		};
 		const handleBeforeUnload = () => {
+			console.log("unloading");
 			finishSession();
 		};
 		document.addEventListener("visibilitychange", handleVisibilityChange);

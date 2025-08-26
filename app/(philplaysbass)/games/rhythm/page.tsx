@@ -1,10 +1,12 @@
 import RhythmAccuracyGame from "@/components/games/RhythmAccuracyGame";
-import BackToButton from "@/components/games/ui/BackToButton";
+import { RhythmAccuracyGameProvider } from "@/context/rhythmAccuracyGameContext";
 import React from "react";
 
 const page = () => (
 	<div>
-		<RhythmAccuracyGame />
+		<RhythmAccuracyGameProvider>
+			<RhythmAccuracyGame />
+		</RhythmAccuracyGameProvider>
 	</div>
 );
 

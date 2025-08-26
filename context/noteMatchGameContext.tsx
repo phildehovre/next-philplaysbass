@@ -3,6 +3,7 @@
 
 import React, { createContext, useContext } from "react";
 import { useNoteMatchGame } from "@/hooks/game-hooks/useNoteMatchGame";
+import { GameTypes } from "@/types/types";
 
 const NoteMatchGameContext = createContext<any>(null);
 
@@ -20,7 +21,7 @@ export const NoteMatchGameProvider = ({
 };
 
 export const useNoteMatchGameContext = () => {
-	const context = useContext(NoteMatchGameContext);
+	let context = useContext(NoteMatchGameContext);
 	if (!context)
 		throw new Error(
 			"useNoteMatchGameContext must be used within a NoteMatchGameProvider"

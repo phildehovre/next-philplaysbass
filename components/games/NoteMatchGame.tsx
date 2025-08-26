@@ -13,9 +13,9 @@ import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
 import StreakManager from "./ui/StreakManager";
-import BackToButton from "./ui/BackToButton";
 import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
+import GameContainer from "./ui/GameContainer";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -74,8 +74,7 @@ const NoteMatchGame = () => {
 		));
 
 	return (
-		<div className="game_ctn max-w-[24em] ">
-			<BackToButton label="To dashboard" url={"/dashboard"} />
+		<GameContainer>
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="state.isPracticeMode"
@@ -212,7 +211,7 @@ const NoteMatchGame = () => {
 				showDevices={true}
 				onNoteDetection={actions.onNoteDetection}
 			/>
-		</div>
+		</GameContainer>
 	);
 };
 

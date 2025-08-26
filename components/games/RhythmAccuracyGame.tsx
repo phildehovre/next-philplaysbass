@@ -11,15 +11,13 @@ import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
 import ScoreModal from "./ui/ScoreModal";
-import BackToButton from "./ui/BackToButton";
 import { useRhythmAccuracyGame } from "@/hooks/game-hooks/useRhythmAccuracyGame";
 import { NoteInfo } from "@/types/types";
-import gsap from "gsap";
+import GameContainer from "./ui/GameContainer";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 
-	const gameCtn = useRef<HTMLDivElement>(null);
 	const { events, showScore, finishSession, scoreEvents, bpm, setBpm } =
 		usePracticeSession();
 
@@ -46,30 +44,9 @@ const RhythmAccuracyGame = () => {
 		actions.onNoteDetection(note, bpm);
 	};
 
-	useEffect(() => {
-		if (gameCtn.current) {
-			// Select all children sections inside the dashboard
-			const sections = [
-				gameCtn.current,
-				...gameCtn.current.querySelectorAll("*"),
-			];
-			gsap.fromTo(
-				sections,
-				{ opacity: 0, y: 20 },
-				{
-					opacity: 1,
-					y: 0,
-					stagger: 0.1,
-					duration: 0.2,
-					ease: "power2.out",
-				}
-			);
-		}
-	}, []);
 	return (
-		<div ref={gameCtn} className="game_ctn max-w-[24em]">
-			<BackToButton url="/dashboard" label="To dashboard" />
-			<div className="game_header flex flex-col justify-center gap-2 w-full">
+		<GameContainer>
+			<div className="gsap-element game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="isPracticeMode"
 					className="flex justify-center gap-2 m-auto"
@@ -89,7 +66,7 @@ const RhythmAccuracyGame = () => {
 				</label>
 			</div>
 
-			<div className="scoreboard text-2xl font-mono w-full">
+			<div className="gsap-element scoreboard text-2xl font-mono w-full">
 				<AnimatedNumber number={state.score.losses} />:
 				<AnimatedNumber number={state.score.wins} />
 			</div>
@@ -98,6 +75,7 @@ const RhythmAccuracyGame = () => {
 				showPulse={state.showPulse}
 				progress={state.progress}
 				gameStarted={state.gameStarted}
+				className="gsap-element"
 			>
 				<div className={`game_question inversions `}>
 					{!state.gameStarted ? (
@@ -125,23 +103,27 @@ const RhythmAccuracyGame = () => {
 					)}
 				</div>
 			</Clockface>
-			<MetroWidget
-				gameStarted={state.gameStarted}
-				play={state.countdown || state.gameStarted}
-				bpm={bpm}
-				setBpm={setBpm}
-				lastTickTime={state.lastTickTime}
-				setLastTickTime={setters.setLastTickTime}
-			/>
+			<div className="gsap-element w-full">
+				<MetroWidget
+					gameStarted={state.gameStarted}
+					play={state.countdown || state.gameStarted}
+					bpm={bpm}
+					setBpm={setBpm}
+					lastTickTime={state.lastTickTime}
+					setLastTickTime={setters.setLastTickTime}
+				/>
+			</div>
 
-			<PitchyComponent
-				showDevices={true}
-				onNoteDetection={forwardNoteDetection}
-			/>
+			<div className="gsap-element w-full">
+				<PitchyComponent
+					showDevices={true}
+					onNoteDetection={forwardNoteDetection}
+				/>
+			</div>
 			{!state.gameStarted && showScore && events.length && (
 				<ScoreModal scoreData={state.finalScore} scoreEvents={scoreEvents} />
 			)}
-		</div>
+		</GameContainer>
 	);
 };
 

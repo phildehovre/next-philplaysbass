@@ -12,6 +12,7 @@ type ClockfacePropsType = {
 	children: React.ReactNode;
 	size?: number;
 	gameStarted: boolean;
+	className?: string;
 };
 
 const CIRCLE_RADIUS = 45;
@@ -28,6 +29,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	children,
 	size,
 	gameStarted,
+	className,
 }) => {
 	const [angle, setAngle] = useState(0);
 	const [blipVisible, setBlipVisible] = useState(false);
@@ -82,7 +84,11 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	}, [markerX, markerY, gameStarted, gameType]);
 
 	return (
-		<div className="clock-face relative flex items-center justify-center">
+		<div
+			className={`${
+				className ? className : ""
+			} clock-face relative flex items-center justify-center`}
+		>
 			{gameStarted && <Blip bpm={bpm} />}
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}

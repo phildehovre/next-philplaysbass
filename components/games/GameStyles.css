@@ -9,6 +9,8 @@
 	justify-content: center;
 	box-shadow: var(--box-shadow);
 	margin-top: 1em;
+	min-width: 350px;
+	animation: fadeIn 500ms forwards;
 }
 
 .game_btn {
@@ -437,6 +439,15 @@ input[type="range"]:focus::-ms-fill-upper {
 	}
 	to {
 		opacity: 0;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
 	}
 }
 

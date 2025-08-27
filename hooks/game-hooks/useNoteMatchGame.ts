@@ -264,7 +264,11 @@ export const useNoteMatchGame = () => {
 		resetGame();
 		await init();
 		setGameStarted(true);
-	}, [resetGame, init]);
+		if (withTimer) {
+			setProgress(0);
+			startTimer();
+		}
+	}, [resetGame, init, withTimer]);
 
 	const stopGame = useCallback(() => {
 		resetGame();

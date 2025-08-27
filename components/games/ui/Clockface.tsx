@@ -4,6 +4,7 @@ import { ScoreBurstManager } from "./ScoreBurstManager";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
 import { RHYTHM_ACCURACY_TYPE } from "../../../constants/GameConstants";
+import PowerUpBar from "./PowerUpBar";
 
 type ClockfacePropsType = {
 	showPulse: boolean;
@@ -15,10 +16,11 @@ type ClockfacePropsType = {
 	className?: string;
 };
 
-const CIRCLE_RADIUS = 45;
+const CIRCLE_RADIUS = 38;
 const CIRCLE_CANVAS = 50;
 const TAIL_LENGTH = 25;
 const radius = CIRCLE_RADIUS;
+const bonusRadius = radius + 8;
 const cx = CIRCLE_CANVAS;
 const cy = CIRCLE_CANVAS;
 
@@ -93,7 +95,6 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}
 			<ScoreBurstManager />
-
 			<svg viewBox="0 0 100 100" className="clock-svg">
 				{/* Base circle */}
 				<circle
@@ -103,35 +104,21 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					r={radius}
 					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
-
-				{/* Timer progress */}
+				{/* Bonus arc track + fill */}
+				<PowerUpBar cx={cx} cy={cy} progress={progress} radius={radius} />
+				{/* Timer progress (full circle) */}
 				{withTimer && (
 					<circle
 						className="clock-progress"
 						cx={cx}
 						cy={cy}
+						strokeLinecap="round"
 						r={radius}
 						strokeDasharray={2 * Math.PI * radius}
 						strokeDashoffset={(1 - progress / 100) * 2 * Math.PI * radius}
 					/>
 				)}
-
-				{/* Tail + marker */}
-				{gameStarted && gameType === "rhythm-accuracy" && (
-					<>
-						<circle cx={markerX} cy={markerY} r={3} fill="var(--clr-brand)" />
-						{tail.map((pos, i) => (
-							<circle
-								key={i}
-								cx={pos.x}
-								cy={pos.y}
-								r={2}
-								fill="var(--clr-brand)"
-								style={{ opacity: (i + 1) / tail.length / 1.5 }}
-							/>
-						))}
-					</>
-				)}
+				...
 			</svg>
 
 			{/* Children */}

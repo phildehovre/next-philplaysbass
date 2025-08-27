@@ -70,8 +70,8 @@ const Dashboard = (props: any) => {
 					</AnnouncementBanner>
 					<AnnouncementBanner title={"Announcements"} callToActionText="">
 						<p>
-							The PhilPlaysBass community would love for you to join the forum
-							and start exchanging with other members!
+							The leaderboard is now Live! Will you measure up against the OG's
+							of the PhilPlaysBass stream? Play any of the games to find out!
 						</p>
 					</AnnouncementBanner>
 				</div>

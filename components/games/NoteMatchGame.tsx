@@ -16,6 +16,7 @@ import StreakManager from "./ui/StreakManager";
 import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
+import PowerUpBar from "./ui/PowerUpBar";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);

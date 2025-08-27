@@ -81,7 +81,6 @@ export const PracticeSessionProvider = ({
 				streak,
 				gameType,
 			});
-			console.log(event);
 
 			if (newScore) {
 				setScore((prev) => ({

@@ -202,8 +202,8 @@
 }
 
 .clock-face {
-	width: 175px;
-	height: 175px;
+	width: 200px;
+	height: 200px;
 	margin: 1rem auto;
 	position: relative;
 }
@@ -224,7 +224,11 @@
 	fill: none;
 	stroke: var(--clr-brand);
 	stroke-width: 10;
-	/* transition: stroke-dashoffset 0.05s infinite; */
+	stroke-linecap: round;
+}
+
+.clock-powerup {
+	transition: stroke-dashoffset 0.05s infinite;
 }
 
 .clock-text {

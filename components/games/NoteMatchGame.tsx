@@ -29,6 +29,7 @@ const NoteMatchGame = () => {
 	const game = useNoteMatchGameContext();
 	const { state, setters, actions } = game;
 
+	console.log(state.progress);
 	useEffect(() => {
 		const handleVisibilityChange = () => {
 			setIsTabVisible(!document.hidden);

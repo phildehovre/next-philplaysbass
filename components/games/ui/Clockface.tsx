@@ -85,7 +85,6 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 		}
 	}, [markerX, markerY, gameStarted, gameType]);
 
-	console.log(Math.PI * bonusRadius * (1 - (progress ?? 0) / 100));
 	return (
 		<div
 			className={`${
@@ -106,28 +105,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
 				{/* Bonus arc track + fill */}
-				<g transform={`rotate(90 ${cx} ${cy})`} className="clock-powerup">
-					<path
-						d={`M ${cx} ${cy - bonusRadius}
-        A ${bonusRadius} ${bonusRadius} 0 0 0 ${cx} ${cy + bonusRadius}`}
-						stroke="var(--clr-box-bg)"
-						strokeLinecap="round"
-						strokeWidth="4"
-						fill="none"
-					/>
-					<path
-						d={`M ${cx} ${cy - bonusRadius}
-        A ${bonusRadius} ${bonusRadius} 0 0 0 ${cx} ${cy + bonusRadius}`}
-						stroke="var(--clr-accent)"
-						strokeWidth="4"
-						strokeLinecap="round"
-						fill="none"
-						strokeDasharray={Math.PI * bonusRadius}
-						strokeDashoffset={
-							Math.PI * bonusRadius * (1 - (progress ?? 0) / 100)
-						}
-					/>
-				</g>
+				<PowerUpBar cx={cx} cy={cy} progress={progress} radius={radius} />
 				{/* Timer progress (full circle) */}
 				{withTimer && (
 					<circle

@@ -249,6 +249,7 @@ export const useNoteMatchGame = () => {
 			withArpeggios,
 		]
 	);
+	console.log(withTimer);
 
 	useEffect(() => {
 		if (arpeggioPlayed.length === 3) {
@@ -264,7 +265,11 @@ export const useNoteMatchGame = () => {
 		resetGame();
 		await init();
 		setGameStarted(true);
-	}, [resetGame, init]);
+		if (withTimer) {
+			setProgress(0);
+			startTimer();
+		}
+	}, [resetGame, init, withTimer]);
 
 	const stopGame = useCallback(() => {
 		resetGame();

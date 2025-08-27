@@ -249,7 +249,6 @@ export const useNoteMatchGame = () => {
 			withArpeggios,
 		]
 	);
-	console.log(withTimer);
 
 	useEffect(() => {
 		if (arpeggioPlayed.length === 3) {

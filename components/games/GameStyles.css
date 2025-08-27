@@ -224,12 +224,11 @@
 	fill: none;
 	stroke: var(--clr-brand);
 	stroke-width: 10;
-	/* transition: stroke-dashoffset 0.05s infinite; */
 	stroke-linecap: round;
 }
 
 .clock-powerup {
-	transition: 100ms ease-in-out all;
+	transition: stroke-dashoffset 0.05s infinite;
 }
 
 .clock-text {

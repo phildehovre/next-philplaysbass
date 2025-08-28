@@ -20,6 +20,7 @@ import {
 } from "@/constants/GameConstants";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
+import useCookies from "../useCookies";
 
 export const useNoteMatchGame = () => {
 	// --- Game state ---
@@ -63,6 +64,37 @@ export const useNoteMatchGame = () => {
 		startSession,
 		finishSession,
 	} = usePracticeSession();
+
+	// Load game settings on Mount
+	useEffect(() => {
+		const saved = localStorage.getItem("gameSettings");
+		if (saved) {
+			try {
+				const parsed = JSON.parse(saved);
+				if (typeof parsed.withMetronome === "boolean")
+					setWithMetronome(parsed.withMetronome);
+				if (typeof parsed.withTimer === "boolean")
+					setWithTimer(parsed.withTimer);
+				if (typeof parsed.withArpeggios === "boolean")
+					setWithArpeggios(parsed.withArpeggios);
+				if (typeof parsed.withInversions === "boolean")
+					setWithInversions(parsed.withInversions);
+			} catch (e) {
+				console.error("Failed to parse game settings:", e);
+			}
+		}
+	}, []);
+
+	// Save settings on change
+	useEffect(() => {
+		const settings = {
+			withMetronome,
+			withTimer,
+			withArpeggios,
+			withInversions,
+		};
+		localStorage.setItem("gameSettings", JSON.stringify(settings));
+	}, [withMetronome, withTimer, withArpeggios, withInversions]);
 
 	// --- Helpers ---
 	const resetGame = useCallback(() => {
@@ -118,7 +150,6 @@ export const useNoteMatchGame = () => {
 			startTimer();
 		}, duration);
 	};
-
 	useEffect(() => {
 		return () => {
 			if (timeoutRef.current) clearTimeout(timeoutRef.current);

@@ -1,109 +1,125 @@
 "use client";
-
+import { useEffect, useLayoutEffect, useState } from "react";
 import "./Nav.css";
-import { textObject as lg } from "../constants/textFile";
-import { useLanguage } from "../context/LanguageContext";
-import { LANGUAGES } from "../constants/languages";
-import type { LanguagesType } from "../types/types";
-import React from "react";
-import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { LucideMenu } from "lucide-react";
+import { useActiveSectionContext } from "../context/activeElementContext";
+import { links } from "../types/types";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import Link from "next/link";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
+import UserMenu from "./UserMenu";
+import NavbarBuffer from "./NavbarBuffer";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { Moon, MoonIcon, Timer } from "lucide-react";
+import Switch from "./Switch";
+import { useTheme } from "next-themes";
 
-type NavProps = {
-	isLoggedIn: boolean | null;
-};
+function Header() {
+	const { activeSection, setActiveSection, setTimeOfLastClick } =
+		useActiveSectionContext();
 
-const Nav: React.FC<NavProps> = ({ isLoggedIn }) => {
-	const { language, setLanguage } = useLanguage();
+	const [isShowing, setIsShowing] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { setTheme, theme } = useTheme();
 
-	const languages: LanguagesType[] = LANGUAGES;
-	const btns = lg.nav.buttons;
+	const { user } = useKindeBrowserClient();
 
-	const renderLanguageButtons = () => {
-		return languages.map((item, index) => (
-			<React.Fragment key={item}>
-				<button onClick={() => setLanguage(item)}>{item}</button>
-				{index < languages.length - 1 && <span>|</span>}
-			</React.Fragment>
-		));
+	useEffect(() => {
+		if (user) {
+			setIsLoggedIn(true);
+		}
+		if (!user) {
+			setIsLoggedIn(false);
+		}
+	});
+	useLayoutEffect(() => {
+		gsap.registerPlugin(ScrollTrigger);
+
+		const ctx = gsap.context(() => {
+			ScrollTrigger.create({
+				trigger: "main",
+				start: "50px 5%",
+				toggleClass: { targets: "nav", className: "nav-active" },
+				// markers: true,
+			});
+		});
+
+		return () => ctx.revert();
+	});
+
+	const toggleTheme = () => {
+		setTheme((prev) => {
+			if (theme == "light") {
+				return "dark";
+			} else {
+				return "light";
+			}
+		});
 	};
 
-	const navLinks = [
-		{
-			href: "/",
-			label: btns.home.labels[language],
-			tooltip: btns.home.tooltip[language],
-		},
-		{
-			href: "/about",
-			label: btns.about.labels[language],
-			tooltip: btns.about.tooltip[language],
-		},
-		{
-			href: "/lessons",
-			label: btns.lessons.labels[language],
-			tooltip: btns.lessons.tooltip[language],
-		},
-		{
-			href: "/games",
-			label: btns.games.labels[language],
-			tooltip: btns.games.tooltips[language],
-		},
-	];
-
+	const renderLinks = () => {
+		return links.map((link) => {
+			return (
+				<li
+					key={link.name}
+					onClick={() => {
+						setActiveSection(link.name);
+						setTimeOfLastClick(Date.now());
+						setIsShowing(false);
+					}}
+					className={activeSection === link.name ? "active" : ""}
+				>
+					<Link href={link.hash}>{link.name}</Link>
+				</li>
+			);
+		});
+	};
 	return (
-		<nav>
-			<ul className="desktop-menu desktop">
-				{navLinks.map((link) => (
-					<li key={link.href}>
-						<Link href={link.href} title={link.tooltip}>
-							{link.label}
-						</Link>
+		<header>
+			<NavbarBuffer />
+			<nav className="navbar">
+				<div
+					className={`hamburger ${isShowing ? "showing" : ""}`}
+					onClick={() => setIsShowing(!isShowing)}
+				>
+					<span className="hamburger-bar"></span>
+					<span className="hamburger-bar"></span>
+					<span className="hamburger-bar"></span>
+					<span className="hamburger-bar"></span>
+				</div>
+				<ul className={`links ${isShowing ? "showing" : ""}`}>
+					{renderLinks()}
+					<li className="login-btn">
+						{isLoggedIn ? (
+							<UserMenu user={user} />
+						) : (
+							<button className="auth_btn desktop">
+								<LoginLink postLoginRedirectURL="/api/user">Sign in</LoginLink>
+							</button>
+						)}
 					</li>
-				))}
-			</ul>
-
-			<div className="mobile-menu">
-				<DropdownMenu>
-					<DropdownMenuTrigger>
-						<LucideMenu />
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						{navLinks.map((link) => (
-							<DropdownMenuItem asChild key={link.href}>
-								<a
-									className="gap-1 text-black"
-									style={{ color: "black", gap: "1em" }}
-									href={link.href}
-									title={link.tooltip}
-								>
-									{link.label}
-								</a>
-							</DropdownMenuItem>
-						))}
-					</DropdownMenuContent>
-				</DropdownMenu>
-			</div>
-
-			{isLoggedIn ? (
-				<button className="auth_btn desktop">
-					<LogoutLink>Log out</LogoutLink>
-				</button>
-			) : (
-				<button className="auth_btn desktop">
-					<LoginLink>Sign in</LoginLink>
-				</button>
-			)}
-			<div className="languages desktop">{renderLanguageButtons()}</div>
-		</nav>
+					<Tooltip>
+						<TooltipTrigger asChild={true}>
+							<label htmlFor="darkMode" className="flex items-center gap-2">
+								<MoonIcon />
+								<Switch
+									disabled={false}
+									checked={theme === "light"}
+									onCheckChange={toggleTheme}
+								/>
+							</label>
+						</TooltipTrigger>
+						<TooltipContent>Toggle dark/light mode</TooltipContent>
+					</Tooltip>
+				</ul>
+			</nav>
+		</header>
 	);
-};
+}
 
-export default Nav;
+export default Header;

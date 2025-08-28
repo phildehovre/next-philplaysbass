@@ -5,7 +5,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/AuthProvider";
 import Footer from "@/components/Footer";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import Nav_alt from "@/components/Nav_alt";
+import Nav from "@/components/Nav";
 import ActiveSectionContextProvider from "@/context/activeElementContext";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/context/userContext";
@@ -55,7 +55,7 @@ export default async function WebsiteLayout({
 							<LanguageProvider>
 								<UserProvider>
 									<ActiveSectionContextProvider>
-										<Nav_alt />
+										<Nav />
 									</ActiveSectionContextProvider>
 									{children}
 									<Footer />

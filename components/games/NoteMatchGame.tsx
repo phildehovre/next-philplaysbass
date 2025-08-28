@@ -16,7 +16,6 @@ import StreakManager from "./ui/StreakManager";
 import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
-import PowerUpBar from "./ui/PowerUpBar";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -24,7 +23,11 @@ const NoteMatchGame = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 
-	const { score: totalScore, finishSession } = usePracticeSession();
+	const {
+		score: totalScore,
+		finishSession,
+		isFirstTimeUser,
+	} = usePracticeSession();
 
 	const game = useNoteMatchGameContext();
 	const { state, setters, actions } = game;

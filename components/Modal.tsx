@@ -6,7 +6,7 @@ type ModalProps = {
 	children: React.ReactNode;
 	onClose: () => void;
 	className?: string;
-	excludeRefs: React.RefObject<HTMLElement>[];
+	excludeRefs?: React.RefObject<HTMLElement>[];
 };
 
 const Modal = ({

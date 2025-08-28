@@ -8,18 +8,19 @@ const HorizontalPulseVisualisation = ({
 	tempoInterval,
 	lastTickTime,
 	gameStarted,
+	onParentNoteDetection,
 }: {
 	play: boolean;
 	tempoInterval: number | undefined;
 	lastTickTime: number | null;
 	gameStarted: boolean;
+	onParentNoteDetection?: (note: NoteInfo) => void;
 }) => {
 	const [pulse, setPulse] = useState(false);
 	const [animationKey, setAnimationKey] = useState(0);
 	const [markers, setMarkers] = useState<{ id: number; msOffset: number }[]>(
 		[]
 	);
-
 	const [showMarker, setShowMarker] = useState<boolean>(false);
 	const lastDetectionTimeRef = useRef<number>(0);
 
@@ -41,7 +42,7 @@ const HorizontalPulseVisualisation = ({
 		return () => clearInterval(interval);
 	}, [play, tempoInterval, gameStarted]);
 
-	const onNoteDetection = (note: NoteInfo) => {
+	const onNoteDetection = () => {
 		const now = performance.now();
 
 		if (!cooldown || now - lastDetectionTimeRef.current < cooldown) return;

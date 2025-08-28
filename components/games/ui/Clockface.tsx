@@ -14,6 +14,7 @@ type ClockfacePropsType = {
 	size?: number;
 	gameStarted: boolean;
 	className?: string;
+	showProgress?: boolean;
 };
 
 const CIRCLE_RADIUS = 38;
@@ -32,9 +33,9 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	size,
 	gameStarted,
 	className,
+	showProgress,
 }) => {
 	const [angle, setAngle] = useState(0);
-	const [blipVisible, setBlipVisible] = useState(false);
 	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
 
 	const { bpm, gameType } = usePracticeSession();
@@ -104,10 +105,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					r={radius}
 					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
-				{/* Bonus arc track + fill */}
-				<PowerUpBar cx={cx} cy={cy} progress={progress} radius={radius} />
-				{/* Timer progress (full circle) */}
-				{withTimer && (
+				{(withTimer || showProgress) && (
 					<circle
 						className="clock-progress"
 						cx={cx}
@@ -116,6 +114,9 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 						r={radius}
 						strokeDasharray={2 * Math.PI * radius}
 						strokeDashoffset={(1 - progress / 100) * 2 * Math.PI * radius}
+						style={{
+							transition: "stroke-dashoffset 0.3s ease-out",
+						}}
 					/>
 				)}
 				...

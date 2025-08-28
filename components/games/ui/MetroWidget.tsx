@@ -7,6 +7,7 @@ import {
 	MIN_TEMPO_AS_STR,
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
+import { NoteInfo } from "@/types/types";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -87,6 +88,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 						type="range"
 						min={MIN_TEMPO_AS_STR}
 						max={MAX_TEMPO_AS_STR}
+						defaultValue={bpm}
 						onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
 						onMouseUp={() => setBpm(displayedBpm)}
 					/>

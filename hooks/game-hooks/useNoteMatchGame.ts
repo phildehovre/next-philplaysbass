@@ -9,7 +9,6 @@ import {
 } from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
-	QUALITY,
 	ScaleQuality,
 	selectRandomInversion,
 } from "@/constants/chromaticScale";
@@ -20,7 +19,6 @@ import {
 } from "@/constants/GameConstants";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
-import useCookies from "../useCookies";
 
 export const useNoteMatchGame = () => {
 	// --- Game state ---

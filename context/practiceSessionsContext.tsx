@@ -33,6 +33,7 @@ interface PracticeSessionContextType {
 	setBpm: (t: number) => void;
 	gameType: GameTypes | undefined;
 	streak: number;
+	isFirstTimeUser: boolean;
 }
 
 const PracticeSessionContext = createContext<
@@ -45,6 +46,7 @@ export const PracticeSessionProvider = ({
 	children: React.ReactNode;
 }) => {
 	const [sessionId, setSessionId] = useState<string | null>(null);
+	const [isFirstTimeUser, setIsFirstTimeUser] = useState<boolean>(true);
 	const [gameType, setGameType] = useState<GameTypes>();
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2 - 30);
 	const [startTime, setStartTime] = useState<Date | null>(null);
@@ -63,6 +65,16 @@ export const PracticeSessionProvider = ({
 		bonus: 0,
 	});
 	const [streak, setStreak] = useState<number>(0);
+
+	useEffect(() => {
+		const isFirstVisit = localStorage.getItem("isFirstTimeUser");
+		if (isFirstVisit) {
+			setIsFirstTimeUser(true);
+			return;
+		}
+	}, []);
+
+	console.log("isFirstTimeUser: ", isFirstTimeUser);
 
 	useEffect(() => {
 		const lastEvent = events[events.length - 1];
@@ -179,6 +191,7 @@ export const PracticeSessionProvider = ({
 		gameType,
 		streak,
 		totalScore,
+		isFirstTimeUser,
 	};
 
 	return (

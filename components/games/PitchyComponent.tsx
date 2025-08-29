@@ -22,6 +22,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
+	const [rms, setRms] = useState<number>(0);
 
 	const audioContextRef = useRef<AudioContext | null>(null);
 	const analyserRef = useRef<AnalyserNode | null>(null);
@@ -80,7 +81,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	useEffect(() => {
 		if (!pitch) return;
 		const evaluatedPitch = getNoteFromPitch(pitch);
-		onNoteDetection(evaluatedPitch);
+		onNoteDetection({ ...evaluatedPitch, volume: rms });
 	}, [pitch]);
 
 	useEffect(() => {
@@ -182,10 +183,8 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 					now - lastDetectionTime.current > REFRACTORY_MS
 				) {
 					setPitch(stableNoteRef.current.pitch);
-					// console.log(
-					// 	"✅ Passing all gates, emitting note:",
-					// 	stableNoteRef.current
-					// );
+					setRms(rms);
+
 					historyRef.current = [];
 					lastDetectionTime.current = now;
 				}
@@ -210,7 +209,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		<div className="p-4 space-y-4">
 			{showDevices && (
 				<div className="flex flex-col">
-					<label htmlFor="device" className="mr-2 font-semibold">
+					<label htmlFor="device" className="mr-2 font-regular">
 						Input device:
 					</label>
 					<select

@@ -1,22 +1,27 @@
 "use client";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import React, { useEffect, useRef, useState } from "react";
-import Modal from "../Modal";
+import Modal from "../../Modal";
 import {
+	CheckCircle2,
 	MessageCircleQuestionIcon,
 	PlayIcon,
 	StopCircleIcon,
 } from "lucide-react";
-import MetroWidget from "./ui/MetroWidget";
-import PitchyWithDeviceSelect from "./PitchyComponent";
-import Clockface from "./ui/Clockface";
+import MetroWidget from "../ui/MetroWidget";
+import PitchyWithDeviceSelect from "../PitchyComponent";
+import Clockface from "../ui/Clockface";
+import { CalibrationSettingKey } from "./ModalCalibration";
 
 const REQUIRED_SAMPLES = 8; // how many taps before averaging
 
-const ModalCalibration = () => {
+const LatencyCalibration = (props: {
+	onReady: (setting: CalibrationSettingKey, value: any) => void;
+}) => {
+	const { onReady } = props;
+
 	const [play, setPlay] = useState<boolean>(false);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
-	const { isFirstTimeUser } = usePracticeSession();
 	const [bpm, setBpm] = useState<number>(40);
 	const [tempoInterval, setTempoInterval] = useState<number>();
 	const lastDetectionTimeRef = useRef<number>(0);
@@ -29,9 +34,14 @@ const ModalCalibration = () => {
 	useEffect(() => {
 		setTempoInterval((60 / bpm) * 1000);
 	}, [bpm]);
-	const cooldown = tempoInterval;
 
-	if (!isFirstTimeUser) return null;
+	const submitOnReady = () => {
+		if (latencySamples.length >= REQUIRED_SAMPLES) {
+			onReady("latency", avgLatency);
+		}
+	};
+
+	const cooldown = tempoInterval;
 
 	const onNoteDetection = () => {
 		const noteTime = performance.now();
@@ -67,23 +77,19 @@ const ModalCalibration = () => {
 		}
 	};
 
+	const handleResetCalibration = () => {
+		setLatencySamples([]);
+		setPlay(false);
+		setCalibrationComplete(false);
+		setAvgLatency(null);
+	};
+
 	return (
 		<Modal onClose={function (): void {}}>
 			<span className="flex gap-1">
 				<h1 className="text-xl font-bold">Let's calibrate the game!</h1>
 				<MessageCircleQuestionIcon className="text-gray-500" />
 			</span>
-			<button
-				className="hover:text-yellow-300 flex items-center"
-				onClick={() => {
-					setPlay(!play);
-					setLatencySamples([]);
-					setCalibrationComplete(false);
-					setAvgLatency(null);
-				}}
-			>
-				{play ? <StopCircleIcon /> : <PlayIcon />}
-			</button>
 			<MetroWidget
 				bpm={bpm}
 				setBpm={setBpm}
@@ -103,6 +109,7 @@ const ModalCalibration = () => {
 						<button
 							className="underline"
 							style={{ color: "var(--clr-cta-accent)" }}
+							onClick={handleResetCalibration}
 						>
 							restart
 						</button>{" "}
@@ -128,17 +135,33 @@ const ModalCalibration = () => {
 					{latencySamples.length == REQUIRED_SAMPLES ? (
 						<button>Continue</button>
 					) : (
-						<span className="flex-col">
-							<p>Keep playing...</p>
-							<span className="flex justify-center">
-								({latencySamples.length}/{REQUIRED_SAMPLES})
-							</span>
+						<span className="flex flex-col items-center justify-center">
+							{play ? (
+								<>
+									<p>Keep playing...</p>
+									<span className="flex justify-center">
+										({latencySamples.length}/{REQUIRED_SAMPLES})
+									</span>
+									<StopCircleIcon
+										color="darkRed"
+										onClick={handleResetCalibration}
+										size={40}
+									/>
+								</>
+							) : (
+								<PlayIcon onClick={() => setPlay(true)} />
+							)}
 						</span>
 					)}
 				</div>
 			</Clockface>
+			{latencySamples.length >= REQUIRED_SAMPLES && (
+				<button>
+					<CheckCircle2 size={40} color="green" onClick={submitOnReady} />
+				</button>
+			)}
 		</Modal>
 	);
 };
 
-export default ModalCalibration;
+export default LatencyCalibration;

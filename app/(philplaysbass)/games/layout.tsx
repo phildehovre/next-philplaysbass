@@ -1,4 +1,4 @@
-import ModalCalibration from "@/components/games/ModalCalibration";
+import ModalCalibration from "@/components/games/calibration/ModalCalibration";
 import { OscillatorGenProvider } from "@/context/oscillatorGenContext";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import { SoundFXProvider } from "@/context/soundContext";

@@ -105,6 +105,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					r={radius}
 					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
+				<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
 				{(withTimer || showProgress) && (
 					<circle
 						className="clock-progress"
@@ -121,7 +122,6 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				)}
 				...
 			</svg>
-			<PowerUpBar cx={cx} cy={cy} radius={radius} />
 
 			{/* Children */}
 			{children}

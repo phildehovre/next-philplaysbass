@@ -121,6 +121,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				)}
 				...
 			</svg>
+			<PowerUpBar cx={cx} cy={cy} radius={radius} />
 
 			{/* Children */}
 			{children}

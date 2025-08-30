@@ -119,6 +119,22 @@ button:hover,
 	}
 }
 
+.ui_btn {
+	background: var(--clr-brand);
+	color: black;
+	width: 10em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 6px;
+	padding: 0.5em 0;
+	&.disabled {
+		background: var(--clr-box-bg);
+		color: gray;
+		border: 1px solid var(--clr-box-border);
+	}
+}
+
 button:focus-visible,
 .button:focus-visible {
 }

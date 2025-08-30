@@ -46,7 +46,7 @@ export const PracticeSessionProvider = ({
 	children: React.ReactNode;
 }) => {
 	const [sessionId, setSessionId] = useState<string | null>(null);
-	const [isFirstTimeUser, setIsFirstTimeUser] = useState<boolean>(false);
+	const [isFirstTimeUser, setIsFirstTimeUser] = useState<boolean>(true);
 	const [gameType, setGameType] = useState<GameTypes>();
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2 - 30);
 	const [startTime, setStartTime] = useState<Date | null>(null);

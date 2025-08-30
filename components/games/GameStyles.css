@@ -388,19 +388,34 @@ input[type="range"]:focus::-ms-fill-upper {
 	z-index: 0;
 }
 
-.detection_visualisation {
+.volume-visualiser_ctn {
 	position: relative;
+	margin: auto;
+}
+.detection_visualisation {
 	background: rgb(22, 22, 22);
 	border-radius: 100%;
-	width: 100px;
-	height: 100px;
-	margin: auto;
+	width: 150px;
+	height: 150px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	overflow: hidden;
+}
+.volume_visualisation {
+	width: 100%;
+	background-color: var(--clr-brand-o5);
 }
 .mic_btn {
 	position: absolute;
+}
+@keyframes decrease {
+	0% {
+		height: var(--height);
+	}
+	100% {
+		height: 0%;
+	}
 }
 
 @keyframes ripple {

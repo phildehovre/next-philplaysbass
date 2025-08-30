@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import PitchyWithDeviceSelect from "../PitchyComponent";
 import { NoteInfo } from "@/types/types";
-import { MicIcon } from "lucide-react";
+import { ChevronRight, MicIcon } from "lucide-react";
+import VolumeVisualizer from "../ui/VolumeVisualiser";
+import PitchyStream from "@/components/PitchyStream";
 
 const PULSE_DURATION = 1200;
 
@@ -13,11 +15,13 @@ const InputVolumeCalibration = (props: {
 
 	const [playedNote, setPlayedNote] = useState<NoteInfo>();
 	const [ripples, setRipples] = useState<{ id: number; volume: number }[]>([]);
+	const [volume, setVolume] = useState<number>(0);
+	const [detectedUserInput, setDetectedUserinput] = useState<boolean>(false);
 
 	const onNoteDetection = (note: NoteInfo) => {
 		setPlayedNote(note);
+		if (note.noteName && note.volume > 0.04) setDetectedUserinput(true);
 
-		console.log(note);
 		const id = Date.now();
 		const volume = note.volume ?? 1; // assuming your NoteInfo has volume (0–1 or 0–100)
 
@@ -29,23 +33,30 @@ const InputVolumeCalibration = (props: {
 	};
 
 	return (
-		<div className="flex flex-col gap-2 min-h-[350px]">
-			<h1 className="font-bold text-2xl">Select audio input sources:</h1>
+		<div className="flex flex-col gap-2 min-h-[350px] items-center justify-center">
+			<h1 className="font-bold text-2xl">Select audio input source:</h1>
 			<PitchyWithDeviceSelect
 				onNoteDetection={onNoteDetection}
 				showDevices={true}
 			/>
+			<PitchyStream
+				showDevices={false}
+				onNoteDetection={(note: NoteInfo) => setVolume(note.volume)}
+			/>
 
-			<div className="detection_visualisation relative">
-				{/* render all active ripples */}
+			<div className="volume-visualiser_ctn">
 				{ripples.map((r) => (
 					<div key={r.id} className="pulse-ripple absolute inset-0" />
 				))}
-
-				<div className="mic_btn relative z-10">
-					<MicIcon />
-				</div>
+				<VolumeVisualizer volume={volume} />
 			</div>
+			<button
+				onClick={() => {}}
+				className={`ui_btn ${detectedUserInput ? "" : "disabled"}`}
+			>
+				Next
+				<ChevronRight size={12} />
+			</button>
 		</div>
 	);
 };

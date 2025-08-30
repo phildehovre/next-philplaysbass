@@ -49,12 +49,17 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	useEffect(() => {
 		if (!selectedDeviceId) {
 			const deviceId = getCookie("device-id");
-			if (deviceId) setSelectedDeviceId(deviceId);
+			if (deviceId) {
+				setSelectedDeviceId(deviceId);
+			} else {
+				setSelectedDeviceId(devices[0].deviceId);
+			}
 		}
 	}, []);
 
 	useEffect(() => {
 		if (selectedDeviceId) setCookie("device-id", selectedDeviceId);
+		console.log(selectedDeviceId);
 	}, [selectedDeviceId]);
 
 	useEffect(() => {
@@ -93,9 +98,9 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			if (streamRef.current) {
 				streamRef.current.getTracks().forEach((t) => t.stop());
 			}
-			if (audioContextRef.current) {
-				audioContextRef.current.close();
-			}
+			// if (audioContextRef.current) {
+			// 	audioContextRef.current.close();
+			// }
 
 			const stream = await navigator.mediaDevices.getUserMedia({
 				audio: { deviceId: { exact: selectedDeviceId } },

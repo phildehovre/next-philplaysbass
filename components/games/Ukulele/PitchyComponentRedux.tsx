@@ -24,6 +24,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
 	const [clarity, setClarity] = useState<number | null>(null);
+	const [rms, setRms] = useState<number>(0);
 
 	const audioContextRef = useRef<AudioContext | null>(null);
 	const analyserRef = useRef<AnalyserNode | null>(null);
@@ -89,7 +90,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		}
 		// Process pitch immediately
 		const evaluatedPitch = getNoteFromPitch(pitch);
-		onNoteDetection(evaluatedPitch);
+		onNoteDetection({ ...evaluatedPitch, volume: rms });
 	}, [pitch]);
 
 	// Initialize pitch detection when a device is selected
@@ -157,6 +158,7 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 				const rms = getRMS(inputArrayRef.current);
 				const now = performance.now();
 
+				setRms(rms);
 				// Update RMS history
 				historyRef.current.push({ pitch: detectedPitch, rms, t: now });
 				if (historyRef.current.length > RMS_WINDOW) historyRef.current.shift();

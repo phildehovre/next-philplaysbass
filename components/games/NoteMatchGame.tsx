@@ -103,13 +103,13 @@ const NoteMatchGame = () => {
 				<div className="scoreboard text-2xl font-mono w-full">
 					<label className="scoreboard_label">Session score</label>
 					<AnimatedNumber
-						number={totalScore.bonus + totalScore.pitch + totalScore.rhythm}
+						data={totalScore.bonus + totalScore.pitch + totalScore.rhythm}
 					/>
 				</div>
 				<div className="scoreboard text-2xl font-mono w-full">
 					<label className="scoreboard_label">Tally</label>
-					<AnimatedNumber number={state.score.losses} />:
-					<AnimatedNumber number={state.score.wins} />
+					<AnimatedNumber data={state.score.losses} />:
+					<AnimatedNumber data={state.score.wins} />
 				</div>
 			</div>
 			<GameOptionsSwitches state={state} setters={setters} />

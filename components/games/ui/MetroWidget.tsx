@@ -8,6 +8,7 @@ import {
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 import { NoteInfo } from "@/types/types";
+import { Pause, Play } from "lucide-react";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -16,11 +17,21 @@ type MetroWidgetPropsType = {
 	gameStarted: boolean;
 	lastTickTime: number | null;
 	setLastTickTime: (t: number) => void;
+	controls?: boolean;
+	setPlay?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
-	const { bpm, setBpm, play, gameStarted, lastTickTime, setLastTickTime } =
-		props;
+	const {
+		controls,
+		bpm,
+		setBpm,
+		play,
+		gameStarted,
+		lastTickTime,
+		setLastTickTime,
+		setPlay,
+	} = props;
 
 	const [tempoInterval, setTempoInterval] = useState<number | undefined>();
 	const [soundEffect, setSoundEffect] = useState<any>("sidestick");
@@ -33,6 +44,21 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		const sidestick = new Audio("/sounds/Click.wav");
 		setSounds({ woodblock, cowbell, sidestick });
 	}, []);
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.code === "Space" && setPlay) {
+				e.preventDefault();
+				setPlay((prev: boolean) => !prev);
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown); // cleanup
+		};
+	}, [setPlay]); // dependency: setPlay is stable, so this won't cause reruns
 
 	const playSound = useCallback(() => {
 		if (soundEffect === "cowbell") {
@@ -81,7 +107,14 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
 			<div className="scoreboard flex flex-col items-center font-bold">
-				{displayedBpm} bpm
+				<span className="flex justify-center gap-1">
+					<div className="scoreboard w-full">{displayedBpm} bpm</div>
+					{controls && setPlay && (
+						<button className="ui_btn" onClick={() => setPlay(!play)}>
+							{!play ? <Play /> : <Pause />}
+						</button>
+					)}
+				</span>
 				<div className="controls flex gap-1 w-full">
 					<input
 						className="w-full"

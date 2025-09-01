@@ -59,7 +59,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 
 	useEffect(() => {
 		if (selectedDeviceId) setCookie("device-id", selectedDeviceId);
-		console.log(selectedDeviceId);
 	}, [selectedDeviceId]);
 
 	useEffect(() => {

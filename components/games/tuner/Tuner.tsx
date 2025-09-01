@@ -5,6 +5,7 @@ import PitchyComponent from "../PitchyComponent";
 import { NoteInfo } from "@/types/types";
 import { NOTE_FREQUENCIES } from "@/constants/chromaticScale";
 import { cn } from "@/lib/utils";
+import PitchyStream from "@/components/PitchyStream";
 
 const Tuner = () => {
 	const [note, setNote] = useState<NoteInfo | null>(null);
@@ -49,7 +50,7 @@ const Tuner = () => {
 				</div>
 			)}
 
-			<PitchyComponent onNoteDetection={setNote} />
+			<PitchyStream onNoteDetection={setNote} />
 		</div>
 	);
 };

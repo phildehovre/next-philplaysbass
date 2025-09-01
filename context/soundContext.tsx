@@ -61,21 +61,21 @@ export const SoundFXProvider: React.FC<SoundFXProviderProps> = ({
 		if (typeof window === "undefined") return;
 
 		// Example: single file with sprite map
-		sounds.current["ui"] = new Howl({
-			src: ["/sounds/ui-sprites.mp3"],
-			volume,
-			sprite: {
-				click: [0, 200],
-				success: [500, 800],
-				error: [1500, 600],
-			},
-		});
+		// sounds.current["ui"] = new Howl({
+		// 	src: ["/sounds/ui-sprites.mp3"],
+		// 	volume,
+		// 	sprite: {
+		// 		click: [0, 200],
+		// 		success: [500, 800],
+		// 		error: [1500, 600],
+		// 	},
+		// });
 
 		// Example: individual file
-		sounds.current["alert"] = new Howl({
-			src: ["/sounds/alert.mp3"],
-			volume,
-		});
+		// sounds.current["alert"] = new Howl({
+		// 	src: ["/sounds/alert.mp3"],
+		// 	volume,
+		// });
 		sounds.current["streak"] = new Howl({
 			src: ["/sounds/notification.wav"],
 			volume,

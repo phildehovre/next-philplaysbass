@@ -1,12 +1,9 @@
-// app/page.tsx (or your Home component)
 "use server";
 
 import styles from "./page.module.css";
 import Hero from "@/components/Hero";
 import LatestStream from "@/components/LatestStream";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-// Fetch stream data directly in the server component
 async function fetchLatestStream() {
 	const channelId = process.env.CHANNEL_ID;
 	const apiKey = process.env.YOUTUBE_API_KEY;

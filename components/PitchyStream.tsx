@@ -114,6 +114,8 @@ export default function PitchyStream(props: PitchyStreamProps) {
 
 				const rms = getRMS(inputArrayRef.current);
 
+				// if (rms < 0.4) return;
+
 				if (
 					detectedPitch > MIN_PITCH_HZ &&
 					detectedPitch < MAX_PITCH_HZ &&

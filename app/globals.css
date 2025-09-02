@@ -133,6 +133,11 @@ button:hover,
 		color: gray;
 		border: 1px solid var(--clr-box-border);
 	}
+	&.secondary {
+		background-color: var(--clr-box-bg);
+		border: 1px solid var(--clr-box-border);
+		color: var(--clr-brand);
+	}
 }
 
 button:focus-visible,

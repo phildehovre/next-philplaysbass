@@ -24,8 +24,6 @@ const Tuner = () => {
 
 	return (
 		<div className="flex flex-col items-center justify-center p-8">
-			<h2 className="text-xl font-semibold mb-4">Tuner</h2>
-
 			<div className="relative w-64 h-32">
 				{/* Semicircle */}
 				<div className="w-full h-full border-t-4 border-gray-300 rounded-t-full"></div>

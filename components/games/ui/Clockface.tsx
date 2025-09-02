@@ -15,6 +15,7 @@ type ClockfacePropsType = {
 	gameStarted: boolean;
 	className?: string;
 	showProgress?: boolean;
+	showPowerUp?: boolean;
 };
 
 const CIRCLE_RADIUS = 38;
@@ -27,6 +28,7 @@ const cy = CIRCLE_CANVAS;
 
 const Clockface: React.FC<ClockfacePropsType> = ({
 	withTimer = false,
+	showPowerUp = true,
 	showPulse,
 	progress,
 	children,
@@ -105,7 +107,9 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					r={radius}
 					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
 				/>
-				<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
+				{showPowerUp && (
+					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
+				)}
 				{(withTimer || showProgress) && (
 					<circle
 						className="clock-progress"

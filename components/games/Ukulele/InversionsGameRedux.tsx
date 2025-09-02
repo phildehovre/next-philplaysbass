@@ -20,7 +20,7 @@ import PitchyComponentRedux from "./PitchyComponentRedux";
 import { Square } from "lucide-react";
 import AnimatedNumber from "../ui/AnimatedNumber";
 import "./GameStylesRedux.css";
-import { useGameTimer } from "../../Timer";
+import { useGameTimer } from "@/hooks/useGameTimer";
 import UkulelePlayer from "./UkulelePlayer";
 import UkeDiagramWithNotes from "./DetectedNotesDisplay";
 import { useOscillatorGen } from "@/context/oscillatorGenContext";
@@ -229,7 +229,7 @@ const ChordDetectionGame = () => {
 	return (
 		<div className="game_ctn max-w-[24em]">
 			<div className="scoreboard text-2xl font-mono relative">
-				<AnimatedNumber number={score.wins} />
+				<AnimatedNumber data={score.wins} />
 				{gameStarted && (
 					<button onClick={stopGame} className="stop-game_btn">
 						<Square />

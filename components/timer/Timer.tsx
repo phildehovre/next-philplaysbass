@@ -2,7 +2,14 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "../games/GameStyles.css";
-import { MinusIcon, PlusIcon, TimerIcon } from "lucide-react";
+import {
+	MinusIcon,
+	Pause,
+	PlusIcon,
+	Square,
+	StopCircle,
+	TimerIcon,
+} from "lucide-react";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import GameContainer from "../games/ui/GameContainer";
 import AnimatedNumber from "../games/ui/AnimatedNumber";
@@ -23,10 +30,20 @@ const Timer = () => {
 	const [started, setStarted] = useState<boolean>(false);
 	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
 	const [play, setPlay] = useState<boolean>(false);
+	const [paused, setPaused] = useState<boolean>(false);
+	const [progress, setProgress] = useState<number>(0);
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 	const { finishSession } = usePracticeSession();
+
+	useEffect(() => {
+		if (!started) {
+			setProgress(0);
+			return;
+		}
+		setProgress(((initialDuration - remainingTime) / initialDuration) * 100);
+	}, [initialDuration, remainingTime, started]);
 
 	// Handle tab close
 	useEffect(() => {
@@ -45,7 +62,7 @@ const Timer = () => {
 
 	// Timer countdown
 	useEffect(() => {
-		if (started && remainingTime > 0) {
+		if (started && remainingTime > 0 && !paused) {
 			timerRef.current = setTimeout(() => {
 				setRemainingTime((prev) => prev - 1000);
 			}, 1000);
@@ -53,9 +70,11 @@ const Timer = () => {
 			setStarted(false);
 		}
 		return () => {
-			if (timerRef.current) clearTimeout(timerRef.current);
+			if (timerRef.current) {
+				clearTimeout(timerRef.current);
+			}
 		};
-	}, [started, remainingTime]);
+	}, [started, remainingTime, paused]);
 
 	// Confirm timer changes from modal
 	const confirmTimer = () => {
@@ -72,14 +91,23 @@ const Timer = () => {
 					<AnimatedNumber data={1} />
 				</div>
 				<div className="font-mono w-full ui_btn">
-					<button className="" onClick={() => setShowTimerModal(true)}>
+					<button
+						className="flex gap-1"
+						onClick={() => setShowTimerModal(true)}
+					>
 						<TimerIcon />
-						Set timer
+						Set
 					</button>
 				</div>
 			</div>
 
-			<Clockface showPulse={false} withTimer progress={0} gameStarted={started}>
+			<Clockface
+				showPulse={false}
+				withTimer
+				progress={progress}
+				gameStarted={started}
+				showPowerUp={false}
+			>
 				<div className="absolute flex flex-col gap-2 items-center">
 					{!started ? (
 						<>
@@ -97,14 +125,18 @@ const Timer = () => {
 						</>
 					) : (
 						<>
-							<h1 className="text-3xl font-bold">
+							<button className="" onClick={() => setPaused(!paused)}>
+								<Pause color={`${!paused ? "white" : "var(--clr-brand"}`} />
+							</button>
+							<h1
+								className={`text-3xl font-bold ${
+									paused ? "text-gray-600" : ""
+								}`}
+							>
 								{formatTime(remainingTime)}
 							</h1>
-							<button
-								className="game_btn stop-game_btn"
-								onClick={() => setStarted(false)}
-							>
-								Stop
+							<button className="" onClick={() => setStarted(false)}>
+								<Square color="red" />
 							</button>
 						</>
 					)}
@@ -116,7 +148,7 @@ const Timer = () => {
 				setBpm={setBpm}
 				play={play}
 				setPlay={setPlay}
-				gameStarted={false}
+				gameStarted={play}
 				lastTickTime={null}
 				setLastTickTime={() => {}}
 				controls={true}
@@ -130,9 +162,9 @@ const Timer = () => {
 
 					<div className="flex items-center justify-between w-full my-4">
 						<button
-							className="ui_btn"
+							className="ui_btn secondary"
 							onClick={() =>
-								setDisplayedDuration((prev) => Math.max(60000, prev - 60000))
+								setDisplayedDuration((prev) => Math.max(60000, prev - 5000))
 							}
 						>
 							<MinusIcon />
@@ -141,8 +173,8 @@ const Timer = () => {
 							{formatTime(displayedDuration)}
 						</h1>
 						<button
-							className="ui_btn"
-							onClick={() => setDisplayedDuration((prev) => prev + 60000)}
+							className="ui_btn secondary"
+							onClick={() => setDisplayedDuration((prev) => prev + 5000)}
 						>
 							<PlusIcon />
 						</button>
@@ -159,7 +191,10 @@ const Timer = () => {
 					/>
 
 					<span className="flex justify-between mt-4">
-						<button className="ui_btn" onClick={() => setShowTimerModal(false)}>
+						<button
+							className="ui_btn secondary"
+							onClick={() => setShowTimerModal(false)}
+						>
 							Cancel
 						</button>
 						<button className="ui_btn" onClick={confirmTimer}>

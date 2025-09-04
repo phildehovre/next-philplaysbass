@@ -45,20 +45,20 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		setSounds({ woodblock, cowbell, sidestick });
 	}, []);
 
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.code === "Space" && setPlay) {
-				e.preventDefault();
-				setPlay((prev: boolean) => !prev);
-			}
-		};
+	// useEffect(() => {
+	// 	const handleKeyDown = (e: KeyboardEvent) => {
+	// 		if (e.code === "Space" && setPlay) {
+	// 			e.preventDefault();
+	// 			setPlay((prev: boolean) => !prev);
+	// 		}
+	// 	};
 
-		document.addEventListener("keydown", handleKeyDown);
+	// 	document.addEventListener("keydown", handleKeyDown);
 
-		return () => {
-			document.removeEventListener("keydown", handleKeyDown); // cleanup
-		};
-	}, [setPlay]); // dependency: setPlay is stable, so this won't cause reruns
+	// 	return () => {
+	// 		document.removeEventListener("keydown", handleKeyDown); // cleanup
+	// 	};
+	// }, [setPlay]); // dependency: setPlay is stable, so this won't cause reruns
 
 	const playSound = useCallback(() => {
 		if (soundEffect === "cowbell") {

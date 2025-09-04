@@ -11,11 +11,12 @@ type ClockfacePropsType = {
 	progress: number;
 	withTimer?: boolean;
 	children: React.ReactNode;
-	size?: number;
+	ringStroke?: number;
 	gameStarted: boolean;
 	className?: string;
 	showProgress?: boolean;
 	showPowerUp?: boolean;
+	size?: number;
 };
 
 const CIRCLE_RADIUS = 38;
@@ -32,10 +33,11 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	showPulse,
 	progress,
 	children,
-	size,
+	ringStroke,
 	gameStarted,
 	className,
 	showProgress,
+	size = 1,
 }) => {
 	const [angle, setAngle] = useState(0);
 	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
@@ -105,7 +107,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					cx={cx}
 					cy={cy}
 					r={radius}
-					style={{ strokeWidth: `${size ? size / 2 : 10}` }}
+					style={{ strokeWidth: `${ringStroke ? ringStroke / 2 : 10}` }}
 				/>
 				{showPowerUp && (
 					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />

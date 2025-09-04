@@ -41,6 +41,7 @@
 	&.start-game_btn {
 		color: black;
 		background-color: var(--clr-brand);
+		font-size: 1.5em;
 	}
 
 	.countdown {
@@ -176,14 +177,25 @@
 	}
 }
 
-.scoreboard_label {
+.box_label {
 	color: gray;
 	position: absolute;
 	top: -8px;
 	left: 5px;
+	border-top: 1px solid var(--clr-box-border);
+	border-radius: 6px;
 	padding: 0 5px;
-	font-size: 0.5em;
+	font-size: 1em;
 	background: var(--color-background);
+}
+.box {
+	background: var(--color-background);
+	border: 1px solid var(--clr-box-border);
+	border-radius: var(--border-radius);
+	padding: 1em;
+	&.activity {
+		padding: 0.25em;
+	}
 }
 
 .flashing_el {
@@ -202,8 +214,6 @@
 }
 
 .clock-face {
-	width: 200px;
-	height: 200px;
 	margin: 1rem auto;
 	position: relative;
 }

@@ -27,6 +27,8 @@ const ModalCalibration = () => {
 	];
 	if (!isFirstTimeUser) return null;
 
+	console.log(calibrationObj);
+
 	const nextStep = () =>
 		setCalibrationStep((s) => Math.min(s + 1, STEPS.length - 1));
 
@@ -35,7 +37,6 @@ const ModalCalibration = () => {
 		return (
 			<CurrentPhase
 				onReady={(setting, value) => {
-					// Validate conditions
 					setCalibrationObj((prev) => ({ ...prev, [setting]: value }));
 					nextStep();
 				}}

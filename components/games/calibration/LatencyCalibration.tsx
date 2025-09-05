@@ -85,7 +85,7 @@ const LatencyCalibration = (props: {
 	};
 
 	return (
-		<Modal onClose={function (): void {}}>
+		<div className="">
 			<span className="flex gap-1">
 				<h1 className="text-xl font-bold">Let's calibrate the game!</h1>
 				<MessageCircleQuestionIcon className="text-gray-500" />
@@ -160,7 +160,7 @@ const LatencyCalibration = (props: {
 					<CheckCircle2 size={40} color="green" onClick={submitOnReady} />
 				</button>
 			)}
-		</Modal>
+		</div>
 	);
 };
 

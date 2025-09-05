@@ -182,8 +182,8 @@ const ArpeggioGame = () => {
 	return (
 		<div className="game_ctn p-2">
 			<div className="scoreboard text-2xl font-mono">
-				<AnimatedNumber number={score.losses} />:
-				<AnimatedNumber number={score.wins} />
+				<AnimatedNumber data={score.losses} />:
+				<AnimatedNumber data={score.wins} />
 			</div>
 			<div className="options">
 				<label htmlFor="highlight-root">

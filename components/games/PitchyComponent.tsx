@@ -15,10 +15,11 @@ type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;
 	showDevices?: boolean;
 	cooldown?: number;
+	deviceIdHandle?: (id: string) => void;
 };
 
 export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
-	const { onNoteDetection, showDevices, cooldown } = props;
+	const { deviceIdHandle, onNoteDetection, showDevices, cooldown } = props;
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 	const [pitch, setPitch] = useState<number | null>(null);
@@ -51,8 +52,10 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 			const deviceId = getCookie("device-id");
 			if (deviceId) {
 				setSelectedDeviceId(deviceId);
+				deviceIdHandle && deviceIdHandle(deviceId);
 			} else {
 				setSelectedDeviceId(devices[0].deviceId);
+				deviceIdHandle && deviceIdHandle(devices[0].deviceId);
 			}
 		}
 	}, []);

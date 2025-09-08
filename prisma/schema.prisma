@@ -17,6 +17,7 @@ model User {
   kindeId         String            @unique
   PracticeSession PracticeSession[]
   UserStats       UserStats?
+  UserSettings    UserSettings?
 }
 
 model Playlist {
@@ -58,7 +59,7 @@ model PracticeSession {
   user      User            @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime        @default(now())
-  gameType  String 
+  gameType  String
   duration  Int
   result    PracticeResult? @relation(fields: [resultId], references: [id])
   resultId  String?
@@ -71,12 +72,12 @@ model PracticeEvent {
   session   PracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String
 
-  expectedNote      String 
+  expectedNote      String
   playedNote        String?
   isCorrect         Boolean
-  playedAt          DateTime 
-  timeToHitMs       Int? 
-  metronomeOffsetMs Int? 
+  playedAt          DateTime
+  timeToHitMs       Int?
+  metronomeOffsetMs Int?
 }
 
 model PracticeResult {
@@ -84,8 +85,8 @@ model PracticeResult {
   totalNotes       Int
   correctNotes     Int
   averageHitTimeMs Int?
-  rhythmAccuracy   Float? 
-  score            Int 
+  rhythmAccuracy   Float?
+  score            Int
   PracticeSession  PracticeSession[]
 }
 
@@ -98,4 +99,14 @@ model UserStats {
   avgScore      Float
   totalScore    Int
   lastPracticed DateTime
+}
+
+model UserSettings {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  latency              Int?
+  defaultInputDeviceId String?
+  completed            Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id])
 }

@@ -7,27 +7,37 @@ import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Modal from "@/components/Modal";
 
 export type CalibrationSettings = {
-	latency?: number | undefined;
-	defaultInputDeviceId?: number | string | undefined;
+	latency?: number;
+	defaultInputDeviceId?: string;
+	completed?: boolean;
 };
 
-export type CalibrationSettingKey = "latency" | "defaultInputDeviceId";
+export type CalibrationSettingKey =
+	| "latency"
+	| "defaultInputDeviceId"
+	| "completed";
+
+// Define a common prop type for calibration phases
+export interface CalibrationPhaseProps {
+	onReady: (
+		setting: CalibrationSettingKey,
+		value: CalibrationSettings[CalibrationSettingKey]
+	) => void;
+}
 
 const ModalCalibration = () => {
 	const [calibrationStep, setCalibrationStep] = useState<number>(0);
-	const [calibrationObj, setCalibrationObj] = useState<CalibrationSettings>();
+	const [calibrationObj, setCalibrationObj] = useState<CalibrationSettings>({});
 
 	const { isFirstTimeUser } = usePracticeSession();
 
-	console.log(calibrationObj);
-	const STEPS = [
+	const STEPS: React.ComponentType<CalibrationPhaseProps>[] = [
 		InputVolumeCalibration,
 		LatencyCalibration,
 		CompletedCalibration,
 	];
-	if (!isFirstTimeUser) return null;
 
-	console.log(calibrationObj);
+	if (!isFirstTimeUser) return null;
 
 	const nextStep = () =>
 		setCalibrationStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -44,7 +54,34 @@ const ModalCalibration = () => {
 		);
 	};
 
-	return <Modal onClose={() => {}}>{renderPhase()}</Modal>;
+	const cacheAndRecordUserSettings = async () => {
+		// cache locally as cookies
+		Object.entries(calibrationObj).forEach(([key, value]) => {
+			localStorage.set(key, String(value), { expires: 365 });
+		});
+
+		// persist in DB via API
+		try {
+			await fetch("/api/user-settings", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(calibrationObj),
+			});
+		} catch (err) {
+			console.error("Failed to save calibration settings:", err);
+		}
+	};
+
+	return (
+		<Modal
+			onClose={() => {
+				cacheAndRecordUserSettings();
+			}}
+		>
+			{/* Once steps are completed, hide modal */}
+			{calibrationStep < STEPS.length ? renderPhase() : null}
+		</Modal>
+	);
 };
 
 export default ModalCalibration;

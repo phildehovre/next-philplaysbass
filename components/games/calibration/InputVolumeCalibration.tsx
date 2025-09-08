@@ -5,14 +5,13 @@ import { NoteInfo } from "@/types/types";
 import { Check, ChevronRight, MicIcon } from "lucide-react";
 import VolumeVisualizer from "../ui/VolumeVisualiser";
 import PitchyStream from "@/components/PitchyStream";
+import { CalibrationPhaseProps } from "./ModalCalibration";
 
 const PULSE_DURATION = 1200;
 
-const InputVolumeCalibration = (props: {
-	onReady: (setting: string, value: any) => void;
+const InputVolumeCalibration: React.FC<CalibrationPhaseProps> = ({
+	onReady,
 }) => {
-	const { onReady } = props;
-
 	const [playedNote, setPlayedNote] = useState<NoteInfo>();
 	const [ripples, setRipples] = useState<{ id: number; volume: number }[]>([]);
 	const [volume, setVolume] = useState<number>(0);

@@ -34,6 +34,7 @@ interface PracticeSessionContextType {
 	gameType: GameTypes | undefined;
 	streak: number;
 	isFirstTimeUser: boolean;
+	setIsFirstTimeUser: (b: boolean) => void;
 }
 
 const PracticeSessionContext = createContext<
@@ -67,14 +68,20 @@ export const PracticeSessionProvider = ({
 	const [streak, setStreak] = useState<number>(0);
 
 	useEffect(() => {
-		const isFirstVisit = localStorage.getItem("isFirstTimeUser");
-		if (isFirstVisit) {
+		const stored = localStorage.getItem("isFirstTimeUser");
+
+		if (stored === null) {
+			// first ever visit
 			setIsFirstTimeUser(true);
-			return;
+			localStorage.setItem("isFirstTimeUser", "true");
+		} else {
+			setIsFirstTimeUser(stored === "true");
 		}
 	}, []);
 
-	console.log("isFirstTimeUser: ", isFirstTimeUser);
+	useEffect(() => {
+		localStorage.setItem("isFirstTimeUser", String(isFirstTimeUser));
+	}, [isFirstTimeUser]);
 
 	useEffect(() => {
 		const lastEvent = events[events.length - 1];
@@ -192,6 +199,7 @@ export const PracticeSessionProvider = ({
 		streak,
 		totalScore,
 		isFirstTimeUser,
+		setIsFirstTimeUser,
 	};
 
 	return (

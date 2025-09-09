@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LatencyCalibration from "./LatencyCalibration";
 import InputVolumeCalibration from "./InputVolumeCalibration";
 import CompletedCalibration from "./CompletedCalibration";
@@ -29,7 +29,7 @@ const ModalCalibration = () => {
 	const [calibrationStep, setCalibrationStep] = useState<number>(0);
 	const [calibrationObj, setCalibrationObj] = useState<CalibrationSettings>({});
 
-	const { isFirstTimeUser } = usePracticeSession();
+	const { isFirstTimeUser, setIsFirstTimeUser } = usePracticeSession();
 
 	const STEPS: React.ComponentType<CalibrationPhaseProps>[] = [
 		InputVolumeCalibration,
@@ -37,7 +37,15 @@ const ModalCalibration = () => {
 		CompletedCalibration,
 	];
 
+	useEffect(() => {
+		if (calibrationObj.defaultInputDeviceId && calibrationObj.latency) {
+			setIsFirstTimeUser(false);
+		}
+	}, [calibrationObj]);
+
 	if (!isFirstTimeUser) return null;
+
+	console.log(isFirstTimeUser);
 
 	const nextStep = () =>
 		setCalibrationStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -57,7 +65,7 @@ const ModalCalibration = () => {
 	const cacheAndRecordUserSettings = async () => {
 		// cache locally as cookies
 		Object.entries(calibrationObj).forEach(([key, value]) => {
-			localStorage.set(key, String(value), { expires: 365 });
+			localStorage.setItem(key, String(value));
 		});
 
 		// persist in DB via API

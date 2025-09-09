@@ -1,9 +1,6 @@
 "use client";
-import { usePracticeSession } from "@/context/practiceSessionsContext";
 import React, { useEffect, useRef, useState } from "react";
-import Modal from "../../Modal";
 import {
-	CheckCircle2,
 	MessageCircleQuestionIcon,
 	PlayIcon,
 	StopCircleIcon,
@@ -154,12 +151,12 @@ const LatencyCalibration = (props: {
 						</span>
 					)}
 				</div>
+				{latencySamples.length >= REQUIRED_SAMPLES && (
+					<button className="ui_btn circular absolute" onClick={submitOnReady}>
+						Complete
+					</button>
+				)}
 			</Clockface>
-			{latencySamples.length >= REQUIRED_SAMPLES && (
-				<button>
-					<CheckCircle2 size={40} color="green" onClick={submitOnReady} />
-				</button>
-			)}
 		</div>
 	);
 };

@@ -138,6 +138,11 @@ button:hover,
 		border: 1px solid var(--clr-box-border);
 		color: var(--clr-brand);
 	}
+	&.circular {
+		border-radius: 100%;
+		height: 50%;
+		width: 50%;
+	}
 }
 
 button:focus-visible,

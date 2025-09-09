@@ -41,7 +41,7 @@
 	&.start-game_btn {
 		color: black;
 		background-color: var(--clr-brand);
-		font-size: 1.5em;
+		font-size: 1em;
 	}
 
 	.countdown {

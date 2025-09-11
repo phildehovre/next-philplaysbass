@@ -14,10 +14,11 @@ import {
 type PitchyStreamProps = {
 	onNoteDetection: (note: NoteInfo) => void;
 	showDevices?: boolean;
+	threshold: number; // base RMS threshold
 };
 
 export default function PitchyStream(props: PitchyStreamProps) {
-	const { onNoteDetection, showDevices } = props;
+	const { onNoteDetection, threshold, showDevices } = props;
 
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 	const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
@@ -27,9 +28,13 @@ export default function PitchyStream(props: PitchyStreamProps) {
 	const detectorRef = useRef<any>(null);
 	const inputArrayRef = useRef<Float32Array | null>(null);
 	const streamRef = useRef<MediaStream | null>(null);
-	const rafRef = useRef<number>(null);
+	const rafRef = useRef<number | null>(null);
 
 	const { setCookie, getCookie } = useCookies();
+
+	// threshold lock state
+	const [thresholdDisabled, setThresholdDisabled] = useState(false);
+	const resetTimerRef = useRef<NodeJS.Timeout | null>(null);
 
 	// Restore deviceId from cookies
 	useEffect(() => {
@@ -114,15 +119,30 @@ export default function PitchyStream(props: PitchyStreamProps) {
 
 				const rms = getRMS(inputArrayRef.current);
 
-				// if (rms < 0.4) return;
-
 				if (
 					detectedPitch > MIN_PITCH_HZ &&
 					detectedPitch < MAX_PITCH_HZ &&
 					clarity > MIN_CLARITY
 				) {
+					// apply threshold only if it's active
+					if (!thresholdDisabled && rms < threshold) {
+						rafRef.current = requestAnimationFrame(update);
+						return;
+					}
+
 					const note = getNoteFromPitch(detectedPitch);
 					onNoteDetection({ ...note, volume: rms });
+
+					// once a valid note passes → disable threshold temporarily
+					if (!thresholdDisabled) {
+						setThresholdDisabled(true);
+					}
+
+					// reset the threshold after 6s
+					if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+					resetTimerRef.current = setTimeout(() => {
+						setThresholdDisabled(false);
+					}, 6000);
 				}
 
 				rafRef.current = requestAnimationFrame(update);
@@ -138,8 +158,9 @@ export default function PitchyStream(props: PitchyStreamProps) {
 			if (streamRef.current)
 				streamRef.current.getTracks().forEach((t) => t.stop());
 			if (audioContextRef.current) audioContextRef.current.close();
+			if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
 		};
-	}, [selectedDeviceId]);
+	}, [selectedDeviceId, threshold]);
 
 	return (
 		<div className="p-4 space-y-4">

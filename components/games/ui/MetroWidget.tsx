@@ -7,7 +7,6 @@ import {
 	MIN_TEMPO_AS_STR,
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
-import { NoteInfo } from "@/types/types";
 import { Pause, Play } from "lucide-react";
 
 type MetroWidgetPropsType = {
@@ -106,7 +105,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
-			<div className="scoreboard flex flex-col items-center font-bold">
+			<div className="flex flex-col items-stretch font-bold">
 				<span className="flex justify-center gap-1">
 					<div className="scoreboard w-full">{displayedBpm} bpm</div>
 					{controls && setPlay && (

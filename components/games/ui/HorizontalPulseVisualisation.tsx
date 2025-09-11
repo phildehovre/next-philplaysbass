@@ -8,7 +8,6 @@ const HorizontalPulseVisualisation = ({
 	tempoInterval,
 	lastTickTime,
 	gameStarted,
-	onParentNoteDetection,
 }: {
 	play: boolean;
 	tempoInterval: number | undefined;
@@ -71,7 +70,7 @@ const HorizontalPulseVisualisation = ({
 
 	return (
 		<div>
-			<div className="scoreboard flex justify-center h-5 p-0 relative overflow-hidden">
+			<div className="flex justify-center h-5 p-0 relative overflow-hidden">
 				{pulse && <div className={`center-blip`} />}
 				{gameStarted && tempoInterval && (
 					<>

@@ -1,54 +1,63 @@
 "use client";
 import "./TunerStyles.css";
-import React, { useState } from "react";
-import PitchyComponent from "../PitchyComponent";
+import React, { useState, useEffect, useRef } from "react";
 import { NoteInfo } from "@/types/types";
-import { NOTE_FREQUENCIES } from "@/constants/chromaticScale";
 import { cn } from "@/lib/utils";
 import PitchyStream from "@/components/PitchyStream";
 
 const Tuner = () => {
 	const [note, setNote] = useState<NoteInfo | null>(null);
+	const [smoothedPercent, setSmoothedPercent] = useState(50);
+	const animationRef = useRef<number | null>(null);
 
-	const getCents = (detected: number, target: number): number => {
-		if (!detected || !target) return 0;
-		return 1200 * Math.log2(detected / target);
-	};
+	// clamp to ±50 cents so indicator doesn’t fly off screen
+	const clampedOffset = note ? Math.max(-50, Math.min(50, note.centsOff)) : 0;
 
-	const clampedRotation = note
-		? Math.max(-45, Math.min(45, note?.centsOff))
-		: 0;
+	// normalize to percentage (-50 → 0%, 0 → 50%, +50 → 100%)
+	const targetPercent = ((clampedOffset + 50) / 100) * 100;
 
-	const needleColor =
+	useEffect(() => {
+		const animate = () => {
+			setSmoothedPercent((prev) => {
+				const next = prev + (targetPercent - prev) * 0.15;
+				return next;
+			});
+			animationRef.current = requestAnimationFrame(animate);
+		};
+
+		animationRef.current = requestAnimationFrame(animate);
+		return () => {
+			if (animationRef.current) cancelAnimationFrame(animationRef.current);
+		};
+	}, [targetPercent]);
+
+	const indicatorColor =
 		note && Math.abs(note.centsOff) < 5 ? "bg-green-500" : "bg-red-500";
 
 	return (
 		<div className="flex flex-col items-center justify-center p-8">
-			<div className="relative w-64 h-32">
-				{/* Semicircle */}
-				<div className="w-full h-full border-t-4 border-gray-300 rounded-t-full"></div>
+			<div className="scoreboard relative w-80 h-6 rounded-full overflow-hidden">
+				<div className="absolute left-1/2 top-0 bottom-0 w-0.5 "></div>
 
-				{/* Needle */}
 				<div
 					className={cn(
-						`absolute bottom-0 left-1/2 w-1 h-32 origin-bottom ${needleColor}`,
-						"tuner_needle"
+						"absolute top-0 h-full w-2 rounded-full",
+						indicatorColor
 					)}
-					style={{ transform: `rotate(${clampedRotation}deg)` }}
+					style={{
+						left: `${smoothedPercent}%`,
+						transform: "translateX(-50%)",
+					}}
 				></div>
 			</div>
-
-			{/* Note Display */}
 			{note && (
 				<div className="mt-4 text-center">
 					<p className="text-2xl font-bold">{note.noteName}</p>
-					{/* <p className="text-gray-500 text-sm">
-						{note.frequency.toFixed(2)} Hz – {cents.toFixed(1)} cents
-					</p> */}
+					<p className="text-sm text-gray-600">{note.centsOff.toFixed(1)}¢</p>
 				</div>
 			)}
 
-			<PitchyStream onNoteDetection={setNote} />
+			<PitchyStream onNoteDetection={setNote} threshold={3} />
 		</div>
 	);
 };

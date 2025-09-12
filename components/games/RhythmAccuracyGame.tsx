@@ -69,8 +69,8 @@ const RhythmAccuracyGame = () => {
 			</div>
 
 			<div className="gsap-element scoreboard text-2xl font-mono w-full">
-				<AnimatedNumber number={state.score.losses} />:
-				<AnimatedNumber number={state.score.wins} />
+				<AnimatedNumber data={state.score.losses} />:
+				<AnimatedNumber data={state.score.wins} />
 			</div>
 
 			<Clockface

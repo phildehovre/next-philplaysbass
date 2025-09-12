@@ -201,13 +201,15 @@ const Timer = () => {
 					showPowerUp={false}
 					size={0.8}
 				>
-					<button
-						className="ui_btn absolute"
-						onClick={() => setShowTimerModal(true)}
-					>
-						<Plus color="black" />
-						Start
-					</button>
+					{timerArray.length == 0 && (
+						<button
+							className="ui_btn absolute"
+							onClick={() => setShowTimerModal(true)}
+						>
+							<Plus color="black" />
+							Add timer
+						</button>
+					)}
 					<div className="absolute flex flex-col gap-2 items-center">
 						{!started ? (
 							<>

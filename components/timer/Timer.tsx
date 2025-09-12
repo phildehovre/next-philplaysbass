@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "../games/GameStyles.css";
-import { MinusIcon, Pause, PlusIcon, Square, TimerIcon } from "lucide-react";
+import { Drum, Pause, Plus, Square, TimerIcon } from "lucide-react";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import GameContainer from "../games/ui/GameContainer";
 import AnimatedNumber from "../games/ui/AnimatedNumber";
@@ -11,8 +11,12 @@ import Clockface from "../games/ui/Clockface";
 import PitchyComponent from "../games/PitchyComponent";
 import Tuner from "../games/tuner/Tuner";
 import { MAX_TEMPO_AS_NUM } from "@/constants/GameConstants";
-import Modal from "../Modal";
 import { formatTime } from "@/utils/helpers";
+import AnimatedGridRow from "../games/ui/AnimatedGridRow";
+import Switch from "../Switch";
+import TuningFork from "../games/tuner/TuningFork";
+import PhaseModal from "./PhaseModal";
+import TimerPhases from "./TimerPhases";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
@@ -23,15 +27,12 @@ export type TimerCfg = {
 
 const Timer = () => {
 	const [initialDuration, setInitialDuration] = useState<number>(0);
-	const [displayedDuration, setDisplayedDuration] = useState<number>(60000);
 	const [remainingTime, setRemainingTime] = useState<number>(60000);
-
-	const [cooldownDuration, setCooldownDuration] = useState<number>(5000);
-	const [label, setLabel] = useState<string>("New Phase");
-
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 	const [started, setStarted] = useState<boolean>(false);
 	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
+	const [showTuner, setShowTuner] = useState<boolean>(false);
+	const [showMetronome, setShowMetronome] = useState<boolean>(false);
 	const [play, setPlay] = useState<boolean>(false);
 	const [paused, setPaused] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
@@ -126,7 +127,15 @@ const Timer = () => {
 		setPaused(false);
 	};
 
-	const confirmTimer = () => {
+	const confirmTimer = ({
+		label,
+		displayedDuration,
+		cooldownDuration,
+	}: {
+		label: string;
+		displayedDuration: number;
+		cooldownDuration: number;
+	}) => {
 		const newTimer: TimerCfg = {
 			initialDuration: displayedDuration,
 			bpm,
@@ -135,9 +144,6 @@ const Timer = () => {
 		};
 		setTimerArray((prev) => [...prev, newTimer]);
 		setShowTimerModal(false);
-		setLabel("New Phase");
-		setDisplayedDuration(60000);
-		setCooldownDuration(5000);
 	};
 
 	const handleStop = () => {
@@ -148,33 +154,45 @@ const Timer = () => {
 
 	return (
 		<GameContainer>
-			<div className="scoreboard_ctn flex w-full ">
-				<div className="scoreboard text-2xl font-mono w-full">
-					<label className="scoreboard_label">Phase</label>
-					<AnimatedNumber data={currentIndex + 1} />
-				</div>
-				<div className="font-mono w-full ui_btn">
-					<button
-						className="flex gap-1"
-						onClick={() => setShowTimerModal(true)}
-					>
-						<TimerIcon />
-						Add
-					</button>
-				</div>
+			<div className="flex w-full justify-between">
+				<span className="flex w-full justify-center gap-1 ">
+					<Switch
+						checked={showTuner}
+						onCheckChange={() => setShowTuner(!showTuner)}
+						disabled={false}
+					/>
+					<label htmlFor="showTuner">
+						<TuningFork />
+					</label>
+				</span>
+				<span className="flex w-full justify-center gap-1">
+					<Switch
+						checked={showMetronome}
+						onCheckChange={() => setShowMetronome(!showMetronome)}
+						disabled={false}
+					/>
+					<label htmlFor="showTuner">
+						<Drum color={"var(--clr-brand)"} size={20} />
+					</label>
+				</span>
 			</div>
+			<AnimatedGridRow active={showTuner}>
+				<Tuner />
+			</AnimatedGridRow>
+			<AnimatedGridRow active={showMetronome}>
+				<MetroWidget
+					bpm={bpm}
+					setBpm={setBpm}
+					play={play}
+					setPlay={setPlay}
+					gameStarted={play}
+					lastTickTime={null}
+					setLastTickTime={() => {}}
+					controls={true}
+				/>
+			</AnimatedGridRow>
 
 			<div className="flex justify-between">
-				<div className="timer-list_ctn w-1/2">
-					<ul>
-						{timerArray.map((t, i) => (
-							<li key={i} className={i === currentIndex ? "font-bold" : ""}>
-								{i + 1}. {t.label} ({formatTime(t.initialDuration)})
-							</li>
-						))}
-					</ul>
-				</div>
-
 				<Clockface
 					showPulse={false}
 					withTimer
@@ -183,6 +201,13 @@ const Timer = () => {
 					showPowerUp={false}
 					size={0.8}
 				>
+					<button
+						className="ui_btn absolute"
+						onClick={() => setShowTimerModal(true)}
+					>
+						<Plus color="black" />
+						Start
+					</button>
 					<div className="absolute flex flex-col gap-2 items-center">
 						{!started ? (
 							<>
@@ -221,107 +246,17 @@ const Timer = () => {
 				</Clockface>
 			</div>
 
-			<MetroWidget
-				bpm={bpm}
-				setBpm={setBpm}
-				play={play}
-				setPlay={setPlay}
-				gameStarted={play}
-				lastTickTime={null}
-				setLastTickTime={() => {}}
-				controls={true}
+			<TimerPhases
+				setShowTimerModal={setShowTimerModal}
+				current={currentIndex}
+				phases={timerArray}
 			/>
-			<Tuner />
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
-
-			{showTimerModal && (
-				<Modal className="box" onClose={() => setShowTimerModal(false)}>
-					<h1 className="text-2xl font-bold ">Add Timer Phase</h1>
-
-					<label className="mt-2">Label</label>
-					<input
-						className="w-full p-1 border"
-						value={label}
-						onChange={(e) => setLabel(e.target.value)}
-					/>
-
-					<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
-						<div className="box_label text-2xl">Timer duration</div>
-						<span className="flex w-2/3">
-							<button
-								className="ui_btn secondary"
-								onClick={() =>
-									setDisplayedDuration((prev) => Math.max(60000, prev - 5000))
-								}
-							>
-								<MinusIcon />
-							</button>
-							<h1 className="scoreboard timer text-xl w-full">
-								{formatTime(displayedDuration)}
-							</h1>
-							<button
-								className="ui_btn secondary"
-								onClick={() => setDisplayedDuration((prev) => prev + 5000)}
-							>
-								<PlusIcon />
-							</button>
-						</span>
-						<input
-							className="w-full"
-							type="range"
-							min="60000"
-							max="3600000"
-							step="60000"
-							value={displayedDuration}
-							onChange={(e) => setDisplayedDuration(e.target.valueAsNumber)}
-						/>
-					</div>
-
-					<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
-						<div className="box_label text-2xl">Cooldown duration</div>
-						<span className="flex w-2/3">
-							<button
-								className="ui_btn secondary"
-								onClick={() =>
-									setCooldownDuration((prev) => Math.max(0, prev - 1000))
-								}
-							>
-								<MinusIcon />
-							</button>
-							<h1 className="scoreboard timer text-xl w-full">
-								{cooldownDuration === 0 ? "None" : formatTime(cooldownDuration)}
-							</h1>
-							<button
-								className="ui_btn secondary"
-								onClick={() => setCooldownDuration((prev) => prev + 1000)}
-							>
-								<PlusIcon />
-							</button>
-						</span>
-						<input
-							className="w-full"
-							type="range"
-							min="0"
-							max="60000"
-							step="1000"
-							value={cooldownDuration}
-							onChange={(e) => setCooldownDuration(e.target.valueAsNumber)}
-						/>
-					</div>
-
-					<span className="flex justify-between mt-4">
-						<button
-							className="ui_btn secondary"
-							onClick={() => setShowTimerModal(false)}
-						>
-							Cancel
-						</button>
-						<button className="ui_btn" onClick={confirmTimer}>
-							Confirm
-						</button>
-					</span>
-				</Modal>
-			)}
+			<PhaseModal
+				show={showTimerModal}
+				setShow={setShowTimerModal}
+				onClose={confirmTimer}
+			/>
 		</GameContainer>
 	);
 };

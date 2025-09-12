@@ -397,6 +397,9 @@ input[type="range"]:focus::-ms-fill-upper {
 	pointer-events: none;
 	z-index: 0;
 }
+.horizontal-visualisation_ctn {
+	background-color: var(--clr-brand-o5);
+}
 
 .volume-visualiser_ctn {
 	position: relative;

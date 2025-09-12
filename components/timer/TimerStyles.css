@@ -1,0 +1,10 @@
+.timer_phase {
+	background-color: var(--clr-brand-o2);
+	padding: 0.25em;
+	border-radius: 6px;
+	transition: 250ms ease-in-out all;
+	&.active {
+		background-color: var(--clr-brand-o5);
+		border: 1px solid var(--clr-brand);
+	}
+}

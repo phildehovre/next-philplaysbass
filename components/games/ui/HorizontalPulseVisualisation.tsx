@@ -70,7 +70,7 @@ const HorizontalPulseVisualisation = ({
 
 	return (
 		<div>
-			<div className="flex justify-center h-5 p-0 relative overflow-hidden">
+			<div className="horizontal-visualisation_ctn flex justify-center h-5 p-0 relative overflow-hidden rounded-sm">
 				{pulse && <div className={`center-blip`} />}
 				{gameStarted && tempoInterval && (
 					<>

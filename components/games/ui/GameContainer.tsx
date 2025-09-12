@@ -38,7 +38,7 @@ const GameContainer = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, []);
 	return (
-		<div ref={gameCtn} className="game_ctn max-w-[24em]">
+		<div ref={gameCtn} className="game_ctn">
 			<BackToButton label="To dashboard" url={"/dashboard"} />
 			{children}
 		</div>

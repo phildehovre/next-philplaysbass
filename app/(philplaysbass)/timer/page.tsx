@@ -3,7 +3,10 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { PlayerProvider } from "@/context/playerContext";
 import SpotifyPlayer from "@/components/metronome/SpotifyPlayer";
-import { getUserPlaylists } from "@/actions/playlistActions";
+import {
+	getUserPlaylists,
+	getUserPracticeRoutines,
+} from "@/actions/playlistActions";
 import { PlaylistProvider } from "@/context/playlistContext";
 import Timer from "@/components/timer/Timer";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
@@ -19,7 +22,9 @@ const page = async () => {
 	}
 
 	const playlists = await getUserPlaylists();
+	const routines = await getUserPracticeRoutines();
 
+	console.log(routines);
 	return (
 		<main className="flex justify-center">
 			<PracticeSessionProvider>

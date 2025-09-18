@@ -43,6 +43,7 @@ const InputVolumeCalibration: React.FC<CalibrationPhaseProps> = ({
 			<PitchyStream
 				showDevices={false}
 				onNoteDetection={(note: NoteInfo) => setVolume(note.volume)}
+				threshold={0}
 			/>
 
 			{detectedUserInput && (

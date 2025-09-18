@@ -57,7 +57,7 @@ const Tuner = () => {
 				</div>
 			)}
 
-			<PitchyStream onNoteDetection={setNote} threshold={3} />
+			<PitchyStream onNoteDetection={setNote} threshold={0} />
 		</div>
 	);
 };

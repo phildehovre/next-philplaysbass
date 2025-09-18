@@ -7,6 +7,7 @@ type ModalProps = {
 	onClose: () => void;
 	className?: string;
 	excludeRefs?: React.RefObject<HTMLElement>[];
+	excludeSelectors?: string[];
 };
 
 const Modal = ({
@@ -14,34 +15,48 @@ const Modal = ({
 	onClose,
 	className = "",
 	excludeRefs = [],
+	excludeSelectors = [],
 }: ModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as Node;
-			const clickedOutsideModal =
-				modalRef.current && !modalRef.current.contains(target);
-			const clickedInsideExcluded = excludeRefs.some(
-				(ref) => ref.current && ref.current.contains(target)
-			);
+
+			if (!modalRef.current) return;
+
+			// Inside modal?
+			if (modalRef.current.contains(target)) return;
+
+			// Inside an excluded ref?
+			if (excludeRefs.some((ref) => ref.current?.contains(target))) return;
+
+			// Inside an excluded selector?
 			if (
-				modalRef.current &&
-				!modalRef.current.contains(event.target as Node) &&
-				!(event.target as HTMLElement).closest(".song-dropdown_ctn") // fallback safety
-			) {
-				onClose();
-			}
-			if (clickedOutsideModal && !clickedInsideExcluded) {
+				excludeSelectors.some((selector) =>
+					(event.target as HTMLElement).closest(selector)
+				)
+			)
+				return;
+
+			// Otherwise → close
+			onClose();
+		};
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
 				onClose();
 			}
 		};
 
 		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener("keydown", handleKeyDown);
+
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [onClose, excludeRefs]);
+	}, [onClose, excludeRefs, excludeSelectors]);
 
 	return (
 		<div className="modal_overlay">

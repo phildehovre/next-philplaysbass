@@ -1,17 +1,12 @@
 import React from "react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import { PlayerProvider } from "@/context/playerContext";
-import SpotifyPlayer from "@/components/metronome/SpotifyPlayer";
-import {
-	getUserPlaylists,
-	getUserPracticeRoutines,
-} from "@/actions/playlistActions";
-import { PlaylistProvider } from "@/context/playlistContext";
+import { getUserPlaylists } from "@/actions/playlistActions";
 import Timer from "@/components/timer/Timer";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import { NoteMatchGameProvider } from "@/context/noteMatchGameContext";
 import { SoundFXProvider } from "@/context/soundContext";
+import { getUserPracticeRoutines } from "@/actions/timerActions";
 
 const page = async () => {
 	const { isAuthenticated } = await getKindeServerSession();
@@ -22,15 +17,15 @@ const page = async () => {
 	}
 
 	const playlists = await getUserPlaylists();
+
 	const routines = await getUserPracticeRoutines();
 
-	console.log(routines);
 	return (
 		<main className="flex justify-center">
 			<PracticeSessionProvider>
 				<NoteMatchGameProvider>
 					<SoundFXProvider>
-						<Timer />
+						<Timer routines={routines} />
 					</SoundFXProvider>
 				</NoteMatchGameProvider>
 			</PracticeSessionProvider>

@@ -2,10 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "../games/GameStyles.css";
-import { Drum, Pause, Plus, Square, TimerIcon } from "lucide-react";
+import { Drum, FolderUp, Pause, Plus, Square, TimerIcon } from "lucide-react";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import GameContainer from "../games/ui/GameContainer";
-import AnimatedNumber from "../games/ui/AnimatedNumber";
 import MetroWidget from "../games/ui/MetroWidget";
 import Clockface from "../games/ui/Clockface";
 import PitchyComponent from "../games/PitchyComponent";
@@ -17,28 +16,40 @@ import Switch from "../Switch";
 import TuningFork from "../games/tuner/TuningFork";
 import PhaseModal from "./PhaseModal";
 import TimerPhases from "./TimerPhases";
+import { Phase, TimerSet } from "@/lib/generated/prisma";
+import { handleTabClose } from "@/lib/utils";
+import RoutinesModal from "@/prisma/RoutinesModal";
+import { UserPracticeRoutine } from "@/actions/timerActions";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
 	bpm: number;
 	label: string;
-	postCooldown: number | "pause"; // ms or "pause"
+	postCooldown: number; // ms or "pause"
 };
 
-const Timer = () => {
+type TimerComponentProps = {
+	routines: UserPracticeRoutine[];
+};
+
+const Timer = (props: TimerComponentProps) => {
+	const { routines } = props;
+	console.log(routines);
+
 	const [initialDuration, setInitialDuration] = useState<number>(0);
 	const [remainingTime, setRemainingTime] = useState<number>(60000);
 	const [bpm, setBpm] = useState<number>(MAX_TEMPO_AS_NUM / 2);
 	const [started, setStarted] = useState<boolean>(false);
-	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
-	const [showTuner, setShowTuner] = useState<boolean>(false);
-	const [showMetronome, setShowMetronome] = useState<boolean>(false);
 	const [play, setPlay] = useState<boolean>(false);
 	const [paused, setPaused] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
-
-	const [timerArray, setTimerArray] = useState<TimerCfg[]>([]);
+	const [timerArray, setTimerArray] = useState<Phase[]>([]);
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
+	const [showTuner, setShowTuner] = useState<boolean>(false);
+	const [showMetronome, setShowMetronome] = useState<boolean>(false);
+	const [showRoutinesModal, setShowRoutinesModal] = useState<boolean>(false);
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const { finishSession } = usePracticeSession();
@@ -60,17 +71,7 @@ const Timer = () => {
 
 	// handle tab close
 	useEffect(() => {
-		const handleVisibilityChange = () => {
-			if (document.hidden) finishSession();
-		};
-		const handleBeforeUnload = () => finishSession();
-
-		document.addEventListener("visibilitychange", handleVisibilityChange);
-		window.addEventListener("beforeunload", handleBeforeUnload);
-		return () => {
-			document.removeEventListener("visibilitychange", handleVisibilityChange);
-			window.removeEventListener("beforeunload", handleBeforeUnload);
-		};
+		handleTabClose(finishSession);
 	}, [finishSession]);
 
 	// countdown
@@ -92,7 +93,7 @@ const Timer = () => {
 		const current = timerArray[currentIndex];
 		if (!current) return;
 
-		if (current.postCooldown === "pause") {
+		if (current.postCooldown === 0) {
 			setPaused(true);
 			setStarted(false);
 		} else if (current.postCooldown > 0) {
@@ -136,11 +137,14 @@ const Timer = () => {
 		displayedDuration: number;
 		cooldownDuration: number;
 	}) => {
-		const newTimer: TimerCfg = {
+		const newTimer: Phase = {
 			initialDuration: displayedDuration,
 			bpm,
 			label,
 			postCooldown: cooldownDuration,
+			id: "",
+			timerSetId: "",
+			order: timerArray.length,
 		};
 		setTimerArray((prev) => [...prev, newTimer]);
 		setShowTimerModal(false);
@@ -203,13 +207,24 @@ const Timer = () => {
 				>
 					{timerArray.length == 0 && (
 						<button
-							className="ui_btn absolute"
+							className="ui_btn absolute top-27"
 							onClick={() => setShowTimerModal(true)}
 						>
-							<Plus color="black" />
-							Add timer
+							<p className="flex justify-start w-full gap-1">
+								<Plus />
+								New timer
+							</p>
 						</button>
 					)}
+					<button className="ui_btn absolute bottom-27">
+						<p
+							className="flex justify-start w-full gap-1"
+							onClick={() => setShowRoutinesModal(true)}
+						>
+							<FolderUp />
+							Open routine
+						</p>
+					</button>
 					<div className="absolute flex flex-col gap-2 items-center">
 						{!started ? (
 							<>
@@ -258,6 +273,12 @@ const Timer = () => {
 				show={showTimerModal}
 				setShow={setShowTimerModal}
 				onClose={confirmTimer}
+			/>
+			<RoutinesModal
+				setShow={setShowRoutinesModal}
+				show={showRoutinesModal}
+				routines={routines}
+				setTimerArray={setTimerArray}
 			/>
 		</GameContainer>
 	);

@@ -28,22 +28,6 @@ export async function getUserPlaylists() {
 	}
 }
 
-export async function getUserPracticeRoutines() {
-	const dbUser = await ensureUserInDb();
-
-	try {
-		const routines = await prisma.timerSet.findMany({
-			where: {
-				userId: dbUser.id,
-			},
-		});
-
-		return routines;
-	} catch (err: any) {
-		throw new Error(err.message);
-	}
-}
-
 export async function createPlaylist(formData: FormData) {
 	const dbUser = await ensureUserInDb();
 	const name = formData.get("playlistName")?.toString();

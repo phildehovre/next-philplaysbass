@@ -2,17 +2,19 @@
 import { formatTime } from "@/utils/helpers";
 import React, { useEffect, useState } from "react";
 import "./TimerStyles.css";
-import { Plus, Save, Trash2 } from "lucide-react";
+import { EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import SaveRoutineModal from "./SaveRoutineModal";
 
 const TimerPhases = ({
 	phases,
 	current,
 	setShowTimerModal,
+	setCurrentTimer,
 }: {
 	phases: any[];
 	current: number;
 	setShowTimerModal: (b: boolean) => void;
+	setCurrentTimer: (index: number) => void;
 }) => {
 	const [localPhases, setLocalPhases] = useState(phases);
 	const [showSaveRoutineModal, setShowSaveRoutineModal] = useState(false);
@@ -47,7 +49,6 @@ const TimerPhases = ({
 
 	const handleDeletePhases = async () => {};
 
-	// Drag logic
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
 	const handleDragStart = (index: number) => {
@@ -89,15 +90,17 @@ const TimerPhases = ({
 					{localPhases.map((t, i) => (
 						<li
 							key={i}
-							className={`timer_phase ${
-								i === current ? "font-bold active" : ""
-							}`}
+							className={`timer_phase ${i === current ? "active" : ""}`}
 							draggable
 							onDragStart={() => handleDragStart(i)}
 							onDragOver={handleDragOver}
 							onDrop={() => handleDrop(i)}
+							onClick={() => setCurrentTimer(i)}
 						>
-							{i + 1}. {t.label} ({formatTime(t.initialDuration)})
+							<p className="phase_index font-light text-xs ">{i + 1}</p>
+							<p className="phase_label w-full">{t.label}</p>
+							<p className="phase_duration">{formatTime(t.initialDuration)}</p>
+							<EllipsisVertical />
 						</li>
 					))}
 				</ul>

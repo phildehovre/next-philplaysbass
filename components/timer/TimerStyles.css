@@ -2,9 +2,22 @@
 	background-color: var(--clr-brand-o2);
 	padding: 0.25em;
 	border-radius: 6px;
-	transition: 250ms ease-in-out all;
+	transition: 150ms ease-in-out all;
+	border: 1px solid transparent;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5em;
+	cursor: grab;
+
+	&:hover {
+		background-color: var(--clr-brand-o5);
+	}
 	&.active {
 		background-color: var(--clr-brand-o5);
 		border: 1px solid var(--clr-brand);
+	}
+	&:active {
+		border: 1px solid white;
 	}
 }

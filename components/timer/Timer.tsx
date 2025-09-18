@@ -34,7 +34,6 @@ type TimerComponentProps = {
 
 const Timer = (props: TimerComponentProps) => {
 	const { routines } = props;
-	console.log(routines);
 
 	const [initialDuration, setInitialDuration] = useState<number>(0);
 	const [remainingTime, setRemainingTime] = useState<number>(60000);
@@ -206,25 +205,27 @@ const Timer = (props: TimerComponentProps) => {
 					size={0.8}
 				>
 					{timerArray.length == 0 && (
-						<button
-							className="ui_btn absolute top-27"
-							onClick={() => setShowTimerModal(true)}
-						>
-							<p className="flex justify-start w-full gap-1">
-								<Plus />
-								New timer
-							</p>
-						</button>
+						<>
+							<button
+								className="ui_btn absolute top-27"
+								onClick={() => setShowTimerModal(true)}
+							>
+								<p className="flex justify-start w-full gap-1">
+									<Plus />
+									New timer
+								</p>
+							</button>
+							<button className="ui_btn absolute bottom-27">
+								<p
+									className="flex justify-start w-full gap-1"
+									onClick={() => setShowRoutinesModal(true)}
+								>
+									<FolderUp />
+									Open routine
+								</p>
+							</button>
+						</>
 					)}
-					<button className="ui_btn absolute bottom-27">
-						<p
-							className="flex justify-start w-full gap-1"
-							onClick={() => setShowRoutinesModal(true)}
-						>
-							<FolderUp />
-							Open routine
-						</p>
-					</button>
 					<div className="absolute flex flex-col gap-2 items-center">
 						{!started ? (
 							<>
@@ -267,6 +268,7 @@ const Timer = (props: TimerComponentProps) => {
 				setShowTimerModal={setShowTimerModal}
 				current={currentIndex}
 				phases={timerArray}
+				setCurrentTimer={setCurrentIndex}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal

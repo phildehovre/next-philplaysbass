@@ -14,65 +14,53 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Phase } from "@/lib/generated/prisma";
+import { EllipsisVertical, Trash, X } from "lucide-react";
 
 type PhaseDropDownProps = {
-	show: boolean;
-	setShow: (b: boolean) => void;
+	handleDelete: (id: string) => void;
+	handleOmit: (id: string) => void;
+	phase: Phase;
 };
+
 export function PhaseDropdown(props: PhaseDropDownProps) {
+	const { handleDelete, handleOmit, phase } = props;
+
+	const dropdownOptions = [
+		{
+			label: "Remove for this session",
+			action: handleOmit,
+			variant: "",
+			icon: () => <X />,
+		},
+		{
+			label: "Delete",
+			action: handleDelete,
+			variant: "destructive",
+			icon: () => <Trash />,
+		},
+	];
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline">Open</Button>
+				<Button variant="outline">
+					<EllipsisVertical />
+				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-56" align="start">
-				<DropdownMenuLabel>My Account</DropdownMenuLabel>
-				<DropdownMenuGroup>
-					<DropdownMenuItem>
-						Profile
-						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-					</DropdownMenuItem>
-					<DropdownMenuItem>
-						Billing
-						<DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-					</DropdownMenuItem>
-					<DropdownMenuItem>
-						Settings
-						<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-					</DropdownMenuItem>
-					<DropdownMenuItem>
-						Keyboard shortcuts
-						<DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-					</DropdownMenuItem>
-				</DropdownMenuGroup>
-				<DropdownMenuSeparator />
-				<DropdownMenuGroup>
-					<DropdownMenuItem>Team</DropdownMenuItem>
-					<DropdownMenuSub>
-						<DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-						<DropdownMenuPortal>
-							<DropdownMenuSubContent>
-								<DropdownMenuItem>Email</DropdownMenuItem>
-								<DropdownMenuItem>Message</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>More...</DropdownMenuItem>
-							</DropdownMenuSubContent>
-						</DropdownMenuPortal>
-					</DropdownMenuSub>
-					<DropdownMenuItem>
-						New Team
-						<DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-					</DropdownMenuItem>
-				</DropdownMenuGroup>
-				<DropdownMenuSeparator />
-				<DropdownMenuItem>GitHub</DropdownMenuItem>
-				<DropdownMenuItem>Support</DropdownMenuItem>
-				<DropdownMenuItem disabled>API</DropdownMenuItem>
-				<DropdownMenuSeparator />
-				<DropdownMenuItem>
-					Log out
-					<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-				</DropdownMenuItem>
+			<DropdownMenuContent className="w-56 p-2" align="start">
+				{dropdownOptions.map((o) => {
+					return (
+						<DropdownMenuItem
+							className={`${o.variant && o.variant}`}
+							key={o.label}
+							onClick={() => o.action(phase.id)}
+						>
+							{o.icon()}
+							{o.label}
+						</DropdownMenuItem>
+					);
+				})}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

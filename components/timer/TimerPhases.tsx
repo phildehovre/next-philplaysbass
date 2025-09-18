@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import "./TimerStyles.css";
 import { EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import SaveRoutineModal from "./SaveRoutineModal";
+import { PhaseDropdown } from "./PhaseDropdown";
 
 const TimerPhases = ({
 	phases,
@@ -20,6 +21,7 @@ const TimerPhases = ({
 	const [showSaveRoutineModal, setShowSaveRoutineModal] = useState(false);
 	const [routineName, setRoutineName] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
 	useEffect(() => {
 		setLocalPhases(phases);
@@ -47,7 +49,8 @@ const TimerPhases = ({
 		}
 	};
 
-	const handleDeletePhases = async () => {};
+	const handleDeletePhase = async () => {};
+	const handleOmitPhase = async () => {};
 
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -100,7 +103,11 @@ const TimerPhases = ({
 							<p className="phase_index font-light text-xs ">{i + 1}</p>
 							<p className="phase_label w-full">{t.label}</p>
 							<p className="phase_duration">{formatTime(t.initialDuration)}</p>
-							<EllipsisVertical />
+							<PhaseDropdown
+								phase={t}
+								handleDelete={handleDeletePhase}
+								handleOmit={handleOmitPhase}
+							/>
 						</li>
 					))}
 				</ul>

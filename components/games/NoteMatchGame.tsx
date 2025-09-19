@@ -16,12 +16,12 @@ import StreakManager from "./ui/StreakManager";
 import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
+import { handleTabClose } from "@/lib/utils";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
 
 	const {
 		score: totalScore,
@@ -33,20 +33,8 @@ const NoteMatchGame = () => {
 	const { state, setters, actions } = game;
 
 	useEffect(() => {
-		const handleVisibilityChange = () => {
-			setIsTabVisible(!document.hidden);
-			if (document.hidden) finishSession();
-		};
-		const handleBeforeUnload = () => {
-			finishSession();
-		};
-		document.addEventListener("visibilitychange", handleVisibilityChange);
-		window.addEventListener("beforeunload", handleBeforeUnload);
-		return () => {
-			document.removeEventListener("visibilitychange", handleVisibilityChange);
-			window.removeEventListener("beforeunload", handleBeforeUnload);
-		};
-	}, []);
+		handleTabClose(finishSession);
+	}, [finishSession]);
 
 	const renderFilters = () =>
 		QUALITY.map((filter, index) => (

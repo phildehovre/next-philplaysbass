@@ -14,6 +14,7 @@ import ScoreModal from "./ui/ScoreModal";
 import { NoteInfo } from "@/types/types";
 import GameContainer from "./ui/GameContainer";
 import { useRhythmAccuracyGameContext } from "@/context/rhythmAccuracyGameContext";
+import { handleTabClose } from "@/lib/utils";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
@@ -25,22 +26,8 @@ const RhythmAccuracyGame = () => {
 	const { state, setters, actions } = game;
 
 	useEffect(() => {
-		const handleVisibilityChange = () => {
-			setIsTabVisible(!document.hidden);
-			console.log("visibility change");
-			if (document.hidden) finishSession();
-		};
-		const handleBeforeUnload = () => {
-			console.log("unloading");
-			finishSession();
-		};
-		document.addEventListener("visibilitychange", handleVisibilityChange);
-		window.addEventListener("beforeunload", handleBeforeUnload);
-		return () => {
-			document.removeEventListener("visibilitychange", handleVisibilityChange);
-			window.removeEventListener("beforeunload", handleBeforeUnload);
-		};
-	}, []);
+		handleTabClose(finishSession);
+	}, [finishSession]);
 
 	const forwardNoteDetection = (note: NoteInfo) => {
 		actions.onNoteDetection(note, bpm);

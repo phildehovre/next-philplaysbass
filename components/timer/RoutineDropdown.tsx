@@ -10,6 +10,7 @@ import { Phase } from "@/lib/generated/prisma";
 import { EllipsisVertical, Loader, Save, Trash, Trash2, X } from "lucide-react";
 import Spinner from "../Spinner";
 import { UserPracticeRoutine } from "@/actions/timerActions";
+import { Portal } from "@radix-ui/react-dropdown-menu";
 
 type RoutineDropdownProps = {
 	loading: boolean;
@@ -41,20 +42,22 @@ export function RoutineDropdown(props: RoutineDropdownProps) {
 					{loading ? <Spinner /> : <EllipsisVertical />}
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-56 p-2" align="start">
-				{dropdownOptions.map((o) => {
-					return (
-						<DropdownMenuItem
-							className={`${o.variant && o.variant}`}
-							key={o.label}
-							onClick={() => o.action(routine.id)}
-						>
-							{o.icon()}
-							{o.label}
-						</DropdownMenuItem>
-					);
-				})}
-			</DropdownMenuContent>
+			<Portal>
+				<DropdownMenuContent className="w-56 p-2" align="start" sideOffset={0}>
+					{dropdownOptions.map((o) => {
+						return (
+							<DropdownMenuItem
+								className={`${o.variant && o.variant}`}
+								key={o.label}
+								onClick={() => o.action(routine.id)}
+							>
+								{o.icon()}
+								{o.label}
+							</DropdownMenuItem>
+						);
+					})}
+				</DropdownMenuContent>
+			</Portal>
 		</DropdownMenu>
 	);
 }

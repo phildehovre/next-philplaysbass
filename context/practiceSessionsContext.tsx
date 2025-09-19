@@ -120,6 +120,7 @@ export const PracticeSessionProvider = ({
 	);
 
 	const finishSession = useCallback(async () => {
+		console.log("finishing session!");
 		const [totalScore, aggregateScore] = processNormalizedScore(events, {
 			bpm,
 			gameType,
@@ -164,6 +165,7 @@ export const PracticeSessionProvider = ({
 	};
 
 	const startSession = async (gameType: GameTypes) => {
+		console.log("starting session!");
 		setGameType(gameType);
 		try {
 			const res = await fetch("/api/practice/start", {

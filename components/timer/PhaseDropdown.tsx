@@ -42,7 +42,7 @@ export function PhaseDropdown(props: PhaseDropDownProps) {
 					{loading ? <Spinner /> : <EllipsisVertical />}
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-56 p-2" align="start">
+			<DropdownMenuContent className="w-56 p-2" align="start" sideOffset={0}>
 				{dropdownOptions.map((o) => {
 					return (
 						<DropdownMenuItem

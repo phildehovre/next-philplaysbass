@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import {
 	MAX_TEMPO_AS_NUM,
 	MAX_TEMPO_AS_STR,
@@ -7,7 +7,7 @@ import {
 	MIN_TEMPO_AS_STR,
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
-import { Pause, Play } from "lucide-react";
+import { Minus, Pause, Play, Plus } from "lucide-react";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -43,6 +43,10 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		const sidestick = new Audio("/sounds/Click.wav");
 		setSounds({ woodblock, cowbell, sidestick });
 	}, []);
+
+	useEffect(() => {
+		setDisplayedBpm(bpm);
+	}, [bpm]);
 
 	// useEffect(() => {
 	// 	const handleKeyDown = (e: KeyboardEvent) => {
@@ -106,8 +110,16 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	return (
 		<div className="w-full flex flex-col gap-2">
 			<div className="flex w-full flex-col items-stretch font-bold">
-				<span className="flex justify-center gap-1">
-					<div className="scoreboard w-full">{displayedBpm} bpm</div>
+				<span className="flex justify-center gap-1 w-full">
+					<div className="w-full flex items-center justify-between bg-teal-900 p-1 rounded-sm">
+						<button className="ui_btn" onClick={() => setBpm(bpm - 1)}>
+							<Minus />
+						</button>
+						{displayedBpm} bpm
+						<button className="ui_btn" onClick={() => setBpm(bpm + 1)}>
+							<Plus />
+						</button>
+					</div>
 					{controls && setPlay && (
 						<button className="ui_btn" onClick={() => setPlay(!play)}>
 							{!play ? <Play /> : <Pause />}

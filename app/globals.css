@@ -59,11 +59,12 @@
 	--background: oklch(62.793% 0.25768 29.223 / 0.433);
 	--foreground: oklch(0.145 0 0);
 }
-
+html {
+}
 html,
 body {
 	max-width: 100vw;
-	overflow-x: hidden;
+	/* overflow-x: hidden; */
 	background-color: var(--clr-bg);
 }
 
@@ -74,8 +75,6 @@ body {
 
 * {
 	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
 }
 
 .navbar_buffer {
@@ -122,7 +121,6 @@ button:hover,
 .ui_btn {
 	background: var(--clr-brand);
 	color: black;
-	width: 10em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -150,9 +148,6 @@ button:hover,
 		background: var(--clr-brand-o5);
 		color: var(--clr-brand);
 		outline: 1px solid var(--clr-brand);
-	}
-	&.small {
-		width: 2em;
 	}
 }
 

@@ -108,15 +108,15 @@ const TimerPhases = ({
 		<>
 			<div className="timer-phases_ctn w-full rounded-sm">
 				{selectedRoutine && (
-					<div className="routine_header flex items-center w-full justify-between">
-						<span className="flex">
-							<h1 className="text-2xl">{selectedRoutine.name}</h1>
+					<div className="flex items-center w-full justify-between mb-2">
+						<span className="flex gap-1 items-center">
 							<button
-								className="ui_btn small"
+								className="ui_btn secondary"
 								onClick={() => setShowTimerModal(true)}
 							>
 								<Plus />
 							</button>
+							<h1 className="text-2xl">{selectedRoutine.name}</h1>
 						</span>
 						<RoutineDropdown
 							loading={loading}

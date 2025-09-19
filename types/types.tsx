@@ -189,7 +189,8 @@ export type GameTypes =
 	| "chord-match"
 	| "name-triad"
 	| "tempo-match"
-	| "rhythm-accuracy";
+	| "rhythm-accuracy"
+	| "free-practice";
 
 export type Score = {
 	rhythm: number;

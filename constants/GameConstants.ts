@@ -1,6 +1,7 @@
 // Game types
 export const NOTE_MATCH_TYPE = "note-match";
 export const RHYTHM_ACCURACY_TYPE = "rhythm-accuracy";
+export const FREE_PRACTICE_TYPE = "free-practice";
 
 // Metronome vars
 export const MIN_TEMPO_AS_STR = "10";

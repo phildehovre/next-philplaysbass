@@ -9,7 +9,10 @@ import MetroWidget from "../games/ui/MetroWidget";
 import Clockface from "../games/ui/Clockface";
 import PitchyComponent from "../games/PitchyComponent";
 import Tuner from "../games/tuner/Tuner";
-import { MAX_TEMPO_AS_NUM } from "@/constants/GameConstants";
+import {
+	FREE_PRACTICE_TYPE,
+	MAX_TEMPO_AS_NUM,
+} from "@/constants/GameConstants";
 import { formatTime } from "@/utils/helpers";
 import AnimatedGridRow from "../games/ui/AnimatedGridRow";
 import Switch from "../Switch";
@@ -20,8 +23,6 @@ import { Phase, TimerSet } from "@/lib/generated/prisma";
 import { handleTabClose } from "@/lib/utils";
 import RoutinesModal from "@/prisma/RoutinesModal";
 import { UserPracticeRoutine } from "@/actions/timerActions";
-import { User } from "spotify-api.js";
-import { set } from "date-fns";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
@@ -54,7 +55,7 @@ const Timer = (props: TimerComponentProps) => {
 	const [showRoutinesModal, setShowRoutinesModal] = useState<boolean>(false);
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
-	const { finishSession } = usePracticeSession();
+	const { finishSession, startSession } = usePracticeSession();
 
 	// progress calculation
 	useEffect(() => {
@@ -93,7 +94,9 @@ const Timer = (props: TimerComponentProps) => {
 	// handle phase completion
 	const handlePhaseComplete = () => {
 		const current = timerArray[currentIndex];
-		if (!current) return;
+		if (!current) {
+			return;
+		}
 
 		if (current.postCooldown === 0) {
 			setPaused(true);
@@ -120,6 +123,7 @@ const Timer = (props: TimerComponentProps) => {
 		const next = timerArray[currentIndex + 1];
 		if (!next) {
 			// session finished
+			finishSession();
 			setStarted(false);
 			setPaused(false);
 			return;
@@ -156,6 +160,7 @@ const Timer = (props: TimerComponentProps) => {
 		setStarted(false);
 		setPaused(false);
 		setRemainingTime(initialDuration);
+		finishSession();
 	};
 
 	return (
@@ -240,6 +245,7 @@ const Timer = (props: TimerComponentProps) => {
 											setInitialDuration(timerArray[0].initialDuration);
 											setRemainingTime(timerArray[0].initialDuration);
 											setStarted(true);
+											startSession(FREE_PRACTICE_TYPE);
 										}}
 									>
 										Start

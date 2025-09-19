@@ -3,28 +3,22 @@ import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuPortal,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuSub,
-	DropdownMenuSubContent,
-	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Phase } from "@/lib/generated/prisma";
-import { EllipsisVertical, Trash, X } from "lucide-react";
+import { EllipsisVertical, Loader, Trash, X } from "lucide-react";
+import Spinner from "../Spinner";
 
 type PhaseDropDownProps = {
 	handleDelete: (id: string) => void;
 	handleOmit: (id: string) => void;
 	phase: Phase;
+	loading: boolean;
 };
 
 export function PhaseDropdown(props: PhaseDropDownProps) {
-	const { handleDelete, handleOmit, phase } = props;
+	const { handleDelete, loading, handleOmit, phase } = props;
 
 	const dropdownOptions = [
 		{
@@ -44,8 +38,8 @@ export function PhaseDropdown(props: PhaseDropDownProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline">
-					<EllipsisVertical />
+				<Button variant="outline" className="rounded-full w-[1.5em] h-[1.5em]">
+					{loading ? <Spinner /> : <EllipsisVertical />}
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56 p-2" align="start">

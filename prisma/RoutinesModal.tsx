@@ -14,6 +14,11 @@ type RoutinesModalProps = {
 const RoutinesModal = (props: RoutinesModalProps) => {
 	const { show, routines, setShow, setTimerArray } = props;
 
+	const handleSelectRoutine = (phases: Phase[]) => {
+		setTimerArray(phases);
+		setShow(false);
+	};
+
 	if (!show) return;
 	return (
 		<Modal onClose={() => setShow(false)}>
@@ -24,7 +29,7 @@ const RoutinesModal = (props: RoutinesModalProps) => {
 				{routines.map((r) => {
 					return (
 						<li
-							onClick={() => setTimerArray(r.phases)}
+							onClick={() => handleSelectRoutine(r.phases)}
 							key={r.id}
 							className="hover:bg-gray"
 						>

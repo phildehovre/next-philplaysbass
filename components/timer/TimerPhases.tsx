@@ -2,9 +2,11 @@
 import { formatTime } from "@/utils/helpers";
 import React, { useEffect, useState } from "react";
 import "./TimerStyles.css";
-import { EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
+import { Plus, Save, Trash2 } from "lucide-react";
 import SaveRoutineModal from "./SaveRoutineModal";
 import { PhaseDropdown } from "./PhaseDropdown";
+import { handleDelete } from "@/actions/timerActions";
+import { toast } from "sonner";
 
 const TimerPhases = ({
 	phases,
@@ -21,7 +23,6 @@ const TimerPhases = ({
 	const [showSaveRoutineModal, setShowSaveRoutineModal] = useState(false);
 	const [routineName, setRoutineName] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
 	useEffect(() => {
 		setLocalPhases(phases);
@@ -49,8 +50,26 @@ const TimerPhases = ({
 		}
 	};
 
-	const handleDeletePhase = async () => {};
-	const handleOmitPhase = async () => {};
+	const handleDeletePhase = async (id: string) => {
+		setLoading(true);
+		try {
+			const res = await handleDelete(id);
+			if (res?.success) {
+				handleOmitPhase(id);
+				toast(`Phase successfully deleted`);
+			}
+		} catch (error) {
+			toast(`Error: phase was not removed`);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleOmitPhase = async (id: string) => {
+		setLocalPhases((prev) => {
+			return prev.filter((ph) => ph.id != id);
+		});
+	};
 
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -107,6 +126,7 @@ const TimerPhases = ({
 								phase={t}
 								handleDelete={handleDeletePhase}
 								handleOmit={handleOmitPhase}
+								loading={loading}
 							/>
 						</li>
 					))}

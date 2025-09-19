@@ -1,9 +1,9 @@
-import { LoaderPinwheelIcon } from "lucide-react";
+import { Loader, LoaderPinwheelIcon } from "lucide-react";
 import React from "react";
 import "./Spinner.css";
 
 const Spinner = () => {
-	return <LoaderPinwheelIcon className="spinner" />;
+	return <Loader className="spinner" />;
 };
 
 export default Spinner;

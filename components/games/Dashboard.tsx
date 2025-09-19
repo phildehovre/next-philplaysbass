@@ -70,8 +70,9 @@ const Dashboard = (props: any) => {
 					</AnnouncementBanner>
 					<AnnouncementBanner title={"Announcements"} callToActionText="">
 						<p>
-							The leaderboard is now Live! Will you measure up against the OG's
-							of the PhilPlaysBass stream? Play any of the games to find out!
+							The timer has officially dropped! This little beast comes packed
+							with a Timer, Tuner, and Metronome, basically the holy trinity of
+							practice tools!
 						</p>
 					</AnnouncementBanner>
 				</div>
@@ -100,8 +101,6 @@ const Dashboard = (props: any) => {
 				<h1 className="section_title">Activity</h1>
 				<ActivityFeed userData={userData} />
 			</div>
-
-			<Tuner />
 		</div>
 	);
 };

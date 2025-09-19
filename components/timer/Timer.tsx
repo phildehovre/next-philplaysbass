@@ -20,6 +20,8 @@ import { Phase, TimerSet } from "@/lib/generated/prisma";
 import { handleTabClose } from "@/lib/utils";
 import RoutinesModal from "@/prisma/RoutinesModal";
 import { UserPracticeRoutine } from "@/actions/timerActions";
+import { User } from "spotify-api.js";
+import { set } from "date-fns";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
@@ -43,6 +45,7 @@ const Timer = (props: TimerComponentProps) => {
 	const [paused, setPaused] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
 	const [timerArray, setTimerArray] = useState<Phase[]>([]);
+	const [selectedRoutine, setSelectedRoutine] = useState<UserPracticeRoutine>();
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
 
 	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
@@ -269,6 +272,8 @@ const Timer = (props: TimerComponentProps) => {
 				current={currentIndex}
 				phases={timerArray}
 				setCurrentTimer={setCurrentIndex}
+				selectedRoutine={selectedRoutine}
+				setSelectedRoutine={setSelectedRoutine}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal
@@ -281,6 +286,7 @@ const Timer = (props: TimerComponentProps) => {
 				show={showRoutinesModal}
 				routines={routines}
 				setTimerArray={setTimerArray}
+				setSelectedRoutine={setSelectedRoutine}
 			/>
 		</GameContainer>
 	);

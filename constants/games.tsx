@@ -2,6 +2,13 @@ import { GameTypes } from "@/types/types";
 
 export const toolCards = [
 	{
+		title: "Timer",
+		description:
+			"Total freedom to set up your own practice regime, at your own tempo! Includes tuner and metronome",
+		btnText: "Start timer",
+		href: "/timer",
+	},
+	{
 		title: "Metronome",
 		description:
 			"Set your tempo and time signature, or sync with backing tracks. Stay in time with precision.",

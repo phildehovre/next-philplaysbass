@@ -151,6 +151,9 @@ button:hover,
 		color: var(--clr-brand);
 		outline: 1px solid var(--clr-brand);
 	}
+	&.small {
+		width: 2em;
+	}
 }
 
 button:focus-visible,

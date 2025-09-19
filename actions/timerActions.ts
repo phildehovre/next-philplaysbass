@@ -54,7 +54,7 @@ export async function deleteUserPhase(phaseId: string) {
 	}
 }
 
-export const handleDelete = async (phaseId: string) => {
+export const deletePhase = async (phaseId: string) => {
 	try {
 		const res = await fetch("/api/timer-sets", {
 			method: "DELETE",

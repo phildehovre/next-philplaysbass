@@ -35,7 +35,7 @@ const Tuner = () => {
 		note && Math.abs(note.centsOff) < 5 ? "bg-green-500" : "bg-red-500";
 
 	return (
-		<div className="flex flex-col items-center justify-center p-8">
+		<div className="flex flex-col items-center justify-center">
 			<div className="scoreboard relative w-80 h-6 rounded-full overflow-hidden">
 				<div className="absolute left-1/2 top-0 bottom-0 w-0.5 "></div>
 

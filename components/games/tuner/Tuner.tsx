@@ -56,7 +56,6 @@ const Tuner = () => {
 					<p className="text-sm text-gray-600">{note.centsOff.toFixed(1)}¢</p>
 				</div>
 			)}
-
 			<PitchyStream onNoteDetection={setNote} threshold={0} />
 		</div>
 	);

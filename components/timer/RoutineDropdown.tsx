@@ -6,7 +6,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Phase } from "@/lib/generated/prisma";
 import { EllipsisVertical, Loader, Save, Trash, Trash2, X } from "lucide-react";
 import Spinner from "../Spinner";
 import { UserPracticeRoutine } from "@/actions/timerActions";
@@ -16,14 +15,15 @@ type RoutineDropdownProps = {
 	loading: boolean;
 	routine: UserPracticeRoutine;
 	handleDeleteRoutine: (id: string) => void;
+	handleSaveRoutine: (id: string) => void;
 };
 export function RoutineDropdown(props: RoutineDropdownProps) {
-	const { loading, routine, handleDeleteRoutine } = props;
+	const { loading, routine, handleDeleteRoutine, handleSaveRoutine } = props;
 
 	const dropdownOptions = [
 		{
 			label: "Save practice",
-			action: (id: string) => {},
+			action: handleSaveRoutine,
 			variant: "",
 			icon: () => <Save />,
 		},

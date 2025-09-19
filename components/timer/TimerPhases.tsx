@@ -122,6 +122,7 @@ const TimerPhases = ({
 							loading={loading}
 							handleDeleteRoutine={handleDeleteRoutine}
 							routine={selectedRoutine}
+							handleSaveRoutine={handleSaveRoutine}
 						/>
 					</div>
 				)}

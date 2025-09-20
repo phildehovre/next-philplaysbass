@@ -46,6 +46,7 @@ const TimerPhases = ({
 			});
 
 			const data = await res.json();
+			setSelectedRoutine(data);
 			console.log("Saved:", data);
 		} catch (error) {
 			console.error(error);
@@ -107,25 +108,26 @@ const TimerPhases = ({
 	return (
 		<>
 			<div className="timer-phases_ctn w-full rounded-sm">
-				{selectedRoutine && (
-					<div className="flex items-center w-full justify-between mb-2">
-						<span className="flex gap-1 items-center">
-							<button
-								className="ui_btn secondary"
-								onClick={() => setShowTimerModal(true)}
-							>
-								<Plus />
-							</button>
-							<h1 className="text-2xl">{selectedRoutine.name}</h1>
-						</span>
-						<RoutineDropdown
-							loading={loading}
-							handleDeleteRoutine={handleDeleteRoutine}
-							routine={selectedRoutine}
-							handleSaveRoutine={handleSaveRoutine}
-						/>
-					</div>
-				)}
+				<div className="flex items-center w-full justify-between mb-2">
+					<span className="flex gap-1 items-center">
+						<button
+							className="ui_btn secondary"
+							onClick={() => setShowTimerModal(true)}
+						>
+							<Plus />
+						</button>
+					</span>
+					{selectedRoutine && (
+						<h1 className="text-2xl">{selectedRoutine.name}</h1>
+					)}
+					<RoutineDropdown
+						loading={loading}
+						handleDeleteRoutine={handleDeleteRoutine}
+						routine={selectedRoutine}
+						handleSaveRoutine={handleSaveRoutine}
+						setShowSaveRoutineModal={setShowSaveRoutineModal}
+					/>
+				</div>
 				<ul className="timer_list flex flex-col gap-1">
 					{localPhases.map((t, i) => (
 						<li

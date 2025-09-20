@@ -109,7 +109,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 
 	return (
 		<div className="w-full flex flex-col gap-2">
-			<div className="flex w-full flex-col items-stretch font-bold">
+			<div className="flex w-full flex-col font-bold">
 				<span className="flex justify-center gap-1 w-full">
 					<div className="w-full flex items-center justify-between bg-teal-900 p-1 rounded-sm">
 						<button className="ui_btn" onClick={() => setBpm(bpm - 1)}>

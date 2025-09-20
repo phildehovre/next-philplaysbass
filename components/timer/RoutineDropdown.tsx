@@ -6,35 +6,26 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EllipsisVertical, Loader, Save, Trash, Trash2, X } from "lucide-react";
+import { EllipsisVertical, Save, Trash2 } from "lucide-react";
 import Spinner from "../Spinner";
 import { UserPracticeRoutine } from "@/actions/timerActions";
 import { Portal } from "@radix-ui/react-dropdown-menu";
 
 type RoutineDropdownProps = {
 	loading: boolean;
-	routine: UserPracticeRoutine;
+	routine?: UserPracticeRoutine; // make it optional
 	handleDeleteRoutine: (id: string) => void;
 	handleSaveRoutine: (id: string) => void;
+	setShowSaveRoutineModal: (b: boolean) => void;
 };
-export function RoutineDropdown(props: RoutineDropdownProps) {
-	const { loading, routine, handleDeleteRoutine, handleSaveRoutine } = props;
 
-	const dropdownOptions = [
-		{
-			label: "Save practice",
-			action: handleSaveRoutine,
-			variant: "",
-			icon: () => <Save />,
-		},
-		{
-			label: "Delete practice",
-			action: handleDeleteRoutine,
-			variant: "destructive",
-			icon: () => <Trash2 />,
-		},
-	];
-
+export function RoutineDropdown({
+	loading,
+	routine,
+	setShowSaveRoutineModal,
+	handleDeleteRoutine,
+	handleSaveRoutine,
+}: RoutineDropdownProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -44,18 +35,18 @@ export function RoutineDropdown(props: RoutineDropdownProps) {
 			</DropdownMenuTrigger>
 			<Portal>
 				<DropdownMenuContent className="w-56 p-2" align="start" sideOffset={0}>
-					{dropdownOptions.map((o) => {
-						return (
-							<DropdownMenuItem
-								className={`${o.variant && o.variant}`}
-								key={o.label}
-								onClick={() => o.action(routine.id)}
-							>
-								{o.icon()}
-								{o.label}
-							</DropdownMenuItem>
-						);
-					})}
+					<DropdownMenuItem onClick={() => setShowSaveRoutineModal(true)}>
+						<Save className="mr-2 h-4 w-4" />
+						Save practice
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						disabled={!routine} // disable if routine not present
+						className="text-destructive"
+						onClick={() => routine && handleDeleteRoutine(routine.id)}
+					>
+						<Trash2 className="mr-2 h-4 w-4" />
+						Delete practice
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</Portal>
 		</DropdownMenu>

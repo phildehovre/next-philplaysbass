@@ -212,27 +212,24 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 		};
 	}, [selectedDeviceId]);
 
+	if (!showDevices) return;
 	return (
-		<div className="p-4 space-y-4">
-			{showDevices && (
-				<div className="flex flex-col">
-					{/* <label htmlFor="device" className="mr-2 font-regular">
+		<div className="flex flex-col">
+			{/* <label htmlFor="device" className="mr-2 font-regular">
 						Input device:
 					</label> */}
-					<select
-						id="device"
-						value={selectedDeviceId ?? ""}
-						onChange={(e) => setSelectedDeviceId(e.target.value)}
-						className="border px-2 py-1 rounded"
-					>
-						{devices.map((device) => (
-							<option key={device.deviceId} value={device.deviceId}>
-								{device.label || `Input ${device.deviceId.slice(0, 5)}`}
-							</option>
-						))}
-					</select>
-				</div>
-			)}
+			<select
+				id="device"
+				value={selectedDeviceId ?? ""}
+				onChange={(e) => setSelectedDeviceId(e.target.value)}
+				className="border px-2 py-1 rounded"
+			>
+				{devices.map((device) => (
+					<option key={device.deviceId} value={device.deviceId}>
+						{device.label || `Input ${device.deviceId.slice(0, 5)}`}
+					</option>
+				))}
+			</select>
 		</div>
 	);
 }

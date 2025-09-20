@@ -1,4 +1,4 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronsLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import "../GameStyles.css";
@@ -10,10 +10,10 @@ const BackToButton = (props: {
 }) => {
 	return (
 		<Link
-			className={`${props.className} flex text-center items-center btn_backto text-xs`}
+			className={`${props?.className} flex text-center items-center btn_backto text-xs`}
 			href={props.url}
 		>
-			<ChevronLeft size={10} />
+			<ChevronsLeft size={10} />
 			{props.label}
 		</Link>
 	);

@@ -21,6 +21,7 @@
 	margin: 1em auto;
 	padding: 0 1em;
 	max-width: 1000px;
+	opacity: 0;
 }
 
 .section_title {
@@ -36,6 +37,7 @@
 	background: var(--gradient-brand-h);
 	padding: 1em 0;
 	width: 100%;
+	opacity: 0;
 	> h1 {
 		font-size: 2em;
 		font-weight: 900;

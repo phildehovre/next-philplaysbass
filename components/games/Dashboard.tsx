@@ -6,7 +6,6 @@ import { gameCards, toolCards } from "@/constants/games";
 import UserStats from "./dashboard/UserStats";
 import { GameCard } from "./dashboard/Card";
 import ActivityFeed from "./ActivityFeed";
-import Tuner from "./tuner/Tuner";
 import Link from "next/link";
 import { LinkIcon } from "lucide-react";
 import gsap from "gsap";
@@ -56,7 +55,7 @@ const Dashboard = (props: any) => {
 
 	return (
 		<div className="dashboard_ctn w-full" ref={dashboardRef}>
-			<div className="welcome_banner flex flex-col items-center">
+			<div className="welcome_banner opacity-0 flex flex-col items-center">
 				<h1>Welcome back, {userData.name}</h1>
 				<div className="banner_ctn flex gap-2 justify-center w-full">
 					<AnnouncementBanner

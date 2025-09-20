@@ -5,14 +5,17 @@ import InputVolumeCalibration from "./InputVolumeCalibration";
 import CompletedCalibration from "./CompletedCalibration";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Modal from "@/components/Modal";
+import InitialUserGesture from "@/components/timer/InitialUserGesture";
 
 export type CalibrationSettings = {
+	initialUserGesture: boolean;
 	latency?: number;
 	defaultInputDeviceId?: string;
 	completed?: boolean;
 };
 
 export type CalibrationSettingKey =
+	| "initialUserGesture"
 	| "latency"
 	| "defaultInputDeviceId"
 	| "completed";
@@ -27,11 +30,14 @@ export interface CalibrationPhaseProps {
 
 const ModalCalibration = () => {
 	const [calibrationStep, setCalibrationStep] = useState<number>(0);
-	const [calibrationObj, setCalibrationObj] = useState<CalibrationSettings>({});
+	const [calibrationObj, setCalibrationObj] = useState<CalibrationSettings>({
+		initialUserGesture: false,
+	});
 
 	const { isFirstTimeUser, setIsFirstTimeUser } = usePracticeSession();
 
 	const STEPS: React.ComponentType<CalibrationPhaseProps>[] = [
+		InitialUserGesture,
 		InputVolumeCalibration,
 		LatencyCalibration,
 		CompletedCalibration,
@@ -45,7 +51,7 @@ const ModalCalibration = () => {
 
 	if (!isFirstTimeUser) return null;
 
-	console.log(isFirstTimeUser);
+	console.log(calibrationObj);
 
 	const nextStep = () =>
 		setCalibrationStep((s) => Math.min(s + 1, STEPS.length - 1));

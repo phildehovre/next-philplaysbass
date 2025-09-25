@@ -7,20 +7,27 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Phase } from "@/lib/generated/prisma";
-import { EllipsisVertical, Loader, Trash, X } from "lucide-react";
+import { EditIcon, EllipsisVertical, Loader, Trash, X } from "lucide-react";
 import Spinner from "../Spinner";
 
 type PhaseDropDownProps = {
 	handleDelete: (id: string) => void;
 	handleOmit: (id: string) => void;
+	handleEdit: (id: string) => void;
 	phase: Phase;
 	loading: boolean;
 };
 
 export function PhaseDropdown(props: PhaseDropDownProps) {
-	const { handleDelete, loading, handleOmit, phase } = props;
+	const { handleDelete, loading, handleOmit, handleEdit, phase } = props;
 
 	const dropdownOptions = [
+		{
+			label: "Edit",
+			action: handleEdit,
+			variant: "",
+			icon: () => <EditIcon />,
+		},
 		{
 			label: "Remove for this session",
 			action: handleOmit,

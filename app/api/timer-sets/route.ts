@@ -24,26 +24,75 @@ export async function POST(req: Request) {
 		}
 
 		const body = await req.json();
-		const { name, phases } = body;
+		const { id, name, phases } = body;
 
-		const timerSet = await prisma.timerSet.create({
-			data: {
-				name: name || "Untitled Set",
-				userId: dbUser.id,
-				phases: {
-					create: phases.map((p: any, i: number) => ({
+		let timerSet;
+
+		if (id) {
+			// Update routine name
+			timerSet = await prisma.timerSet.update({
+				where: { id },
+				data: { name: name || "Untitled Set" },
+			});
+
+			// Delete phases that are no longer in the list
+			const incomingIds = phases.filter((p: any) => p.id).map((p: any) => p.id);
+			await prisma.phase.deleteMany({
+				where: {
+					timerSetId: id,
+					NOT: { id: { in: incomingIds } },
+				},
+			});
+
+			// Upsert each phase
+			for (let i = 0; i < phases.length; i++) {
+				const p = phases[i];
+				await prisma.phase.upsert({
+					where: { id: p.id ?? "" }, // empty string will never match, so it creates
+					update: {
 						initialDuration: p.initialDuration,
 						bpm: p.bpm,
 						label: p.label,
 						postCooldown: p.postCooldown,
 						order: i,
-					})),
-				},
-			},
-			include: { phases: true },
-		});
+					},
+					create: {
+						initialDuration: p.initialDuration,
+						bpm: p.bpm,
+						label: p.label,
+						postCooldown: p.postCooldown,
+						order: i,
+						timerSetId: id,
+					},
+				});
+			}
 
-		return new Response(JSON.stringify(timerSet), { status: 201 });
+			// Finally, return the updated set with its phases
+			timerSet = await prisma.timerSet.findUnique({
+				where: { id },
+				include: { phases: true },
+			});
+		} else {
+			// ➕ Create new routine as before
+			timerSet = await prisma.timerSet.create({
+				data: {
+					name: name || "Untitled Set",
+					userId: dbUser.id,
+					phases: {
+						create: phases.map((p: any, i: number) => ({
+							initialDuration: p.initialDuration,
+							bpm: p.bpm,
+							label: p.label,
+							postCooldown: p.postCooldown,
+							order: i,
+						})),
+					},
+				},
+				include: { phases: true },
+			});
+		}
+
+		return new Response(JSON.stringify(timerSet), { status: id ? 200 : 201 });
 	} catch (error) {
 		console.error(error);
 		return new Response(JSON.stringify({ error: "Something went wrong" }), {

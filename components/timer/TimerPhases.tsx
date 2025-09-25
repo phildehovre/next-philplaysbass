@@ -8,6 +8,7 @@ import { PhaseDropdown } from "./PhaseDropdown";
 import { deletePhase, UserPracticeRoutine } from "@/actions/timerActions";
 import { toast } from "sonner";
 import { RoutineDropdown } from "./RoutineDropdown";
+import { Phase } from "@/lib/generated/prisma";
 
 const TimerPhases = ({
 	phases,
@@ -16,6 +17,8 @@ const TimerPhases = ({
 	setCurrentTimer,
 	selectedRoutine,
 	setSelectedRoutine,
+	setSelectedPhase,
+	setShowRoutinesModal,
 }: {
 	phases: any[];
 	current: number;
@@ -23,17 +26,23 @@ const TimerPhases = ({
 	setCurrentTimer: (index: number) => void;
 	selectedRoutine: UserPracticeRoutine | undefined;
 	setSelectedRoutine: (r: UserPracticeRoutine) => void;
+	setSelectedPhase: (p: Phase) => void;
+	setShowRoutinesModal: (b: boolean) => void;
 }) => {
 	const [localPhases, setLocalPhases] = useState(phases);
 	const [showSaveRoutineModal, setShowSaveRoutineModal] = useState(false);
 	const [routineName, setRoutineName] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		setLocalPhases(phases);
 	}, [phases]);
 
 	const handleSaveRoutine = async () => {
+		if (selectedRoutine) {
+			// update routine
+		}
 		setLoading(true);
 		try {
 			const res = await fetch("/api/timer-sets", {
@@ -84,14 +93,17 @@ const TimerPhases = ({
 		});
 	};
 
-	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+	const handleEditPhase = async (id: string) => {
+		setShowTimerModal(true);
+		setSelectedPhase(phases.find((p) => p.id === id));
+	};
 
 	const handleDragStart = (index: number) => {
 		setDraggedIndex(index);
 	};
 
 	const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
-		e.preventDefault(); // Required to allow dropping
+		e.preventDefault();
 	};
 
 	const handleDrop = (index: number) => {
@@ -126,6 +138,7 @@ const TimerPhases = ({
 						routine={selectedRoutine}
 						handleSaveRoutine={handleSaveRoutine}
 						setShowSaveRoutineModal={setShowSaveRoutineModal}
+						setShowRoutinesModal={setShowRoutinesModal}
 					/>
 				</div>
 				<ul className="timer_list flex flex-col gap-1">
@@ -147,6 +160,7 @@ const TimerPhases = ({
 								handleDelete={handleDeletePhase}
 								handleOmit={handleOmitPhase}
 								loading={loading}
+								handleEdit={handleEditPhase}
 							/>
 						</li>
 					))}

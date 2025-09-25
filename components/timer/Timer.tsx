@@ -48,6 +48,7 @@ const Timer = (props: TimerComponentProps) => {
 	const [timerArray, setTimerArray] = useState<Phase[]>([]);
 	const [selectedRoutine, setSelectedRoutine] = useState<UserPracticeRoutine>();
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
+	const [selectedPhase, setSelectedPhase] = useState<Phase>();
 
 	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
 	const [showTuner, setShowTuner] = useState<boolean>(false);
@@ -133,6 +134,7 @@ const Timer = (props: TimerComponentProps) => {
 		setStarted(true);
 		setPaused(false);
 	};
+	console.log(selectedPhase);
 
 	const confirmTimer = ({
 		label,
@@ -143,17 +145,33 @@ const Timer = (props: TimerComponentProps) => {
 		displayedDuration: number;
 		cooldownDuration: number;
 	}) => {
-		const newTimer: Phase = {
-			initialDuration: displayedDuration,
-			bpm,
-			label,
-			postCooldown: cooldownDuration,
-			id: "",
-			timerSetId: "",
-			order: timerArray.length,
-		};
-		setTimerArray((prev) => [...prev, newTimer]);
+		if (selectedPhase) {
+			setTimerArray((prev) =>
+				prev.map((phase) =>
+					phase.id === selectedPhase.id
+						? {
+								...phase,
+								label,
+								initialDuration: displayedDuration,
+								postCooldown: cooldownDuration,
+						  }
+						: phase
+				)
+			);
+		} else {
+			const newTimer: Phase = {
+				initialDuration: displayedDuration,
+				bpm,
+				label,
+				postCooldown: cooldownDuration,
+				id: "",
+				timerSetId: "",
+				order: timerArray.length,
+			};
+			setTimerArray((prev) => [...prev, newTimer]);
+		}
 		setShowTimerModal(false);
+		setSelectedPhase(undefined);
 	};
 
 	const handleStop = () => {
@@ -280,12 +298,15 @@ const Timer = (props: TimerComponentProps) => {
 				setCurrentTimer={setCurrentIndex}
 				selectedRoutine={selectedRoutine}
 				setSelectedRoutine={setSelectedRoutine}
+				setSelectedPhase={setSelectedPhase}
+				setShowRoutinesModal={setShowRoutinesModal}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal
 				show={showTimerModal}
 				setShow={setShowTimerModal}
 				onClose={confirmTimer}
+				initialValues={selectedPhase}
 			/>
 			<RoutinesModal
 				setShow={setShowRoutinesModal}

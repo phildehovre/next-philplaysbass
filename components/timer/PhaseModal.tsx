@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { formatTime } from "@/utils/helpers";
+import { Phase } from "@/lib/generated/prisma";
 
 type PhaseModalProps = {
 	show: boolean;
 	setShow: (b: boolean) => void;
+	initialValues?: Phase;
 	onClose: ({
 		label,
 		displayedDuration,
@@ -17,10 +20,18 @@ type PhaseModalProps = {
 	}) => void;
 };
 const PhaseModal = (props: PhaseModalProps) => {
-	const { onClose, show, setShow } = props;
+	const { onClose, show, setShow, initialValues } = props;
 	const [label, setLabel] = useState<string>("");
 	const [displayedDuration, setDisplayedDuration] = useState<number>(0);
 	const [cooldownDuration, setCooldownDuration] = useState<number>(0);
+
+	useEffect(() => {
+		if (initialValues) {
+			setLabel(initialValues.label);
+			setDisplayedDuration(initialValues.initialDuration);
+			setCooldownDuration(initialValues.postCooldown);
+		}
+	}, [initialValues]);
 
 	if (!show) return;
 

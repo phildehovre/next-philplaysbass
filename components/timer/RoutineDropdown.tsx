@@ -6,7 +6,13 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EllipsisVertical, Save, Trash2 } from "lucide-react";
+import {
+	EllipsisVertical,
+	Folder,
+	FolderInputIcon,
+	Save,
+	Trash2,
+} from "lucide-react";
 import Spinner from "../Spinner";
 import { UserPracticeRoutine } from "@/actions/timerActions";
 import { Portal } from "@radix-ui/react-dropdown-menu";
@@ -17,6 +23,7 @@ type RoutineDropdownProps = {
 	handleDeleteRoutine: (id: string) => void;
 	handleSaveRoutine: (id: string) => void;
 	setShowSaveRoutineModal: (b: boolean) => void;
+	setShowRoutinesModal: (b: boolean) => void;
 };
 
 export function RoutineDropdown({
@@ -25,6 +32,7 @@ export function RoutineDropdown({
 	setShowSaveRoutineModal,
 	handleDeleteRoutine,
 	handleSaveRoutine,
+	setShowRoutinesModal,
 }: RoutineDropdownProps) {
 	return (
 		<DropdownMenu>
@@ -35,6 +43,10 @@ export function RoutineDropdown({
 			</DropdownMenuTrigger>
 			<Portal>
 				<DropdownMenuContent className="w-56 p-2" align="start" sideOffset={0}>
+					<DropdownMenuItem onClick={() => setShowRoutinesModal(true)}>
+						<Folder className="mr-2 h-4 w-4" />
+						Open
+					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => setShowSaveRoutineModal(true)}>
 						<Save className="mr-2 h-4 w-4" />
 						Save practice

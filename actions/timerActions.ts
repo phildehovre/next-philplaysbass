@@ -1,4 +1,4 @@
-import { Prisma } from "@/lib/generated/prisma";
+import { Phase, Prisma } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
 
@@ -24,6 +24,23 @@ export async function getUserPracticeRoutines() {
 		return routines;
 	} catch (err: any) {
 		throw new Error(err.message);
+	}
+}
+export async function saveRoutine(name: string, phases: Phase[]) {
+	try {
+		const res = await fetch("/api/timer-sets", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				name: name,
+				phases: phases,
+			}),
+		});
+
+		const data = await res.json();
+		return data;
+	} catch (error: any) {
+		throw new Error(error.message);
 	}
 }
 
@@ -54,12 +71,12 @@ export async function deleteUserPhase(phaseId: string) {
 	}
 }
 
-export const deletePhase = async (phaseId: string) => {
+export const deleteRoutine = async (id: string) => {
 	try {
 		const res = await fetch("/api/timer-sets", {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ phaseId }),
+			body: JSON.stringify({ id }),
 		});
 
 		if (!res.ok) {
@@ -71,5 +88,38 @@ export const deletePhase = async (phaseId: string) => {
 		return { success: true };
 	} catch (err) {
 		console.error("Unexpected error:", err);
+	}
+};
+export const updateRoutine = async (routine: UserPracticeRoutine) => {
+	try {
+		const res = await fetch("/api/timer-sets", {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				id: routine.id,
+				name: routine.name,
+				phases: routine.phases.map((phase) => ({
+					id: phase.id,
+					label: phase.label,
+					initialDuration: phase.initialDuration,
+					bpm: phase.bpm,
+					postCooldown: phase.postCooldown,
+					order: phase.order,
+					timerSetId: phase.timerSetId,
+				})),
+			}),
+		});
+
+		if (!res.ok) {
+			const error = await res.json();
+			console.error("Update failed:", error.error);
+			return { success: false };
+		}
+
+		const updated = await res.json();
+		return updated;
+	} catch (err) {
+		console.error("Unexpected error:", err);
+		return { success: false };
 	}
 };

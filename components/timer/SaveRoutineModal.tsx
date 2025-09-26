@@ -22,7 +22,10 @@ const SaveRoutineModal = (props: SaveRoutineModalProps) => {
 				type="text"
 				name="routine-name"
 				id=""
+				value={routineName}
 				onChange={(e) => setRoutineName(e.target.value)}
+				className="p-2 bg-black"
+				autoFocus
 			/>
 			<button
 				disabled={loading || routineName.length < 3}

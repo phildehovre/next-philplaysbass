@@ -72,6 +72,15 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
+::selection {
+	background: var(--clr-brand-o2); /* highlight color */
+	color: white; /* text color */
+}
+
+::-moz-selection {
+	background: var(--clr-brand);
+	color: #000000;
+}
 
 * {
 	box-sizing: border-box;

@@ -11,7 +11,6 @@ import { EditIcon, EllipsisVertical, Loader, Trash, X } from "lucide-react";
 import Spinner from "../Spinner";
 
 type PhaseDropDownProps = {
-	handleDelete: (id: string) => void;
 	handleOmit: (id: string) => void;
 	handleEdit: (id: string) => void;
 	phase: Phase;
@@ -19,7 +18,7 @@ type PhaseDropDownProps = {
 };
 
 export function PhaseDropdown(props: PhaseDropDownProps) {
-	const { handleDelete, loading, handleOmit, handleEdit, phase } = props;
+	const { loading, handleOmit, handleEdit, phase } = props;
 
 	const dropdownOptions = [
 		{
@@ -33,12 +32,6 @@ export function PhaseDropdown(props: PhaseDropDownProps) {
 			action: handleOmit,
 			variant: "",
 			icon: () => <X />,
-		},
-		{
-			label: "Delete",
-			action: handleDelete,
-			variant: "destructive",
-			icon: () => <Trash />,
 		},
 	];
 

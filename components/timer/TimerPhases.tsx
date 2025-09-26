@@ -5,7 +5,12 @@ import "./TimerStyles.css";
 import { Plus, Save, Trash2 } from "lucide-react";
 import SaveRoutineModal from "./SaveRoutineModal";
 import { PhaseDropdown } from "./PhaseDropdown";
-import { deletePhase, UserPracticeRoutine } from "@/actions/timerActions";
+import {
+	deleteRoutine,
+	saveRoutine,
+	updateRoutine,
+	UserPracticeRoutine,
+} from "@/actions/timerActions";
 import { toast } from "sonner";
 import { RoutineDropdown } from "./RoutineDropdown";
 import { Phase } from "@/lib/generated/prisma";
@@ -19,14 +24,16 @@ const TimerPhases = ({
 	setSelectedRoutine,
 	setSelectedPhase,
 	setShowRoutinesModal,
+	onDelete,
 }: {
 	phases: any[];
 	current: number;
 	setShowTimerModal: (b: boolean) => void;
 	setCurrentTimer: (index: number) => void;
 	selectedRoutine: UserPracticeRoutine | undefined;
-	setSelectedRoutine: (r: UserPracticeRoutine) => void;
+	setSelectedRoutine: (r: UserPracticeRoutine | undefined) => void;
 	setSelectedPhase: (p: Phase) => void;
+	onDelete: (id: string) => void;
 	setShowRoutinesModal: (b: boolean) => void;
 }) => {
 	const [localPhases, setLocalPhases] = useState(phases);
@@ -39,43 +46,31 @@ const TimerPhases = ({
 		setLocalPhases(phases);
 	}, [phases]);
 
-	const handleSaveRoutine = async () => {
+	useEffect(() => {
 		if (selectedRoutine) {
-			// update routine
+			setRoutineName(selectedRoutine.name);
 		}
+	}, [selectedRoutine]);
+
+	const handleSaveRoutine = async () => {
+		let newRoutine: UserPracticeRoutine;
 		setLoading(true);
 		try {
-			const res = await fetch("/api/timer-sets", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					name: routineName,
-					phases,
-				}),
-			});
-
-			const data = await res.json();
-			setSelectedRoutine(data);
-			console.log("Saved:", data);
-		} catch (error) {
-			console.error(error);
+			if (selectedRoutine) {
+				newRoutine = await updateRoutine({
+					...selectedRoutine,
+					phases: localPhases,
+				});
+			} else {
+				newRoutine = await saveRoutine(routineName, localPhases);
+			}
+			if (newRoutine) {
+				setSelectedRoutine(newRoutine);
+			}
+		} catch (err: any) {
+			throw new Error(err.message);
 		} finally {
 			setShowSaveRoutineModal(false);
-			setLoading(false);
-		}
-	};
-
-	const handleDeletePhase = async (id: string) => {
-		setLoading(true);
-		try {
-			const res = await deletePhase(id);
-			if (res?.success) {
-				handleOmitPhase(id);
-				toast(`Phase successfully deleted`);
-			}
-		} catch (error) {
-			toast(`Error: phase was not removed`);
-		} finally {
 			setLoading(false);
 		}
 	};
@@ -83,8 +78,15 @@ const TimerPhases = ({
 	const handleDeleteRoutine = async (id: string) => {
 		setLoading(true);
 		try {
-			const res = await handleDeleteRoutine(id);
-		} catch (error) {}
+			const res = await deleteRoutine(id);
+			if (res?.success) {
+				onDelete(id);
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const handleOmitPhase = async (id: string) => {
@@ -157,7 +159,6 @@ const TimerPhases = ({
 							<p className="phase_duration">{formatTime(t.initialDuration)}</p>
 							<PhaseDropdown
 								phase={t}
-								handleDelete={handleDeletePhase}
 								handleOmit={handleOmitPhase}
 								loading={loading}
 								handleEdit={handleEditPhase}

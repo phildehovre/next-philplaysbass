@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ensureUserInDb } from "@/services/userService";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
 				include: { phases: true },
 			});
 		}
-
+		revalidatePath("/timer");
 		return new Response(JSON.stringify(timerSet), { status: id ? 200 : 201 });
 	} catch (error) {
 		console.error(error);
@@ -103,36 +104,90 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
 	try {
-		const { phaseId } = await req.json();
+		const { id } = await req.json();
 
-		const phase = await prisma.phase.findUnique({
-			where: { id: phaseId },
-			select: { id: true, timerSetId: true, order: true },
+		await prisma.timerSet.delete({
+			where: { id },
 		});
 
-		if (!phase) {
-			return NextResponse.json({ error: "Phase not found" }, { status: 404 });
+		revalidatePath("/timer");
+		return NextResponse.json({ success: true, revalidatePath: true });
+	} catch (err: any) {
+		console.error("deleteTimerSet API error:", err);
+		return NextResponse.json({ error: "Server error" }, { status: 500 });
+	}
+}
+export async function PUT(req: Request) {
+	try {
+		const dbUser = await ensureUserInDb();
+		const body = await req.json();
+		const { id, name, phases } = body;
+
+		// Ensure routine belongs to this user
+		const routine = await prisma.timerSet.findUnique({
+			where: { id },
+			include: { phases: true },
+		});
+		if (!routine || routine.userId !== dbUser.id) {
+			return new Response(
+				JSON.stringify({ error: "Not authorized or routine not found" }),
+				{ status: 403 }
+			);
 		}
 
-		await prisma.$transaction(async (tx) => {
-			await tx.phase.delete({ where: { id: phaseId } });
-
-			const remaining = await tx.phase.findMany({
-				where: { timerSetId: phase.timerSetId },
-				orderBy: { order: "asc" },
-			});
-
-			for (let i = 0; i < remaining.length; i++) {
-				await tx.phase.update({
-					where: { id: remaining[i].id },
-					data: { order: i },
-				});
-			}
+		// Update routine itself
+		const updatedRoutine = await prisma.timerSet.update({
+			where: { id },
+			data: { name },
 		});
 
-		return NextResponse.json({ success: true });
+		// Update or create phases
+		const updatedPhases = await Promise.all(
+			phases.map((p: any) => {
+				if (p.id) {
+					// Existing → update
+					return prisma.phase.update({
+						where: { id: p.id },
+						data: {
+							label: p.label,
+							initialDuration: p.initialDuration,
+							bpm: p.bpm,
+							postCooldown: p.postCooldown,
+							order: p.order,
+						},
+					});
+				} else {
+					// New → create
+					return prisma.phase.create({
+						data: {
+							label: p.label,
+							initialDuration: p.initialDuration,
+							bpm: p.bpm,
+							postCooldown: p.postCooldown,
+							order: p.order,
+							timerSetId: id, // make sure it links to the parent routine
+						},
+					});
+				}
+			})
+		);
+
+		// Remove deleted phases
+		const phaseIds = phases.filter((p: any) => p.id).map((p: any) => p.id);
+		await prisma.phase.deleteMany({
+			where: {
+				timerSetId: id,
+				id: { notIn: phaseIds },
+			},
+		});
+
+		return new Response(
+			JSON.stringify({ ...updatedRoutine, phases: updatedPhases }),
+			{ status: 200 }
+		);
 	} catch (err: any) {
-		console.error("deletePhase API error:", err);
-		return NextResponse.json({ error: "Server error" }, { status: 500 });
+		return new Response(JSON.stringify({ error: err.message }), {
+			status: 500,
+		});
 	}
 }

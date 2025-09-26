@@ -6,13 +6,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	EllipsisVertical,
-	Folder,
-	FolderInputIcon,
-	Save,
-	Trash2,
-} from "lucide-react";
+import { EllipsisVertical, Folder, Save, Trash2 } from "lucide-react";
 import Spinner from "../Spinner";
 import { UserPracticeRoutine } from "@/actions/timerActions";
 import { Portal } from "@radix-ui/react-dropdown-menu";
@@ -31,7 +25,6 @@ export function RoutineDropdown({
 	routine,
 	setShowSaveRoutineModal,
 	handleDeleteRoutine,
-	handleSaveRoutine,
 	setShowRoutinesModal,
 }: RoutineDropdownProps) {
 	return (

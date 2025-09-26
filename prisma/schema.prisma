@@ -130,5 +130,5 @@ model Phase {
   postCooldown    Int
   order           Int      // ensures correct ordering
   timerSetId      String
-  timerSet        TimerSet @relation(fields: [timerSetId], references: [id])
+  timerSet        TimerSet @relation(fields: [timerSetId], references: [id], onDelete: Cascade)
 }

@@ -19,7 +19,7 @@ import Switch from "../Switch";
 import TuningFork from "../games/tuner/TuningFork";
 import PhaseModal from "./PhaseModal";
 import TimerPhases from "./TimerPhases";
-import { Phase, TimerSet } from "@/lib/generated/prisma";
+import { Phase, Prisma, TimerSet } from "@/lib/generated/prisma";
 import { handleTabClose } from "@/lib/utils";
 import RoutinesModal from "@/prisma/RoutinesModal";
 import { UserPracticeRoutine } from "@/actions/timerActions";
@@ -35,6 +35,16 @@ type TimerComponentProps = {
 	routines: UserPracticeRoutine[];
 };
 
+type PhaseDraft = {
+	id?: string; // optional when creating
+	initialDuration: number;
+	bpm: number;
+	label: string;
+	postCooldown: number;
+	order: number;
+	timerSetId?: string; // optional when creating
+};
+
 const Timer = (props: TimerComponentProps) => {
 	const { routines } = props;
 
@@ -45,10 +55,11 @@ const Timer = (props: TimerComponentProps) => {
 	const [play, setPlay] = useState<boolean>(false);
 	const [paused, setPaused] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
-	const [timerArray, setTimerArray] = useState<Phase[]>([]);
+	const [timerArray, setTimerArray] = useState<PhaseDraft[]>([]);
 	const [selectedRoutine, setSelectedRoutine] = useState<UserPracticeRoutine>();
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
 	const [selectedPhase, setSelectedPhase] = useState<Phase>();
+	const [localRoutines, setLocalRoutines] = useState<UserPracticeRoutine[]>([]);
 
 	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
 	const [showTuner, setShowTuner] = useState<boolean>(false);
@@ -57,6 +68,10 @@ const Timer = (props: TimerComponentProps) => {
 
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const { finishSession, startSession } = usePracticeSession();
+
+	useEffect(() => {
+		setLocalRoutines(routines);
+	}, []);
 
 	// progress calculation
 	useEffect(() => {
@@ -159,16 +174,14 @@ const Timer = (props: TimerComponentProps) => {
 				)
 			);
 		} else {
-			const newTimer: Phase = {
+			const newPhase: PhaseDraft = {
 				initialDuration: displayedDuration,
 				bpm,
 				label,
 				postCooldown: cooldownDuration,
-				id: "",
-				timerSetId: "",
 				order: timerArray.length,
 			};
-			setTimerArray((prev) => [...prev, newTimer]);
+			setTimerArray((prev) => [...prev, newPhase]);
 		}
 		setShowTimerModal(false);
 		setSelectedPhase(undefined);
@@ -179,6 +192,13 @@ const Timer = (props: TimerComponentProps) => {
 		setPaused(false);
 		setRemainingTime(initialDuration);
 		finishSession();
+	};
+
+	const handleDeleteRoutine = (id: string) => {
+		setSelectedRoutine(undefined);
+		setTimerArray([]);
+		setLocalRoutines((prev) => prev.filter((r) => r.id != id));
+		setSelectedPhase(undefined);
 	};
 
 	return (
@@ -233,17 +253,17 @@ const Timer = (props: TimerComponentProps) => {
 					{timerArray.length == 0 && (
 						<>
 							<button
-								className="ui_btn absolute top-27"
+								className="ui_btn absolute top-27 "
 								onClick={() => setShowTimerModal(true)}
 							>
-								<p className="flex justify-start w-full gap-1">
+								<p className="flex justify-start w-full gap-1 min-w-[125px]">
 									<Plus />
 									New timer
 								</p>
 							</button>
-							<button className="ui_btn absolute bottom-27">
+							<button className="ui_btn absolute bottom-27 min-w-[125px]">
 								<p
-									className="flex justify-start w-full gap-1"
+									className="flex justify-start gap-1"
 									onClick={() => setShowRoutinesModal(true)}
 								>
 									<FolderUp />
@@ -300,6 +320,7 @@ const Timer = (props: TimerComponentProps) => {
 				setSelectedRoutine={setSelectedRoutine}
 				setSelectedPhase={setSelectedPhase}
 				setShowRoutinesModal={setShowRoutinesModal}
+				onDelete={handleDeleteRoutine}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal
@@ -311,7 +332,7 @@ const Timer = (props: TimerComponentProps) => {
 			<RoutinesModal
 				setShow={setShowRoutinesModal}
 				show={showRoutinesModal}
-				routines={routines}
+				routines={localRoutines}
 				setTimerArray={setTimerArray}
 				setSelectedRoutine={setSelectedRoutine}
 			/>

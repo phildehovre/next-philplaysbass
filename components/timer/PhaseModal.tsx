@@ -38,13 +38,18 @@ const PhaseModal = (props: PhaseModalProps) => {
 	return (
 		<Modal className="box" onClose={() => {}}>
 			<h1 className="text-2xl font-bold ">Add Timer Phase</h1>
-
-			<label className="mt-2">Label</label>
-			<input
-				className="w-full border"
-				value={label}
-				onChange={(e) => setLabel(e.target.value)}
-			/>
+			<div className="scoreboard box flex flex-col items-center justify-between">
+				<label htmlFor="phase-name" className="box_label">
+					Phase name:
+				</label>
+				<input
+					className="w-full border p-2 bg-black mt-1"
+					value={label}
+					onChange={(e) => setLabel(e.target.value)}
+					autoFocus
+					name="phase-name"
+				/>
+			</div>
 
 			<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
 				<div className="box_label text-2xl">Timer duration</div>

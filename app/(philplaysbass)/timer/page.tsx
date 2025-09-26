@@ -16,9 +16,9 @@ const page = async () => {
 		redirect("/login");
 	}
 
-	const playlists = await getUserPlaylists();
-
 	const routines = await getUserPracticeRoutines();
+
+	console.log(routines);
 
 	return (
 		<main className="flex justify-center">

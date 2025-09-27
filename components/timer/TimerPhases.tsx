@@ -2,7 +2,7 @@
 import { formatTime } from "@/utils/helpers";
 import React, { useEffect, useState } from "react";
 import "./TimerStyles.css";
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import SaveRoutineModal from "./SaveRoutineModal";
 import { PhaseDropdown } from "./PhaseDropdown";
 import {
@@ -44,7 +44,7 @@ const TimerPhases = ({
 
 	useEffect(() => {
 		setLocalPhases(phases);
-	}, [phases]);
+	}, [phases, selectedRoutine]);
 
 	useEffect(() => {
 		if (selectedRoutine) {

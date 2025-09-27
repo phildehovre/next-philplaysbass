@@ -135,56 +135,39 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		// Update routine itself
-		const updatedRoutine = await prisma.timerSet.update({
-			where: { id },
-			data: { name },
-		});
+		// Wrap in a transaction for safety
+		const result = await prisma.$transaction(async (tx) => {
+			// Update routine itself
+			const updatedRoutine = await tx.timerSet.update({
+				where: { id },
+				data: { name },
+			});
 
-		// Update or create phases
-		const updatedPhases = await Promise.all(
-			phases.map((p: any) => {
-				if (p.id) {
-					// Existing → update
-					return prisma.phase.update({
-						where: { id: p.id },
+			// Delete all existing phases
+			await tx.phase.deleteMany({
+				where: { timerSetId: id },
+			});
+
+			// Recreate phases
+			const newPhases = await Promise.all(
+				phases.map((p: any) =>
+					tx.phase.create({
 						data: {
 							label: p.label,
 							initialDuration: p.initialDuration,
 							bpm: p.bpm,
 							postCooldown: p.postCooldown,
 							order: p.order,
+							timerSetId: id,
 						},
-					});
-				} else {
-					// New → create
-					return prisma.phase.create({
-						data: {
-							label: p.label,
-							initialDuration: p.initialDuration,
-							bpm: p.bpm,
-							postCooldown: p.postCooldown,
-							order: p.order,
-							timerSetId: id, // make sure it links to the parent routine
-						},
-					});
-				}
-			})
-		);
+					})
+				)
+			);
 
-		// Remove deleted phases
-		const phaseIds = phases.filter((p: any) => p.id).map((p: any) => p.id);
-		await prisma.phase.deleteMany({
-			where: {
-				timerSetId: id,
-				id: { notIn: phaseIds },
-			},
+			return { ...updatedRoutine, phases: newPhases };
 		});
 
-		return new Response(
-			JSON.stringify({ ...updatedRoutine, phases: updatedPhases }),
-			{ status: 200 }
-		);
+		return new Response(JSON.stringify(result), { status: 200 });
 	} catch (err: any) {
 		return new Response(JSON.stringify({ error: err.message }), {
 			status: 500,

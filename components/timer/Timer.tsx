@@ -149,7 +149,6 @@ const Timer = (props: TimerComponentProps) => {
 		setStarted(true);
 		setPaused(false);
 	};
-	console.log(selectedPhase);
 
 	const confirmTimer = ({
 		label,

@@ -19,7 +19,7 @@ type ClockfacePropsType = {
 	size?: number;
 };
 
-const CIRCLE_RADIUS = 38;
+const CIRCLE_RADIUS = 30;
 const CIRCLE_CANVAS = 50;
 const TAIL_LENGTH = 25;
 const radius = CIRCLE_RADIUS;

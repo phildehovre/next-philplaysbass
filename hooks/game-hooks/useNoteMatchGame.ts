@@ -223,7 +223,6 @@ export const useNoteMatchGame = () => {
 		async (note: NoteInfo) => {
 			if (!gameStarted) return;
 			const offset = calculateMsOffset(bpm, lastTickTime);
-			if (!sessionId) await startSession(NOTE_MATCH_TYPE);
 			if (evaluateCooldownRef.current) return;
 
 			const isMatch = await evaluateNotePlayed(note);
@@ -291,6 +290,7 @@ export const useNoteMatchGame = () => {
 
 	const startGame = useCallback(async () => {
 		resetGame();
+		if (!sessionId) await startSession(NOTE_MATCH_TYPE);
 		await init();
 		setGameStarted(true);
 		if (withTimer) {

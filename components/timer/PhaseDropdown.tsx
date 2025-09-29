@@ -11,8 +11,8 @@ import { EditIcon, EllipsisVertical, Loader, Trash, X } from "lucide-react";
 import Spinner from "../Spinner";
 
 type PhaseDropDownProps = {
-	handleOmit: (id: string) => void;
-	handleEdit: (id: string) => void;
+	handleOmit: (phase: Phase) => void;
+	handleEdit: (phase: Phase) => void;
 	phase: Phase;
 	loading: boolean;
 };
@@ -48,7 +48,7 @@ export function PhaseDropdown(props: PhaseDropDownProps) {
 						<DropdownMenuItem
 							className={`${o.variant && o.variant}`}
 							key={o.label}
-							onClick={() => o.action(phase.id)}
+							onClick={() => o.action(phase)}
 						>
 							{o.icon()}
 							{o.label}

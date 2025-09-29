@@ -11,12 +11,14 @@ import {
 	updateRoutine,
 	UserPracticeRoutine,
 } from "@/actions/timerActions";
-import { toast } from "sonner";
 import { RoutineDropdown } from "./RoutineDropdown";
 import { Phase } from "@/lib/generated/prisma";
+import { toast } from "sonner";
+import { PhaseDraft } from "./Timer";
 
 const TimerPhases = ({
 	phases,
+	setPhases,
 	current,
 	setShowTimerModal,
 	setCurrentTimer,
@@ -28,6 +30,7 @@ const TimerPhases = ({
 }: {
 	phases: any[];
 	current: number;
+	setPhases: (p: any) => void;
 	setShowTimerModal: (b: boolean) => void;
 	setCurrentTimer: (index: number) => void;
 	selectedRoutine: UserPracticeRoutine | undefined;
@@ -36,15 +39,10 @@ const TimerPhases = ({
 	handleCloseRoutine: (id?: string) => void;
 	setShowRoutinesModal: (b: boolean) => void;
 }) => {
-	const [localPhases, setLocalPhases] = useState(phases);
 	const [showSaveRoutineModal, setShowSaveRoutineModal] = useState(false);
 	const [routineName, setRoutineName] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-
-	useEffect(() => {
-		setLocalPhases(phases);
-	}, [phases, selectedRoutine]);
 
 	useEffect(() => {
 		if (selectedRoutine) {
@@ -59,14 +57,15 @@ const TimerPhases = ({
 			if (selectedRoutine) {
 				newRoutine = await updateRoutine({
 					...selectedRoutine,
-					phases: localPhases,
+					phases,
 				});
 			} else {
-				newRoutine = await saveRoutine(routineName, localPhases);
+				newRoutine = await saveRoutine(routineName, phases);
 			}
 			if (newRoutine) {
 				setSelectedRoutine(newRoutine);
 			}
+			toast("Routine saved!");
 		} catch (err: any) {
 			throw new Error(err.message);
 		} finally {
@@ -82,6 +81,7 @@ const TimerPhases = ({
 			if (res?.success) {
 				handleCloseRoutine(id);
 			}
+			toast("Practice routine deleted successfully");
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -89,15 +89,15 @@ const TimerPhases = ({
 		}
 	};
 
-	const handleOmitPhase = async (id: string) => {
-		setLocalPhases((prev) => {
-			return prev.filter((ph) => ph.id != id);
+	const handleOmitPhase = async (phase: Phase) => {
+		setPhases((prev: any) => {
+			return prev.filter((ph: PhaseDraft) => ph.id != phase.id);
 		});
 	};
 
-	const handleEditPhase = async (id: string) => {
+	const handleOpenEditModal = async (phase: Phase) => {
 		setShowTimerModal(true);
-		setSelectedPhase(phases.find((p) => p.id === id));
+		setSelectedPhase(phase);
 	};
 
 	const handleDragStart = (index: number) => {
@@ -111,11 +111,11 @@ const TimerPhases = ({
 	const handleDrop = (index: number) => {
 		if (draggedIndex === null) return;
 
-		const updated = [...localPhases];
+		const updated = [...phases];
 		const [movedItem] = updated.splice(draggedIndex, 1);
 		updated.splice(index, 0, movedItem);
 
-		setLocalPhases(updated);
+		setPhases(updated.map((p, i) => ({ ...p, order: i })));
 		setDraggedIndex(null);
 	};
 
@@ -145,7 +145,7 @@ const TimerPhases = ({
 					/>
 				</div>
 				<ul className="timer_list flex flex-col gap-1">
-					{localPhases.map((t, i) => (
+					{phases.map((t, i) => (
 						<li
 							key={i}
 							className={`timer_phase ${i === current ? "active" : ""}`}
@@ -162,7 +162,7 @@ const TimerPhases = ({
 								phase={t}
 								handleOmit={handleOmitPhase}
 								loading={loading}
-								handleEdit={handleEditPhase}
+								handleEdit={handleOpenEditModal}
 							/>
 						</li>
 					))}

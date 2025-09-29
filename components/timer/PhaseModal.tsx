@@ -11,25 +11,25 @@ type PhaseModalProps = {
 	initialValues?: Phase;
 	onClose: ({
 		label,
-		displayedDuration,
-		cooldownDuration,
+		initialDuration,
+		postCooldown,
 	}: {
 		label: string;
-		displayedDuration: number;
-		cooldownDuration: number;
+		initialDuration: number;
+		postCooldown: number;
 	}) => void;
 };
 const PhaseModal = (props: PhaseModalProps) => {
 	const { onClose, show, setShow, initialValues } = props;
 	const [label, setLabel] = useState<string>("");
-	const [displayedDuration, setDisplayedDuration] = useState<number>(0);
-	const [cooldownDuration, setCooldownDuration] = useState<number>(0);
+	const [initialDuration, setInitialDuration] = useState<number>(0);
+	const [postCooldown, setPostCooldown] = useState<number>(0);
 
 	useEffect(() => {
 		if (initialValues) {
 			setLabel(initialValues.label);
-			setDisplayedDuration(initialValues.initialDuration);
-			setCooldownDuration(initialValues.postCooldown);
+			setInitialDuration(initialValues.initialDuration);
+			setPostCooldown(initialValues.postCooldown);
 		}
 	}, [initialValues]);
 
@@ -57,17 +57,17 @@ const PhaseModal = (props: PhaseModalProps) => {
 					<button
 						className="ui_btn secondary"
 						onClick={() =>
-							setDisplayedDuration((prev) => Math.max(60000, prev - 5000))
+							setInitialDuration((prev) => Math.max(1000, prev - 1000))
 						}
 					>
 						<MinusIcon />
 					</button>
 					<h1 className="scoreboard timer text-xl w-full">
-						{formatTime(displayedDuration)}
+						{formatTime(initialDuration)}
 					</h1>
 					<button
 						className="ui_btn secondary"
-						onClick={() => setDisplayedDuration((prev) => prev + 5000)}
+						onClick={() => setInitialDuration((prev) => prev + 1000)}
 					>
 						<PlusIcon />
 					</button>
@@ -75,11 +75,11 @@ const PhaseModal = (props: PhaseModalProps) => {
 				<input
 					className="w-full"
 					type="range"
-					min="60000"
+					min="60"
 					max="3600000"
-					step="60000"
-					value={displayedDuration}
-					onChange={(e) => setDisplayedDuration(e.target.valueAsNumber)}
+					step="6000"
+					value={initialDuration}
+					onChange={(e) => setInitialDuration(e.target.valueAsNumber)}
 				/>
 			</div>
 
@@ -88,18 +88,16 @@ const PhaseModal = (props: PhaseModalProps) => {
 				<span className="flex w-2/3">
 					<button
 						className="ui_btn secondary"
-						onClick={() =>
-							setCooldownDuration((prev) => Math.max(0, prev - 1000))
-						}
+						onClick={() => setPostCooldown((prev) => Math.max(0, prev - 1000))}
 					>
 						<MinusIcon />
 					</button>
 					<h1 className="scoreboard timer text-xl w-full">
-						{cooldownDuration === 0 ? "None" : formatTime(cooldownDuration)}
+						{postCooldown === 0 ? "None" : formatTime(postCooldown)}
 					</h1>
 					<button
 						className="ui_btn secondary"
-						onClick={() => setCooldownDuration((prev) => prev + 1000)}
+						onClick={() => setPostCooldown((prev) => prev + 1000)}
 					>
 						<PlusIcon />
 					</button>
@@ -110,8 +108,8 @@ const PhaseModal = (props: PhaseModalProps) => {
 					min="0"
 					max="60000"
 					step="1000"
-					value={cooldownDuration}
-					onChange={(e) => setCooldownDuration(e.target.valueAsNumber)}
+					value={postCooldown}
+					onChange={(e) => setPostCooldown(e.target.valueAsNumber)}
 				/>
 			</div>
 
@@ -121,12 +119,10 @@ const PhaseModal = (props: PhaseModalProps) => {
 				</button>
 				<button
 					className={`ui_btn ${
-						!label || displayedDuration == 0 ? "disabled" : ""
+						!label || initialDuration == 0 ? "disabled" : ""
 					}`}
-					onClick={() =>
-						onClose({ label, displayedDuration, cooldownDuration })
-					}
-					disabled={!label || displayedDuration == 0}
+					onClick={() => onClose({ label, initialDuration, postCooldown })}
+					disabled={!label || initialDuration == 0}
 				>
 					Confirm
 				</button>

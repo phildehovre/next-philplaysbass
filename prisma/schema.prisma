@@ -131,4 +131,5 @@ model Phase {
   order           Int      // ensures correct ordering
   timerSetId      String
   timerSet        TimerSet @relation(fields: [timerSetId], references: [id], onDelete: Cascade)
+  autoStart Boolean @default(false)
 }

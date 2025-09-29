@@ -35,7 +35,7 @@ type TimerComponentProps = {
 	routines: UserPracticeRoutine[];
 };
 
-type PhaseDraft = {
+export type PhaseDraft = {
 	id?: string; // optional when creating
 	initialDuration: number;
 	bpm: number;
@@ -43,6 +43,7 @@ type PhaseDraft = {
 	postCooldown: number;
 	order: number;
 	timerSetId?: string; // optional when creating
+	autoStart?: boolean;
 };
 
 const Timer = (props: TimerComponentProps) => {
@@ -72,6 +73,10 @@ const Timer = (props: TimerComponentProps) => {
 	useEffect(() => {
 		setLocalRoutines(routines);
 	}, []);
+
+	useEffect(() => {
+		console.log(selectedRoutine?.phases[currentIndex]);
+	}, [started, currentIndex]);
 
 	// progress calculation
 	useEffect(() => {
@@ -150,41 +155,30 @@ const Timer = (props: TimerComponentProps) => {
 		setPaused(false);
 	};
 
-	const confirmTimer = ({
-		label,
-		displayedDuration,
-		cooldownDuration,
-	}: {
-		label: string;
-		displayedDuration: number;
-		cooldownDuration: number;
-	}) => {
+	const confirmTimer = (options: Partial<PhaseDraft>) => {
 		if (selectedPhase) {
 			setTimerArray((prev) =>
 				prev.map((phase) =>
-					phase.id === selectedPhase.id
-						? {
-								...phase,
-								label,
-								initialDuration: displayedDuration,
-								postCooldown: cooldownDuration,
-						  }
-						: phase
+					phase.id === selectedPhase.id ? { ...phase, ...options } : phase
 				)
 			);
 		} else {
+			console.log("creating...");
 			const newPhase: PhaseDraft = {
-				initialDuration: displayedDuration,
-				bpm,
-				label,
-				postCooldown: cooldownDuration,
+				initialDuration: options.initialDuration ?? 0,
+				bpm: options.bpm ?? bpm,
+				label: options.label ?? "Untitled",
+				postCooldown: options.postCooldown ?? 0,
 				order: timerArray.length,
+				autoStart: options.autoStart ?? false,
 			};
 			setTimerArray((prev) => [...prev, newPhase]);
 		}
+
 		setShowTimerModal(false);
 		setSelectedPhase(undefined);
 	};
+	console.log(timerArray);
 
 	const handleStop = () => {
 		setStarted(false);
@@ -322,6 +316,7 @@ const Timer = (props: TimerComponentProps) => {
 				setSelectedPhase={setSelectedPhase}
 				setShowRoutinesModal={setShowRoutinesModal}
 				handleCloseRoutine={handleCloseRoutine}
+				setPhases={setTimerArray}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal

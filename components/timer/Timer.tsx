@@ -193,11 +193,13 @@ const Timer = (props: TimerComponentProps) => {
 		finishSession();
 	};
 
-	const handleDeleteRoutine = (id: string) => {
+	const handleCloseRoutine = (id?: string) => {
+		setSelectedPhase(undefined);
 		setSelectedRoutine(undefined);
 		setTimerArray([]);
-		setLocalRoutines((prev) => prev.filter((r) => r.id != id));
-		setSelectedPhase(undefined);
+		if (id) {
+			setLocalRoutines((prev) => prev.filter((r) => r.id != id));
+		}
 	};
 
 	return (
@@ -319,7 +321,7 @@ const Timer = (props: TimerComponentProps) => {
 				setSelectedRoutine={setSelectedRoutine}
 				setSelectedPhase={setSelectedPhase}
 				setShowRoutinesModal={setShowRoutinesModal}
-				onDelete={handleDeleteRoutine}
+				handleCloseRoutine={handleCloseRoutine}
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal

@@ -24,7 +24,7 @@ const TimerPhases = ({
 	setSelectedRoutine,
 	setSelectedPhase,
 	setShowRoutinesModal,
-	onDelete,
+	handleCloseRoutine,
 }: {
 	phases: any[];
 	current: number;
@@ -33,7 +33,7 @@ const TimerPhases = ({
 	selectedRoutine: UserPracticeRoutine | undefined;
 	setSelectedRoutine: (r: UserPracticeRoutine | undefined) => void;
 	setSelectedPhase: (p: Phase) => void;
-	onDelete: (id: string) => void;
+	handleCloseRoutine: (id?: string) => void;
 	setShowRoutinesModal: (b: boolean) => void;
 }) => {
 	const [localPhases, setLocalPhases] = useState(phases);
@@ -80,7 +80,7 @@ const TimerPhases = ({
 		try {
 			const res = await deleteRoutine(id);
 			if (res?.success) {
-				onDelete(id);
+				handleCloseRoutine(id);
 			}
 		} catch (error) {
 			console.log(error);
@@ -141,6 +141,7 @@ const TimerPhases = ({
 						handleSaveRoutine={handleSaveRoutine}
 						setShowSaveRoutineModal={setShowSaveRoutineModal}
 						setShowRoutinesModal={setShowRoutinesModal}
+						handleCloseRoutine={handleCloseRoutine}
 					/>
 				</div>
 				<ul className="timer_list flex flex-col gap-1">

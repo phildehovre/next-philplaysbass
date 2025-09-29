@@ -74,10 +74,6 @@ const Timer = (props: TimerComponentProps) => {
 		setLocalRoutines(routines);
 	}, []);
 
-	useEffect(() => {
-		console.log(selectedRoutine?.phases[currentIndex]);
-	}, [started, currentIndex]);
-
 	// progress calculation
 	useEffect(() => {
 		if (!started) {
@@ -149,6 +145,8 @@ const Timer = (props: TimerComponentProps) => {
 			setPaused(false);
 			return;
 		}
+		setBpm(next.bpm);
+		if (next.autoStart) setPlay(true);
 		setInitialDuration(next.initialDuration);
 		setRemainingTime(next.initialDuration);
 		setStarted(true);
@@ -163,7 +161,6 @@ const Timer = (props: TimerComponentProps) => {
 				)
 			);
 		} else {
-			console.log("creating...");
 			const newPhase: PhaseDraft = {
 				initialDuration: options.initialDuration ?? 0,
 				bpm: options.bpm ?? bpm,
@@ -178,13 +175,27 @@ const Timer = (props: TimerComponentProps) => {
 		setShowTimerModal(false);
 		setSelectedPhase(undefined);
 	};
-	console.log(timerArray);
 
 	const handleStop = () => {
 		setStarted(false);
 		setPaused(false);
+		setPlay(false);
 		setRemainingTime(initialDuration);
 		finishSession();
+	};
+
+	const handleStart = () => {
+		const firstPhase = timerArray[0];
+		setCurrentIndex(0);
+		setInitialDuration(firstPhase.initialDuration);
+		setRemainingTime(firstPhase.initialDuration);
+		setStarted(true);
+		startSession(FREE_PRACTICE_TYPE);
+		// set up and trigger metronome if autoStart
+		setBpm(firstPhase.bpm);
+		if (firstPhase.autoStart) {
+			setPlay(true);
+		}
 	};
 
 	const handleCloseRoutine = (id?: string) => {
@@ -273,13 +284,7 @@ const Timer = (props: TimerComponentProps) => {
 								{timerArray.length > 0 && (
 									<button
 										className="game_btn start-game_btn"
-										onClick={() => {
-											setCurrentIndex(0);
-											setInitialDuration(timerArray[0].initialDuration);
-											setRemainingTime(timerArray[0].initialDuration);
-											setStarted(true);
-											startSession(FREE_PRACTICE_TYPE);
-										}}
+										onClick={() => handleStart()}
 									>
 										Start
 									</button>

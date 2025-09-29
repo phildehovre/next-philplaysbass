@@ -4,26 +4,23 @@ import Modal from "../Modal";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { formatTime } from "@/utils/helpers";
 import { Phase } from "@/lib/generated/prisma";
+import { Checkbox } from "../ui/checkbox";
+import { PhaseDraft } from "./Timer";
+import Switch from "../Switch";
 
 type PhaseModalProps = {
 	show: boolean;
 	setShow: (b: boolean) => void;
 	initialValues?: Phase;
-	onClose: ({
-		label,
-		initialDuration,
-		postCooldown,
-	}: {
-		label: string;
-		initialDuration: number;
-		postCooldown: number;
-	}) => void;
+	onClose: (options: Partial<PhaseDraft>) => void;
 };
 const PhaseModal = (props: PhaseModalProps) => {
 	const { onClose, show, setShow, initialValues } = props;
 	const [label, setLabel] = useState<string>("");
 	const [initialDuration, setInitialDuration] = useState<number>(0);
 	const [postCooldown, setPostCooldown] = useState<number>(0);
+	const [autoStart, setAutoStart] = useState<boolean>(false);
+	const [bpm, setBpm] = useState<number>(110);
 
 	useEffect(() => {
 		if (initialValues) {
@@ -35,6 +32,7 @@ const PhaseModal = (props: PhaseModalProps) => {
 
 	if (!show) return;
 
+	console.log(autoStart);
 	return (
 		<Modal className="box" onClose={() => {}}>
 			<h1 className="text-2xl font-bold ">Add Timer Phase</h1>
@@ -113,6 +111,43 @@ const PhaseModal = (props: PhaseModalProps) => {
 				/>
 			</div>
 
+			<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
+				<div className="box_label text-2xl">Metronome</div>
+				<span className="flex items-center gap-1 w-full justify-start ">
+					<Switch
+						checked={autoStart}
+						onCheckChange={() => setAutoStart(!autoStart)}
+						disabled={false}
+					/>
+					<label htmlFor="autoStart" className="text-xs">
+						Auto-Start
+					</label>
+				</span>
+				<span className="flex w-2/3">
+					<button
+						className="ui_btn secondary"
+						onClick={() => setBpm((prev) => prev - 1)}
+					>
+						<MinusIcon />
+					</button>
+					<h1 className="scoreboard timer text-xl w-full">{bpm}</h1>
+					<button
+						className="ui_btn secondary"
+						onClick={() => setBpm((prev) => prev + 1)}
+					>
+						<PlusIcon />
+					</button>
+				</span>
+				<input
+					className="w-full"
+					type="range"
+					min="40"
+					max="240"
+					step="1"
+					value={bpm}
+					onChange={(e) => setBpm(Number(e.target.value))}
+				/>
+			</div>
 			<span className="flex justify-between mt-4">
 				<button className="ui_btn secondary" onClick={() => setShow(false)}>
 					Cancel
@@ -121,7 +156,9 @@ const PhaseModal = (props: PhaseModalProps) => {
 					className={`ui_btn ${
 						!label || initialDuration == 0 ? "disabled" : ""
 					}`}
-					onClick={() => onClose({ label, initialDuration, postCooldown })}
+					onClick={() =>
+						onClose({ label, initialDuration, postCooldown, autoStart, bpm })
+					}
 					disabled={!label || initialDuration == 0}
 				>
 					Confirm

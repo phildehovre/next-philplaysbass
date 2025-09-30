@@ -88,14 +88,14 @@ const NoteMatchGame = () => {
 			</div>
 
 			<div className="scoreboard_ctn flex w-full ">
-				<div className="scoreboard text-2xl font-mono w-full">
-					<label className="scoreboard_label">Session score</label>
+				<div className="scoreboard flex items-center font-mono w-full">
+					<label className="text-sm">Session score</label>
 					<AnimatedNumber
 						data={totalScore.bonus + totalScore.pitch + totalScore.rhythm}
 					/>
 				</div>
-				<div className="scoreboard text-2xl font-mono w-full">
-					<label className="scoreboard_label">Tally</label>
+				<div className="scoreboard flex items-center font-mono w-full">
+					<label className="text-sm">Tally</label>
 					<AnimatedNumber data={state.score.losses} />:
 					<AnimatedNumber data={state.score.wins} />
 				</div>

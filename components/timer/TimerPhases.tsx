@@ -21,7 +21,6 @@ const TimerPhases = ({
 	setPhases,
 	current,
 	setShowTimerModal,
-	setCurrentTimer,
 	selectedRoutine,
 	setSelectedRoutine,
 	setSelectedPhase,
@@ -32,7 +31,6 @@ const TimerPhases = ({
 	current: number;
 	setPhases: (p: any) => void;
 	setShowTimerModal: (b: boolean) => void;
-	setCurrentTimer: (index: number) => void;
 	selectedRoutine: UserPracticeRoutine | undefined;
 	setSelectedRoutine: (r: UserPracticeRoutine | undefined) => void;
 	setSelectedPhase: (p: Phase) => void;
@@ -145,7 +143,7 @@ const TimerPhases = ({
 					/>
 				</div>
 				<ul className="timer_list flex flex-col gap-1">
-					{phases.map((t, i) => (
+					{phases.map((p, i) => (
 						<li
 							key={i}
 							className={`timer_phase ${i === current ? "active" : ""}`}
@@ -153,13 +151,13 @@ const TimerPhases = ({
 							onDragStart={() => handleDragStart(i)}
 							onDragOver={handleDragOver}
 							onDrop={() => handleDrop(i)}
-							onClick={() => setCurrentTimer(i)}
+							onClick={() => setSelectedPhase(p)}
 						>
 							<p className="phase_index font-light text-xs ">{i + 1}</p>
-							<p className="phase_label w-full">{t.label}</p>
-							<p className="phase_duration">{formatTime(t.initialDuration)}</p>
+							<p className="phase_label w-full">{p.label}</p>
+							<p className="phase_duration">{formatTime(p.initialDuration)}</p>
 							<PhaseDropdown
-								phase={t}
+								phase={p}
 								handleOmit={handleOmitPhase}
 								loading={loading}
 								handleEdit={handleOpenEditModal}

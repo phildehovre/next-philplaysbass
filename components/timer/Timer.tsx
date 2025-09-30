@@ -74,6 +74,29 @@ const Timer = (props: TimerComponentProps) => {
 		setLocalRoutines(routines);
 	}, []);
 
+	useEffect(() => {
+		if (!selectedPhase) return;
+
+		const idx = timerArray.findIndex((p) => p.id === selectedPhase.id);
+
+		if (idx === -1) return;
+
+		setCurrentIndex(idx);
+		setBpm(selectedPhase.bpm);
+		setInitialDuration(selectedPhase.initialDuration);
+		setRemainingTime(selectedPhase.initialDuration);
+
+		setPlay(false);
+
+		if (started) {
+			setPaused(false);
+			if (selectedPhase.autoStart) {
+				setPlay(true);
+				setShowMetronome(true);
+			}
+		}
+	}, [selectedPhase]);
+
 	// progress calculation
 	useEffect(() => {
 		if (!started) {
@@ -184,8 +207,8 @@ const Timer = (props: TimerComponentProps) => {
 		finishSession();
 	};
 
-	const handleStart = () => {
-		const firstPhase = timerArray[0];
+	const handleStart = (i: number) => {
+		const firstPhase = timerArray[i];
 		setCurrentIndex(0);
 		setInitialDuration(firstPhase.initialDuration);
 		setRemainingTime(firstPhase.initialDuration);
@@ -284,7 +307,7 @@ const Timer = (props: TimerComponentProps) => {
 								{timerArray.length > 0 && (
 									<button
 										className="game_btn start-game_btn"
-										onClick={() => handleStart()}
+										onClick={() => handleStart(0)}
 									>
 										Start
 									</button>
@@ -315,7 +338,6 @@ const Timer = (props: TimerComponentProps) => {
 				setShowTimerModal={setShowTimerModal}
 				current={currentIndex}
 				phases={timerArray}
-				setCurrentTimer={setCurrentIndex}
 				selectedRoutine={selectedRoutine}
 				setSelectedRoutine={setSelectedRoutine}
 				setSelectedPhase={setSelectedPhase}

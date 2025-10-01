@@ -4,7 +4,6 @@
 	border-radius: 6px;
 	display: flex;
 	flex-direction: column;
-	gap: 1em;
 	align-items: center;
 	justify-content: center;
 	box-shadow: var(--box-shadow);

@@ -17,6 +17,7 @@ import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
 import { handleTabClose } from "@/lib/utils";
+import AnimatedGridRow from "./ui/AnimatedGridRow";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -70,7 +71,7 @@ const NoteMatchGame = () => {
 			<div className="game_header flex flex-col justify-center gap-2 w-full">
 				<label
 					htmlFor="state.isPracticeMode"
-					className="flex justify-center gap-2 m-auto"
+					className="flex justify-center gap-2 m-auto items-center my-2"
 				>
 					<Switch
 						disabled={state.gameStarted}
@@ -100,8 +101,10 @@ const NoteMatchGame = () => {
 					<AnimatedNumber data={state.score.wins} />
 				</div>
 			</div>
-			<GameOptionsSwitches state={state} setters={setters} />
-			{state.withMetronome && (
+			<div className="my-2">
+				<GameOptionsSwitches state={state} setters={setters} />
+			</div>
+			<AnimatedGridRow active={state.withMetronome} className="my-2">
 				<MetroWidget
 					gameStarted={state.gameStarted}
 					play={state.countdown || state.gameStarted}
@@ -110,8 +113,8 @@ const NoteMatchGame = () => {
 					lastTickTime={state.lastTickTime}
 					setLastTickTime={setters.setLastTickTime}
 				/>
-			)}
-			{state.withTimer && (
+			</AnimatedGridRow>
+			<AnimatedGridRow active={state.withTimer}>
 				<div className="flex w-full">
 					<h1 className="scoreboard timer w-12 text-xs flex items-center">
 						{displayedDuration / 1000} s
@@ -125,7 +128,7 @@ const NoteMatchGame = () => {
 						onMouseUp={() => setDuration(displayedDuration)}
 					/>
 				</div>
-			)}
+			</AnimatedGridRow>
 			<Clockface
 				showPulse={state.showPulse}
 				withTimer={state.withTimer}
@@ -188,17 +191,17 @@ const NoteMatchGame = () => {
 					)}
 				</div>
 			</Clockface>
-
-			{state.withArpeggios && (
-				<>
+			<AnimatedGridRow active={state.withArpeggios}>
+				<div className="mb-2">
 					<label htmlFor="scale_types">
 						Select scales:
 						<div id="scale_types" className="qualities_ctn flex">
 							{renderFilters()}
 						</div>
 					</label>
-				</>
-			)}
+				</div>
+			</AnimatedGridRow>
+
 			<PitchyComponent
 				showDevices={true}
 				onNoteDetection={actions.onNoteDetection}

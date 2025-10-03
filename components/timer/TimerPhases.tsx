@@ -155,6 +155,7 @@ const TimerPhases = ({
 						>
 							<p className="phase_index font-light text-xs ">{i + 1}</p>
 							<p className="phase_label w-full">{p.label}</p>
+							<p className="phase_bpm w-1/2">{p.bpm}</p>
 							<p className="phase_duration">{formatTime(p.initialDuration)}</p>
 							<PhaseDropdown
 								phase={p}

@@ -74,8 +74,8 @@ const PhaseModal = (props: PhaseModalProps) => {
 					className="w-full"
 					type="range"
 					min="60"
-					max="3600000"
-					step="6000"
+					max="600000"
+					step="5000"
 					value={initialDuration}
 					onChange={(e) => setInitialDuration(e.target.valueAsNumber)}
 				/>

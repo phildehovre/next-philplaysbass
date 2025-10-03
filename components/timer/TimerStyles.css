@@ -20,4 +20,11 @@
 	&:active {
 		border: 1px solid white;
 	}
+	.phase_bpm {
+		font-size: 0.8em;
+	}
+
+	.phase_duration {
+		font-size: 0.8em;
+	}
 }

@@ -25,7 +25,6 @@ const AnimatedGridRow: React.FC<AnimatedGridRowProps> = ({
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const contentRef = useRef<HTMLDivElement | null>(null);
 
-	// height can be a px number or 'auto'
 	const [height, setHeight] = useState<number | "auto">(active ? "auto" : 0);
 	const [hidden, setHidden] = useState(!active);
 

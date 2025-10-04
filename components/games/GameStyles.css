@@ -197,6 +197,10 @@
 	}
 }
 
+.band {
+	height: 1.25em;
+}
+
 .flashing_el {
 	position: absolute;
 	height: 1em;

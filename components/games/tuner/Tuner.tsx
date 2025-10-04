@@ -35,10 +35,16 @@ const Tuner = () => {
 		note && Math.abs(note.centsOff) < 5 ? "bg-green-500" : "bg-red-500";
 
 	return (
-		<div className="flex flex-col items-center justify-center">
-			<div className="scoreboard relative w-80 h-6 rounded-full overflow-hidden">
+		<div className="flex items-center justify-center w-full">
+			{note && (
+				<div className="mt-4 text-center w-1/6">
+					<p className="text-2xl font-bold">{note.noteName}</p>
+					<p className="text-sm text-gray-600">{note.centsOff.toFixed(1)}¢</p>
+				</div>
+			)}
+			<div className="scoreboard band relative w-5/6 h-6 rounded-full overflow-hidden">
+				<div className="pulse-bar" />
 				<div className="absolute left-1/2 top-0 bottom-0 w-0.5 "></div>
-
 				<div
 					className={cn(
 						"absolute top-0 h-full w-2 rounded-full",
@@ -50,12 +56,6 @@ const Tuner = () => {
 					}}
 				></div>
 			</div>
-			{note && (
-				<div className="mt-4 text-center">
-					<p className="text-2xl font-bold">{note.noteName}</p>
-					<p className="text-sm text-gray-600">{note.centsOff.toFixed(1)}¢</p>
-				</div>
-			)}
 			<PitchyStream onNoteDetection={setNote} threshold={0} />
 		</div>
 	);

@@ -4,7 +4,6 @@ import Modal from "../Modal";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { formatTime } from "@/utils/helpers";
 import { Phase } from "@/lib/generated/prisma";
-import { Checkbox } from "../ui/checkbox";
 import { PhaseDraft } from "./Timer";
 import Switch from "../Switch";
 

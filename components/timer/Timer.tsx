@@ -23,6 +23,7 @@ import { Phase, Prisma, TimerSet } from "@/lib/generated/prisma";
 import { handleTabClose } from "@/lib/utils";
 import RoutinesModal from "@/prisma/RoutinesModal";
 import { UserPracticeRoutine } from "@/actions/timerActions";
+import SemiCircleTuner from "../games/tuner/SemiCircleTuner";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
@@ -254,9 +255,6 @@ const Timer = (props: TimerComponentProps) => {
 					</label>
 				</span>
 			</div>
-			<AnimatedGridRow active={showTuner}>
-				<Tuner />
-			</AnimatedGridRow>
 			<AnimatedGridRow active={showMetronome}>
 				<MetroWidget
 					bpm={bpm}
@@ -279,7 +277,8 @@ const Timer = (props: TimerComponentProps) => {
 					showPowerUp={false}
 					size={0.8}
 				>
-					{timerArray.length == 0 && (
+					{showTuner && <SemiCircleTuner />}
+					{timerArray.length == 0 && !showTuner && (
 						<>
 							<button
 								className="ui_btn absolute top-27 "

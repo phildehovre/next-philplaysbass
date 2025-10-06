@@ -3,8 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
-import { RHYTHM_ACCURACY_TYPE } from "../../../constants/GameConstants";
 import PowerUpBar from "./PowerUpBar";
+import { CLOCKFACE_DIMENSIONS } from "@/constants/clockFaceConstants";
 
 type ClockfacePropsType = {
 	showPulse: boolean;
@@ -19,13 +19,7 @@ type ClockfacePropsType = {
 	size?: number;
 };
 
-const CIRCLE_RADIUS = 30;
-const CIRCLE_CANVAS = 50;
-const TAIL_LENGTH = 25;
-const radius = CIRCLE_RADIUS;
-const bonusRadius = radius + 8;
-const cx = CIRCLE_CANVAS;
-const cy = CIRCLE_CANVAS;
+const { TAIL_LENGTH, radius, cx, cy } = CLOCKFACE_DIMENSIONS;
 
 const Clockface: React.FC<ClockfacePropsType> = ({
 	withTimer = false,

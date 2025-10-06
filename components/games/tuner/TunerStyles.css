@@ -1,3 +1,22 @@
 .tuner_needle {
 	transition: transform 0.1s ease-out;
 }
+
+.mask {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	/* Create a semicircular mask using clip-path */
+	clip-path: ellipse(50% 100% at 50% 100%);
+	background: radial-gradient(circle at center, transparent 50%, black 50%);
+	mask-composite: exclude;
+	-webkit-mask-composite: xor;
+}
+
+.mask-overlay {
+	/* optional black overlay if you want the bottom to look filled */
+	background-color: black;
+	border-top-left-radius: 9999px;
+	border-top-right-radius: 9999px;
+}

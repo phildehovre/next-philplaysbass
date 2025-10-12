@@ -301,7 +301,7 @@ const Timer = (props: TimerComponentProps) => {
 						</>
 					)}
 					<div className="absolute flex flex-col gap-2 items-center">
-						{!started ? (
+						{!started && !showTuner ? (
 							<>
 								{timerArray.length > 0 && (
 									<button

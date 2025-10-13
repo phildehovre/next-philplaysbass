@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Settings } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
@@ -18,6 +18,9 @@ import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
 import { handleTabClose } from "@/lib/utils";
 import AnimatedGridRow from "./ui/AnimatedGridRow";
+import GameSettings from "./GameSettings";
+import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
+import { useNoteMatchGame } from "@/hooks/game-hooks/useNoteMatchGame";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -68,10 +71,10 @@ const NoteMatchGame = () => {
 
 	return (
 		<GameContainer>
-			<div className="game_header flex flex-col justify-center gap-2 w-full">
+			<div className="game_header flex gap-2 w-full">
 				<label
 					htmlFor="state.isPracticeMode"
-					className="flex justify-center gap-2 m-auto items-center my-2"
+					className="flex justify-center gap-2 m-auto items-center my-2 w-1/2"
 				>
 					<Switch
 						disabled={state.gameStarted}
@@ -86,6 +89,7 @@ const NoteMatchGame = () => {
 						Practice mode
 					</p>
 				</label>
+				<GameSettings gameType={NOTE_MATCH_TYPE} game={game} />
 			</div>
 
 			<div className="scoreboard_ctn flex w-full ">
@@ -100,9 +104,6 @@ const NoteMatchGame = () => {
 					<AnimatedNumber data={state.score.losses} />:
 					<AnimatedNumber data={state.score.wins} />
 				</div>
-			</div>
-			<div className="my-2">
-				<GameOptionsSwitches state={state} setters={setters} />
 			</div>
 			<AnimatedGridRow active={state.withMetronome} className="my-2">
 				<MetroWidget

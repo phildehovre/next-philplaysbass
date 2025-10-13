@@ -31,11 +31,11 @@ const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 	setters,
 }) => {
 	return (
-		<div className="switch_ctn grid grid-cols-2 gap-7">
+		<div className="flex flex-col gap-3 m-3">
 			<Tooltip>
 				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2">
-						<Drum />
+					<label className="flex items-center gap-2 justify-between  w-full">
+						<Drum size={18} color={"lightGray"} />
 						<Switch
 							disabled={state.gameStarted || state.withTimer}
 							checked={state.withMetronome}
@@ -43,13 +43,13 @@ const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 						/>
 					</label>
 				</TooltipTrigger>
-				<TooltipContent>[coming soon] Practice with a metronome</TooltipContent>
+				<TooltipContent side="right">Practice with a metronome</TooltipContent>
 			</Tooltip>
 
 			<Tooltip>
 				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2">
-						<Timer />
+					<label className="flex items-center gap-2 justify-between">
+						<Timer size={18} color={"lightGray"} />
 						<Switch
 							disabled={state.gameStarted || state.withMetronome}
 							checked={state.withTimer}
@@ -57,13 +57,13 @@ const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 						/>
 					</label>
 				</TooltipTrigger>
-				<TooltipContent>Practice with a time limit</TooltipContent>
+				<TooltipContent side="right">Practice with a time limit</TooltipContent>
 			</Tooltip>
 
 			<Tooltip>
 				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2">
-						<Piano />
+					<label className="flex items-center gap-2 justify-between">
+						<Piano size={18} color={"lightGray"} />
 						<Switch
 							disabled={state.gameStarted}
 							checked={state.withArpeggios}
@@ -71,13 +71,15 @@ const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 						/>
 					</label>
 				</TooltipTrigger>
-				<TooltipContent>Practice with single notes or arpeggios</TooltipContent>
+				<TooltipContent side="right">
+					Practice with single notes or arpeggios
+				</TooltipContent>
 			</Tooltip>
 
 			<Tooltip>
 				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2">
-						<ArrowUpDown />
+					<label className="flex items-center gap-2 justify-between">
+						<ArrowUpDown size={18} color={"lightGray"} />
 						<Switch
 							disabled={state.gameStarted}
 							checked={state.withInversions}
@@ -85,7 +87,7 @@ const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 						/>
 					</label>
 				</TooltipTrigger>
-				<TooltipContent>Practice with inversions</TooltipContent>
+				<TooltipContent side="right">Practice with inversions</TooltipContent>
 			</Tooltip>
 		</div>
 	);

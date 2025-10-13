@@ -24,9 +24,10 @@ const GameSettings = (props: GameSettingsPropsType) => {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
+			<DropdownMenuTrigger asChild className="absolute bottom-58 left-58 z-0">
 				<Button variant="outline" className="rounded-full w-[1.5em] h-[1.5em]">
-					<Settings />
+					<img src="/tab.png" className="absolute scale-200 rotate-45" />
+					<Settings className="absolute top-1 left-0.5" color="black" />
 				</Button>
 			</DropdownMenuTrigger>
 			<Portal>

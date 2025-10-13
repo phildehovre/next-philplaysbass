@@ -5,36 +5,34 @@ import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
 import PowerUpBar from "./PowerUpBar";
 import { CLOCKFACE_DIMENSIONS } from "@/constants/clockFaceConstants";
+import GameSettings from "../GameSettings";
+import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
 
 type ClockfacePropsType = {
-	showPulse: boolean;
-	progress: number;
-	withTimer?: boolean;
 	children: React.ReactNode;
 	ringStroke?: number;
-	gameStarted: boolean;
 	className?: string;
 	showProgress?: boolean;
 	showPowerUp?: boolean;
 	size?: number;
+	game: any | undefined;
 };
 
 const { TAIL_LENGTH, radius, cx, cy } = CLOCKFACE_DIMENSIONS;
 
 const Clockface: React.FC<ClockfacePropsType> = ({
-	withTimer = false,
+	game,
 	showPowerUp = true,
-	showPulse,
-	progress,
 	children,
 	ringStroke,
-	gameStarted,
 	className,
 	showProgress,
+
 	size = 1,
 }) => {
 	const [angle, setAngle] = useState(0);
 	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
+	const { withTimer, gameStarted, showPulse, progress } = game;
 
 	const { bpm, gameType } = usePracticeSession();
 	const lastAngleRef = useRef(0);
@@ -90,6 +88,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				className ? className : ""
 			} clock-face relative flex items-center justify-center`}
 		>
+			<GameSettings gameType={NOTE_MATCH_TYPE} game={game} />
 			{gameStarted && <Blip bpm={bpm} />}
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./GameStyles.css";
 import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Settings } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
@@ -13,12 +13,14 @@ import Clockface from "./ui/Clockface";
 import Countdown from "./ui/Countdown";
 import MetroWidget from "./ui/MetroWidget";
 import StreakManager from "./ui/StreakManager";
+import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
 import { handleTabClose } from "@/lib/utils";
 import AnimatedGridRow from "./ui/AnimatedGridRow";
 import GameSettings from "./GameSettings";
 import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
+import { useNoteMatchGame } from "@/hooks/game-hooks/useNoteMatchGame";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -104,7 +106,14 @@ const NoteMatchGame = () => {
 				</div>
 			</div>
 			<AnimatedGridRow active={state.withMetronome} className="my-2">
-				<MetroWidget {...state} {...setters} />
+				<MetroWidget
+					gameStarted={state.gameStarted}
+					play={state.countdown || state.gameStarted}
+					bpm={state.bpm}
+					setBpm={setters.setBpm}
+					lastTickTime={state.lastTickTime}
+					setLastTickTime={setters.setLastTickTime}
+				/>
 			</AnimatedGridRow>
 			<AnimatedGridRow active={state.withTimer}>
 				<div className="flex w-full">
@@ -121,7 +130,16 @@ const NoteMatchGame = () => {
 					/>
 				</div>
 			</AnimatedGridRow>
+<<<<<<< HEAD
 			<Clockface gameType={NOTE_MATCH_TYPE} game={game}>
+=======
+			<Clockface
+				showPulse={state.showPulse}
+				withTimer={state.withTimer}
+				progress={state.progress}
+				gameStarted={state.gameStarted}
+			>
+>>>>>>> parent of e4f758c (refactor of gamesettings)
 				<StreakManager />
 				<div className={`game_question inversions `}>
 					{isLoading ? (

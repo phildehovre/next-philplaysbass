@@ -9,8 +9,13 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { DropdownMenuLabel, Portal } from "@radix-ui/react-dropdown-menu";
-import GameOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 import Spinner from "../Spinner";
+import {
+	FREE_PRACTICE_TYPE,
+	NOTE_MATCH_TYPE,
+	RHYTHM_ACCURACY_TYPE,
+} from "@/constants/GameConstants";
+import NoteMatchOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 
 type GameSettingsPropsType = {
 	gameType: GameTypes;
@@ -24,16 +29,23 @@ const GameSettings = (props: GameSettingsPropsType) => {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
+			<DropdownMenuTrigger asChild className="absolute bottom-58 left-58 z-0">
 				<Button variant="outline" className="rounded-full w-[1.5em] h-[1.5em]">
-					<Settings />
+					<img src="/tab.png" className="absolute scale-200 rotate-45" />
+					<Settings className="absolute top-1 left-0.5" color="black" />
 				</Button>
 			</DropdownMenuTrigger>
 			<Portal>
 				<DropdownMenuContent align="start" sideOffset={0}>
 					<DropdownMenuLabel color="gray">Settings</DropdownMenuLabel>
 					<DropdownMenuSeparator />
-					<GameOptionsSwitches state={state} setters={setters} />
+					{gameType == NOTE_MATCH_TYPE && (
+						<NoteMatchOptionsSwitches state={state} setters={setters} />
+					)}
+					{gameType == RHYTHM_ACCURACY_TYPE && "Under construction!"}
+					{gameType == FREE_PRACTICE_TYPE && (
+						<NoteMatchOptionsSwitches state={state} setters={setters} />
+					)}
 				</DropdownMenuContent>
 			</Portal>
 		</DropdownMenu>

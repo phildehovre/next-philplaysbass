@@ -121,7 +121,7 @@ const NoteMatchGame = () => {
 					/>
 				</div>
 			</AnimatedGridRow>
-			<Clockface game={game}>
+			<Clockface gameType={NOTE_MATCH_TYPE} game={game}>
 				<StreakManager />
 				<div className={`game_question inversions `}>
 					{isLoading ? (

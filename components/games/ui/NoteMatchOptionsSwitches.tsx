@@ -1,96 +1,54 @@
-// components/GameOptionsSwitches.tsx
-"use client";
-
-import React from "react";
-import { Drum, Piano, Timer, ArrowUpDown } from "lucide-react";
+import { GameTypes } from "@/types/types";
+import { Settings } from "lucide-react";
+import React, { useState } from "react";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
-import Switch from "@/components/Switch";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+	DropdownMenuSeparator,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { DropdownMenuLabel, Portal } from "@radix-ui/react-dropdown-menu";
+import GameOptionsSwitches from "./GameSettings";
+import Spinner from "../Spinner";
+import {
+	FREE_PRACTICE_TYPE,
+	NOTE_MATCH_TYPE,
+	RHYTHM_ACCURACY_TYPE,
+} from "@/constants/GameConstants";
+import NoteMatchOptionsSwitches from "./GameSettings";
 
-type GameOptionsSwitchesProps = {
-	state: {
-		gameStarted: boolean;
-		withMetronome: boolean;
-		withTimer: boolean;
-		withArpeggios: boolean;
-		withInversions: boolean;
-	};
-	setters: {
-		setWithMetronome: (val: boolean) => void;
-		setWithTimer: (val: boolean) => void;
-		setWithArpeggios: (val: boolean) => void;
-		setWithInversions: (val: boolean) => void;
-	};
+type GameSettingsPropsType = {
+	gameType: GameTypes;
+	game: any | undefined;
 };
+const GameSettings = (props: GameSettingsPropsType) => {
+	const { game, gameType } = props;
+	const { state, setters } = game;
 
-const GameOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
-	state,
-	setters,
-}) => {
+	if (!game) return <Spinner />;
+
 	return (
-		<div className="flex flex-col gap-3 m-3">
-			<Tooltip>
-				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2 justify-between  w-full">
-						<Drum size={18} color={"lightGray"} />
-						<Switch
-							disabled={state.gameStarted || state.withTimer}
-							checked={state.withMetronome}
-							onCheckChange={setters.setWithMetronome}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent side="right">Practice with a metronome</TooltipContent>
-			</Tooltip>
-
-			<Tooltip>
-				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2 justify-between">
-						<Timer size={18} color={"lightGray"} />
-						<Switch
-							disabled={state.gameStarted || state.withMetronome}
-							checked={state.withTimer}
-							onCheckChange={setters.setWithTimer}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent side="right">Practice with a time limit</TooltipContent>
-			</Tooltip>
-
-			<Tooltip>
-				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2 justify-between">
-						<Piano size={18} color={"lightGray"} />
-						<Switch
-							disabled={state.gameStarted}
-							checked={state.withArpeggios}
-							onCheckChange={setters.setWithArpeggios}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent side="right">
-					Practice with single notes or arpeggios
-				</TooltipContent>
-			</Tooltip>
-
-			<Tooltip>
-				<TooltipTrigger asChild>
-					<label className="flex items-center gap-2 justify-between">
-						<ArrowUpDown size={18} color={"lightGray"} />
-						<Switch
-							disabled={state.gameStarted}
-							checked={state.withInversions}
-							onCheckChange={setters.setWithInversions}
-						/>
-					</label>
-				</TooltipTrigger>
-				<TooltipContent side="right">Practice with inversions</TooltipContent>
-			</Tooltip>
-		</div>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild className="absolute bottom-58 left-58 z-0">
+				<Button variant="outline" className="rounded-full w-[1.5em] h-[1.5em]">
+					<img src="/tab.png" className="absolute scale-200 rotate-45" />
+					<Settings className="absolute top-1 left-0.5" color="black" />
+				</Button>
+			</DropdownMenuTrigger>
+			<Portal>
+				<DropdownMenuContent align="start" sideOffset={0}>
+					<DropdownMenuLabel color="gray">Settings</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					{gameType == NOTE_MATCH_TYPE && (
+						<NoteMatchOptionsSwitches state={state} setters={setters} />
+					)}
+					{gameType == RHYTHM_ACCURACY_TYPE && "Under construction!"}
+					{gameType == FREE_PRACTICE_TYPE && "hello"}
+				</DropdownMenuContent>
+			</Portal>
+		</DropdownMenu>
 	);
 };
 
-export default GameOptionsSwitches;
+export default GameSettings;

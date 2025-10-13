@@ -270,12 +270,15 @@ const Timer = (props: TimerComponentProps) => {
 
 			<div className="flex justify-between">
 				<Clockface
-					showPulse={false}
-					withTimer
-					progress={progress}
-					gameStarted={started}
 					showPowerUp={false}
+					gameType={FREE_PRACTICE_TYPE}
 					size={0.8}
+					game={{
+						showPulse: false,
+						withTimer: false,
+						progress,
+						gameStarted: started,
+					}}
 				>
 					{showTuner && <SemiCircleTuner />}
 					{timerArray.length == 0 && !showTuner && (

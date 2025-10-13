@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./GameStyles.css";
-import "../metronome/metronome.scss";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
@@ -15,6 +14,7 @@ import { NoteInfo } from "@/types/types";
 import GameContainer from "./ui/GameContainer";
 import { useRhythmAccuracyGameContext } from "@/context/rhythmAccuracyGameContext";
 import { handleTabClose } from "@/lib/utils";
+import { RHYTHM_ACCURACY_TYPE } from "@/constants/GameConstants";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);
@@ -61,9 +61,8 @@ const RhythmAccuracyGame = () => {
 			</div>
 
 			<Clockface
-				showPulse={state.showPulse}
-				progress={state.progress}
-				gameStarted={state.gameStarted}
+				gameType={RHYTHM_ACCURACY_TYPE}
+				game={game}
 				className="gsap-element"
 			>
 				<div className={`game_question inversions `}>

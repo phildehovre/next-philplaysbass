@@ -9,6 +9,7 @@ import MetroWidget from "../ui/MetroWidget";
 import PitchyWithDeviceSelect from "../PitchyComponent";
 import Clockface from "../ui/Clockface";
 import { CalibrationSettingKey } from "./ModalCalibration";
+import { FREE_PRACTICE_TYPE } from "@/constants/GameConstants";
 
 const REQUIRED_SAMPLES = 8; // how many taps before averaging
 
@@ -120,13 +121,20 @@ const LatencyCalibration = (props: {
 				)}
 			</div>
 			<Clockface
-				progress={Math.min(
-					(latencySamples.length / REQUIRED_SAMPLES) * 100,
-					100
-				)}
-				showPulse={false}
-				gameStarted={false}
-				showProgress={true}
+				game={{
+					showPulse: false,
+					gameStarted: false,
+					showProgress: true,
+					state: {
+						withTimer: false,
+						progress: Math.min(
+							(latencySamples.length / REQUIRED_SAMPLES) * 100,
+							100
+						),
+					},
+				}}
+				showSettings={false}
+				gameType={FREE_PRACTICE_TYPE}
 			>
 				<div className="absolute rounded-b-full">
 					{latencySamples.length == REQUIRED_SAMPLES ? (

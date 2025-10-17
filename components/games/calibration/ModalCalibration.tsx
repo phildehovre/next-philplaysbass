@@ -51,8 +51,6 @@ const ModalCalibration = () => {
 
 	if (!isFirstTimeUser) return null;
 
-	console.log(calibrationObj);
-
 	const nextStep = () =>
 		setCalibrationStep((s) => Math.min(s + 1, STEPS.length - 1));
 

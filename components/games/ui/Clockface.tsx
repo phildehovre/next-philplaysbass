@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
-import { usePracticeSession } from "@/context/practiceSessionsContext";
 import Blip from "./Blip";
 import PowerUpBar from "./PowerUpBar";
 import { CLOCKFACE_DIMENSIONS } from "@/constants/clockFaceConstants";
 import { GameTypes } from "@/types/types";
 import GameSettings from "../GameSettings";
+import Spinner from "@/components/Spinner";
 
 type ClockfacePropsType = {
 	children: React.ReactNode;
@@ -17,6 +17,7 @@ type ClockfacePropsType = {
 	size?: number;
 	game?: any | undefined;
 	gameType: GameTypes;
+	showSettings: boolean;
 };
 
 const { TAIL_LENGTH, radius, cx, cy } = CLOCKFACE_DIMENSIONS;
@@ -29,13 +30,17 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	className,
 	showProgress,
 	gameType,
+	showSettings = true,
 	size = 1,
 }) => {
 	const [angle, setAngle] = useState(0);
 	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
-	const { withTimer, gameStarted, showPulse, progress } = game;
 
-	const { bpm } = usePracticeSession();
+	if (!game) return <Spinner />;
+
+	const { state } = game;
+	const { withTimer, gameStarted, showPulse, progress, bpm } = state;
+
 	const lastAngleRef = useRef(0);
 
 	const [blipActive, setBlipActive] = useState(false);
@@ -89,7 +94,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				className ? className : ""
 			} clock-face relative flex items-center justify-center`}
 		>
-			<GameSettings gameType={gameType} game={game} />
+			{showSettings && <GameSettings gameType={gameType} game={game} />}
 			{gameStarted && <Blip bpm={bpm} />}
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}

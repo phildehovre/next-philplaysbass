@@ -54,13 +54,21 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 				setSelectedDeviceId(deviceId);
 				deviceIdHandle && deviceIdHandle(deviceId);
 			} else {
-				setSelectedDeviceId(devices[0].deviceId);
+				setSelectedDeviceId(devices[0]?.deviceId);
+
 				deviceIdHandle && deviceIdHandle(devices[0].deviceId);
 			}
 		}
 	}, []);
 
 	useEffect(() => {
+		if (!selectedDeviceId && devices.length > 0) {
+			setSelectedDeviceId(devices[0]?.deviceId);
+		}
+	});
+
+	useEffect(() => {
+		console.log(devices);
 		if (selectedDeviceId) setCookie("device-id", selectedDeviceId);
 	}, [selectedDeviceId]);
 

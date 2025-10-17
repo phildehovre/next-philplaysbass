@@ -17,7 +17,7 @@ type ClockfacePropsType = {
 	size?: number;
 	game?: any | undefined;
 	gameType: GameTypes;
-	showSettings: boolean;
+	showSettings?: boolean;
 };
 
 const { TAIL_LENGTH, radius, cx, cy } = CLOCKFACE_DIMENSIONS;

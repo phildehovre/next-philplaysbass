@@ -1,7 +1,17 @@
-// Game types
-export const NOTE_MATCH_TYPE = "note-match";
-export const RHYTHM_ACCURACY_TYPE = "rhythm-accuracy";
-export const FREE_PRACTICE_TYPE = "free-practice";
+export const NOTE_MATCH_TYPE = "note-match" as const;
+export const RHYTHM_ACCURACY_TYPE = "rhythm-accuracy" as const;
+export const FREE_PRACTICE_TYPE = "free-practice" as const;
+
+export type GameType =
+	| typeof NOTE_MATCH_TYPE
+	| typeof RHYTHM_ACCURACY_TYPE
+	| typeof FREE_PRACTICE_TYPE;
+
+export const GAME_LABELS: Record<GameType, string> = {
+	[NOTE_MATCH_TYPE]: "Note Match",
+	[RHYTHM_ACCURACY_TYPE]: "Rhythm Game",
+	[FREE_PRACTICE_TYPE]: "Free Practice",
+};
 
 // Metronome vars
 export const MIN_TEMPO_AS_STR = "10";

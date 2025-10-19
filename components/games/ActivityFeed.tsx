@@ -1,3 +1,4 @@
+import { GAME_LABELS, GameType } from "@/constants/GameConstants";
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
@@ -39,7 +40,7 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 			return (
 				<div className="dashboard_box activity" key={a.id}>
 					<label className="activity_label">
-						<div>{a.gameType}</div>
+						<div>{GAME_LABELS[a.gameType as GameType]}</div>
 					</label>
 					<div className="">{formatTime(a.duration)}</div>
 					<label className="activity_label">
@@ -64,7 +65,7 @@ const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 	};
 	return (
 		<div className=" activity-feed_ctn w-full flex flex-col gap-0.5">
-			<div className="activity">
+			<div className="activity text-gray-500">
 				<label className="activity_label">
 					<div>Game type</div>
 				</label>

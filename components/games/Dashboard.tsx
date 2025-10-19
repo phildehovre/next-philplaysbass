@@ -56,8 +56,9 @@ const Dashboard = (props: any) => {
 	return (
 		<div className="dashboard_ctn w-full" ref={dashboardRef}>
 			<div className="welcome_banner opacity-0 flex flex-col items-center">
-				<h1>Welcome back, {userData.name}</h1>
-				<div className="banner_ctn flex gap-2 justify-center w-full">
+				<p>Welcome back,</p>
+				<h1>{userData.name}</h1>
+				<div className="banner_ctn flex gap-2 flex-col items-center md:flex-row md:justify-center w-full">
 					<AnnouncementBanner
 						title={"Join the conversation"}
 						callToActionText="Discord invite"
@@ -77,21 +78,21 @@ const Dashboard = (props: any) => {
 				</div>
 			</div>
 
-			<div className="dashboard_section justify-center">
+			<div className="dashboard_section md:justify-center">
 				<h1 className="section_title">Your progress</h1>
 				<UserStats userData={userData} />
 			</div>
 
 			<div className="dashboard_section w-full">
 				<h1 className="section_title">Challenges</h1>
-				<div className="dashboard-cards_ctn flex gap-2 justify-center">
+				<div className="dashboard-cards_ctn flex flex-col md:flex-row gap-2 justify-center">
 					{renderGameCards()}
 				</div>
 			</div>
 
 			<div className="dashboard_section w-full">
 				<h1 className="section_title">Tools</h1>
-				<div className="dashboard-cards_ctn flex gap-2">
+				<div className="dashboard-cards_ctn flex flex-col md:flex-row gap-2">
 					{renderToolCards()}
 				</div>
 			</div>

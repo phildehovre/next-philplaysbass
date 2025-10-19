@@ -44,9 +44,9 @@ const UserStats = (props: UserStatsProps) => {
 	}, [data]);
 
 	return (
-		<div className="dashboard_box user-stats_ctn flex w-full justify-between gap-2">
+		<div className="dashboard_box user-stats_ctn flex flex-col md:flex-row w-full justify-between gap-2">
 			<div className="user-stats_item">
-				<div className="span data_label flex justify-between">
+				<div className="span data_label flex  justify-between">
 					<h1>Practiced today:</h1>
 					<CircleHelp color={"gray"} />
 				</div>
@@ -58,7 +58,6 @@ const UserStats = (props: UserStatsProps) => {
 					) : (
 						<p className="no-data">No data yet!</p>
 					)}
-					<p></p>
 				</span>
 			</div>
 			<div className="user-stats_item ">

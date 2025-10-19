@@ -46,16 +46,16 @@ export const GameCard = (props: CardPropsType) => {
 
 	return (
 		<div className="dashboard_box dashboard_card">
-			<div className="dashboard-card_header flex justify-between">
+			<div className="dashboard-card_header flex justify-between relative">
 				{stickerDisplay ? (
 					<Sticker content={stickerContent} />
 				) : (
 					<div className="sticker_placeholder"></div>
 				)}
-				<EllipsisVertical />
+				<h1 className="mx-auto">{title}</h1>
+				<EllipsisVertical className="absolute right-0 top-0" />
 			</div>
 			<div className="dashboard-card_body">
-				<h1>{title}</h1>
 				<div className="dashboard-card_content">{description}</div>
 			</div>
 			<div className="dashboard-card_footer flex justify-center">

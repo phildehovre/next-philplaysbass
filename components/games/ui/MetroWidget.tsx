@@ -48,21 +48,6 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		setDisplayedBpm(bpm);
 	}, [bpm]);
 
-	// useEffect(() => {
-	// 	const handleKeyDown = (e: KeyboardEvent) => {
-	// 		if (e.code === "Space" && setPlay) {
-	// 			e.preventDefault();
-	// 			setPlay((prev: boolean) => !prev);
-	// 		}
-	// 	};
-
-	// 	document.addEventListener("keydown", handleKeyDown);
-
-	// 	return () => {
-	// 		document.removeEventListener("keydown", handleKeyDown); // cleanup
-	// 	};
-	// }, [setPlay]); // dependency: setPlay is stable, so this won't cause reruns
-
 	const playSound = useCallback(() => {
 		if (soundEffect === "cowbell") {
 			sounds?.cowbell?.play();
@@ -132,9 +117,12 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 						type="range"
 						min={MIN_TEMPO_AS_STR}
 						max={MAX_TEMPO_AS_STR}
-						defaultValue={bpm}
-						onChange={(e) => setDisplayedBpm(e.target.valueAsNumber)}
-						onMouseUp={() => setBpm(displayedBpm)}
+						value={displayedBpm}
+						onChange={(e) => {
+							const val = e.target.valueAsNumber;
+							setDisplayedBpm(val);
+							setBpm(val);
+						}}
 					/>
 				</div>
 			</div>

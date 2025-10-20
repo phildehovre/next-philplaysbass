@@ -274,10 +274,13 @@ const Timer = (props: TimerComponentProps) => {
 					gameType={FREE_PRACTICE_TYPE}
 					size={0.8}
 					game={{
-						showPulse: false,
-						withTimer: false,
-						progress,
-						gameStarted: started,
+						state: {
+							bpm,
+							showPulse: false,
+							withTimer: true,
+							progress,
+							gameStarted: started,
+						},
 					}}
 				>
 					{showTuner && <SemiCircleTuner />}

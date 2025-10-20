@@ -9,6 +9,7 @@ import {
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type UserMenuProps = {
 	user: any;
@@ -16,6 +17,7 @@ type UserMenuProps = {
 const UserMenu: React.FC<UserMenuProps> = (props) => {
 	const [show, setShow] = useState(false);
 	const { user } = props;
+	const isMobile = useIsMobile();
 
 	const items = [
 		{ label: "Settings", link: "/settings" },
@@ -42,26 +44,26 @@ const UserMenu: React.FC<UserMenuProps> = (props) => {
 	};
 
 	return (
-		<div className="z-100">
-			<DropdownMenu>
-				<DropdownMenuTrigger>
-					<Image
-						onClick={() => setShow(!show)}
-						src={user.picture}
-						alt="user avatar"
-						className="user-menu"
-						width={20}
-						height={20}
-						quality={100}
-					/>
-				</DropdownMenuTrigger>
-				{show && (
-					<DropdownMenuContent className="dropdown-menu_content">
-						{renderUserMenu()}
-					</DropdownMenuContent>
-				)}
-			</DropdownMenu>
-		</div>
+		<DropdownMenu>
+			<DropdownMenuTrigger
+				className={`${isMobile ? "absolute top-5 right-5" : ""}`}
+			>
+				<Image
+					onClick={() => setShow(!show)}
+					src={user.picture}
+					alt="user avatar"
+					className="user-menu"
+					width={100}
+					height={100}
+					quality={100}
+				/>
+			</DropdownMenuTrigger>
+			{show && (
+				<DropdownMenuContent className="dropdown-menu_content">
+					{renderUserMenu()}
+				</DropdownMenuContent>
+			)}
+		</DropdownMenu>
 	);
 };
 

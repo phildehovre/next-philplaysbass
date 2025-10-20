@@ -29,7 +29,6 @@ header {
 	align-items: center;
 	list-style: none;
 	margin-top: -35px;
-	font-family: Anton;
 	border-bottom: 4px solid var(--clr-brand);
 }
 
@@ -221,5 +220,9 @@ header {
 	}
 	.login-btn {
 		padding: 0;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }

@@ -15,7 +15,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Moon, MoonIcon, Timer } from "lucide-react";
+import { MoonIcon } from "lucide-react";
 import Switch from "./Switch";
 import { useTheme } from "next-themes";
 

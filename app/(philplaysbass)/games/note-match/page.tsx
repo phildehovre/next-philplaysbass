@@ -7,7 +7,7 @@ const page = async () => {
 	return (
 		<>
 			<NoteMatchGameProvider>
-				<ModalCalibration />
+				{/* <ModalCalibration /> */}
 				<NoteMatchGame />
 			</NoteMatchGameProvider>
 		</>

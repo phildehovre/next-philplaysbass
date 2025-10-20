@@ -61,6 +61,6 @@ export const gameCards: {
 		description:
 			"Challenge your sense of timing in this rhythm accuracy game! Your goal is to hit each beat as precisely as possible, the closer you are to perfect timing, the more points you earn. Speed matters too: faster reactions mean higher scores. Rhythm patterns coming soon for an even greater challenge!",
 		btnText: "Play!",
-		href: "/games/rhythm",
+		href: "/games/rhythm-accuracy",
 	},
 ];

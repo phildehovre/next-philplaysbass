@@ -44,7 +44,7 @@ export const gameCards: {
 		description:
 			"Random notes will appear as soon as the game begins. Your goal? Play them on your instrument as quickly and accurately as possible to score points. It’s a fast-paced test of fretboard knowledge, reflexes, and instrumental control. Can you keep up?",
 		btnText: "Play!",
-		href: "/games/inversions",
+		href: "/games/note-match",
 	},
 	{
 		title: "Name the triad",

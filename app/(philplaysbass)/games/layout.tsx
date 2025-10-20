@@ -1,4 +1,3 @@
-import ModalCalibration from "@/components/games/calibration/ModalCalibration";
 import { OscillatorGenProvider } from "@/context/oscillatorGenContext";
 import { PracticeSessionProvider } from "@/context/practiceSessionsContext";
 import { SoundFXProvider } from "@/context/soundContext";
@@ -9,10 +8,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 		<div className="w-full h-full flex flex-col justify-center items-center">
 			<PracticeSessionProvider>
 				<SoundFXProvider>
-					<OscillatorGenProvider>
-						<ModalCalibration />
-						{children}
-					</OscillatorGenProvider>
+					<OscillatorGenProvider>{children}</OscillatorGenProvider>
 				</SoundFXProvider>
 			</PracticeSessionProvider>
 		</div>

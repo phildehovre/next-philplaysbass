@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import "./GameStyles.css";
 import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, StopCircleIcon } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import Switch from "../Switch";
@@ -24,6 +24,7 @@ const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
 	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [play, setPlay] = useState<boolean>(false);
 
 	const {
 		score: totalScore,
@@ -104,7 +105,13 @@ const NoteMatchGame = () => {
 				</div>
 			</div>
 			<AnimatedGridRow active={state.withMetronome} className="my-2">
-				<MetroWidget {...state} {...setters} />
+				<MetroWidget
+					{...state}
+					{...setters}
+					{...actions}
+					setPlay={setPlay}
+					play={play}
+				/>
 			</AnimatedGridRow>
 			<AnimatedGridRow active={state.withTimer}>
 				<div className="flex w-full">
@@ -148,7 +155,7 @@ const NoteMatchGame = () => {
 									onClick={actions.stopGame}
 									className="game_btn stop-game_btn inversions"
 								>
-									Stop
+									<StopCircleIcon size={40} />
 								</button>
 							)}
 							<div className={`note ${state.showShake ? "shake-error" : ""}`}>

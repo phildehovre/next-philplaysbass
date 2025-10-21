@@ -68,7 +68,6 @@ export default function PitchyWithDeviceSelect(props: PitchyComponentProps) {
 	});
 
 	useEffect(() => {
-		console.log(devices);
 		if (selectedDeviceId) setCookie("device-id", selectedDeviceId);
 	}, [selectedDeviceId]);
 

@@ -275,9 +275,8 @@ const Timer = (props: TimerComponentProps) => {
 					size={0.8}
 					game={{
 						state: {
-							bpm,
 							showPulse: false,
-							withTimer: true,
+							withTimer: false,
 							progress,
 							gameStarted: started,
 						},

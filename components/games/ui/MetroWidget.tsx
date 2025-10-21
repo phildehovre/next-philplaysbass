@@ -7,7 +7,7 @@ import {
 	MIN_TEMPO_AS_STR,
 } from "../../../constants/GameConstants";
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
-import { Minus, Pause, Play, Plus } from "lucide-react";
+import { CookingPot, Minus, Pause, Play, Plus } from "lucide-react";
 
 type MetroWidgetPropsType = {
 	bpm: number;
@@ -17,7 +17,7 @@ type MetroWidgetPropsType = {
 	lastTickTime: number | null;
 	setLastTickTime: (t: number) => void;
 	controls?: boolean;
-	setPlay?: React.Dispatch<React.SetStateAction<boolean>>;
+	setPlay: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
@@ -47,6 +47,15 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	useEffect(() => {
 		setDisplayedBpm(bpm);
 	}, [bpm]);
+
+	useEffect(() => {
+		if (gameStarted) {
+			setPlay(true);
+		}
+		if (!gameStarted) {
+			setPlay(false);
+		}
+	}, [gameStarted]);
 
 	const playSound = useCallback(() => {
 		if (soundEffect === "cowbell") {

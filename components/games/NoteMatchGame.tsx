@@ -19,6 +19,7 @@ import { handleTabClose } from "@/lib/utils";
 import AnimatedGridRow from "./ui/AnimatedGridRow";
 import { NOTE_MATCH_TYPE } from "@/constants/gameConstants";
 import GameSettings from "./GameSettings";
+import FretRangeSelector from "./ui/FretRangeSelector";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
@@ -195,6 +196,7 @@ const NoteMatchGame = () => {
 					</label>
 				</div>
 			</AnimatedGridRow>
+			<FretRangeSelector />
 
 			<PitchyComponent
 				showDevices={true}

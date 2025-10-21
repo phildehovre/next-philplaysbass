@@ -204,13 +204,9 @@ const NoteMatchGame = () => {
 					</label>
 				</div>
 			</AnimatedGridRow>
-<<<<<<< HEAD
 			<AnimatedGridRow active={state.withFretboard}>
 				<FretRangeSelector game={{ state, setters, actions }} />
 			</AnimatedGridRow>
-=======
-			<FretRangeSelector />
->>>>>>> 70a1d9c (intial range)
 
 			<PitchyComponent
 				showDevices={true}

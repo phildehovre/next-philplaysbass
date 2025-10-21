@@ -162,6 +162,7 @@ export default function FretRangeSelector(props: { game: any }) {
 				<Slider
 					value={range}
 					min={0}
+<<<<<<< HEAD
 					max={24}
 					step={1}
 					onValueChange={(val) => handleSetRange(val)}
@@ -169,6 +170,15 @@ export default function FretRangeSelector(props: { game: any }) {
 				/>
 				<div className="text-sm text-center mt-2 text-stone-400">
 					Selected frets: {range[0]} – {range[1] > 0 ? range[1] - 1 : 0}
+=======
+					max={12}
+					step={1}
+					onValueChange={(val) => setRange(val as [number, number])}
+					className="w-full"
+				/>
+				<div className="text-sm text-center mt-2 text-stone-400">
+					Selected frets: {range[0]} – {range[1]}
+>>>>>>> a7c9811 (intial range)
 				</div>
 			</div>
 		</div>

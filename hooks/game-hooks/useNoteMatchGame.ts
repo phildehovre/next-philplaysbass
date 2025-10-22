@@ -34,10 +34,6 @@ export const useNoteMatchGame = () => {
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
-	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
-		INSTRUMENTS["bass4"]
-	);
-	const [fretRange, setFretRange] = useState([0, 12]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -344,8 +340,6 @@ export const useNoteMatchGame = () => {
 			setCountdown,
 			setLastTickTime,
 			setBpm,
-			setInstrumentPreset,
-			setFretRange,
 		},
 		actions: {
 			startGame,

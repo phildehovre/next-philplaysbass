@@ -272,6 +272,7 @@ const Timer = (props: TimerComponentProps) => {
 				<Clockface
 					showPowerUp={false}
 					gameType={FREE_PRACTICE_TYPE}
+					showSettings={false}
 					size={0.8}
 					game={{
 						state: {

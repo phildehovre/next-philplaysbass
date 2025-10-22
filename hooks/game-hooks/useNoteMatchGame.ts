@@ -17,7 +17,7 @@ import {
 	MAX_TEMPO_AS_NUM,
 	NOTE_MATCH_TYPE,
 } from "@/constants/gameConstants";
-import { Note, NoteEvent, NoteInfo } from "@/types/types";
+import { InstrumentPreset, Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 
 export const useNoteMatchGame = () => {
@@ -34,6 +34,7 @@ export const useNoteMatchGame = () => {
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
+	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>();
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -338,6 +339,7 @@ export const useNoteMatchGame = () => {
 			setCountdown,
 			setLastTickTime,
 			setBpm,
+			setInstrumentPreset,
 		},
 		actions: {
 			startGame,

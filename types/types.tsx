@@ -197,3 +197,9 @@ export type Score = {
 	pitch: number;
 	bonus: number;
 };
+
+export type InstrumentPreset = {
+	label: string;
+	strings: number;
+	active: boolean[];
+};

@@ -196,7 +196,7 @@ const NoteMatchGame = () => {
 					</label>
 				</div>
 			</AnimatedGridRow>
-			<FretRangeSelector />
+			<FretRangeSelector game={game} />
 
 			<PitchyComponent
 				showDevices={true}

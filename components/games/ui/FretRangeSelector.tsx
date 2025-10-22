@@ -67,7 +67,11 @@ export default function FretRangeSelector(props: { game: any }) {
 			<div className="w-full mb-2">
 				<label className="text-sm text-stone-400 mr-2">Instrument:</label>
 				<select
+<<<<<<< HEAD
 					value={state.instrumentPreset.key}
+=======
+					value={instrument}
+>>>>>>> 05ec0ea (gradually implement instrument presets cfg)
 					onChange={handleInstrumentChange}
 					className="bg-stone-800 text-stone-200 rounded-md px-3 py-1 text-sm border border-stone-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 				>
@@ -80,7 +84,11 @@ export default function FretRangeSelector(props: { game: any }) {
 			</div>
 
 			{/* Neck visual with string selectors */}
+<<<<<<< HEAD
 			<div className="flex items-center gap-2 w-full ">
+=======
+			<div className="flex items-center gap-2 w-full">
+>>>>>>> 05ec0ea (gradually implement instrument presets cfg)
 				{/* String selectors (checkboxes) */}
 				<div className="flex flex-col justify-between h-20 py-[2px]">
 					{strings.map((s) => (
@@ -119,10 +127,17 @@ export default function FretRangeSelector(props: { game: any }) {
 					{frets.map((fret, i) => (
 						<div
 							key={i}
+<<<<<<< HEAD
 							className={`absolute top-0 bottom-0 border-l  ${
 								i === 0 ? "border-l-10" : "border-l-2"
 							} border-stone-600`}
 							style={{ left: `${(i / frets.length) * 100}%` }}
+=======
+							className={`absolute top-0 bottom-0 border-l ${
+								i === 0 ? "border-l-4" : "border-l-2"
+							} border-stone-600`}
+							style={{ left: `${(i / 12) * 100}%` }}
+>>>>>>> 05ec0ea (gradually implement instrument presets cfg)
 						></div>
 					))}
 
@@ -130,12 +145,18 @@ export default function FretRangeSelector(props: { game: any }) {
 					<div
 						className="absolute top-0 bottom-0 bg-cyan-500/40 transition-all"
 						style={{
+<<<<<<< HEAD
 							left: `${(range[0] / frets.length) * 100}%`,
 							width: `${((range[1] - range[0]) / frets.length) * 100}%`,
+=======
+							left: `${(range[0] / 12) * 100}%`,
+							width: `${((range[1] - range[0]) / 12) * 100}%`,
+>>>>>>> 05ec0ea (gradually implement instrument presets cfg)
 						}}
 					/>
 
 					{/* Fret markers */}
+<<<<<<< HEAD
 					{[3, 5, 7, 9, 12, 15, 17, 19, 21, 24].map((f) => (
 						<div
 							key={f}
@@ -152,6 +173,22 @@ export default function FretRangeSelector(props: { game: any }) {
 							{f % 12 == 0 && (
 								<div className="w-2 h-2 bg-white/70 rounded-full" />
 							)}
+=======
+					{[3, 5, 7, 9, 12].map((f) => (
+						<div
+							key={f}
+							className={`absolute top-9 ${
+								f === 12 && "flex flex-col gap-7"
+							} translate-y-1/2 left-1/2 transform -translate-x-1/2`}
+							style={{ left: `${(f / 12) * 100 - 4}%` }}
+						>
+							<div
+								className={`w-2 h-2 ${
+									f === 12 && "-my-3"
+								} bg-white/70 rounded-full`}
+							/>
+							{f === 12 && <div className="w-2 h-2 bg-white/70 rounded-full" />}
+>>>>>>> 05ec0ea (gradually implement instrument presets cfg)
 						</div>
 					))}
 				</div>

@@ -308,36 +308,3 @@ export const guitarFrets: string[][] = [
 		"E5",
 	],
 ];
-
-export const INSTRUMENTS: Record<string, InstrumentPreset> = {
-	guitar6: {
-		label: "6-String Guitar (E–E)",
-		strings: 6,
-		active: [true, true, true, true, true, true],
-	},
-	bass4: {
-		label: "4-String Bass (B–G)",
-		strings: 4,
-		active: [true, true, true, true],
-	},
-	bass5: {
-		label: "5-String Bass (B–G)",
-		strings: 5,
-		active: [true, true, true, true, true],
-	},
-	bass5c: {
-		label: "5-String Bass (E-C)",
-		strings: 5,
-		active: [true, true, true, true, true],
-	},
-	bass6: {
-		label: "6-String Bass (B–C)",
-		strings: 6,
-		active: [true, true, true, true, true, true],
-	},
-	guitar7: {
-		label: "7-String Guitar (B–E)",
-		strings: 7,
-		active: [true, true, true, true, true, true, true],
-	},
-};

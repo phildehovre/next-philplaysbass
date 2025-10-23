@@ -9,7 +9,7 @@ import {
 	MAX_PITCH_HZ,
 	MIN_CLARITY,
 	MIN_PITCH_HZ,
-} from "../constants/GameConstants";
+} from "../constants/gameConstants";
 
 type PitchyStreamProps = {
 	onNoteDetection: (note: NoteInfo) => void;

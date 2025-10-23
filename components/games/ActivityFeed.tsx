@@ -1,4 +1,4 @@
-import { GAME_LABELS, GameType } from "@/constants/GameConstants";
+import { GAME_LABELS, GameType } from "@/constants/gameConstants";
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";

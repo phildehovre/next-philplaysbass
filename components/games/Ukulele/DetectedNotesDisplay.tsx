@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { parseNoteDisplay } from "@/lib/utils/gameUtils";
-import { UkuleleShape } from "@/constants/chromaticScale";
+import { UkuleleShape } from "@/constants/musicConstants";
 
 type Props = {
 	chord?: UkuleleShape; // fret numbers: (number | "x")[]

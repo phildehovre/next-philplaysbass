@@ -1,6 +1,6 @@
 import { Track } from "spotify-api.js";
 import { Song } from "@/lib/generated/prisma";
-import { ScaleQuality } from "@/constants/chromaticScale";
+import { ScaleQuality } from "@/constants/musicConstants";
 
 export type LanguagesType = "en" | "fr" | "nl";
 
@@ -202,4 +202,5 @@ export type InstrumentPreset = {
 	label: string;
 	strings: number;
 	active: boolean[];
+	frets: string[][];
 };

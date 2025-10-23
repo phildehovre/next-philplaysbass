@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import { INSTRUMENTS } from "@/constants/chromaticScale";
+import { INSTRUMENTS } from "@/constants/instrumentConstants";
 
 // Instrument presets
 const frets = Array.from({ length: 13 }, (_, i) => i); // 0–12 frets

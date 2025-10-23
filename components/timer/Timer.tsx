@@ -12,7 +12,7 @@ import Tuner from "../games/tuner/Tuner";
 import {
 	FREE_PRACTICE_TYPE,
 	MAX_TEMPO_AS_NUM,
-} from "@/constants/GameConstants";
+} from "@/constants/gameConstants";
 import { formatTime } from "@/utils/helpers";
 import AnimatedGridRow from "../games/ui/AnimatedGridRow";
 import Switch from "../Switch";

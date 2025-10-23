@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "./GameStyles.css";
-import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
+import { QUALITY, ScaleQuality } from "@/constants/musicConstants";
 import { PlusIcon, StopCircleIcon } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";
@@ -17,7 +17,7 @@ import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
 import { handleTabClose } from "@/lib/utils";
 import AnimatedGridRow from "./ui/AnimatedGridRow";
-import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
+import { NOTE_MATCH_TYPE } from "@/constants/gameConstants";
 import GameSettings from "./GameSettings";
 import FretRangeSelector from "./ui/FretRangeSelector";
 

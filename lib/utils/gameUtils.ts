@@ -1,4 +1,4 @@
-import { MS_LATENCY_OFFSET } from "@/constants/GameConstants";
+import { MS_LATENCY_OFFSET } from "@/constants/gameConstants";
 import {
 	arrayChromaticScale,
 	ChordType,
@@ -7,7 +7,7 @@ import {
 	ScaleQuality,
 	UkeNote,
 	ukuleleChordShapes,
-} from "@/constants/chromaticScale";
+} from "@/constants/musicConstants";
 import { ChordQuality, Note, NoteEvent, Score } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {

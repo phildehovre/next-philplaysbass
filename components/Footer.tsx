@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import "./Footer.css";
 import { useLanguage } from "@/context/LanguageContext";
-import { textObject } from "@/constants/textFile";
+import { textObject } from "@/constants/localization";
 import Logo from "./metronome/Logo";
 
 const Footer = () => {

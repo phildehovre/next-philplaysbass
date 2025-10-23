@@ -11,7 +11,7 @@ import {
 	arrayChromaticScale,
 	ScaleQuality,
 	selectRandomInversion,
-} from "@/constants/chromaticScale";
+} from "@/constants/musicConstants";
 import {
 	COOLDOWN_MS,
 	MAX_TEMPO_AS_NUM,

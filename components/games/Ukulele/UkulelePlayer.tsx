@@ -6,7 +6,7 @@ import React, {
 	forwardRef,
 	useImperativeHandle,
 } from "react";
-import { UKE_TUNING, UkuleleShape } from "@/constants/chromaticScale";
+import { UKE_TUNING, UkuleleShape } from "@/constants/musicConstants";
 
 const UkulelePlayer = forwardRef((props: { shape: UkuleleShape }, ref) => {
 	const audioCtxRef = useRef<AudioContext | null>(null);

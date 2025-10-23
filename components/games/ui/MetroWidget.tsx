@@ -5,7 +5,11 @@ import {
 	MAX_TEMPO_AS_STR,
 	MIN_TEMPO_AS_NUM,
 	MIN_TEMPO_AS_STR,
+<<<<<<< HEAD
 } from "@/constants/gameConstants";
+=======
+} from "../../../constants/gameConstants";
+>>>>>>> 669b364 (add instrument object with fret data)
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 import { CookingPot, Minus, Pause, Play, Plus } from "lucide-react";
 

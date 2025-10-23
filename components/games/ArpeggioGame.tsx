@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { arrayChromaticScale, QUALITY } from "@/constants/chromaticScale";
+import { arrayChromaticScale, QUALITY } from "@/constants/musicConstants";
 import { ChordQuality, Note } from "@/types/types";
 import {
 	buildScale,

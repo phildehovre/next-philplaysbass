@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import PitchyComponent from "../PitchyComponent";
 import { NoteInfo } from "@/types/types";
+<<<<<<< HEAD
 import { MS_LATENCY_OFFSET } from "@/constants/gameConstants";
+=======
+import { MS_LATENCY_OFFSET } from "../../../constants/gameConstants";
+>>>>>>> 669b364 (add instrument object with fret data)
 
 const HorizontalPulseVisualisation = ({
 	play,

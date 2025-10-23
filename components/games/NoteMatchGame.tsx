@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "./GameStyles.css";
-import { QUALITY, ScaleQuality } from "@/constants/chromaticScale";
+import { QUALITY, ScaleQuality } from "@/constants/musicConstants";
 import { PlusIcon, StopCircleIcon } from "lucide-react";
 import PitchyComponent from "./PitchyComponent";
 import AnimatedNumber from "./ui/AnimatedNumber";

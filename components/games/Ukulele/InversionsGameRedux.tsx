@@ -7,7 +7,7 @@ import Countdown from "../ui/Countdown";
 import AnimatedNumber from "../ui/AnimatedNumber";
 import PitchyComponentRedux from "./PitchyComponentRedux";
 import UkeDiagramWithNotes from "./DetectedNotesDisplay";
-import { QUALITY } from "@/constants/chromaticScale";
+import { QUALITY } from "@/constants/musicConstants";
 import "./GameStylesRedux.css";
 import { useNoteMatchGame } from "@/hooks/game-hooks/useNoteMatchGame";
 import { NOTE_MATCH_TYPE } from "@/constants/gameConstants";

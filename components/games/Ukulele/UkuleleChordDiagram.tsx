@@ -1,6 +1,6 @@
 "use client";
 
-import { UkuleleShape } from "@/constants/chromaticScale";
+import { UkuleleShape } from "@/constants/musicConstants";
 import React from "react";
 
 interface UkuleleChordDiagramProps {

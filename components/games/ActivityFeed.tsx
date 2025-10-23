@@ -1,4 +1,9 @@
 import { GAME_LABELS, GameType } from "@/constants/gameConstants";
+<<<<<<< HEAD
+=======
+import { PracticeEvent } from "@/lib/generated/prisma";
+import { formatDuration } from "@/lib/utils/dashboardUtils";
+>>>>>>> 669b364 (add instrument object with fret data)
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
 import { formatDistance, subDays } from "date-fns";

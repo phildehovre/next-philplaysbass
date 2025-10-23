@@ -9,7 +9,11 @@ import {
 	MAX_PITCH_HZ,
 	MIN_CLARITY,
 	MIN_PITCH_HZ,
+<<<<<<< HEAD
 } from "@/constants/gameConstants";
+=======
+} from "../../constants/gameConstants";
+>>>>>>> 669b364 (add instrument object with fret data)
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;

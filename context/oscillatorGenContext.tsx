@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useRef } from "react";
-import { UKE_TUNING, UkuleleShape } from "@/constants/chromaticScale";
+import { UKE_TUNING, UkuleleShape } from "@/constants/musicConstants";
 
 // Context shape
 type OscillatorGenContext = {

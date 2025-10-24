@@ -944,7 +944,7 @@ export const INSTRUMENTS: Record<string, InstrumentPreset> = {
 		frets: guitar6Frets,
 	},
 	bass4: {
-		label: "4-String Bass (B–G)",
+		label: "4-String Bass (E–G)",
 		strings: 4,
 		active: [true, true, true, true],
 		frets: bass4Frets,

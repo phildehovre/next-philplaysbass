@@ -35,6 +35,7 @@ export const useNoteMatchGame = () => {
 		"major",
 	]);
 	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>();
+	const [fretRange, setFretRange] = useState();
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -340,6 +341,7 @@ export const useNoteMatchGame = () => {
 			setLastTickTime,
 			setBpm,
 			setInstrumentPreset,
+			setFretRange,
 		},
 		actions: {
 			startGame,

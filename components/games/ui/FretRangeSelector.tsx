@@ -9,6 +9,7 @@ const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
 
 export default function FretRangeSelector(props: { game: any }) {
 	const { game } = props;
+	const { setters, state } = game;
 	const [instrument, setInstrument] =
 		useState<keyof typeof INSTRUMENTS>("guitar6");
 	const [range, setRange] = useState<[number, number]>([0, 12]);
@@ -24,11 +25,13 @@ export default function FretRangeSelector(props: { game: any }) {
 		const truncatedInstrument = INSTRUMENTS[instrument].frets.map((array) =>
 			array.slice(range[0], range[1])
 		);
-		setters.setFretRange(range);
-		setters.setInstrumentPreset(truncatedInstrument);
-	}, [range]);
 
-	const { setters } = game;
+		setters.setFretRange(range);
+		setters.setInstrumentPreset({
+			...INSTRUMENTS[instrument],
+			frets: truncatedInstrument,
+		});
+	}, [range]);
 
 	const currentStrings = INSTRUMENTS[instrument].strings;
 	const strings = Array.from({ length: currentStrings }, (_, i) => i);
@@ -46,6 +49,20 @@ export default function FretRangeSelector(props: { game: any }) {
 		setInstrument(selected);
 		setters.setInstrumentPreset(INSTRUMENTS[selected]);
 		setActiveStrings(INSTRUMENTS[selected].active);
+	};
+
+	const handleSetRange = (val: number[]) => {
+		const [start, end] = val as [number, number];
+		// Ensure there's always at least a 1-step gap
+		if (end - start < 1) {
+			if (range[0] !== start) {
+				setRange([start, start + 1]);
+			} else {
+				setRange([end - 1, end]);
+			}
+		} else {
+			setRange([start, end]);
+		}
 	};
 
 	return (
@@ -151,11 +168,11 @@ export default function FretRangeSelector(props: { game: any }) {
 					min={0}
 					max={24}
 					step={1}
-					onValueChange={(val) => setRange(val as [number, number])}
+					onValueChange={(val) => handleSetRange(val)}
 					className="w-full"
 				/>
 				<div className="text-sm text-center mt-2 text-stone-400">
-					Selected frets: {range[0]} – {range[1]}
+					Selected frets: {range[0]} – {range[1] > 0 ? range[1] - 1 : 0}
 				</div>
 			</div>
 		</div>

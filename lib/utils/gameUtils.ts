@@ -2,13 +2,20 @@ import { MS_LATENCY_OFFSET } from "@/constants/gameConstants";
 import {
 	arrayChromaticScale,
 	ChordType,
+	enharmonics,
 	formulae,
 	NOTE_LETTER_ORDER,
 	ScaleQuality,
 	UkeNote,
 	ukuleleChordShapes,
 } from "@/constants/musicConstants";
-import { ChordQuality, Note, NoteEvent, Score } from "@/types/types";
+import {
+	ChordQuality,
+	InstrumentPreset,
+	Note,
+	NoteEvent,
+	Score,
+} from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -23,8 +30,13 @@ export const buildScale = (
 	startingNote: string,
 	quality: ScaleQuality
 ): Note[] => {
+	const match = startingNote.match(/^([A-G][b#]?)(\d)$/);
+	if (match) {
+		var [_, noteName, octave] = match;
+	}
+	if (!match) throw new Error("No note name matched");
 	const rootIndex = arrayChromaticScale.findIndex((arr) =>
-		arr.includes(startingNote)
+		arr.includes(noteName)
 	);
 	if (rootIndex === -1) throw new Error("Invalid starting note");
 
@@ -105,6 +117,35 @@ const NOTE_NAMES = [
 	"B",
 ];
 
+export const selectRandomNoteFromRange = (
+	instrument: InstrumentPreset,
+	enharmonicProbability = 0.5
+): string => {
+	const activeStrings = instrument.frets.filter((_, i) => instrument.active[i]);
+	if (activeStrings.length === 0)
+		throw new Error("No active strings available");
+
+	const stringIndex = Math.floor(Math.random() * activeStrings.length);
+	const fretIndex = Math.floor(
+		Math.random() * activeStrings[stringIndex].length
+	);
+
+	let note = activeStrings[stringIndex][fretIndex];
+
+	// Apply enharmonic substitution with given probability
+	if (Math.random() < enharmonicProbability) {
+		// Extract base + octave (e.g., "F#" and "3")
+		const match = note.match(/^([A-G][b#]?)(\d)$/);
+		if (match) {
+			const [_, base, octave] = match;
+			const enharmonic = enharmonics[base];
+			if (enharmonic) note = `${enharmonic}${octave}`;
+		}
+	}
+
+	return note;
+};
+
 // A4 = 440 Hz, MIDI number 69
 export function getNoteFromPitch(frequency: number) {
 	// console.log("freq to note:: ", frequency);
@@ -148,30 +189,6 @@ export const calculateMsOffset = (bpm: number, lastTickTime: number | null) => {
 };
 
 export const normalizeNote = (note: string): UkeNote => {
-	const enharmonics: Record<string, UkeNote> = {
-		C: "C",
-		"B#": "C",
-		"C#": "C#",
-		Db: "C#",
-		D: "D",
-		"D#": "Eb",
-		Eb: "Eb",
-		E: "E",
-		Fb: "E",
-		F: "F",
-		"E#": "F",
-		"F#": "F#",
-		Gb: "F#",
-		G: "G",
-		"G#": "Ab",
-		Ab: "Ab",
-		A: "A",
-		"A#": "Bb",
-		Bb: "Bb",
-		B: "B",
-		Cb: "B",
-	};
-
 	const normalized = enharmonics[note];
 	if (!normalized) {
 		throw new Error(`Invalid note: ${note}`);

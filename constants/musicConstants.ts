@@ -1,4 +1,4 @@
-import { InstrumentPreset, Note } from "@/types/types";
+import { Note } from "@/types/types";
 
 export const arrayChromaticScale = [
 	["C"],

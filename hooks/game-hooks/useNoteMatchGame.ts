@@ -361,10 +361,7 @@ export const useNoteMatchGame = () => {
 			setBpm,
 			setInstrumentPreset,
 			setFretRange,
-<<<<<<< HEAD
 			setDuration,
-=======
->>>>>>> 2ce7fc9 (add instrument + range to context setters)
 		},
 		actions: {
 			startGame,

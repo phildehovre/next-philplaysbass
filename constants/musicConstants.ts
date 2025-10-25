@@ -1,4 +1,4 @@
-import { InstrumentPreset, Note } from "@/types/types";
+import { Note } from "@/types/types";
 
 export const arrayChromaticScale = [
 	["C"],
@@ -14,6 +14,30 @@ export const arrayChromaticScale = [
 	["A#", "Bb"],
 	["B"],
 ];
+
+export const enharmonics: Record<string, UkeNote> = {
+	C: "C",
+	"B#": "C",
+	"C#": "C#",
+	Db: "C#",
+	D: "D",
+	"D#": "Eb",
+	Eb: "Eb",
+	E: "E",
+	Fb: "E",
+	F: "F",
+	"E#": "F",
+	"F#": "F#",
+	Gb: "F#",
+	G: "G",
+	"G#": "Ab",
+	Ab: "Ab",
+	A: "A",
+	"A#": "Bb",
+	Bb: "Bb",
+	B: "B",
+	Cb: "B",
+};
 
 export type ScaleQuality = "major" | "minor" | "diminished" | "augmented";
 

@@ -6,6 +6,7 @@ import {
 	buildScale,
 	calculateMsOffset,
 	selectRandomNote,
+	selectRandomNoteFromRange,
 } from "@/lib/utils/gameUtils";
 import {
 	arrayChromaticScale,
@@ -19,6 +20,7 @@ import {
 } from "@/constants/gameConstants";
 import { InstrumentPreset, Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
+import { INSTRUMENTS } from "@/constants/instrumentConstants";
 
 export const useNoteMatchGame = () => {
 	// --- Game state ---
@@ -34,7 +36,9 @@ export const useNoteMatchGame = () => {
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
-	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>();
+	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
+		INSTRUMENTS["guitar6"]
+	);
 	const [fretRange, setFretRange] = useState();
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
@@ -165,10 +169,10 @@ export const useNoteMatchGame = () => {
 		setQuestionQuality(quality);
 
 		setPreviousNotes((prev) => {
-			let note = selectRandomNote();
+			let note = selectRandomNoteFromRange(instrumentPreset);
 			let attempts = 0;
 			while (prev.includes(note) && attempts < 10) {
-				note = selectRandomNote();
+				note = selectRandomNoteFromRange(instrumentPreset);
 				attempts++;
 			}
 

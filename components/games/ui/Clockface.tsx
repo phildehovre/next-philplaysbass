@@ -95,7 +95,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 			} clock-face relative flex items-center justify-center`}
 		>
 			{showSettings && <GameSettings gameType={gameType} game={game} />}
-			{gameStarted && <Blip bpm={bpm} />}
+			{/* {gameStarted && <Blip bpm={bpm} />} */}
 			{showPulse && <div className="pulse-ripple" />}
 			{showPulse && <div className="pulse-ripple delay" />}
 			<ScoreBurstManager />
@@ -111,7 +111,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				{showPowerUp && (
 					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
 				)}
-				{(withTimer || showProgress) && (
+				{withTimer && (
 					<circle
 						className="clock-progress"
 						cx={cx}
@@ -125,7 +125,6 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 						}}
 					/>
 				)}
-				...
 			</svg>
 
 			{/* Children */}

@@ -91,7 +91,6 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				{showPowerUp && (
 					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
 				)}
-
 				{withTimer && (
 					<circle
 						ref={progressRef}

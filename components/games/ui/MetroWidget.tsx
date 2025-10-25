@@ -22,6 +22,7 @@ type MetroWidgetPropsType = {
 	setLastTickTime: (t: number) => void;
 	controls?: boolean;
 	setPlay: React.Dispatch<React.SetStateAction<boolean>>;
+	withMetronome: boolean;
 };
 
 const MetroWidget = (props: MetroWidgetPropsType) => {
@@ -34,6 +35,7 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 		lastTickTime,
 		setLastTickTime,
 		setPlay,
+		withMetronome,
 	} = props;
 
 	const [tempoInterval, setTempoInterval] = useState<number | undefined>();
@@ -53,10 +55,10 @@ const MetroWidget = (props: MetroWidgetPropsType) => {
 	}, [bpm]);
 
 	useEffect(() => {
-		if (gameStarted) {
+		if (gameStarted && withMetronome) {
 			setPlay(true);
 		}
-		if (!gameStarted) {
+		if (!gameStarted || !withMetronome) {
 			setPlay(false);
 		}
 	}, [gameStarted]);

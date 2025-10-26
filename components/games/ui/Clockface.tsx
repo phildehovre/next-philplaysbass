@@ -101,7 +101,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 						r={radius}
 						strokeDasharray={2 * Math.PI * radius}
 						strokeLinecap="round"
-						style={{ transition: "all 0.2s ease-in-out" }}
+						style={{ transition: "none" }}
 					/>
 				)}
 			</svg>

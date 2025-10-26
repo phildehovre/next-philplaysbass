@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { ScoreBurstManager } from "./ScoreBurstManager";
-import Blip from "./Blip";
 import PowerUpBar from "./PowerUpBar";
 import { CLOCKFACE_DIMENSIONS } from "@/constants/clockFaceConstants";
 import { GameTypes } from "@/types/types";
@@ -18,9 +17,10 @@ type ClockfacePropsType = {
 	game?: any | undefined;
 	gameType: GameTypes;
 	showSettings?: boolean;
+	progress: number; // from hook
 };
 
-const { TAIL_LENGTH, radius, cx, cy } = CLOCKFACE_DIMENSIONS;
+const { radius, cx, cy, TAIL_LENGTH } = CLOCKFACE_DIMENSIONS;
 
 const Clockface: React.FC<ClockfacePropsType> = ({
 	game,
@@ -28,77 +28,46 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	children,
 	ringStroke,
 	className,
-	showProgress,
 	gameType,
 	showSettings = true,
-	size = 1,
+	progress,
 }) => {
-	const [angle, setAngle] = useState(0);
-	const [tail, setTail] = useState<{ x: number; y: number }[]>([]);
-
 	if (!game) return <Spinner />;
 
 	const { state } = game;
-	const { withTimer, gameStarted, showPulse, progress, bpm } = state;
+	const { withTimer, gameStarted, bpm } = state;
 
+	const progressRef = useRef<SVGCircleElement>(null);
 	const lastAngleRef = useRef(0);
 
-	const [blipActive, setBlipActive] = useState(false);
-
+	// Smoothly update the stroke of the progress circle
 	useEffect(() => {
-		if (!bpm || !gameStarted) return;
+		if (!withTimer || !progressRef.current) return;
+		const circumference = 2 * Math.PI * radius;
 
-		const beatDuration = (60 / bpm) * 1000;
-		let raf: number;
-		const startTime = performance.now();
-
-		const animate = (time: number) => {
-			const elapsed = (time - startTime) % beatDuration;
-			const progress = elapsed / beatDuration;
-			const newAngle = progress * 360;
-
-			// Trigger blip at top of each beat
-			if (progress < 0.05 && lastAngleRef.current > 350) {
-				setBlipActive(true);
-				requestAnimationFrame(() => setBlipActive(false));
-			}
-
-			lastAngleRef.current = newAngle;
-			setAngle(newAngle);
-
-			raf = requestAnimationFrame(animate);
+		const update = () => {
+			const offset = (1 - progress / 100) * circumference;
+			progressRef.current!.style.strokeDashoffset = `${offset}`;
+			requestAnimationFrame(update);
 		};
 
-		raf = requestAnimationFrame(animate);
-		return () => cancelAnimationFrame(raf);
-	}, [bpm, gameStarted]);
+		update();
+	}, [withTimer, progress]);
 
-	// Marker coordinates
-	const markerX = cx + radius * Math.cos(angle * (Math.PI / 180));
-	const markerY = cy + radius * Math.sin(angle * (Math.PI / 180));
-
-	// Update tail
-	useEffect(() => {
-		if (gameStarted) {
-			setTail((prev) => {
-				const newTail = [...prev, { x: markerX, y: markerY }];
-				if (newTail.length > TAIL_LENGTH) newTail.shift();
-				return newTail;
-			});
-		}
-	}, [markerX, markerY, gameStarted, gameType]);
+	// Optional: you can also smooth the angle for the marker
+	const angle = (progress / 100) * 360;
+	const markerX = cx + radius * Math.cos((angle * Math.PI) / 180);
+	const markerY = cy + radius * Math.sin((angle * Math.PI) / 180);
 
 	return (
 		<div
 			className={`${
-				className ? className : ""
+				className ?? ""
 			} clock-face relative flex items-center justify-center`}
 		>
 			{showSettings && <GameSettings gameType={gameType} game={game} />}
-			{/* {gameStarted && <Blip bpm={bpm} />} */}
-			{showPulse && <div className="pulse-ripple" />}
-			{showPulse && <div className="pulse-ripple delay" />}
 			<ScoreBurstManager />
+
 			<svg viewBox="0 0 100 100" className="clock-svg">
 				{/* Base circle */}
 				<circle
@@ -108,21 +77,21 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 					r={radius}
 					style={{ strokeWidth: `${ringStroke ? ringStroke / 2 : 10}` }}
 				/>
+
 				{showPowerUp && (
 					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
 				)}
+
 				{withTimer && (
 					<circle
+						ref={progressRef}
 						className="clock-progress"
 						cx={cx}
 						cy={cy}
-						strokeLinecap="round"
 						r={radius}
 						strokeDasharray={2 * Math.PI * radius}
-						strokeDashoffset={(1 - progress / 100) * 2 * Math.PI * radius}
-						style={{
-							transition: "stroke-dashoffset 0.3s ease-out",
-						}}
+						strokeLinecap="round"
+						style={{ transition: "none" }}
 					/>
 				)}
 			</svg>

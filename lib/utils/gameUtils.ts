@@ -9,13 +9,7 @@ import {
 	UkeNote,
 	ukuleleChordShapes,
 } from "@/constants/musicConstants";
-import {
-	ChordQuality,
-	InstrumentPreset,
-	Note,
-	NoteEvent,
-	Score,
-} from "@/types/types";
+import { ChordQuality, InstrumentPreset, Note } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -148,7 +142,6 @@ export const selectRandomNoteFromRange = (
 
 // A4 = 440 Hz, MIDI number 69
 export function getNoteFromPitch(frequency: number) {
-	// console.log("freq to note:: ", frequency);
 	const A4 = 440;
 	const SEMITONES_PER_OCTAVE = 12;
 

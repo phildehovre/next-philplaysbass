@@ -5,35 +5,29 @@ import { INSTRUMENTS } from "@/constants/instrumentConstants";
 
 // Instrument presets
 const FRET_RANGE = 24;
-const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
 
 export default function FretRangeSelector(props: { game: any }) {
 	const { game } = props;
 	const { setters, state } = game;
-	const [instrument, setInstrument] =
-		useState<keyof typeof INSTRUMENTS>("guitar6");
 	const [range, setRange] = useState<[number, number]>([0, 12]);
 	const [activeStrings, setActiveStrings] = useState<boolean[]>(
-		INSTRUMENTS[instrument].active
+		state.instrumentPreset.active
 	);
 
+	const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
 	useEffect(() => {
-		setters.setInstrumentPreset(INSTRUMENTS["guitar6"]);
-	}, []);
-
-	useEffect(() => {
-		const truncatedInstrument = INSTRUMENTS[instrument].frets.map((array) =>
-			array.slice(range[0], range[1])
+		setters.setFretRange(range);
+		const truncatedInstrument = state.instrumentPreset.frets.map(
+			(array: string[]) => array.slice(range[0], range[1])
 		);
 
-		setters.setFretRange(range);
 		setters.setInstrumentPreset({
-			...INSTRUMENTS[instrument],
+			...state.instrumentPreset,
 			frets: truncatedInstrument,
 		});
 	}, [range]);
 
-	const currentStrings = INSTRUMENTS[instrument].strings;
+	const currentStrings = state.instrumentPreset.strings;
 	const strings = Array.from({ length: currentStrings }, (_, i) => i);
 
 	const toggleString = (index: number) => {
@@ -46,8 +40,10 @@ export default function FretRangeSelector(props: { game: any }) {
 
 	const handleInstrumentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selected = e.target.value as keyof typeof INSTRUMENTS;
-		setInstrument(selected);
-		setters.setInstrumentPreset(INSTRUMENTS[selected]);
+		setters.setInstrumentPreset({
+			...INSTRUMENTS[selected],
+			key: selected,
+		});
 		setActiveStrings(INSTRUMENTS[selected].active);
 	};
 
@@ -71,7 +67,7 @@ export default function FretRangeSelector(props: { game: any }) {
 			<div className="w-full mb-2">
 				<label className="text-sm text-stone-400 mr-2">Instrument:</label>
 				<select
-					value={instrument}
+					value={state.instrumentPreset.key}
 					onChange={handleInstrumentChange}
 					className="bg-stone-800 text-stone-200 rounded-md px-3 py-1 text-sm border border-stone-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 				>

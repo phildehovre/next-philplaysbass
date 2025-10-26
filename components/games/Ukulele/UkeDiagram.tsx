@@ -17,8 +17,6 @@ const UkeDiagram = ({ chord, numFrets = 5, detectedStrings = [] }: Props) => {
 	const diagramWidth = stringSpacing * (stringCount - 1) + startX * 2;
 	const diagramHeight = fretHeight * numFrets + startY;
 
-	console.log(detectedStrings);
-
 	return (
 		<svg width={diagramWidth} height={diagramHeight}>
 			{/* Strings (vertical lines) */}

@@ -5,11 +5,9 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import {
 	buildScale,
 	calculateMsOffset,
-	selectRandomNote,
 	selectRandomNoteFromRange,
 } from "@/lib/utils/gameUtils";
 import {
-	arrayChromaticScale,
 	ScaleQuality,
 	selectRandomInversion,
 } from "@/constants/musicConstants";
@@ -37,9 +35,9 @@ export const useNoteMatchGame = () => {
 		"major",
 	]);
 	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
-		INSTRUMENTS["guitar6"]
+		INSTRUMENTS["bass4"]
 	);
-	const [fretRange, setFretRange] = useState();
+	const [fretRange, setFretRange] = useState([0, 12]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -212,12 +210,13 @@ export const useNoteMatchGame = () => {
 
 	const evaluateNotePlayed = useCallback(
 		async (noteInfo: NoteInfo) => {
+			console.log(noteInfo.noteName, instrumentPreset.frets.flat());
 			if (!gameStarted) return;
 			const notePlayed = noteInfo.noteName;
 			const selected = withArpeggios
 				? questionArpeggio[arpeggioPlayed.length]
 				: selectedNote;
-			const matchSet = arrayChromaticScale.find((group) =>
+			const matchSet = instrumentPreset.frets.find((group) =>
 				group.includes(notePlayed)
 			);
 			return matchSet?.includes(selected);
@@ -332,6 +331,7 @@ export const useNoteMatchGame = () => {
 			countdown,
 			bpm,
 			lastTickTime,
+			instrumentPreset,
 		},
 
 		setters: {

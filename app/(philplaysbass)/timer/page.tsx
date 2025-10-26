@@ -18,8 +18,6 @@ const page = async () => {
 
 	const routines = await getUserPracticeRoutines();
 
-	console.log(routines);
-
 	return (
 		<main className="flex justify-center">
 			<PracticeSessionProvider>

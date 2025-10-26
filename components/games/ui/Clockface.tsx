@@ -43,15 +43,25 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	// Smoothly update the stroke of the progress circle
 	useEffect(() => {
 		if (!withTimer || !progressRef.current) return;
+
+		const circle = progressRef.current;
 		const circumference = 2 * Math.PI * radius;
+		let rafId: number;
+		let mounted = true;
 
 		const update = () => {
+			if (!mounted || !circle) return;
 			const offset = (1 - progress / 100) * circumference;
-			progressRef.current!.style.strokeDashoffset = `${offset}`;
-			requestAnimationFrame(update);
+			circle.style.strokeDashoffset = `${offset}`;
+			rafId = requestAnimationFrame(update);
 		};
 
 		update();
+
+		return () => {
+			mounted = false;
+			cancelAnimationFrame(rafId);
+		};
 	}, [withTimer, progress]);
 
 	// Optional: you can also smooth the angle for the marker
@@ -91,7 +101,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 						r={radius}
 						strokeDasharray={2 * Math.PI * radius}
 						strokeLinecap="round"
-						style={{ transition: "none" }}
+						style={{ transition: "all 0.2s ease-in-out" }}
 					/>
 				)}
 			</svg>

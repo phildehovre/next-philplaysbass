@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import PitchyComponent from "../PitchyComponent";
 import { NoteInfo } from "@/types/types";
+<<<<<<< HEAD
 import { MS_LATENCY_OFFSET } from "../../../constants/gameConstants";
+=======
+import { MS_LATENCY_OFFSET } from "@/constants/gameConstants";
+>>>>>>> 97f16d1 (fix gameConstants.ts filename change)
 
 const HorizontalPulseVisualisation = ({
 	play,

@@ -212,6 +212,7 @@ export const useNoteMatchGame = () => {
 
 	const evaluateNotePlayed = useCallback(
 		async (noteInfo: NoteInfo) => {
+			console.log(noteInfo.noteName, instrumentPreset.frets.flat());
 			if (!gameStarted) return;
 			let notePlayed = noteInfo.display;
 			let selected = withArpeggios

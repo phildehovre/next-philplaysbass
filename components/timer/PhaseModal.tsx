@@ -31,7 +31,6 @@ const PhaseModal = (props: PhaseModalProps) => {
 
 	if (!show) return;
 
-	console.log(autoStart);
 	return (
 		<Modal className="box" onClose={() => {}}>
 			<h1 className="text-2xl font-bold ">Add Timer Phase</h1>

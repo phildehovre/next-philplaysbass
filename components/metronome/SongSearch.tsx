@@ -21,7 +21,6 @@ const SongSearch = () => {
 			return;
 		}
 		const result = await searchSpotifySongsByArtistName(data.searchTerm, token);
-		console.log(result);
 	};
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>

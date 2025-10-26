@@ -6,10 +6,17 @@ import {
 	MIN_TEMPO_AS_NUM,
 	MIN_TEMPO_AS_STR,
 <<<<<<< HEAD
+<<<<<<< HEAD
 } from "@/constants/gameConstants";
 =======
 } from "../../../constants/gameConstants";
 >>>>>>> 669b364 (add instrument object with fret data)
+=======
+} from "../../../constants/gameConstants";
+=======
+} from "@/constants/gameConstants";
+>>>>>>> 97f16d1 (fix gameConstants.ts filename change)
+>>>>>>> d73997e (rebase master)
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 import { CookingPot, Minus, Pause, Play, Plus } from "lucide-react";
 

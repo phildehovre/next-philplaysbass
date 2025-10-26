@@ -1,9 +1,6 @@
 import { GAME_LABELS, GameType } from "@/constants/gameConstants";
-<<<<<<< HEAD
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
-=======
->>>>>>> 97f16d1 (fix gameConstants.ts filename change)
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
 import { formatDistance, subDays } from "date-fns";

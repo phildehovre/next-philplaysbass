@@ -10,7 +10,7 @@ import UkeDiagramWithNotes from "./DetectedNotesDisplay";
 import { QUALITY } from "@/constants/chromaticScale";
 import "./GameStylesRedux.css";
 import { useNoteMatchGame } from "@/hooks/game-hooks/useNoteMatchGame";
-import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
+import { NOTE_MATCH_TYPE } from "@/constants/gameConstants";
 
 const ChordDetectionGame = () => {
 	const game = useNoteMatchGame();

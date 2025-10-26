@@ -16,7 +16,7 @@ import {
 	COOLDOWN_MS,
 	MAX_TEMPO_AS_NUM,
 	NOTE_MATCH_TYPE,
-} from "@/constants/GameConstants";
+} from "@/constants/gameConstants";
 import { Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 

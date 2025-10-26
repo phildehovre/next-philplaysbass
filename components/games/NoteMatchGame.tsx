@@ -17,7 +17,7 @@ import { useNoteMatchGameContext } from "@/context/noteMatchGameContext";
 import GameContainer from "./ui/GameContainer";
 import { handleTabClose } from "@/lib/utils";
 import AnimatedGridRow from "./ui/AnimatedGridRow";
-import { NOTE_MATCH_TYPE } from "@/constants/GameConstants";
+import { NOTE_MATCH_TYPE } from "@/constants/gameConstants";
 import GameSettings from "./GameSettings";
 
 const NoteMatchGame = () => {

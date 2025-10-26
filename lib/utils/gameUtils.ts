@@ -1,4 +1,4 @@
-import { MS_LATENCY_OFFSET } from "@/constants/GameConstants";
+import { MS_LATENCY_OFFSET } from "@/constants/gameConstants";
 import {
 	arrayChromaticScale,
 	ChordType,

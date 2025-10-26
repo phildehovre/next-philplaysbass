@@ -33,8 +33,7 @@ const NoteMatchGame = () => {
 		isFirstTimeUser,
 	} = usePracticeSession();
 
-	const game = useNoteMatchGameContext();
-	const { state, setters, actions } = game;
+	const { progress, state, setters, actions } = useNoteMatchGameContext();
 
 	useEffect(() => {
 		handleTabClose(finishSession);
@@ -89,7 +88,10 @@ const NoteMatchGame = () => {
 						Practice mode
 					</p>
 				</label>
-				<GameSettings gameType={NOTE_MATCH_TYPE} game={game} />
+				<GameSettings
+					gameType={NOTE_MATCH_TYPE}
+					game={{ state, setters, actions }}
+				/>
 			</div>
 
 			<div className="scoreboard_ctn flex w-full ">
@@ -129,7 +131,11 @@ const NoteMatchGame = () => {
 					/>
 				</div>
 			</AnimatedGridRow>
-			<Clockface gameType={NOTE_MATCH_TYPE} game={game}>
+			<Clockface
+				gameType={NOTE_MATCH_TYPE}
+				game={{ state, setters, actions }}
+				progress={progress}
+			>
 				<StreakManager />
 				<div className={`game_question inversions `}>
 					{isLoading ? (
@@ -196,7 +202,7 @@ const NoteMatchGame = () => {
 					</label>
 				</div>
 			</AnimatedGridRow>
-			<FretRangeSelector game={game} />
+			<FretRangeSelector game={{ state, setters, actions }} />
 
 			<PitchyComponent
 				showDevices={true}

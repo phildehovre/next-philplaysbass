@@ -116,9 +116,6 @@ export const useNoteMatchGame = () => {
 		setShowShake(false);
 	}, []);
 
-	console.log("progress: ", progress);
-	console.log("duration: ", duration);
-
 	// ======== TIMER LOGIC ========
 	const startTimer = () => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -293,7 +290,7 @@ export const useNoteMatchGame = () => {
 			init();
 			if (withTimer) startTimer();
 		}
-	}, [arpeggioPlayed]);
+	}, [arpeggioPlayed, duration]);
 
 	const startGame = useCallback(async () => {
 		resetGame();
@@ -312,6 +309,7 @@ export const useNoteMatchGame = () => {
 	}, [resetGame, finishSession, events]);
 
 	return {
+		progress,
 		state: {
 			selectedNote,
 			questionQuality,
@@ -324,7 +322,6 @@ export const useNoteMatchGame = () => {
 			score,
 			selectedQualities,
 			arpeggioPlayed,
-			progress,
 			previousNotes,
 			gameStarted,
 			isPracticeMode,

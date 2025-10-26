@@ -43,6 +43,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 	// Smoothly update the stroke of the progress circle
 	useEffect(() => {
 		if (!withTimer || !progressRef.current) return;
+<<<<<<< HEAD
 
 		const circle = progressRef.current;
 		const circumference = 2 * Math.PI * radius;
@@ -64,6 +65,19 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 		};
 	}, [withTimer, progress]);
 
+=======
+		const circumference = 2 * Math.PI * radius;
+
+		const update = () => {
+			const offset = (1 - progress / 100) * circumference;
+			progressRef.current!.style.strokeDashoffset = `${offset}`;
+			requestAnimationFrame(update);
+		};
+
+		update();
+	}, [withTimer, progress]);
+
+>>>>>>> ea095c8 (progress fixed)
 	// Optional: you can also smooth the angle for the marker
 	const angle = (progress / 100) * 360;
 	const markerX = cx + radius * Math.cos((angle * Math.PI) / 180);
@@ -91,6 +105,7 @@ const Clockface: React.FC<ClockfacePropsType> = ({
 				{showPowerUp && (
 					<PowerUpBar cx={cx} cy={cy} radius={radius} progress={progress} />
 				)}
+
 				{withTimer && (
 					<circle
 						ref={progressRef}

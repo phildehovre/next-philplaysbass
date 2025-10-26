@@ -119,9 +119,6 @@ export const useNoteMatchGame = () => {
 		setShowShake(false);
 	}, []);
 
-	console.log("progress: ", progress);
-	console.log("duration: ", duration);
-
 	// ======== TIMER LOGIC ========
 	const startTimer = () => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);

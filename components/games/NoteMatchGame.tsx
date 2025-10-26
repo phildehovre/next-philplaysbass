@@ -107,7 +107,6 @@ const NoteMatchGame = () => {
 					<AnimatedNumber data={state.score.wins} />
 				</div>
 			</div>
-
 			<Clockface
 				gameType={NOTE_MATCH_TYPE}
 				game={{ state, setters, actions }}

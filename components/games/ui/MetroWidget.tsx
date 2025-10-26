@@ -7,6 +7,7 @@ import {
 	MIN_TEMPO_AS_STR,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } from "@/constants/gameConstants";
 =======
 } from "../../../constants/gameConstants";
@@ -17,6 +18,9 @@ import {
 } from "@/constants/gameConstants";
 >>>>>>> 97f16d1 (fix gameConstants.ts filename change)
 >>>>>>> d73997e (rebase master)
+=======
+} from "../../../constants/gameConstants";
+>>>>>>> c2e94ae (fix gameConstants.ts filename change)
 import HorizontalPulseVisualisation from "./HorizontalPulseVisualisation";
 import { CookingPot, Minus, Pause, Play, Plus } from "lucide-react";
 

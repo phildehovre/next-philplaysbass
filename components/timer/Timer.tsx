@@ -104,13 +104,17 @@ const Timer = (props: TimerComponentProps) => {
 			setProgress(0);
 			return;
 		}
+
 		const currentTimer = timerArray[currentIndex];
-		if (!currentTimer) return;
-		setProgress(
-			((currentTimer.initialDuration - remainingTime) /
-				currentTimer.initialDuration) *
-				100
-		);
+		if (!currentTimer || !currentTimer.initialDuration) return;
+
+		const elapsed =
+			currentTimer.initialDuration -
+			(remainingTime ?? currentTimer.initialDuration);
+		const rawProgress = (elapsed / currentTimer.initialDuration) * 100;
+		const clampedProgress = Math.min(Math.max(rawProgress, 0), 100);
+
+		setProgress(clampedProgress);
 	}, [remainingTime, started, currentIndex, timerArray]);
 
 	// handle tab close
@@ -265,6 +269,7 @@ const Timer = (props: TimerComponentProps) => {
 					lastTickTime={null}
 					setLastTickTime={() => {}}
 					controls={true}
+					withMetronome={showMetronome}
 				/>
 			</AnimatedGridRow>
 
@@ -277,11 +282,11 @@ const Timer = (props: TimerComponentProps) => {
 					game={{
 						state: {
 							showPulse: false,
-							withTimer: false,
-							progress,
+							withTimer: true,
 							gameStarted: started,
 						},
 					}}
+					progress={progress}
 				>
 					{showTuner && <SemiCircleTuner />}
 					{timerArray.length == 0 && !showTuner && (

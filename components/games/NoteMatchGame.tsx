@@ -125,7 +125,7 @@ const NoteMatchGame = () => {
 						min="10"
 						max="100"
 						onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
-						onMouseUp={() => setDuration(displayedDuration)}
+						onMouseUp={() => setters.setDuration(displayedDuration)}
 					/>
 				</div>
 			</AnimatedGridRow>

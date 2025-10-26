@@ -34,6 +34,10 @@ export const useNoteMatchGame = () => {
 	const [selectedQualities, setSelectedQualities] = useState<ScaleQuality[]>([
 		"major",
 	]);
+	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
+		INSTRUMENTS["bass4"]
+	);
+	const [fretRange, setFretRange] = useState<number[]>([0, 12]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -44,8 +48,7 @@ export const useNoteMatchGame = () => {
 	const [countdown, setCountdown] = useState(false);
 	const [bpm, setBpm] = useState(MAX_TEMPO_AS_NUM / 2);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
-	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
-	const [duration, setDuration] = useState<number>(displayedDuration);
+	const [duration, setDuration] = useState<number>(5000);
 
 	// --- Refs ---
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -112,6 +115,9 @@ export const useNoteMatchGame = () => {
 		setShowPulse(false);
 		setShowShake(false);
 	}, []);
+
+	console.log("progress: ", progress);
+	console.log("duration: ", duration);
 
 	// ======== TIMER LOGIC ========
 	const startTimer = () => {
@@ -298,7 +304,7 @@ export const useNoteMatchGame = () => {
 			setProgress(0);
 			startTimer();
 		}
-	}, [resetGame, init, withTimer]);
+	}, [resetGame, init, withTimer, duration]);
 
 	const stopGame = useCallback(() => {
 		resetGame();
@@ -340,6 +346,9 @@ export const useNoteMatchGame = () => {
 			setCountdown,
 			setLastTickTime,
 			setBpm,
+			setInstrumentPreset,
+			setFretRange,
+			setDuration,
 		},
 		actions: {
 			startGame,

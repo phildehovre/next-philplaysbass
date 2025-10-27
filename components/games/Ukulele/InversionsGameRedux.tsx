@@ -22,13 +22,13 @@ const ChordDetectionGame = () => {
 			withTimer,
 			score,
 			selectedQualities,
-			progress,
 			gameStarted,
 			showPulse,
 			countdown,
 		},
 		setters: { setSelectedQualities, setCountdown },
 		actions: { startGame, stopGame, onNoteDetection },
+		progress,
 	} = game;
 
 	return (
@@ -44,7 +44,7 @@ const ChordDetectionGame = () => {
 			</div>
 
 			{/* === Clockface and main game area === */}
-			<Clockface game={game} gameType={NOTE_MATCH_TYPE}>
+			<Clockface game={game} gameType={NOTE_MATCH_TYPE} progress={progress}>
 				<div className="game_question inversions">
 					{(() => {
 						if (!gameStarted) {

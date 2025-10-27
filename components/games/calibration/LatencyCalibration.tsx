@@ -95,6 +95,8 @@ const LatencyCalibration = (props: {
 				gameStarted={play}
 				lastTickTime={lastTickTime}
 				setLastTickTime={setLastTickTime}
+				setPlay={setPlay}
+				withMetronome={true}
 			/>
 			<PitchyWithDeviceSelect onNoteDetection={onNoteDetection} />
 
@@ -127,12 +129,12 @@ const LatencyCalibration = (props: {
 					showProgress: true,
 					state: {
 						withTimer: false,
-						progress: Math.min(
-							(latencySamples.length / REQUIRED_SAMPLES) * 100,
-							100
-						),
 					},
 				}}
+				progress={Math.min(
+					(latencySamples.length / REQUIRED_SAMPLES) * 100,
+					100
+				)}
 				showSettings={false}
 				gameType={FREE_PRACTICE_TYPE}
 			>

@@ -64,6 +64,7 @@ const RhythmAccuracyGame = () => {
 				gameType={RHYTHM_ACCURACY_TYPE}
 				game={game}
 				className="gsap-element"
+				progress={0}
 			>
 				<div className={`game_question inversions `}>
 					{!state.gameStarted ? (
@@ -99,6 +100,8 @@ const RhythmAccuracyGame = () => {
 					setBpm={setBpm}
 					lastTickTime={state.lastTickTime}
 					setLastTickTime={setters.setLastTickTime}
+					setPlay={() => {}}
+					withMetronome={state.withMetronome}
 				/>
 			</div>
 

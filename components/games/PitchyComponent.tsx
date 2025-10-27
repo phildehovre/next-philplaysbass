@@ -12,6 +12,7 @@ import {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } from "@/constants/gameConstants";
 =======
 } from "../../constants/gameConstants";
@@ -25,6 +26,9 @@ import {
 =======
 } from "../../constants/gameConstants";
 >>>>>>> c2e94ae (fix gameConstants.ts filename change)
+=======
+} from "@/constants/gameConstants";
+>>>>>>> 434ea54 (fix gameConstant import)
 
 type PitchyComponentProps = {
 	onNoteDetection: (notes: NoteInfo) => void;

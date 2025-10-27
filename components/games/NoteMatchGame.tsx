@@ -107,30 +107,7 @@ const NoteMatchGame = () => {
 					<AnimatedNumber data={state.score.wins} />
 				</div>
 			</div>
-			<AnimatedGridRow active={state.withMetronome} className="my-2">
-				<MetroWidget
-					{...state}
-					{...setters}
-					{...actions}
-					setPlay={setPlay}
-					play={play}
-				/>
-			</AnimatedGridRow>
-			<AnimatedGridRow active={state.withTimer}>
-				<div className="flex w-full">
-					<h1 className="scoreboard timer w-12 text-xs flex items-center">
-						{displayedDuration / 1000} s
-					</h1>
-					<input
-						className="w-full"
-						type="range"
-						min="10"
-						max="100"
-						onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
-						onMouseUp={() => setters.setDuration(displayedDuration)}
-					/>
-				</div>
-			</AnimatedGridRow>
+
 			<Clockface
 				gameType={NOTE_MATCH_TYPE}
 				game={{ state, setters, actions }}
@@ -192,6 +169,31 @@ const NoteMatchGame = () => {
 					)}
 				</div>
 			</Clockface>
+
+			<AnimatedGridRow active={state.withMetronome} className="my-2">
+				<MetroWidget
+					{...state}
+					{...setters}
+					{...actions}
+					setPlay={setPlay}
+					play={play}
+				/>
+			</AnimatedGridRow>
+			<AnimatedGridRow active={state.withTimer}>
+				<div className="flex w-full">
+					<h1 className="scoreboard timer w-12 text-xs flex items-center">
+						{displayedDuration / 1000} s
+					</h1>
+					<input
+						className="w-full"
+						type="range"
+						min="10"
+						max="100"
+						onChange={(e) => setDisplayedDuration(e.target.valueAsNumber * 100)}
+						onMouseUp={() => setters.setDuration(displayedDuration)}
+					/>
+				</div>
+			</AnimatedGridRow>
 			<AnimatedGridRow active={state.withArpeggios}>
 				<div className="mb-2">
 					<label htmlFor="scale_types">
@@ -202,7 +204,9 @@ const NoteMatchGame = () => {
 					</label>
 				</div>
 			</AnimatedGridRow>
-			<FretRangeSelector game={{ state, setters, actions }} />
+			<AnimatedGridRow active={state.withFretboard}>
+				<FretRangeSelector game={{ state, setters, actions }} />
+			</AnimatedGridRow>
 
 			<PitchyComponent
 				showDevices={true}

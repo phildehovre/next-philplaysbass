@@ -2,7 +2,13 @@
 "use client";
 
 import React from "react";
-import { Drum, Piano, Timer, ArrowUpDown } from "lucide-react";
+import {
+	Drum,
+	Piano,
+	Timer,
+	ArrowUpDown,
+	RulerDimensionLine,
+} from "lucide-react";
 import {
 	Tooltip,
 	TooltipContent,
@@ -17,12 +23,14 @@ type GameOptionsSwitchesProps = {
 		withTimer: boolean;
 		withArpeggios: boolean;
 		withInversions: boolean;
+		withFretboard: boolean;
 	};
 	setters: {
 		setWithMetronome: (val: boolean) => void;
 		setWithTimer: (val: boolean) => void;
 		setWithArpeggios: (val: boolean) => void;
 		setWithInversions: (val: boolean) => void;
+		setWithFretboard: (val: boolean) => void;
 	};
 };
 
@@ -88,6 +96,21 @@ const NoteMatchOptionsSwitches: React.FC<GameOptionsSwitchesProps> = ({
 					</label>
 				</TooltipTrigger>
 				<TooltipContent side="right">Practice with inversions</TooltipContent>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<label className="flex items-center gap-2 justify-between">
+							<RulerDimensionLine size={18} color={"lightGray"} />
+							<Switch
+								disabled={state.gameStarted}
+								checked={state.withFretboard}
+								onCheckChange={setters.setWithFretboard}
+							/>
+						</label>
+					</TooltipTrigger>
+					<TooltipContent side="right">
+						Select a range on the instrument, you must play the same octave!
+					</TooltipContent>
+				</Tooltip>{" "}
 			</Tooltip>
 		</div>
 	);

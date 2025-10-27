@@ -9,7 +9,7 @@ import {
 	UkeNote,
 	ukuleleChordShapes,
 } from "@/constants/musicConstants";
-import { ChordQuality, InstrumentPreset, Note } from "@/types/types";
+import { ChordQuality, InstrumentPreset, Note, NoteInfo } from "@/types/types";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -152,6 +152,20 @@ export const selectRandomNoteFromRange = (
 	}
 
 	return note;
+};
+
+export const separateNoteAndOctave = (note: string) => {
+	const match = note.match(/^([A-G][b#]?)(\d)$/);
+	if (match) {
+		const [_, base, octave] = match;
+		return [base, octave];
+	}
+	console.log(
+		"%cerror lib/utils/gameUtils.ts line:163 ",
+		"color: red; display: block; width: 100%;",
+		"No note found"
+	);
+	return [];
 };
 
 // A4 = 440 Hz, MIDI number 69

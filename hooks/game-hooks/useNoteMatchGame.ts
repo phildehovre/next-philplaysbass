@@ -7,6 +7,7 @@ import {
 	calculateMsOffset,
 	normalizeNote,
 	selectRandomNoteFromRange,
+	separateNoteAndOctave,
 } from "@/lib/utils/gameUtils";
 import {
 	ScaleQuality,
@@ -50,6 +51,7 @@ export const useNoteMatchGame = () => {
 	const [bpm, setBpm] = useState(MAX_TEMPO_AS_NUM / 2);
 	const [lastTickTime, setLastTickTime] = useState<number | null>(0);
 	const [duration, setDuration] = useState<number>(5000);
+	const [withFretboard, setWithFretboard] = useState<boolean>(false);
 
 	// --- Refs ---
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -211,14 +213,28 @@ export const useNoteMatchGame = () => {
 	const evaluateNotePlayed = useCallback(
 		async (noteInfo: NoteInfo) => {
 			if (!gameStarted) return;
-			const notePlayed = noteInfo.display;
-			const selected = withArpeggios
+			let notePlayed = noteInfo.display;
+			let selected = withArpeggios
 				? questionArpeggio[arpeggioPlayed.length]
 				: selectedNote;
 
+			// Default game mechanic, no octave check
+			if (!withFretboard) {
+				const [playedBase, _] = separateNoteAndOctave(notePlayed);
+				const [selectedBase, __] = separateNoteAndOctave(selected);
+				return playedBase == selectedBase;
+			}
+			// With octave check
 			return notePlayed == selected;
 		},
-		[gameStarted, questionArpeggio, arpeggioPlayed, selectedNote, withArpeggios]
+		[
+			gameStarted,
+			questionArpeggio,
+			arpeggioPlayed,
+			selectedNote,
+			withArpeggios,
+			withFretboard,
+		]
 	);
 
 	const onNoteDetection = useCallback(
@@ -329,6 +345,7 @@ export const useNoteMatchGame = () => {
 			bpm,
 			lastTickTime,
 			instrumentPreset,
+			withFretboard,
 		},
 
 		setters: {
@@ -336,6 +353,7 @@ export const useNoteMatchGame = () => {
 			setWithMetronome,
 			setWithArpeggios,
 			setWithInversions,
+			setWithFretboard,
 			setSelectedQualities,
 			setIsPracticeMode,
 			setCountdown,

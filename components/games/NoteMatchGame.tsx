@@ -34,6 +34,7 @@ const NoteMatchGame = () => {
 	} = usePracticeSession();
 
 	const { progress, state, setters, actions } = useNoteMatchGameContext();
+	console.log(totalScore);
 
 	useEffect(() => {
 		handleTabClose(finishSession);

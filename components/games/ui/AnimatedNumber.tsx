@@ -19,9 +19,8 @@ const AnimatedNumber = ({ data }: { data: number | Date | string }) => {
 					transition={{ duration: 0.3 }}
 					className="absolute mx-auto"
 				>
-					{}
+					{data.toLocaleString()}
 				</motion.span>
-				data
 			</AnimatePresence>
 		</div>
 	);

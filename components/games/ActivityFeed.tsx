@@ -1,10 +1,8 @@
 import { GAME_LABELS, GameType } from "@/constants/gameConstants";
-import { PracticeEvent } from "@/lib/generated/prisma";
-import { formatDuration } from "@/lib/utils/dashboardUtils";
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
-import { formatDistance, subDays } from "date-fns";
-import React, { act, useEffect, useState } from "react";
+import { formatDistance } from "date-fns";
+import React, { useEffect, useState } from "react";
 
 const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 	const { userData } = props;

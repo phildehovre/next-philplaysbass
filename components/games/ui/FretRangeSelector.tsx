@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { INSTRUMENTS } from "@/constants/instrumentConstants";
 
@@ -14,17 +14,17 @@ export default function FretRangeSelector(props: { game: any }) {
 		state.instrumentPreset.active
 	);
 
-	const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
-	useEffect(() => {
-		setters.setFretRange(range);
-		const truncatedInstrument = state.instrumentPreset.frets.map(
-			(array: string[]) => array.slice(range[0], range[1])
-		);
+	const originalFretsRef = useRef<string[][]>(state.instrumentPreset.frets);
 
-		setters.setInstrumentPreset({
-			...state.instrumentPreset,
-			frets: truncatedInstrument,
-		});
+	const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
+
+	useEffect(() => {
+		const [start, end] = range;
+
+		// Prevent invalid truncation when thumbs overlap or invert
+		if (end <= start) return;
+
+		setters.setFretRange(range);
 	}, [range]);
 
 	const currentStrings = state.instrumentPreset.strings;
@@ -48,17 +48,19 @@ export default function FretRangeSelector(props: { game: any }) {
 	};
 
 	const handleSetRange = (val: number[]) => {
-		const [start, end] = val as [number, number];
-		// Ensure there's always at least a 1-step gap
-		if (end - start < 1) {
+		let [start, end] = val as [number, number];
+		// Clamp to ensure valid order and minimum width
+		if (start >= end) {
 			if (range[0] !== start) {
-				setRange([start, start + 1]);
+				start = start;
+				end = start + 1;
 			} else {
-				setRange([end - 1, end]);
+				start = end - 1;
+				end = end;
 			}
-		} else {
-			setRange([start, end]);
 		}
+
+		setRange([Math.max(0, start), Math.max(1, end)]);
 	};
 
 	return (

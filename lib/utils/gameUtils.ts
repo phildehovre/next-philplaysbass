@@ -113,22 +113,36 @@ const NOTE_NAMES = [
 
 export const selectRandomNoteFromRange = (
 	instrument: InstrumentPreset,
+	range: [number, number],
 	enharmonicProbability = 0.5
 ): string => {
+	const [start, end] = range;
+
+	// Filter to active strings
 	const activeStrings = instrument.frets.filter((_, i) => instrument.active[i]);
-	if (activeStrings.length === 0)
+	if (activeStrings.length === 0) {
 		throw new Error("No active strings available");
+	}
 
-	const stringIndex = Math.floor(Math.random() * activeStrings.length);
-	const fretIndex = Math.floor(
-		Math.random() * activeStrings[stringIndex].length
-	);
+	// Limit each string to frets within range (end is inclusive)
+	const truncatedStrings = activeStrings
+		.map((frets) => frets.slice(start, end))
+		.filter((frets) => frets.length > 0);
 
-	let note = activeStrings[stringIndex][fretIndex];
+	if (truncatedStrings.length === 0) {
+		throw new Error("No frets available in the selected range");
+	}
+
+	// Randomly select one of the truncated strings
+	const stringIndex = Math.floor(Math.random() * truncatedStrings.length);
+	const selectedString = truncatedStrings[stringIndex];
+
+	// Randomly select a fret from that string
+	const fretIndex = Math.floor(Math.random() * selectedString.length);
+	let note = selectedString[fretIndex];
 
 	// Apply enharmonic substitution with given probability
 	if (Math.random() < enharmonicProbability) {
-		// Extract base + octave (e.g., "F#" and "3")
 		const match = note.match(/^([A-G][b#]?)(\d)$/);
 		if (match) {
 			const [_, base, octave] = match;

@@ -2,6 +2,7 @@ import { GAME_LABELS, GameType } from "@/constants/gameConstants";
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
@@ -16,10 +17,12 @@ import { formatDuration } from "@/lib/utils/dashboardUtils";
 import { PracticeEvent } from "@/lib/generated/prisma";
 import { formatDuration } from "@/lib/utils/dashboardUtils";
 >>>>>>> c2e94ae (fix gameConstants.ts filename change)
+=======
+>>>>>>> 807990f (fix gameConstant import)
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
-import { formatDistance, subDays } from "date-fns";
-import React, { act, useEffect, useState } from "react";
+import { formatDistance } from "date-fns";
+import React, { useEffect, useState } from "react";
 
 const ActivityFeed = (props: { userData: UserWithPracticeSessions }) => {
 	const { userData } = props;

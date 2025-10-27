@@ -13,7 +13,7 @@ import {
 	processEventScore,
 	processNormalizedScore,
 } from "@/lib/utils/scoringUtils";
-import { MAX_TEMPO_AS_NUM } from "@/constants/gameConstants";
+import { MAX_TEMPO_AS_NUM } from "@/constants/gameConfigConstants";
 
 interface PracticeSessionContextType {
 	sessionId: string | null;

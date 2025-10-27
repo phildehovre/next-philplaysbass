@@ -9,7 +9,7 @@ import MetroWidget from "../ui/MetroWidget";
 import PitchyWithDeviceSelect from "../PitchyComponent";
 import Clockface from "../ui/Clockface";
 import { CalibrationSettingKey } from "./ModalCalibration";
-import { FREE_PRACTICE_TYPE } from "@/constants/gameConstants";
+import { FREE_PRACTICE_TYPE } from "@/constants/gameConfigConstants";
 
 const REQUIRED_SAMPLES = 8; // how many taps before averaging
 

@@ -14,7 +14,7 @@ import {
 	FREE_PRACTICE_TYPE,
 	NOTE_MATCH_TYPE,
 	RHYTHM_ACCURACY_TYPE,
-} from "@/constants/gameConstants";
+} from "@/constants/gameConfigConstants";
 import NoteMatchOptionsSwitches from "./ui/NoteMatchOptionsSwitches";
 
 type GameSettingsPropsType = {

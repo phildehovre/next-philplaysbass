@@ -3,7 +3,10 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { calculateMsOffset } from "@/lib/utils/gameUtils";
-import { COOLDOWN_MS, RHYTHM_ACCURACY_TYPE } from "@/constants/gameConstants";
+import {
+	COOLDOWN_MS,
+	RHYTHM_ACCURACY_TYPE,
+} from "@/constants/gameConfigConstants";
 import { NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 

@@ -1,4 +1,4 @@
-import { GAME_LABELS, GameType } from "../../constants/gameConstants";
+import { GAME_LABELS, GameType } from "../../constants/gameConfigConstants";
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
 import { formatDistance } from "date-fns";

@@ -14,7 +14,7 @@ import { NoteInfo } from "@/types/types";
 import GameContainer from "./ui/GameContainer";
 import { useRhythmAccuracyGameContext } from "@/context/rhythmAccuracyGameContext";
 import { handleTabClose } from "@/lib/utils";
-import { RHYTHM_ACCURACY_TYPE } from "@/constants/gameConstants";
+import { RHYTHM_ACCURACY_TYPE } from "@/constants/gameConfigConstants";
 
 const RhythmAccuracyGame = () => {
 	const [isTabVisible, setIsTabVisible] = useState<boolean>(true);

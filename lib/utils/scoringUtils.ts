@@ -1,7 +1,7 @@
 import {
 	NOTE_MATCH_TYPE,
 	RHYTHM_ACCURACY_TYPE,
-} from "@/constants/gameConstants";
+} from "@/constants/gameConfigConstants";
 import { GameTypes, NoteEvent, Score } from "@/types/types";
 
 export interface GameScoringOptions {

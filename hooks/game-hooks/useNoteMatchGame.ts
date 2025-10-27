@@ -6,6 +6,7 @@ import {
 	buildScale,
 	calculateMsOffset,
 	normalizeNote,
+	selectRandomNote,
 	selectRandomNoteFromRange,
 	separateNoteAndOctave,
 } from "@/lib/utils/gameUtils";
@@ -169,10 +170,14 @@ export const useNoteMatchGame = () => {
 		setQuestionQuality(quality);
 
 		setPreviousNotes((prev) => {
-			let note = selectRandomNoteFromRange(instrumentPreset, fretRange);
+			let note = withFretboard
+				? selectRandomNoteFromRange(instrumentPreset, fretRange)
+				: selectRandomNote();
 			let attempts = 0;
 			while (prev.includes(note) && attempts < 10) {
-				note = selectRandomNoteFromRange(instrumentPreset, fretRange);
+				note = withFretboard
+					? selectRandomNoteFromRange(instrumentPreset, fretRange)
+					: selectRandomNote();
 				attempts++;
 			}
 

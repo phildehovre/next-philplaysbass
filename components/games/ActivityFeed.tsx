@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { GAME_LABELS, GameType } from "@/constants/gameConstants";
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -19,6 +20,9 @@ import { formatDuration } from "@/lib/utils/dashboardUtils";
 >>>>>>> c2e94ae (fix gameConstants.ts filename change)
 =======
 >>>>>>> 807990f (fix gameConstant import)
+=======
+import { GAME_LABELS, GameType } from "../../constants/gameConstants";
+>>>>>>> 14ae5c0 (reset .next cache)
 import { PracticeSession, UserWithPracticeSessions } from "@/types/types";
 import { formatTime } from "@/utils/helpers";
 import { formatDistance } from "date-fns";

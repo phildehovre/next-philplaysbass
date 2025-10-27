@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import {
 	buildScale,
 	calculateMsOffset,
+	normalizeNote,
 	selectRandomNoteFromRange,
 } from "@/lib/utils/gameUtils";
 import {
@@ -37,7 +38,7 @@ export const useNoteMatchGame = () => {
 	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
 		INSTRUMENTS["bass4"]
 	);
-	const [fretRange, setFretRange] = useState<number[]>([0, 12]);
+	const [fretRange, setFretRange] = useState<[number, number]>([0, 12]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
 	const [progress, setProgress] = useState(0);
 	const [previousNotes, setPreviousNotes] = useState<string[]>([]);
@@ -166,10 +167,10 @@ export const useNoteMatchGame = () => {
 		setQuestionQuality(quality);
 
 		setPreviousNotes((prev) => {
-			let note = selectRandomNoteFromRange(instrumentPreset);
+			let note = selectRandomNoteFromRange(instrumentPreset, fretRange);
 			let attempts = 0;
 			while (prev.includes(note) && attempts < 10) {
-				note = selectRandomNoteFromRange(instrumentPreset);
+				note = selectRandomNoteFromRange(instrumentPreset, fretRange);
 				attempts++;
 			}
 
@@ -193,7 +194,7 @@ export const useNoteMatchGame = () => {
 
 			return newHistory;
 		});
-	}, [selectedQualities, withInversions]);
+	}, [selectedQualities, withInversions, fretRange]);
 
 	const recordWin = useCallback(() => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
@@ -209,16 +210,13 @@ export const useNoteMatchGame = () => {
 
 	const evaluateNotePlayed = useCallback(
 		async (noteInfo: NoteInfo) => {
-			console.log(noteInfo.noteName, instrumentPreset.frets.flat());
 			if (!gameStarted) return;
-			const notePlayed = noteInfo.noteName;
+			const notePlayed = noteInfo.display;
 			const selected = withArpeggios
 				? questionArpeggio[arpeggioPlayed.length]
 				: selectedNote;
-			const matchSet = instrumentPreset.frets.find((group) =>
-				group.includes(notePlayed)
-			);
-			return matchSet?.includes(selected);
+
+			return notePlayed == selected;
 		},
 		[gameStarted, questionArpeggio, arpeggioPlayed, selectedNote, withArpeggios]
 	);

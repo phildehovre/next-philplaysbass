@@ -13,13 +13,18 @@ type PhaseModalProps = {
 	initialValues?: Phase;
 	onClose: (options: Partial<PhaseDraft>) => void;
 };
-const PhaseModal = (props: PhaseModalProps) => {
-	const { onClose, show, setShow, initialValues } = props;
-	const [label, setLabel] = useState<string>("");
-	const [initialDuration, setInitialDuration] = useState<number>(0);
-	const [postCooldown, setPostCooldown] = useState<number>(0);
-	const [autoStart, setAutoStart] = useState<boolean>(false);
-	const [bpm, setBpm] = useState<number>(110);
+
+const PhaseModal = ({
+	onClose,
+	show,
+	setShow,
+	initialValues,
+}: PhaseModalProps) => {
+	const [label, setLabel] = useState("");
+	const [initialDuration, setInitialDuration] = useState(0);
+	const [postCooldown, setPostCooldown] = useState(0);
+	const [autoStart, setAutoStart] = useState(false);
+	const [bpm, setBpm] = useState(110);
 
 	useEffect(() => {
 		if (initialValues) {
@@ -29,139 +34,155 @@ const PhaseModal = (props: PhaseModalProps) => {
 		}
 	}, [initialValues]);
 
-	if (!show) return;
+	if (!show) return null;
 
 	return (
-		<Modal className="box" onClose={() => {}}>
-			<h1 className="text-2xl font-bold ">Add Timer Phase</h1>
-			<div className="scoreboard box flex flex-col items-center justify-between">
-				<label htmlFor="phase-name" className="box_label">
-					Phase name:
-				</label>
-				<input
-					className="w-full border p-2 bg-black mt-1"
-					value={label}
-					onChange={(e) => setLabel(e.target.value)}
-					autoFocus
-					name="phase-name"
-				/>
-			</div>
+		<Modal onClose={() => {}}>
+			<div className="text-white text-sm flex flex-col mx-auto md:w-2/3 min-w-[300px] p-4 ">
+				<h1 className="text-lg font-semibold mb-2 text-gray-100">
+					Add Timer Phase
+				</h1>
 
-			<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
-				<div className="box_label text-2xl">Timer duration</div>
-				<span className="flex w-2/3">
-					<button
-						className="ui_btn secondary"
-						onClick={() =>
-							setInitialDuration((prev) => Math.max(1000, prev - 1000))
-						}
-					>
-						<MinusIcon />
-					</button>
-					<h1 className="scoreboard timer text-xl w-full">
-						{formatTime(initialDuration)}
-					</h1>
-					<button
-						className="ui_btn secondary"
-						onClick={() => setInitialDuration((prev) => prev + 1000)}
-					>
-						<PlusIcon />
-					</button>
-				</span>
-				<input
-					className="w-full"
-					type="range"
-					min="60"
-					max="600000"
-					step="5000"
-					value={initialDuration}
-					onChange={(e) => setInitialDuration(e.target.valueAsNumber)}
-				/>
-			</div>
-
-			<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
-				<div className="box_label text-2xl">Cooldown duration</div>
-				<span className="flex w-2/3">
-					<button
-						className="ui_btn secondary"
-						onClick={() => setPostCooldown((prev) => Math.max(0, prev - 1000))}
-					>
-						<MinusIcon />
-					</button>
-					<h1 className="scoreboard timer text-xl w-full">
-						{postCooldown === 0 ? "None" : formatTime(postCooldown)}
-					</h1>
-					<button
-						className="ui_btn secondary"
-						onClick={() => setPostCooldown((prev) => prev + 1000)}
-					>
-						<PlusIcon />
-					</button>
-				</span>
-				<input
-					className="w-full"
-					type="range"
-					min="0"
-					max="60000"
-					step="1000"
-					value={postCooldown}
-					onChange={(e) => setPostCooldown(e.target.valueAsNumber)}
-				/>
-			</div>
-
-			<div className="scoreboard box flex flex-col items-center justify-between w-full my-4">
-				<div className="box_label text-2xl">Metronome</div>
-				<span className="flex items-center gap-1 w-full justify-start ">
-					<Switch
-						checked={autoStart}
-						onCheckChange={() => setAutoStart(!autoStart)}
-						disabled={false}
-					/>
-					<label htmlFor="autoStart" className="text-xs">
-						Auto-Start
+				{/* Phase name */}
+				<div className="flex flex-col mb-2">
+					<label htmlFor="phase-name" className="text-xs text-gray-400 mb-1">
+						Phase name
 					</label>
-				</span>
-				<span className="flex w-2/3">
+					<input
+						id="phase-name"
+						className="border border-gray-500 rounded p-1 text-sm text-gray-200 focus:outline-none focus:border-gray-300"
+						value={label}
+						onChange={(e) => setLabel(e.target.value)}
+						autoFocus
+					/>
+				</div>
+
+				{/* Timer duration */}
+				<div className="flex flex-col mb-2">
+					<label className="text-xs text-gray-400 mb-1">Timer duration</label>
+					<div className="flex items-center w-full">
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() =>
+								setInitialDuration((p) => Math.max(1000, p - 1000))
+							}
+						>
+							<MinusIcon size={14} />
+						</button>
+						<h1 className="scoreboard flex-1 text-center text-sm">
+							{formatTime(initialDuration)}
+						</h1>
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() => setInitialDuration((p) => p + 1000)}
+						>
+							<PlusIcon size={14} />
+						</button>
+					</div>
+					<input
+						className="w-full mt-1"
+						type="range"
+						min="60"
+						max="600000"
+						step="5000"
+						value={initialDuration}
+						onChange={(e) => setInitialDuration(e.target.valueAsNumber)}
+					/>
+				</div>
+
+				{/* Cooldown */}
+				<div className="flex flex-col mb-2">
+					<label className="text-xs text-gray-400 mb-1">
+						Cooldown duration
+					</label>
+					<div className="flex items-center w-full">
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() => setPostCooldown((p) => Math.max(0, p - 1000))}
+						>
+							<MinusIcon size={14} />
+						</button>
+						<h1 className="scoreboard flex-1 text-center text-sm">
+							{postCooldown === 0 ? "None" : formatTime(postCooldown)}
+						</h1>
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() => setPostCooldown((p) => p + 1000)}
+						>
+							<PlusIcon size={14} />
+						</button>
+					</div>
+					<input
+						className="w-full mt-1"
+						type="range"
+						min="0"
+						max="60000"
+						step="1000"
+						value={postCooldown}
+						onChange={(e) => setPostCooldown(e.target.valueAsNumber)}
+					/>
+				</div>
+
+				{/* Metronome */}
+				<div className="flex flex-col mb-2 ">
+					<label className="text-xs text-gray-400 mb-1">Metronome</label>
+					<div className="flex items-center gap-2 mb-1">
+						<Switch
+							checked={autoStart}
+							onCheckChange={() => setAutoStart(!autoStart)}
+							disabled={false}
+						/>
+						<span className="text-xs text-gray-300">Auto-start</span>
+					</div>
+					<div className="flex items-center ">
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() => setBpm((p) => p - 1)}
+						>
+							<MinusIcon size={14} />
+						</button>
+						<h1 className="scoreboard flex-1 text-center text-sm">{bpm}</h1>
+						<button
+							className="p-1 border border-gray-500 rounded"
+							onClick={() => setBpm((p) => p + 1)}
+						>
+							<PlusIcon size={14} />
+						</button>
+					</div>
+					<input
+						className="w-full mt-1"
+						type="range"
+						min="40"
+						max="240"
+						step="1"
+						value={bpm}
+						onChange={(e) => setBpm(Number(e.target.value))}
+					/>
+				</div>
+
+				{/* Buttons */}
+				<div className="flex justify-between mt-3 w-full">
 					<button
-						className="ui_btn secondary"
-						onClick={() => setBpm((prev) => prev - 1)}
+						className="border border-gray-500 rounded px-3 py-1 text-sm text-gray-300"
+						onClick={() => setShow(false)}
 					>
-						<MinusIcon />
+						Cancel
 					</button>
-					<h1 className="scoreboard timer text-xl w-full">{bpm}</h1>
 					<button
-						className="ui_btn secondary"
-						onClick={() => setBpm((prev) => prev + 1)}
+						className={`rounded px-3 py-1 text-sm border ${
+							!label || initialDuration === 0
+								? "border-gray-700 text-gray-500 cursor-not-allowed"
+								: "border-gray-400 text-gray-100"
+						}`}
+						onClick={() =>
+							onClose({ label, initialDuration, postCooldown, autoStart, bpm })
+						}
+						disabled={!label || initialDuration === 0}
 					>
-						<PlusIcon />
+						Confirm
 					</button>
-				</span>
-				<input
-					className="w-full"
-					type="range"
-					min="40"
-					max="240"
-					step="1"
-					value={bpm}
-					onChange={(e) => setBpm(Number(e.target.value))}
-				/>
+				</div>
 			</div>
-			<span className="flex justify-between mt-4">
-				<button className="ui_btn secondary" onClick={() => setShow(false)}>
-					Cancel
-				</button>
-				<button
-					className={`ui_btn ${
-						!label || initialDuration == 0 ? "disabled" : ""
-					}`}
-					onClick={() =>
-						onClose({ label, initialDuration, postCooldown, autoStart, bpm })
-					}
-					disabled={!label || initialDuration == 0}
-				>
-					Confirm
-				</button>
-			</span>
 		</Modal>
 	);
 };

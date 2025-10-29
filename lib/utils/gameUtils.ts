@@ -117,6 +117,7 @@ export const selectRandomNoteFromRange = (
 	enharmonicProbability = 0.5
 ): string => {
 	const [start, end] = range;
+	console.log("With fretboard");
 
 	// Filter to active strings
 	const activeStrings = instrument.frets.filter((_, i) => instrument.active[i]);

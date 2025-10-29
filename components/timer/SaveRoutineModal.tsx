@@ -4,7 +4,7 @@ import { Save } from "lucide-react";
 import Spinner from "../Spinner";
 
 type SaveRoutineModalProps = {
-	handleSaveRoutine: () => {};
+	handleSaveRoutine: (n: string) => {};
 	show: boolean;
 	setRoutineName: (n: string) => void;
 	loading: boolean;
@@ -30,7 +30,7 @@ const SaveRoutineModal = (props: SaveRoutineModalProps) => {
 			<button
 				disabled={loading || routineName.length < 3}
 				className={`ui_btn ${loading ? "disabled" : ""}`}
-				onClick={() => handleSaveRoutine()}
+				onClick={() => handleSaveRoutine(routineName)}
 			>
 				{loading ? <Spinner /> : <Save />}
 				Confirm

@@ -20,7 +20,7 @@ const TimerPhases = ({
 	phases,
 	setPhases,
 	current,
-	setShowTimerModal,
+	handleShowCreatePhaseModal,
 	selectedRoutine,
 	setSelectedRoutine,
 	setSelectedPhase,
@@ -30,7 +30,7 @@ const TimerPhases = ({
 	phases: any[];
 	current: number;
 	setPhases: (p: any) => void;
-	setShowTimerModal: (b: boolean) => void;
+	handleShowCreatePhaseModal: (b: boolean, p?: Phase) => void;
 	selectedRoutine: UserPracticeRoutine | undefined;
 	setSelectedRoutine: (r: UserPracticeRoutine | undefined) => void;
 	setSelectedPhase: (p: Phase) => void;
@@ -48,7 +48,8 @@ const TimerPhases = ({
 		}
 	}, [selectedRoutine]);
 
-	const handleSaveRoutine = async () => {
+	const handleSaveRoutine = async (name: string) => {
+		console.log(name);
 		let newRoutine: UserPracticeRoutine;
 		setLoading(true);
 		try {
@@ -56,9 +57,10 @@ const TimerPhases = ({
 				newRoutine = await updateRoutine({
 					...selectedRoutine,
 					phases,
+					name,
 				});
 			} else {
-				newRoutine = await saveRoutine(routineName, phases);
+				newRoutine = await saveRoutine(name, phases);
 			}
 			if (newRoutine) {
 				setSelectedRoutine(newRoutine);
@@ -94,7 +96,7 @@ const TimerPhases = ({
 	};
 
 	const handleOpenEditModal = async (phase: Phase) => {
-		setShowTimerModal(true);
+		handleShowCreatePhaseModal(true, phase);
 		setSelectedPhase(phase);
 	};
 
@@ -124,7 +126,7 @@ const TimerPhases = ({
 					<span className="flex gap-1 items-center">
 						<button
 							className="ui_btn secondary"
-							onClick={() => setShowTimerModal(true)}
+							onClick={() => handleShowCreatePhaseModal(true)}
 						>
 							<Plus />
 						</button>

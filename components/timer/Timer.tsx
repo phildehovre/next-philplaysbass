@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../games/GameStyles.css";
 import { Drum, FolderUp, Pause, Plus, Square, TimerIcon } from "lucide-react";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
@@ -8,7 +8,6 @@ import GameContainer from "../games/ui/GameContainer";
 import MetroWidget from "../games/ui/MetroWidget";
 import Clockface from "../games/ui/Clockface";
 import PitchyComponent from "../games/PitchyComponent";
-import Tuner from "../games/tuner/Tuner";
 import {
 	FREE_PRACTICE_TYPE,
 	MAX_TEMPO_AS_NUM,
@@ -24,6 +23,7 @@ import { handleTabClose } from "@/lib/utils";
 import RoutinesModal from "@/prisma/RoutinesModal";
 import { UserPracticeRoutine } from "@/actions/timerActions";
 import SemiCircleTuner from "../games/tuner/SemiCircleTuner";
+import { v4 as uuidv4 } from "uuid";
 
 export type TimerCfg = {
 	initialDuration: number; // ms
@@ -63,7 +63,7 @@ const Timer = (props: TimerComponentProps) => {
 	const [selectedPhase, setSelectedPhase] = useState<Phase>();
 	const [localRoutines, setLocalRoutines] = useState<UserPracticeRoutine[]>([]);
 
-	const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
+	const [showEditPhaseModal, setShowEditPhaseModal] = useState<boolean>(false);
 	const [showTuner, setShowTuner] = useState<boolean>(false);
 	const [showMetronome, setShowMetronome] = useState<boolean>(false);
 	const [showRoutinesModal, setShowRoutinesModal] = useState<boolean>(false);
@@ -190,6 +190,7 @@ const Timer = (props: TimerComponentProps) => {
 			);
 		} else {
 			const newPhase: PhaseDraft = {
+				id: uuidv4(),
 				initialDuration: options.initialDuration ?? 0,
 				bpm: options.bpm ?? bpm,
 				label: options.label ?? "Untitled",
@@ -200,7 +201,7 @@ const Timer = (props: TimerComponentProps) => {
 			setTimerArray((prev) => [...prev, newPhase]);
 		}
 
-		setShowTimerModal(false);
+		setShowEditPhaseModal(false);
 		setSelectedPhase(undefined);
 	};
 
@@ -235,6 +236,18 @@ const Timer = (props: TimerComponentProps) => {
 		}
 	};
 
+	const handleShowCreatePhaseModal = useCallback(
+		(isOpen: boolean, phase?: Phase | undefined) => {
+			// first, clear out selectedPhase so it does not get fed into the modal.
+			setSelectedPhase(undefined);
+			// Open modal
+			setShowEditPhaseModal(isOpen);
+			if (phase !== undefined) {
+				setSelectedPhase(phase);
+			}
+		},
+		[selectedPhase]
+	);
 	return (
 		<GameContainer>
 			<div className="flex w-full justify-between">
@@ -293,7 +306,7 @@ const Timer = (props: TimerComponentProps) => {
 						<>
 							<button
 								className="ui_btn absolute top-27 "
-								onClick={() => setShowTimerModal(true)}
+								onClick={() => setShowEditPhaseModal(true)}
 							>
 								<p className="flex justify-start w-full gap-1 min-w-[125px]">
 									<Plus />
@@ -345,7 +358,7 @@ const Timer = (props: TimerComponentProps) => {
 			</div>
 
 			<TimerPhases
-				setShowTimerModal={setShowTimerModal}
+				handleShowCreatePhaseModal={handleShowCreatePhaseModal}
 				current={currentIndex}
 				phases={timerArray}
 				selectedRoutine={selectedRoutine}
@@ -357,8 +370,8 @@ const Timer = (props: TimerComponentProps) => {
 			/>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal
-				show={showTimerModal}
-				setShow={setShowTimerModal}
+				show={showEditPhaseModal}
+				setShow={setShowEditPhaseModal}
 				onClose={confirmTimer}
 				initialValues={selectedPhase}
 			/>

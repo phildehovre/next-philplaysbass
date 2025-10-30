@@ -252,8 +252,19 @@ const Timer = (props: TimerComponentProps) => {
 	);
 	return (
 		<GameContainer>
-			<div className="flex w-full justify-between">
-				<span className="flex w-full justify-center gap-1 ">
+			<TimerPhases
+				handleShowCreatePhaseModal={handleShowCreatePhaseModal}
+				current={currentIndex}
+				phases={timerArray}
+				selectedRoutine={selectedRoutine}
+				setSelectedRoutine={setSelectedRoutine}
+				setSelectedPhase={setSelectedPhase}
+				setShowRoutinesModal={setShowRoutinesModal}
+				handleCloseRoutine={handleCloseRoutine}
+				setPhases={setTimerArray}
+			/>
+			<div className="flex w-full justify-between mt-5 -mb-15">
+				<span className="flex w-full  gap-1 ">
 					<Switch
 						checked={showTuner}
 						onCheckChange={() => setShowTuner(!showTuner)}
@@ -263,7 +274,7 @@ const Timer = (props: TimerComponentProps) => {
 						<TuningFork />
 					</label>
 				</span>
-				<span className="flex w-full justify-center gap-1">
+				<span className="flex w-full justify-end gap-1">
 					<Switch
 						checked={showMetronome}
 						onCheckChange={() => setShowMetronome(!showMetronome)}
@@ -274,19 +285,6 @@ const Timer = (props: TimerComponentProps) => {
 					</label>
 				</span>
 			</div>
-			<AnimatedGridRow active={showMetronome}>
-				<MetroWidget
-					bpm={bpm}
-					setBpm={setBpm}
-					play={play}
-					setPlay={setPlay}
-					gameStarted={play}
-					lastTickTime={null}
-					setLastTickTime={() => {}}
-					controls={true}
-					withMetronome={showMetronome}
-				/>
-			</AnimatedGridRow>
 
 			<div className="flex justify-between">
 				<Clockface
@@ -359,17 +357,19 @@ const Timer = (props: TimerComponentProps) => {
 				</Clockface>
 			</div>
 
-			<TimerPhases
-				handleShowCreatePhaseModal={handleShowCreatePhaseModal}
-				current={currentIndex}
-				phases={timerArray}
-				selectedRoutine={selectedRoutine}
-				setSelectedRoutine={setSelectedRoutine}
-				setSelectedPhase={setSelectedPhase}
-				setShowRoutinesModal={setShowRoutinesModal}
-				handleCloseRoutine={handleCloseRoutine}
-				setPhases={setTimerArray}
-			/>
+			<AnimatedGridRow active={showMetronome}>
+				<MetroWidget
+					bpm={bpm}
+					setBpm={setBpm}
+					play={play}
+					setPlay={setPlay}
+					gameStarted={play}
+					lastTickTime={null}
+					setLastTickTime={() => {}}
+					controls={true}
+					withMetronome={showMetronome}
+				/>
+			</AnimatedGridRow>
 			<PitchyComponent showDevices={true} onNoteDetection={() => {}} />
 			<PhaseModal
 				show={showEditPhaseModal}

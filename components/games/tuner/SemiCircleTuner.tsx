@@ -97,7 +97,7 @@ const Tuner = (props: { onClose: () => void }) => {
 				<X
 					color="var(--clr-brand)"
 					onClick={onClose}
-					className="absolute -top-1/2 right-1/2 translate-1/2"
+					className="cursor-pointer absolute -top-1/2 right-1/2 translate-1/2"
 				/>
 				<>
 					<p className="text-4xl font-bold">{note?.noteName || "Play!"}</p>

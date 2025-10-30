@@ -213,9 +213,11 @@ const Timer = (props: TimerComponentProps) => {
 		finishSession();
 	};
 
-	const handleStart = (i: number) => {
-		const firstPhase = timerArray[i];
-		setCurrentIndex(0);
+	const handleStartTimers = (i: number) => {
+		const firstPhase =
+			timerArray.find((t) => t.id == selectedPhase?.id) || timerArray[i];
+
+		setCurrentIndex(firstPhase.order);
 		setInitialDuration(firstPhase.initialDuration);
 		setRemainingTime(firstPhase.initialDuration);
 		setStarted(true);
@@ -301,7 +303,7 @@ const Timer = (props: TimerComponentProps) => {
 					}}
 					progress={progress}
 				>
-					{showTuner && <SemiCircleTuner />}
+					{showTuner && <SemiCircleTuner onClose={() => setShowTuner(false)} />}
 					{timerArray.length == 0 && !showTuner && (
 						<>
 							<button
@@ -330,7 +332,7 @@ const Timer = (props: TimerComponentProps) => {
 								{timerArray.length > 0 && (
 									<button
 										className="game_btn start-game_btn"
-										onClick={() => handleStart(0)}
+										onClick={() => handleStartTimers(0)}
 									>
 										Start
 									</button>

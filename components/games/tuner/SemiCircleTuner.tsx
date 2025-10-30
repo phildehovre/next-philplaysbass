@@ -6,10 +6,12 @@ import { cn } from "@/lib/utils";
 import PitchyStream from "@/components/PitchyStream";
 import Spinner from "@/components/Spinner";
 import { CLOCKFACE_DIMENSIONS } from "@/constants/clockFaceConstants";
+import { X } from "lucide-react";
 
 const { CIRCLE_RADIUS, radius, bonusRadius } = CLOCKFACE_DIMENSIONS;
 
-const Tuner = () => {
+const Tuner = (props: { onClose: () => void }) => {
+	const { onClose } = props;
 	const [note, setNote] = useState<NoteInfo | null>(null);
 	const [smoothedPercent, setSmoothedPercent] = useState(50);
 	const animationRef = useRef<number | null>(null);
@@ -92,13 +94,17 @@ const Tuner = () => {
 					minWidth: `${CIRCLE_RADIUS * 2}px`,
 				}}
 			>
-				{!note && <div className="font-bold text-xl">Play!</div>}
-				{note && (
-					<>
-						<p className="text-4xl font-bold">{note.noteName}</p>
-						<p className="text-sm text-gray-500">{note.centsOff.toFixed(1)}¢</p>
-					</>
-				)}
+				<X
+					color="var(--clr-brand)"
+					onClick={onClose}
+					className="absolute -top-1/2 right-1/2 translate-1/2"
+				/>
+				<>
+					<p className="text-4xl font-bold">{note?.noteName || "Play!"}</p>
+					<p className="text-sm text-gray-500">
+						{note ? note.centsOff.toFixed(1) : 0}¢
+					</p>
+				</>
 			</div>
 
 			{/* Audio stream */}

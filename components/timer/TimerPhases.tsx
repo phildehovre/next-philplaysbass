@@ -49,7 +49,6 @@ const TimerPhases = ({
 	}, [selectedRoutine]);
 
 	const handleSaveRoutine = async (name: string) => {
-		console.log(name);
 		let newRoutine: UserPracticeRoutine;
 		setLoading(true);
 		try {

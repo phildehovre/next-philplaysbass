@@ -15,6 +15,11 @@ import { RoutineDropdown } from "./RoutineDropdown";
 import { Phase } from "@/lib/generated/prisma";
 import { toast } from "sonner";
 import { PhaseDraft } from "./Timer";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 
 const TimerPhases = ({
 	phases,
@@ -143,28 +148,41 @@ const TimerPhases = ({
 						handleCloseRoutine={handleCloseRoutine}
 					/>
 				</div>
-				<ul className="timer_list flex flex-col gap-1">
+				<ul className="timer_list flex flex-col gap-1 z-100 mb-5">
 					{phases.map((p, i) => (
-						<li
-							key={i}
-							className={`timer_phase ${i === current ? "active" : ""}`}
-							draggable
-							onDragStart={() => handleDragStart(i)}
-							onDragOver={handleDragOver}
-							onDrop={() => handleDrop(i)}
-							onClick={() => setSelectedPhase(p)}
-						>
-							<p className="phase_index font-light text-xs ">{i + 1}</p>
-							<p className="phase_label w-full">{p.label}</p>
-							<p className="phase_bpm w-1/2">{p.bpm}</p>
-							<p className="phase_duration">{formatTime(p.initialDuration)}</p>
-							<PhaseDropdown
-								phase={p}
-								handleOmit={handleOmitPhase}
-								loading={loading}
-								handleEdit={handleOpenEditModal}
-							/>
-						</li>
+						<Tooltip>
+							<TooltipTrigger>
+								<li
+									key={i}
+									className={`timer_phase ${
+										i === current ? "active" : ""
+									}  z-50`}
+									draggable
+									onDragStart={() => handleDragStart(i)}
+									onDragOver={handleDragOver}
+									onDrop={() => handleDrop(i)}
+									onClick={() => setSelectedPhase(p)}
+								>
+									<p className="phase_index font-light text-xs ">{i + 1}</p>
+									<p className="phase_label w-full text-left text-sm">
+										{p.label}
+									</p>
+									<p className="phase_bpm w-1/2">{p.bpm}</p>
+									<p className="phase_duration">
+										{formatTime(p.initialDuration)}
+									</p>
+									<PhaseDropdown
+										phase={p}
+										handleOmit={handleOmitPhase}
+										loading={loading}
+										handleEdit={handleOpenEditModal}
+									/>
+								</li>
+							</TooltipTrigger>
+							<TooltipContent className="bg-black/80 p-2" side="right">
+								{p.label}
+							</TooltipContent>
+						</Tooltip>
 					))}
 				</ul>
 			</div>

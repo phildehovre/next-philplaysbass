@@ -263,7 +263,7 @@ const Timer = (props: TimerComponentProps) => {
 				handleCloseRoutine={handleCloseRoutine}
 				setPhases={setTimerArray}
 			/>
-			<div className="flex w-full justify-between mt-5 -mb-15">
+			<div className="flex w-full justify-between mt-5 z-50 -mb-15 ">
 				<span className="flex w-full  gap-1 ">
 					<Switch
 						checked={showTuner}

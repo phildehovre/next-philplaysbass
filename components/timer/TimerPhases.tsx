@@ -164,7 +164,7 @@ const TimerPhases = ({
 									onClick={() => setSelectedPhase(p)}
 								>
 									<p className="phase_index font-light text-xs ">{i + 1}</p>
-									<p className="phase_label w-full text-left text-sm">
+									<p className="phase_label w-full text-left text-sm truncate">
 										{p.label}
 									</p>
 									<p className="phase_bpm w-1/2">{p.bpm}</p>
@@ -179,7 +179,10 @@ const TimerPhases = ({
 									/>
 								</li>
 							</TooltipTrigger>
-							<TooltipContent className="bg-black/80 p-2" side="right">
+							<TooltipContent
+								className="bg-black/80 p-2 hidden md:block"
+								side="right"
+							>
 								{p.label}
 							</TooltipContent>
 						</Tooltip>

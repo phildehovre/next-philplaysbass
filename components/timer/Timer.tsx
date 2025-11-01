@@ -226,6 +226,7 @@ const Timer = (props: TimerComponentProps) => {
 		setBpm(firstPhase.bpm);
 		if (firstPhase.autoStart) {
 			setPlay(true);
+			setShowMetronome(true);
 		}
 	};
 

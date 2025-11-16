@@ -80,6 +80,28 @@
 		color: black;
 	}
 }
+.answer {
+	border-radius: 6px;
+	aspect-ratio: 16/9;
+	width: auto;
+	height: 40px;
+	outline: 1px solid var(--clr-box-border);
+	font-weight: bold;
+	display: flex;
+	text-transform: capitalize;
+	justify-content: center;
+	align-items: center;
+	line-height: 16px;
+	transition: 150ms ease-in-out all;
+	cursor: pointer;
+	&:hover {
+		outline: 1px solid var(--clr-brand);
+	}
+	&.selected {
+		background-color: var(--clr-brand);
+		color: black;
+	}
+}
 
 .game_instructions {
 	color: gray;
@@ -137,9 +159,18 @@
 }
 .filter_btn {
 	outline: 1px solid rgba(255, 255, 255, 0.275);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border-radius: 6px;
-	padding: 0.25em;
 	transition: 150ms ease-in-out transform;
+	color: white;
+	aspect-ratio: 16/9;
+	width: auto;
+	height: 40px;
+	&:hover {
+		color: var(--clr-brand);
+	}
 
 	&.active {
 		outline: 2px solid var(--clr-brand);
@@ -160,7 +191,18 @@
 }
 
 .qualities_ctn {
+	touch-action: none;
+	pointer-events: none;
+	padding-top: 1em;
 	gap: 0.25em;
+	opacity: 0.3;
+	transition: 250ms ease-in-out all;
+
+	&.active {
+		opacity: 1;
+		pointer-events: all;
+		touch-action: auto;
+	}
 }
 
 .scoreboard {

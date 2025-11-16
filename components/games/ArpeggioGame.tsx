@@ -10,6 +10,7 @@ import {
 import "./GameStyles.css";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import AnimatedNumber from "./ui/AnimatedNumber";
+import { toast } from "sonner";
 
 type GameOptionstype = {
 	highlightRoot: boolean;
@@ -85,14 +86,22 @@ const ArpeggioGame = () => {
 					}`}
 					key={filter + index}
 					onClick={() =>
-						setAvailable((prev) =>
-							available.indexOf(filter) !== -1
-								? available.filter((f) => f !== filter)
-								: [...prev, filter]
-						)
+						setAvailable((prev) => {
+							const isActive = prev.includes(filter);
+							if (isActive) {
+								const next = prev.filter((f) => f !== filter);
+								if (next.length === 0) {
+									toast("At least one chord quality must be selected.");
+									return [QUALITY[0]];
+								}
+
+								return next;
+							}
+							return [...prev, filter];
+						})
 					}
 				>
-					<span className="flex items-center  ">
+					<span className="flex items-center ">
 						<PlusIcon
 							size={16}
 							className={`filter_icon ${
@@ -154,11 +163,11 @@ const ArpeggioGame = () => {
 		return arrayChromaticScale.map((n, i) => {
 			return (
 				<div
-					className={`game_btn note ${selectedRoot === n ? "selected" : ""}`}
+					className={`answer ${selectedRoot === n ? "selected" : ""}`}
 					key={n[0]}
 					onClick={() => setSelectedRoot((prev) => (prev !== n ? n : prev))}
 				>
-					{n.length > 1 ? n[0] + " / " + n[1] : n[0]}
+					{n.length > 1 ? n[0] + "/" + n[1] : n[0]}
 				</div>
 			);
 		});
@@ -167,21 +176,19 @@ const ArpeggioGame = () => {
 		return QUALITY.map((q, i) => {
 			return (
 				<div
-					className={`game_btn quality ${
-						selectedQuality === q ? "selected" : ""
-					}`}
+					className={`answer ${selectedQuality === q ? "selected" : ""}`}
 					key={q}
 					onClick={() => setSelectedQuality(q)}
 				>
-					{q}
+					{q.slice(0, 3)}
 				</div>
 			);
 		});
 	};
 
 	return (
-		<div className="game_ctn p-2">
-			<div className="scoreboard text-2xl font-mono">
+		<div className="game_ctn p-2 flex gap-2">
+			<div className="scoreboard text-2xl font-mono w-1/2">
 				<AnimatedNumber data={score.losses} />:
 				<AnimatedNumber data={score.wins} />
 			</div>
@@ -204,7 +211,9 @@ const ArpeggioGame = () => {
 			<div className="filter_ctn">{renderFilters()}</div>
 			<div className="question_ctn flex">{renderArpeggio()}</div>
 			<div className="notes_ctn flex ">{renderNotes()}</div>
-			<div className="qualities_ctn flex ">{renderQualities()}</div>
+			<div className={`qualities_ctn flex ${selectedRoot ? "active" : ""}`}>
+				{renderQualities()}
+			</div>
 			<div
 				className={`flashing_el ${animate}`}
 				style={{ top: `${mousePosition.y}px`, left: `${mousePosition.x}px` }}

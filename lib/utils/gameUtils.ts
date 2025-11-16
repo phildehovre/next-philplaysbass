@@ -10,6 +10,7 @@ import {
 	ukuleleChordShapes,
 } from "@/constants/musicConstants";
 import { ChordQuality, InstrumentPreset, Note, NoteInfo } from "@/types/types";
+import { start } from "repl";
 
 export function shuffleArray(arr: string[]): string[] {
 	const result = [...arr]; // Create a copy to avoid mutating the original array
@@ -24,7 +25,7 @@ export const buildScale = (
 	startingNote: string,
 	quality: ScaleQuality
 ): Note[] => {
-	const match = startingNote.match(/^([A-G][b#]?)(\d)$/);
+	const match = startingNote.match(/^([A-G][b#]?)(\d?)$/);
 	if (match) {
 		var [_, noteName, octave] = match;
 	}

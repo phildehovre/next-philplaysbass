@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "UserStats" ALTER COLUMN "totalTime" SET DATA TYPE TIMESTAMP(3);

@@ -92,7 +92,6 @@ export const textObject = {
 		buttons: {},
 	},
 };
-
 export const bioTextObject = {
 	long: {
 		fr: [

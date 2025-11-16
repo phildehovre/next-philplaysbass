@@ -38,7 +38,7 @@ const Dashboard = (props: any) => {
 		return toolCards.map((tool, index) => {
 			return (
 				<GameCard
-					{...tool}
+					data={tool}
 					userData={userData}
 					sticker={false}
 					key={tool.title + index}
@@ -48,8 +48,8 @@ const Dashboard = (props: any) => {
 	};
 
 	const renderGameCards = () => {
-		return gameCards.map((game, index) => {
-			return <GameCard {...game} sticker={true} key={game.title + index} />;
+		return gameCards.map((card, index) => {
+			return <GameCard data={card} sticker={true} key={card.title + index} />;
 		});
 	};
 

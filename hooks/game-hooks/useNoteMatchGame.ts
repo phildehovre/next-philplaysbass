@@ -22,6 +22,7 @@ import {
 import { InstrumentPreset, Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { INSTRUMENTS } from "@/constants/instrumentConstants";
+import { CloudCog } from "lucide-react";
 
 export const useNoteMatchGame = () => {
 	// --- Game state ---
@@ -201,7 +202,7 @@ export const useNoteMatchGame = () => {
 
 			return newHistory;
 		});
-	}, [selectedQualities, withInversions, fretRange]);
+	}, [selectedQualities, withInversions, fretRange, withFretboard]);
 
 	const recordWin = useCallback(() => {
 		setScore((prev) => ({ ...prev, wins: prev.wins + 1 }));
@@ -223,16 +224,15 @@ export const useNoteMatchGame = () => {
 				? questionArpeggio[arpeggioPlayed.length]
 				: selectedNote;
 
-			console.log("Note played:: ", noteInfo);
-
+			const [playedBase, octave] = separateNoteAndOctave(notePlayed);
 			// Default game mechanic, no octave check
 			if (!withFretboard) {
-				const [playedBase, _] = separateNoteAndOctave(notePlayed);
-				const [selectedBase, __] = separateNoteAndOctave(selected);
-				return playedBase == selectedBase;
+				// const [selectedBase, __] = separateNoteAndOctave(selected);
+				return playedBase == selected;
 			}
 			// With octave check
-			return notePlayed == selected;
+			console.log(playedBase + octave, selected);
+			return playedBase + octave == selected;
 		},
 		[
 			gameStarted,
@@ -251,6 +251,7 @@ export const useNoteMatchGame = () => {
 			if (evaluateCooldownRef.current) return;
 
 			const isMatch = await evaluateNotePlayed(note);
+			console.log("isMatch:: ", isMatch);
 			if (isMatch === undefined) return;
 
 			if (!withArpeggios) {

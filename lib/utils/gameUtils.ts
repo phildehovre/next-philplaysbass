@@ -160,7 +160,7 @@ export const separateNoteAndOctave = (note: string) => {
 	const match = note.match(/^([A-G][b#]?)(\d)$/);
 	if (match) {
 		const [_, base, octave] = match;
-		return [base, octave];
+		return [normalizeNote(base), octave];
 	}
 	console.log(
 		"%cerror lib/utils/gameUtils.ts line:163 ",

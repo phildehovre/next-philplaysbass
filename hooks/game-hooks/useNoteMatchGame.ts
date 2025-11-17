@@ -223,6 +223,8 @@ export const useNoteMatchGame = () => {
 				? questionArpeggio[arpeggioPlayed.length]
 				: selectedNote;
 
+			console.log("Note played:: ", noteInfo);
+
 			// Default game mechanic, no octave check
 			if (!withFretboard) {
 				const [playedBase, _] = separateNoteAndOctave(notePlayed);

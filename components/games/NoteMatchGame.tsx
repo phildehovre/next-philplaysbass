@@ -23,7 +23,6 @@ import FretRangeSelector from "./ui/FretRangeSelector";
 
 const NoteMatchGame = () => {
 	const [displayedDuration, setDisplayedDuration] = useState<number>(5000);
-	const [duration, setDuration] = useState<number>(displayedDuration);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [play, setPlay] = useState<boolean>(false);
 

@@ -35,3 +35,13 @@ export function formatTime(ms: number): string {
 	const seconds = totalSeconds % 60;
 	return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
+
+export const getLS = (key: string) => {
+	if (typeof window === "undefined") return null;
+	return localStorage.getItem(key);
+};
+
+export const setLS = (key: string, value: any) => {
+	if (typeof window === "undefined") return;
+	localStorage.setItem(key, JSON.stringify(value));
+};

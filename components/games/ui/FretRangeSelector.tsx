@@ -2,33 +2,71 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { INSTRUMENTS } from "@/constants/instrumentConstants";
+import { getLS, setLS } from "@/utils/helpers";
 
-// Instrument presets
 const FRET_RANGE = 24;
 
-export default function FretRangeSelector(props: { game: any }) {
-	const { game } = props;
+export default function FretRangeSelector({ game }: { game: any }) {
 	const { setters, state } = game;
+
 	const [range, setRange] = useState<[number, number]>([0, 12]);
 	const [activeStrings, setActiveStrings] = useState<boolean[]>(
 		state.instrumentPreset.active
 	);
+	const [hydrated, setHydrated] = useState(false);
+
+	const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
+	const currentStrings = state.instrumentPreset.strings;
+	const strings = Array.from({ length: currentStrings }, (_, i) => i);
 
 	const originalFretsRef = useRef<string[][]>(state.instrumentPreset.frets);
 
-	const frets = Array.from({ length: FRET_RANGE }, (_, i) => i);
-
 	useEffect(() => {
-		const [start, end] = range;
+		const savedRange = getLS("fretRange");
+		if (savedRange) {
+			try {
+				const parsed = JSON.parse(savedRange);
+				if (
+					Array.isArray(parsed) &&
+					parsed.length === 2 &&
+					parsed.every((n) => !isNaN(Number(n)))
+				) {
+					setRange(parsed as [number, number]);
+					setters.setFretRange(parsed);
+				}
+			} catch {}
+		}
 
-		// Prevent invalid truncation when thumbs overlap or invert
-		if (end <= start) return;
+		// Active strings
+		const savedStrings = getLS("activeStrings");
+		if (savedStrings) {
+			try {
+				const parsed = JSON.parse(savedStrings);
+				if (
+					Array.isArray(parsed) &&
+					parsed.every((v) => typeof v === "boolean")
+				) {
+					setActiveStrings(parsed);
+				}
+			} catch {}
+		}
 
-		setters.setFretRange(range);
-	}, [range]);
+		// Instrument preset
+		const savedInstrument = getLS("instrumentPresetKey");
+		if (savedInstrument && INSTRUMENTS[savedInstrument]) {
+			setters.setInstrumentPreset({
+				...INSTRUMENTS[savedInstrument],
+				key: savedInstrument,
+			});
+			setActiveStrings(INSTRUMENTS[savedInstrument].active);
+		}
 
-	const currentStrings = state.instrumentPreset.strings;
-	const strings = Array.from({ length: currentStrings }, (_, i) => i);
+		setHydrated(true); // mark hydration complete
+	}, []);
+
+	// Persist state
+	useEffect(() => setLS("fretRange", range), [range]);
+	useEffect(() => setLS("activeStrings", activeStrings), [activeStrings]);
 
 	const toggleString = (index: number) => {
 		setActiveStrings((prev) => {
@@ -45,23 +83,22 @@ export default function FretRangeSelector(props: { game: any }) {
 			key: selected,
 		});
 		setActiveStrings(INSTRUMENTS[selected].active);
+		setLS("instrumentPresetKey", selected);
 	};
 
 	const handleSetRange = (val: number[]) => {
 		let [start, end] = val as [number, number];
-		// Clamp to ensure valid order and minimum width
 		if (start >= end) {
 			if (range[0] !== start) {
-				start = start;
 				end = start + 1;
 			} else {
 				start = end - 1;
-				end = end;
 			}
 		}
-
 		setRange([Math.max(0, start), Math.max(1, end)]);
 	};
+
+	if (!hydrated) return null;
 
 	return (
 		<div className="flex flex-col items-center gap-4 p-4 w-full max-w-3xl mx-auto">
@@ -82,8 +119,7 @@ export default function FretRangeSelector(props: { game: any }) {
 			</div>
 
 			{/* Neck visual with string selectors */}
-			<div className="flex items-center gap-2 w-full ">
-				{/* String selectors (checkboxes) */}
+			<div className="flex items-center gap-2 w-full">
 				<div className="flex flex-col justify-between h-20 py-[2px]">
 					{strings.map((s) => (
 						<label
@@ -102,7 +138,6 @@ export default function FretRangeSelector(props: { game: any }) {
 					))}
 				</div>
 
-				{/* Neck */}
 				<div className="relative flex-1 h-20 bg-stone-800 rounded-xl overflow-hidden">
 					{/* Strings */}
 					{strings.map((s) => (
@@ -114,18 +149,18 @@ export default function FretRangeSelector(props: { game: any }) {
 								opacity: activeStrings[s] ? 1 : 0.25,
 								borderWidth: activeStrings[s] ? "2px" : "1px",
 							}}
-						></div>
+						/>
 					))}
 
 					{/* Frets */}
 					{frets.map((fret, i) => (
 						<div
 							key={i}
-							className={`absolute top-0 bottom-0 border-l  ${
+							className={`absolute top-0 bottom-0 border-l ${
 								i === 0 ? "border-l-10" : "border-l-2"
 							} border-stone-600`}
 							style={{ left: `${(i / frets.length) * 100}%` }}
-						></div>
+						/>
 					))}
 
 					{/* Selected range highlight */}
@@ -142,16 +177,16 @@ export default function FretRangeSelector(props: { game: any }) {
 						<div
 							key={f}
 							className={`absolute top-[47%] ${
-								f % 12 == 0 && "flex flex-col gap-5"
+								f % 12 === 0 ? "flex flex-col gap-5" : ""
 							} left-1/2 transform -translate-x-1/2`}
 							style={{ left: `${(f / frets.length) * 100 + 3}%` }}
 						>
 							<div
 								className={`w-2 h-2 ${
-									f % 12 == 0 && "-my-3"
+									f % 12 === 0 ? "-my-3" : ""
 								} bg-white/70 rounded-full`}
 							/>
-							{f % 12 == 0 && (
+							{f % 12 === 0 && (
 								<div className="w-2 h-2 bg-white/70 rounded-full" />
 							)}
 						</div>
@@ -166,7 +201,7 @@ export default function FretRangeSelector(props: { game: any }) {
 					min={0}
 					max={24}
 					step={1}
-					onValueChange={(val) => handleSetRange(val)}
+					onValueChange={handleSetRange}
 					className="w-full"
 				/>
 				<div className="text-sm text-center mt-2 text-stone-400">

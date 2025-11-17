@@ -85,6 +85,8 @@ export const useNoteMatchGame = () => {
 					setWithArpeggios(parsed.withArpeggios);
 				if (typeof parsed.withInversions === "boolean")
 					setWithInversions(parsed.withInversions);
+				if (typeof parsed.withFretboard === "boolean")
+					setWithInversions(parsed.withFretboard);
 			} catch (e) {
 				console.error("Failed to parse game settings:", e);
 			}
@@ -98,9 +100,10 @@ export const useNoteMatchGame = () => {
 			withTimer,
 			withArpeggios,
 			withInversions,
+			withFretboard,
 		};
 		localStorage.setItem("gameSettings", JSON.stringify(settings));
-	}, [withMetronome, withTimer, withArpeggios, withInversions]);
+	}, [withMetronome, withTimer, withArpeggios, withInversions, withFretboard]);
 
 	// --- Helpers ---
 	const resetGame = useCallback(() => {

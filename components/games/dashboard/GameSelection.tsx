@@ -7,9 +7,12 @@ import "../DashboardStyles.css";
 import { gameCards } from "@/constants/games";
 
 const GameSelection = (props: any) => {
+	const { userData } = props;
 	const renderGameCards = () => {
 		return gameCards.map((game, index) => {
-			return <GameCard sticker={true} {...game} key={game.title} data={{}} />;
+			return (
+				<GameCard sticker={true} {...game} key={game.title} data={userData} />
+			);
 		});
 	};
 

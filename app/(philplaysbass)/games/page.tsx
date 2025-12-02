@@ -5,8 +5,10 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const page = async () => {
-	const { getUser } = await getKindeServerSession();
+	const { getUser } = getKindeServerSession();
 	const kindeUser = await getUser();
+
+	if (!kindeUser) redirect("/login");
 
 	const user = await prisma.user.findUnique({
 		where: { kindeId: kindeUser?.id },

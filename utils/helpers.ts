@@ -29,8 +29,9 @@ export function areTitlesSimilar(title1?: string, title2?: string) {
 	console.log("Some titles are missing, 1, 2: ", title1, title2);
 }
 
-export function formatTime(ms: bigint): string {
-	const totalSeconds = Math.floor(Number(ms) / 1000);
+export function formatTime(ms: bigint | number): string {
+	let msTyped = typeof ms == "bigint" ? Number(ms) : ms;
+	const totalSeconds = Math.floor(msTyped / 1000);
 	const minutes = Math.floor(totalSeconds / 60);
 	const seconds = totalSeconds % 60;
 	return `${minutes}:${seconds.toString().padStart(2, "0")}`;

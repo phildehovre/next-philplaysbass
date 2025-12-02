@@ -9,7 +9,7 @@ import { gameCards } from "@/constants/games";
 const GameSelection = (props: any) => {
 	const renderGameCards = () => {
 		return gameCards.map((game, index) => {
-			return <GameCard sticker={true} {...game} key={game.title} />;
+			return <GameCard sticker={true} {...game} key={game.title} data={{}} />;
 		});
 	};
 

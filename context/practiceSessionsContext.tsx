@@ -30,7 +30,7 @@ interface PracticeSessionContextType {
 	aggregateScore: Score;
 	totalScore: number;
 	bpm: number;
-	setBpm: (t: number) => void;
+	setBpm: React.Dispatch<React.SetStateAction<number>>;
 	gameType: GameTypes | undefined;
 	streak: number;
 	isFirstTimeUser: boolean;

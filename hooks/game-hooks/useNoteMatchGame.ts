@@ -228,14 +228,18 @@ export const useNoteMatchGame = () => {
 				: selectedNote;
 
 			const [playedBase, octave] = separateNoteAndOctave(notePlayed);
+			const [selectedBase, selectedOctave] = separateNoteAndOctave(selected);
 			// Default game mechanic, no octave check
 			if (!withFretboard) {
 				// const [selectedBase, __] = separateNoteAndOctave(selected);
-				return playedBase == selected;
+				return playedBase == normalizeNote(selected);
 			}
 			// With octave check
 			console.log(playedBase + octave, selected);
-			return playedBase + octave == selected;
+			return (
+				normalizeNote(playedBase) + octave ==
+				normalizeNote(selectedBase) + octave
+			);
 		},
 		[
 			gameStarted,
@@ -254,7 +258,6 @@ export const useNoteMatchGame = () => {
 			if (evaluateCooldownRef.current) return;
 
 			const isMatch = await evaluateNotePlayed(note);
-			console.log("isMatch:: ", isMatch);
 			if (isMatch === undefined) return;
 
 			if (!withArpeggios) {

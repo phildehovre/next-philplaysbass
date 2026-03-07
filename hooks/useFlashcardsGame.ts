@@ -29,6 +29,7 @@ export const useFlashcardsGame = () => {
 	const [animate, setAnimate] = useState("");
 	const [score, setScore] = useState({ wins: 0, losses: 0 });
 	const [progress, setProgress] = useState(Number);
+	const [questionType, setQuestionType] = useState(String);
 
 	const EXTENSIONS = [6, 1, 3, 5];
 

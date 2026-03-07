@@ -22,7 +22,6 @@ import {
 import { InstrumentPreset, Note, NoteEvent, NoteInfo } from "@/types/types";
 import { usePracticeSession } from "@/context/practiceSessionsContext";
 import { INSTRUMENTS } from "@/constants/instrumentConstants";
-import { CloudCog } from "lucide-react";
 
 export const useNoteMatchGame = () => {
 	// --- Game state ---
@@ -39,7 +38,7 @@ export const useNoteMatchGame = () => {
 		"major",
 	]);
 	const [instrumentPreset, setInstrumentPreset] = useState<InstrumentPreset>(
-		INSTRUMENTS["bass4"]
+		INSTRUMENTS["bass4"],
 	);
 	const [fretRange, setFretRange] = useState<[number, number]>([0, 12]);
 	const [arpeggioPlayed, setArpeggioPlayed] = useState<NoteInfo[]>([]);
@@ -248,7 +247,7 @@ export const useNoteMatchGame = () => {
 			selectedNote,
 			withArpeggios,
 			withFretboard,
-		]
+		],
 	);
 
 	const onNoteDetection = useCallback(
@@ -307,7 +306,7 @@ export const useNoteMatchGame = () => {
 			recordLoss,
 			arpeggioPlayed,
 			withArpeggios,
-		]
+		],
 	);
 
 	useEffect(() => {
